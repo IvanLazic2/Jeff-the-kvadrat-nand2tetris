@@ -1,0 +1,93 @@
+class Platform
+{
+    field int x;
+    field int y;
+    field int size;
+    field int location;
+    
+    field int memAddress;
+
+
+    constructor Platform new(int x2, int y2, int size2)
+    {
+        let x = x2;
+        let y = y2;
+        let location = (y * 32) + x;
+
+        let size = size2;
+
+        do Draw(0);
+
+        return this;
+
+    }
+
+    method int get_x() { return x; }
+    method int get_y() { return y; }
+    method int get_size() { return size; }
+
+    // TO DO
+    method void set_moving()
+    {
+
+        return;
+    }
+
+    method void Draw(int worldOffset)
+    {
+        var int i;
+
+        do Output.printInt(worldOffset);
+        do Output.println();
+
+        while (i < size)
+        {
+            //do Output.printInt(x + i);
+
+            if (((x + worldOffset + i) < 32) & ((x + worldOffset + i) > -1))
+            {
+                let location = (y * 32) + x + worldOffset;
+                let memAddress = 16384 + location + i;
+
+                /*if (~(Memory.peek(memAddress + 0) = -1)) { do Memory.poke(memAddress + 0, -1); }
+	            if (~(Memory.peek(memAddress + 32) = -32767)) { do Memory.poke(memAddress + 32, -32767); }
+	            if (~(Memory.peek(memAddress + 64) = -32767)) { do Memory.poke(memAddress + 64, -32767); }
+	            if (~(Memory.peek(memAddress + 96) = -32767)) { do Memory.poke(memAddress + 96, -32767); }
+	            if (~(Memory.peek(memAddress + 128) = -32767)) { do Memory.poke(memAddress + 128, -32767); }
+	            if (~(Memory.peek(memAddress + 160) = -32767)) { do Memory.poke(memAddress + 160, -32767); }
+	            if (~(Memory.peek(memAddress + 192) = -32767)) { do Memory.poke(memAddress + 192, -32767); }
+	            if (~(Memory.peek(memAddress + 224) = -32767)) { do Memory.poke(memAddress + 224, -32767); }
+	            if (~(Memory.peek(memAddress + 256) = -32767)) { do Memory.poke(memAddress + 256, -32767); }
+	            if (~(Memory.peek(memAddress + 288) = -32767)) { do Memory.poke(memAddress + 288, -32767); }
+	            if (~(Memory.peek(memAddress + 320) = -32767)) { do Memory.poke(memAddress + 320, -32767); }
+	            if (~(Memory.peek(memAddress + 352) = -32767)) { do Memory.poke(memAddress + 352, -32767); }
+	            if (~(Memory.peek(memAddress + 384) = -32767)) { do Memory.poke(memAddress + 384, -32767); }
+	            if (~(Memory.peek(memAddress + 416) = -32767)) { do Memory.poke(memAddress + 416, -32767); }
+	            if (~(Memory.peek(memAddress + 448) = -32767)) { do Memory.poke(memAddress + 448, -32767); }
+    	        if (~(Memory.peek(memAddress + 480) = -1)) { do Memory.poke(memAddress + 480, -1); }*/
+
+                do Memory.poke(memAddress + 0, -1);
+	            do Memory.poke(memAddress + 32, -32767);
+	            do Memory.poke(memAddress + 64, -32767);
+	            do Memory.poke(memAddress + 96, -32767);
+	            do Memory.poke(memAddress + 128, -32767);
+	            do Memory.poke(memAddress + 160, -32767);
+	            do Memory.poke(memAddress + 192, -32767);
+	            do Memory.poke(memAddress + 224, -32767);
+	            do Memory.poke(memAddress + 256, -32767);
+	            do Memory.poke(memAddress + 288, -32767);
+	            do Memory.poke(memAddress + 320, -32767);
+	            do Memory.poke(memAddress + 352, -32767);
+	            do Memory.poke(memAddress + 384, -32767);
+	            do Memory.poke(memAddress + 416, -32767);
+	            do Memory.poke(memAddress + 448, -32767);
+    	        do Memory.poke(memAddress + 480, -1);
+
+            }
+
+            let i = i + 1;
+        }
+
+        return;
+    }
+}

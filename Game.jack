@@ -1,0 +1,144 @@
+//https://www.youtube.com/watch?v=Ouza_4SsbLc
+//https://codepen.io/rickyjw/pen/qrjmdz
+//https://editor.p5js.org/Coulomb1/sketches/ajYsnHRW2
+//https://www.coursera.org/lecture/nand2tetris2/unit-3-10-graphics-optimization-hHNmi
+//https://classes.engineering.wustl.edu/cse365/demo_program.php
+//https://arieljannai.gitlab.io/Nand2TetrisBitmapEditor/
+//https://github.com/ErikUmble/nand2tetris/tree/main/DinoAdventure
+
+
+
+
+
+// IDEJA: sortirat platforme po x koordinati
+// IDEJA2: brojac koji broji kolko ih je izaslo iz ekrana. kolko ih je izaslo tolko mogu stvorit novih tako da starima promijenim koordinate.
+//         ako nijedna nije izasla iz ekrana, a treba se pokazat novi, sam stvorim novu platformu
+
+
+
+
+class Game
+{
+    field int direction;
+    field Character character;
+
+    field int platform_num;
+
+    field Array platform_section_sizes;
+    field int platform_sections_num;
+    field Array platform_sections;
+
+    field Array section1;
+    field int section1size;
+
+
+    field Level2 level;
+
+    
+    constructor Game new()
+    {
+        let direction = 0;
+
+        let level = Level2.new();
+
+        let character = level.get_character();
+        let platform_num = level.get_platform_num();
+        let platform_section_sizes = level.get_platform_section_sizes();
+        let platform_sections_num = level.get_platform_sections_num();
+        let platform_sections = level.get_platform_sections();
+
+        let section1 = platform_sections[0];
+        let section1size = platform_section_sizes[0];
+
+        return this;
+    }
+
+    method void start()
+    {
+        var char key;
+        var bool exit;
+        var int i;
+        var Platform plat_temp;
+        var int curr_section_index;
+        var Array curr_section;
+        var int curr_section_size;
+
+
+        let exit = false;
+
+        //do Screen.drawLine(0, 255-80, 511, 255-80);
+
+        while (~exit)
+        {
+            let key = Keyboard.keyPressed();
+
+            if (key = 0)
+            {
+                let direction = 0;
+            }
+            else { if (key = 131)
+            {
+                do character.Jump();
+            }
+            else { if (key = 81) 
+            {
+                let exit = true;
+            }
+            else { if (key = 130) 
+            {
+                let direction = 1;
+            }
+            else { if (key = 132) 
+            {
+                let direction = 2;
+            }}}}}
+            
+            do move();
+            do Sys.wait(40); // 50
+            
+
+
+
+
+
+            //let curr_section_index = character.get_curr_section_index();
+            //let curr_section = platform_sections[curr_section_index];
+            //let curr_section_size = platform_section_sizes[curr_section_index];
+
+            let i = 0;
+
+            while (i < curr_section_size)
+            {
+                let plat_temp = curr_section[i];
+
+                //if ((plat_temp.get_x() < 32) & ((plat_temp.get_x() + plat_temp.get_size()) > -1))
+                if (Math.abs(character.get_y() - plat_temp.get_y()) < 36)
+                {
+                    do plat_temp.Draw(character.get_world_offset());
+                }
+
+                let i = i + 1;
+            }
+        }
+
+        return;
+    }
+
+    method void move()
+    {
+        do character.check_gravity(platform_sections, platform_section_sizes);
+
+        if (direction = 1) 
+        {
+            //do character.MoveLeft();
+            do character.ml();
+        }
+        if (direction = 2) 
+        {
+            //do character.MoveRight();
+            do character.mr();
+        }
+
+        return;
+    }
+}
