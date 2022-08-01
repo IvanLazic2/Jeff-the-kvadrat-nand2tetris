@@ -1,0 +1,72 @@
+class Section
+{
+    field Array platforms;
+    field int left_border;
+    field int right_border;
+    field int platforms_num;
+
+    constructor Section new(Array platforms2, int left_border2, int right_border2, int platforms_num2)
+    {
+        let platforms = platforms2;
+        let left_border = left_border2;
+        let right_border =  right_border2;
+        let platforms_num = platforms_num2;
+
+        return this;
+    }
+
+    method Array get_platforms() { return platforms; }
+    method int get_left_border() { return left_border; }
+    method int get_right_border() { return right_border; }
+    method int get_platforms_num() { return platforms_num; }
+
+    method void ScrollLeft() // kad se ide prema desno
+    {
+        var int i;
+        var Platform platform;
+
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+            do platform.ScrollLeft();
+
+            let i = i + 1;  
+        }
+
+        return;
+    }
+
+    method void ScrollRight() // kad se ide prema lijevo
+    {
+        var int i;
+        var Platform platform;
+
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+            do platform.ScrollRight();
+
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void Draw()
+    {
+        var Platform platform;
+        var int i;
+
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+
+            do platform.Draw(0);
+
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+}

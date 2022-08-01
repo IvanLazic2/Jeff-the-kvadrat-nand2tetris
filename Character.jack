@@ -16,9 +16,9 @@ class Character
 
     field int widthdiv16;
 
-    field Array div4lookup;
+    //field Array div4lookup;
 
-    field int worldOffset;
+    //field int worldOffset;
 
     constructor Character new(int x2, int y2)
     {
@@ -40,24 +40,29 @@ class Character
 
         let lastlocation = location;
 
-        let div4lookup = Array.new(32);
-        let i = 0;
-        while (i < 32)
-        {
-            let div4lookup[i] = i / 4;
-            let i = i + 1;
-        }
+        //let div4lookup = Array.new(32);
+        //let i = 0;
+        //while (i < 32)
+        //{
+            //let div4lookup[i] = i / 4;
+            //let i = i + 1;
+        //}
 
-        let worldOffset = 0;
+        //let worldOffset = 0;
 
         do Draw();
 
         return this;
     }
 
-    method int get_curr_section_index()
+    //method int get_curr_section_index()
+    //{
+        //return div4lookup[x];
+    //}
+
+    method int get_x()
     {
-        return div4lookup[x];
+        return x;
     }
 
     method int get_y()
@@ -65,10 +70,10 @@ class Character
         return y;
     }
 
-    method int get_world_offset()
-    {
-        return worldOffset;
-    }
+    //method int get_world_offset()
+    //{
+    //    return worldOffset;
+    //}
 
     method void MoveLeft()
     {
@@ -88,6 +93,8 @@ class Character
 
     method void MoveRight()
     {
+        
+
         if(((x + 1) * 16) + 16 < 512)
         {
             let lastlocation = location;
@@ -106,13 +113,13 @@ class Character
 
     method void mr()
     {
-        let worldOffset = worldOffset - 1;
+        //let worldOffset = worldOffset - 1;
         return;
     }
 
     method void ml()
     {
-        let worldOffset = worldOffset + 1;
+        //let worldOffset = worldOffset + 1;
         return;
     }
 
@@ -133,30 +140,38 @@ class Character
         return ((y + height + forceY) > 254); //254
     }
 
-    method void check_gravity(Array platform_sections, Array platform_section_sizes)
+    method void check_gravity(Array sections, int curr_section_index, int world_offset)
     {
         var int i;
-        var int platform_num;
-        var int xdiv4;
+        var int platforms_num;
+        //var int xdiv4;
         var Platform platform;
         var Array platforms;
+        var Section section;
 
-        let xdiv4 = div4lookup[x];
+        //let xdiv4 = div4lookup[x];
 
-        let platforms = platform_sections[xdiv4];
-        let platform_num = platform_section_sizes[xdiv4];
+        //do Output.printInt(xdiv4);
+        //do Output.println();
+
+        //let platforms = sections[xdiv4];
+        //let section = sections[xdiv4];
+
+        let section = sections[curr_section_index];
+        let platforms = section.get_platforms();
+        let platforms_num = section.get_platforms_num();
 
         let lastlocation = location;
 
-        while (i < platform_num)
+        while (i < platforms_num)
         {
             let platform = platforms[i];
 
             //if (Math.abs(y - platform.get_y()) < 50)
             //{
-                if (check_platform(platform))
+                if (check_platform(platform, world_offset))
                 {
-                    let i = platform_num - 1;
+                    let i = platforms_num - 1;
                 }
             //}
 
@@ -172,7 +187,7 @@ class Character
         return;
     }
 
-    method bool is_on_platform(Platform platform)
+    method bool is_on_platform(Platform platform, int world_offset)
     {
         var bool is_stable_x;
         var bool is_stable_y;
@@ -180,7 +195,7 @@ class Character
         var int h;
         var int w;
 
-        let platform_x = platform.get_x() + worldOffset; //TEMPPP
+        let platform_x = platform.get_x() + world_offset; //TEMPPP
 
         let h = platform.get_y() - y - height;
         let w = x + widthdiv16;
@@ -191,11 +206,11 @@ class Character
         return (is_stable_x & is_stable_y);
     }
 
-    method bool check_platform(Platform platform)
+    method bool check_platform(Platform platform, int world_offset)
     {
         let lastlocation = location;
 
-        let can_jump = is_on_platform(platform);
+        let can_jump = is_on_platform(platform, world_offset);
 
         if (can_jump)
         {

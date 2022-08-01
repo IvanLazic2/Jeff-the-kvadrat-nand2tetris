@@ -1,0 +1,152 @@
+class Level3
+{
+	field Character character;
+	field int platforms_num;
+	field int sections_num;
+	field int level_width;
+	field int section_width;
+	field Array sections;
+	field Section section0;
+	field Section section1;
+	field Section section2;
+	field Section section3;
+	field Section section4;
+	field Section section5;
+	field Section section6;
+	field Section section7;
+	field Section section8;
+	field Section section9;
+	field Section section10;
+	field Section section11;
+	field Section section12;
+	field Section section13;
+	field Section section14;
+	field Section section15;
+	field Array section0platforms;
+	field Array section1platforms;
+	field Array section2platforms;
+	field Array section3platforms;
+	field Array section4platforms;
+	field Array section5platforms;
+	field Array section6platforms;
+	field Array section7platforms;
+	field Array section8platforms;
+	field Array section9platforms;
+	field Array section10platforms;
+	field Array section11platforms;
+	field Array section12platforms;
+	field Array section13platforms;
+	field Array section14platforms;
+	field Array section15platforms;
+	constructor Level3 new()
+	{
+		let character = Character.new(16, 200); //224
+		let platforms_num = 8;
+		let sections_num = 16;
+		let level_width = 64;
+		let section_width = 4;
+		let sections = Array.new(sections_num);
+		let section0platforms = Array.new(2);
+		let section0platforms[0] = Platform.new(0, 0, 64);
+		let section0platforms[1] = Platform.new(0, 240, 64);
+		let section0 = Section.new(section0platforms, 0, 4, 2);
+		let sections[0] = section0;
+		let section1platforms = Array.new(3);
+		let section1platforms[0] = Platform.new(0, 0, 64);
+		let section1platforms[1] = Platform.new(0, 240, 64);
+		let section1platforms[2] = Platform.new(7, 176, 6);
+		let section1 = Section.new(section1platforms, 4, 8, 3);
+		let sections[1] = section1;
+		let section2platforms = Array.new(3);
+		let section2platforms[0] = Platform.new(0, 0, 64);
+		let section2platforms[1] = Platform.new(0, 240, 64);
+		let section2platforms[2] = Platform.new(7, 176, 6);
+		let section2 = Section.new(section2platforms, 8, 12, 3);
+		let sections[2] = section2;
+		let section3platforms = Array.new(3);
+		let section3platforms[0] = Platform.new(0, 0, 64);
+		let section3platforms[1] = Platform.new(0, 240, 64);
+		let section3platforms[2] = Platform.new(7, 176, 6);
+		let section3 = Section.new(section3platforms, 12, 16, 3);
+		let sections[3] = section3;
+		let section4platforms = Array.new(3);
+		let section4platforms[0] = Platform.new(0, 0, 64);
+		let section4platforms[1] = Platform.new(0, 240, 64);
+		let section4platforms[2] = Platform.new(17, 128, 5);
+		let section4 = Section.new(section4platforms, 16, 20, 3);
+		let sections[4] = section4;
+		let section5platforms = Array.new(3);
+		let section5platforms[0] = Platform.new(0, 0, 64);
+		let section5platforms[1] = Platform.new(0, 240, 64);
+		let section5platforms[2] = Platform.new(17, 128, 5);
+		let section5 = Section.new(section5platforms, 20, 24, 3);
+		let sections[5] = section5;
+		let section6platforms = Array.new(3);
+		let section6platforms[0] = Platform.new(0, 0, 64);
+		let section6platforms[1] = Platform.new(0, 240, 64);
+		let section6platforms[2] = Platform.new(26, 80, 5);
+		let section6 = Section.new(section6platforms, 24, 28, 3);
+		let sections[6] = section6;
+		let section7platforms = Array.new(3);
+		let section7platforms[0] = Platform.new(0, 0, 64);
+		let section7platforms[1] = Platform.new(0, 240, 64);
+		let section7platforms[2] = Platform.new(26, 80, 5);
+		let section7 = Section.new(section7platforms, 28, 32, 3);
+		let sections[7] = section7;
+		let section8platforms = Array.new(2);
+		let section8platforms[0] = Platform.new(0, 0, 64);
+		let section8platforms[1] = Platform.new(0, 240, 64);
+		let section8 = Section.new(section8platforms, 32, 36, 2);
+		let sections[8] = section8;
+		let section9platforms = Array.new(3);
+		let section9platforms[0] = Platform.new(0, 0, 64);
+		let section9platforms[1] = Platform.new(0, 240, 64);
+		let section9platforms[2] = Platform.new(37, 192, 6);
+		let section9 = Section.new(section9platforms, 36, 40, 3);
+		let sections[9] = section9;
+		let section10platforms = Array.new(3);
+		let section10platforms[0] = Platform.new(0, 0, 64);
+		let section10platforms[1] = Platform.new(0, 240, 64);
+		let section10platforms[2] = Platform.new(37, 192, 6);
+		let section10 = Section.new(section10platforms, 40, 44, 3);
+		let sections[10] = section10;
+		let section11platforms = Array.new(3);
+		let section11platforms[0] = Platform.new(0, 0, 64);
+		let section11platforms[1] = Platform.new(0, 240, 64);
+		let section11platforms[2] = Platform.new(47, 128, 6);
+		let section11 = Section.new(section11platforms, 44, 48, 3);
+		let sections[11] = section11;
+		let section12platforms = Array.new(3);
+		let section12platforms[0] = Platform.new(0, 0, 64);
+		let section12platforms[1] = Platform.new(0, 240, 64);
+		let section12platforms[2] = Platform.new(47, 128, 6);
+		let section12 = Section.new(section12platforms, 48, 52, 3);
+		let sections[12] = section12;
+		let section13platforms = Array.new(3);
+		let section13platforms[0] = Platform.new(0, 0, 64);
+		let section13platforms[1] = Platform.new(0, 240, 64);
+		let section13platforms[2] = Platform.new(47, 128, 6);
+		let section13 = Section.new(section13platforms, 52, 56, 3);
+		let sections[13] = section13;
+		let section14platforms = Array.new(3);
+		let section14platforms[0] = Platform.new(0, 0, 64);
+		let section14platforms[1] = Platform.new(0, 240, 64);
+		let section14platforms[2] = Platform.new(57, 176, 5);
+		let section14 = Section.new(section14platforms, 56, 60, 3);
+		let sections[14] = section14;
+		let section15platforms = Array.new(3);
+		let section15platforms[0] = Platform.new(0, 0, 64);
+		let section15platforms[1] = Platform.new(0, 240, 64);
+		let section15platforms[2] = Platform.new(57, 176, 5);
+		let section15 = Section.new(section15platforms, 60, 64, 3);
+		let sections[15] = section15;
+		return this;
+	}
+	method int get_platforms_num() { return platforms_num; }
+	method int get_sections_num() { return sections_num; }
+	method int get_level_width() { return level_width; }
+	method int get_section_width() { return section_width; }
+	method Array get_sections() { return sections; }
+	method Array get_section(int index) { return sections[index]; }
+	method Character get_character() { return character; }
+}
