@@ -1,0 +1,36 @@
+class Enemy
+{
+    field int location;
+
+    constructor Enemy new()
+    {
+        let location = 0;
+        return this;
+    }
+
+    method void Draw(int location)
+    {
+        var int memAddress;
+
+	    let memAddress = 16384 + location;
+
+	    do Memory.poke(memAddress + 0, 0);
+	    do Memory.poke(memAddress + 32, 0);
+	    do Memory.poke(memAddress + 64, 0);
+	    do Memory.poke(memAddress + 96, 0);
+	    do Memory.poke(memAddress + 128, 576);
+	    do Memory.poke(memAddress + 160, 12876);
+	    do Memory.poke(memAddress + 192, 8184);
+	    do Memory.poke(memAddress + 224, 4080);
+	    do Memory.poke(memAddress + 256, 3504);
+	    do Memory.poke(memAddress + 288, 3504);
+	    do Memory.poke(memAddress + 320, 4080);
+	    do Memory.poke(memAddress + 352, 8184);
+	    do Memory.poke(memAddress + 384, 2016);
+	    do Memory.poke(memAddress + 416, 2016);
+	    do Memory.poke(memAddress + 448, 2016);
+	    do Memory.poke(memAddress + 480, 576);
+
+	    return;
+    }
+}

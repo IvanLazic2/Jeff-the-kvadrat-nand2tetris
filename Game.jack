@@ -32,16 +32,25 @@ class Game
     field int section_width;
 
     field Array platforms;
-
     field Array sections;
+
+    field Section curr_section;
+    field inr curr_section_index;
+    field Array curr_platforms;
+    field int curr_platforms_num;
 
     field Array div4lookup;
 
     field Level3 level;
-
     field int level_width;
 
-    
+    field Enemy enemy;
+
+    field Obstacle obstacle1;
+    field Obstacle obstacle2;
+    field Obstacle obstacle3;
+    field Obstacle obstacle4;
+
 
 
     constructor Game new()
@@ -76,6 +85,20 @@ class Game
             let i = i + 1;
         }
 
+
+
+        let enemy = Enemy.new();
+        let obstacle1 = Obstacle.new(0);
+        let obstacle2 = Obstacle.new(1);
+        let obstacle3 = Obstacle.new(2);
+        let obstacle4 = Obstacle.new(3);
+
+        do enemy.Draw(0);
+        do obstacle1.Draw(5, 50);
+        do obstacle2.Draw(5, 100);
+        do obstacle3.Draw(10, 100);
+        do obstacle4.Draw(15, 100);
+
         return this;
     }
 
@@ -90,10 +113,6 @@ class Game
         var bool exit;
         var int i;
         var Platform plat_temp;
-        var int curr_section_index;
-        var Array curr_section;
-        var int curr_section_size;
-        var Section section;
 
 
         let exit = false;
@@ -125,13 +144,21 @@ class Game
                 let direction = 2;
             }}}}}
             
+
+
+            let curr_section = sections[get_curr_section_index()];
+            let curr_section_index = get_curr_section_index();
+            let curr_platforms = curr_section.get_platforms();
+            let curr_platforms_num = curr_section.get_platforms_num();
+
+
             do move();
             do Sys.wait(40); // 50
             
 
-            let section = sections[get_curr_section_index()];
+            do curr_section.Draw();
 
-            do section.Draw();
+
         }
 
         return;
@@ -145,7 +172,7 @@ class Game
 
         let x = character.get_x();
 
-        do character.check_gravity(sections, get_curr_section_index());
+        do character.check_gravity(platforms, platforms_num);
 
         if (direction = 1) 
         {
@@ -180,14 +207,6 @@ class Game
             let i = i + 1;
         }
 
-        //while (i < sections_num)
-        //{
-        //    let section = sections[i];
-        //    do section.ScrollLeft();
-
-        //    let i = i + 1;
-        //}
-
         return;
     }
 
@@ -219,10 +238,16 @@ class Game
         let x = character.get_x();
         let abs_x = character.get_absolute_x();
 
-        do character.check_gravity(sections, get_curr_section_index());
+        do character.check_gravity(platforms, platforms_num);
 
         if (direction = 1) 
         {
+            //if (character.check_left_collision(sections, get_curr_section_index()))
+            //{
+            //    do Output.printString("left collision");
+            //    do Output.println();
+            //}
+
             if (abs_x - screen_middle + move_area_width > 0)
             {
                 if (x > left_border)
@@ -241,20 +266,23 @@ class Game
         }
         if (direction = 2)
         {
-            if (abs_x + screen_middle - move_area_width < level_width)
+            if (~character.check_right_collision(platforms, platforms_num))
             {
-                if (x < right_border)
-                {   
-                    do character.MoveRight();
+                if (abs_x + screen_middle - move_area_width < level_width)
+                {
+                    if (x < right_border)
+                    {   
+                        do character.MoveRight();
+                    }
+                    else
+                    {
+                        do ScrollLeft();
+                    }
                 }
                 else
                 {
-                    do ScrollLeft();
+                    do character.MoveRight();
                 }
-            }
-            else
-            {
-                do character.MoveRight();
             }
         }
 

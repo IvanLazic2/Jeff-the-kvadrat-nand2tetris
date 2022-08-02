@@ -1,3 +1,5 @@
+// 16384 + 8192 = 24576
+
 class Character
 {
     field int x;
@@ -34,10 +36,10 @@ class Character
         let widthdiv16 = width / 16;
 
         let forceY = 0;
-        let gravity = 2;
+        let gravity = 1; //2
         let can_jump = false;
-        let jump_height = 20; //20
-        let jump_height_const = 20;
+        let jump_height = 1; //20
+        let jump_height_const = 1; //20
         let jump_compensation_const = 4;
 
         let lastlocation = location;
@@ -62,12 +64,72 @@ class Character
         return absolute_x;
     }
 
+    method void set_x(int x2)
+    {
+        let x = x2;
+        return;
+    }
+
+    method void set_y(int y2)
+    {
+        let y = y2;
+        return;
+    }
+
     method void set_absolute_x(int abs_x)
     {
         let absolute_x = abs_x;
         return;
     }
 
+
+
+    method bool check_right_collision(Array platforms, int platforms_num)
+    {
+        var int i;
+        var Platform platform;
+        var Section section;
+        var bool result;
+
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+
+            let result = is_collided_right(platform);
+
+            if (result)
+            {
+                let i = platforms_num - 1;
+            }
+
+            let i = i + 1;
+        }
+
+        return result;
+    }
+
+    method bool is_collided_right(Platform platform)
+    {
+        //if (platform.get_size() = 1)
+        //{
+        //    do Output.printInt(platform.get_y() < (y + 16 - 1));
+        //    do Output.printString(" & ");
+        //    do Output.printInt((y + 16) < (platform.get_y() + 16 - 1));
+        //    do Output.println();
+        //}
+        
+        
+
+        //return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + 16 + 1)) & ((y + 16) < (platform.get_y() + 16 + 1));
+        return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + 17)) & (y < (platform.get_y() + 1));
+    }
+
+    method bool check_left_collision()
+    {
+        return 1;
+    }
+
+    
 
     method void MoveLeft()
     {
@@ -122,20 +184,14 @@ class Character
         return ((y + height + forceY) > 254); //254
     }
 
-    method void check_gravity(Array sections, int curr_section_index)
+    method void check_gravity(Array platforms, int platforms_num)
     {
         var int i;
-        var int platforms_num;
         var Platform platform;
-        var Array platforms;
         var Section section;
 
-        do Output.printInt(curr_section_index);
-        do Output.println();
-
-        let section = sections[curr_section_index];
-        let platforms = section.get_platforms();
-        let platforms_num = section.get_platforms_num();
+        //do Output.printInt(curr_section_index);
+        //do Output.println();
 
         let jump_height = jump_height_const + (jump_compensation_const * platforms_num); // JUMP COMENSATION
 
@@ -200,12 +256,39 @@ class Character
             do Clear();
             do Draw();
         }
+        // padanje
         else
         {
-            let forceY = forceY + gravity;
+            if (y > 219)
+            {
+                do Respawn();
+            }
+
+            let forceY = forceY + gravity;            
         }
 
         return can_jump;
+    }
+
+    method void Respawn()
+    {
+        let y = 100;
+
+        if (x - 10 < 1)
+        {
+            let x = 2;
+            let absolute_x = 2;
+        }
+        else
+        {
+            let x = x - 10;
+            let absolute_x = absolute_x - 10;
+        }
+        
+
+        
+
+        return;
     }
 
     method void Clear()
@@ -216,7 +299,10 @@ class Character
 
         let color = false;
 
-        if (~(lastlocation = location) & (lastlocation < 7650))
+        if (~(lastlocation = location) & (lastlocation < 7199))
+        // (~(lastlocation = location) & (lastlocation < 7650)  & (16384+513+480+lastlocation < 24576))
+        // 16384+513+480 = 17377
+        // 24576 - 17377 = 7199
         {
             let memAddress = 16896 + lastlocation; // 512
 
@@ -272,8 +358,10 @@ class Character
 
     method void Draw()
     {
-        if (~(lastlocation = location))
+        if (~(lastlocation = location) & (location < 7199))
+        // (~(lastlocation = location) & (16384+513+480+location < 24575))
         {
+            
             // faca
             let memAddress = 16384 + location + 512;
 	        do Memory.poke(memAddress + 0, -1);
