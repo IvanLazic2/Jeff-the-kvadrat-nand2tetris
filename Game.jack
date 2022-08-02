@@ -61,17 +61,13 @@ class Game
         let level_width = level.get_level_width();
         let character = level.get_character();
         let platforms_num = level.get_platforms_num();
-        //let platform_section_sizes = level.get_platform_section_sizes();
         let sections_num = level.get_sections_num();
         let section_width = level.get_section_width();
         let sections = level.get_sections();
 
-        //let section1 = platform_sections[0];
-        //let section1size = platform_section_sizes[0];
-
-        let div4lookup = Array.new(32);
+        let div4lookup = Array.new(level_width);
         let i = 0;
-        while (i < 32)
+        while (i < level_width)
         {
             let div4lookup[i] = i / 4;
             let i = i + 1;
@@ -82,7 +78,7 @@ class Game
 
     method int get_curr_section_index()
     {
-        return div4lookup[character.get_x()];
+        return div4lookup[character.get_absolute_x()];
     }
 
     method void start()
@@ -130,48 +126,7 @@ class Game
             do Sys.wait(40); // 50
             
 
-
-
-
-
-            //let curr_section_index = character.get_curr_section_index();
-            //let curr_section = platform_sections[curr_section_index];
-            //let curr_section_size = platform_section_sizes[curr_section_index];
-
-            //let i = 0;
-
-            //while (i < curr_section_size)
-            //{
-            //    let plat_temp = curr_section[i];
-
-            //    if (Math.abs(character.get_y() - plat_temp.get_y()) < 36)
-            //    {
-            //        do plat_temp.Draw(character.get_world_offset());
-            //    }
-
-            //    let i = i + 1;
-            //}
-
-
-            //let i = 0;
-
-            //while (i < sections_num)
-            //{
-            //    let section = sections[i];
-
-            //    if ((section.get_left_border() = 0))
-            //    {
-            //        do section.Draw();
-            //    }
-                
-            //    let i = i + 1;
-            //}
-
-
             let section = sections[get_curr_section_index()];
-
-            //do Output.printInt(get_curr_section_index());
-            //do Output.println();
 
             do section.Draw();
         }
@@ -180,8 +135,8 @@ class Game
     }
 
 
-
-    method void move()
+    // scroll test
+    method void move2()
     {
         var int x;
 
@@ -209,6 +164,12 @@ class Game
     {
         var int i;
         var Section section;
+        var int absolute_x;
+
+        let absolute_x = character.get_absolute_x();
+        do character.set_absolute_x(absolute_x + 1);
+
+
 
         while (i < sections_num)
         {
@@ -225,6 +186,10 @@ class Game
     {
         var int i;
         var Section section;
+        var int absolute_x;
+
+        let absolute_x = character.get_absolute_x();
+        do character.set_absolute_x(absolute_x - 1);
 
         while (i < sections_num)
         {
@@ -237,18 +202,19 @@ class Game
         return;
     }
 
-
-    method void move2()
+    method void move()
     {
         var int x;
+        var int abs_x;
 
         let x = character.get_x();
+        let abs_x = character.get_absolute_x();
 
         do character.check_gravity(sections, get_curr_section_index(), world_offset);
 
         if (direction = 1) 
         {
-            if (x + world_offset - screen_middle > 0)
+            if (abs_x - screen_middle + move_area_width > 0)
             {
                 if (x > left_border)
                 {
@@ -256,8 +222,7 @@ class Game
                 }
                 else
                 {
-                    let world_offset = world_offset - 1;
-                    do scroll_sections_right();
+                    do ScrollRight();
                 }
             }
             else
@@ -265,9 +230,9 @@ class Game
                 do character.MoveLeft();
             }
         }
-        if (direction = 2) 
+        if (direction = 2)
         {
-            if (x + world_offset + screen_middle < level_width)
+            if (abs_x + screen_middle - move_area_width < level_width)
             {
                 if (x < right_border)
                 {   
@@ -275,8 +240,7 @@ class Game
                 }
                 else
                 {
-                    let world_offset = world_offset + 1;
-                    do scroll_sections_left();
+                    do ScrollLeft();
                 }
             }
             else
@@ -285,83 +249,7 @@ class Game
             }
         }
 
-        do Output.printInt(world_offset);
-        do Output.println();
-
         return;
     }
 
-    method void scroll_sections_left()
-    {
-        var int i;
-        var int curr_section_index;
-        var Section section;
-        var int size;
-
-        //let size = (screen_width / section_width) + 1;
-
-        let curr_section_index = get_curr_section_index();
-
-        // hard-coded
-        let size = 9;
-
-        // lijevo od charactera
-        while (i < 4) // hard-coded
-        {
-            let section = sections[curr_section_index - i];
-            do section.ScrollLeft();
-
-            let i = i + 1;
-        }
-
-        let i = 1;
-
-        // desno od charactera
-        while (i < 5) // hard-coded
-        {
-            let section = sections[curr_section_index + i];
-            do section.ScrollLeft();
-
-            let i = i + 1;
-        }
-
-        return;
-    }
-
-    method void scroll_sections_right()
-    {
-        var int i;
-        var int curr_section_index;
-        var Section section;
-        var int size;
-
-        //let size = (screen_width / section_width) + 1;
-
-        let curr_section_index = get_curr_section_index();
-
-        // hard-coded
-        let size = 9;
-
-        // lijevo od charactera
-        while (i < 5) // hard-coded
-        {
-            let section = sections[curr_section_index - i];
-            do section.ScrollRight();
-
-            let i = i + 1;
-        }
-
-        let i = 1;
-
-        // desno od charactera
-        while (i < 4) // hard-coded
-        {
-            let section = sections[curr_section_index + i];
-            do section.ScrollRight();
-
-            let i = i + 1;
-        }
-
-        return;
-    }
 }

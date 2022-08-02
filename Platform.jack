@@ -90,8 +90,6 @@ class Platform
 
 
 
-    // dogadjaju se artefacti (dodatni kvadrati i crte)
-
     method void ScrollRight()
     {
         if ((x < 32) & (x > -1))
@@ -119,7 +117,7 @@ class Platform
 
         let x = x + 1;
 
-        if ((x + size < 32) & (x + size > -1))
+        if ((x + size < 33) & (x + size > 0)) // (x + size - 1 < 32) & (x + size - 1 > -1)
         {
             let location = (y * 32) + x;
             let memAddress = 16384 + location + size - 1;

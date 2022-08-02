@@ -2,6 +2,7 @@ class Character
 {
     field int x;
     field int y;
+    field int absolute_x;
     field int location;
     field int width;
     field int height;
@@ -16,10 +17,6 @@ class Character
 
     field int widthdiv16;
 
-    //field Array div4lookup;
-
-    //field int worldOffset;
-
     constructor Character new(int x2, int y2)
     {
         var int i;
@@ -27,6 +24,7 @@ class Character
         let x = x2;
         let y = y2;
         let location = (y * 32) + x;
+        let absolute_x = x2;
 
         let width = 48; // TEMP
         let height = 32; // TEMP
@@ -40,25 +38,10 @@ class Character
 
         let lastlocation = location;
 
-        //let div4lookup = Array.new(32);
-        //let i = 0;
-        //while (i < 32)
-        //{
-            //let div4lookup[i] = i / 4;
-            //let i = i + 1;
-        //}
-
-        //let worldOffset = 0;
-
         do Draw();
 
         return this;
     }
-
-    //method int get_curr_section_index()
-    //{
-        //return div4lookup[x];
-    //}
 
     method int get_x()
     {
@@ -70,10 +53,17 @@ class Character
         return y;
     }
 
-    //method int get_world_offset()
-    //{
-    //    return worldOffset;
-    //}
+    method int get_absolute_x()
+    {
+        return absolute_x;
+    }
+
+    method void set_absolute_x(int abs_x)
+    {
+        let absolute_x = abs_x;
+        return;
+    }
+
 
     method void MoveLeft()
     {
@@ -82,6 +72,7 @@ class Character
             let lastlocation = location;
 
             let x = x - 1;
+            let absolute_x = absolute_x - 1;
             let location = location - 1;
 
             do Clear();
@@ -93,13 +84,12 @@ class Character
 
     method void MoveRight()
     {
-        
-
         if(((x + 1) * 16) + 16 < 512)
         {
             let lastlocation = location;
 
             let x = x + 1;
+            let absolute_x = absolute_x + 1;
             let location = location + 1;
 
             do Clear();
@@ -109,18 +99,6 @@ class Character
 
         return;
 
-    }
-
-    method void mr()
-    {
-        //let worldOffset = worldOffset - 1;
-        return;
-    }
-
-    method void ml()
-    {
-        //let worldOffset = worldOffset + 1;
-        return;
     }
 
     method void Jump()
@@ -144,18 +122,9 @@ class Character
     {
         var int i;
         var int platforms_num;
-        //var int xdiv4;
         var Platform platform;
         var Array platforms;
         var Section section;
-
-        //let xdiv4 = div4lookup[x];
-
-        //do Output.printInt(xdiv4);
-        //do Output.println();
-
-        //let platforms = sections[xdiv4];
-        //let section = sections[xdiv4];
 
         let section = sections[curr_section_index];
         let platforms = section.get_platforms();
@@ -195,7 +164,7 @@ class Character
         var int h;
         var int w;
 
-        let platform_x = platform.get_x() + world_offset; //TEMPPP
+        let platform_x = platform.get_x();
 
         let h = platform.get_y() - y - height;
         let w = x + widthdiv16;
