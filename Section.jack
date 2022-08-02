@@ -20,37 +20,37 @@ class Section
     method int get_right_border() { return right_border; }
     method int get_platforms_num() { return platforms_num; }
 
-    method void ScrollLeft() // kad se ide prema desno
-    {
-        var int i;
-        var Platform platform;
+    //method void ScrollLeft() // kad se ide prema desno
+    //{
+    //    var int i;
+    //    var Platform platform;
+    //
+    //    while (i < platforms_num)
+    //    {
+    //        let platform = platforms[i];
+    //        do platform.ScrollLeft();
+    //
+    //        let i = i + 1;  
+    //    }
+    //
+    //    return;
+    //}
 
-        while (i < platforms_num)
-        {
-            let platform = platforms[i];
-            do platform.ScrollLeft();
-
-            let i = i + 1;  
-        }
-
-        return;
-    }
-
-    method void ScrollRight() // kad se ide prema lijevo
-    {
-        var int i;
-        var Platform platform;
-
-        while (i < platforms_num)
-        {
-            let platform = platforms[i];
-            do platform.ScrollRight();
-
-            let i = i + 1;
-        }
-
-        return;
-    }
+    //method void ScrollRight() // kad se ide prema lijevo
+    //{
+    //    var int i;
+    //    var Platform platform;
+    //
+    //    while (i < platforms_num)
+    //    {
+    //        let platform = platforms[i];
+    //        do platform.ScrollRight();
+    //
+    //        let i = i + 1;
+    //    }
+    //
+    //    return;
+    //}
 
     method void Draw()
     {
@@ -61,7 +61,7 @@ class Section
         {
             let platform = platforms[i];
 
-            do platform.Draw(0);
+            do platform.Draw();
 
             let i = i + 1;
         }

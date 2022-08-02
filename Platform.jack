@@ -16,7 +16,7 @@ class Platform
 
         let size = size2;
 
-        do Draw(0);
+        do Draw();
 
         return this;
 
@@ -143,15 +143,15 @@ class Platform
         return;
     }
 
-    method void Draw(int world_offset)
+    method void Draw()
     {
         var int i;
 
         while (i < size)
         {
-            if (((x + world_offset + i) < 32) & ((x + world_offset + i) > -1))
+            if (((x + i) < 32) & ((x + i) > -1))
             {
-                let location = (y * 32) + x + world_offset;
+                let location = (y * 32) + x;
                 let memAddress = 16384 + location + i;
 
                 do Memory.poke(memAddress + 0, -1);

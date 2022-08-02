@@ -10,6 +10,8 @@ class Character
     field int forceY;
     field int gravity;
     field int jump_height;
+    field int jump_height_const;
+    field int jump_compensation_const;
     field bool can_jump;
 
     field int lastlocation;
@@ -34,7 +36,9 @@ class Character
         let forceY = 0;
         let gravity = 2;
         let can_jump = false;
-        let jump_height = 30; //20
+        let jump_height = 20; //20
+        let jump_height_const = 20;
+        let jump_compensation_const = 4;
 
         let lastlocation = location;
 
@@ -118,7 +122,7 @@ class Character
         return ((y + height + forceY) > 254); //254
     }
 
-    method void check_gravity(Array sections, int curr_section_index, int world_offset)
+    method void check_gravity(Array sections, int curr_section_index)
     {
         var int i;
         var int platforms_num;
@@ -126,9 +130,14 @@ class Character
         var Array platforms;
         var Section section;
 
+        do Output.printInt(curr_section_index);
+        do Output.println();
+
         let section = sections[curr_section_index];
         let platforms = section.get_platforms();
         let platforms_num = section.get_platforms_num();
+
+        let jump_height = jump_height_const + (jump_compensation_const * platforms_num); // JUMP COMENSATION
 
         let lastlocation = location;
 
@@ -138,7 +147,7 @@ class Character
 
             //if (Math.abs(y - platform.get_y()) < 50)
             //{
-                if (check_platform(platform, world_offset))
+                if (check_platform(platform))
                 {
                     let i = platforms_num - 1;
                 }
@@ -156,7 +165,7 @@ class Character
         return;
     }
 
-    method bool is_on_platform(Platform platform, int world_offset)
+    method bool is_on_platform(Platform platform)
     {
         var bool is_stable_x;
         var bool is_stable_y;
@@ -175,11 +184,11 @@ class Character
         return (is_stable_x & is_stable_y);
     }
 
-    method bool check_platform(Platform platform, int world_offset)
+    method bool check_platform(Platform platform)
     {
         let lastlocation = location;
 
-        let can_jump = is_on_platform(platform, world_offset);
+        let can_jump = is_on_platform(platform);
 
         if (can_jump)
         {

@@ -21,7 +21,6 @@ class Game
 {
     field int direction;
     field Character character;
-    field int world_offset;
     field int screen_width;
     field int move_area_width;
     field int screen_middle;
@@ -31,6 +30,8 @@ class Game
     field int platforms_num;
     field int sections_num;
     field int section_width;
+
+    field Array platforms;
 
     field Array sections;
 
@@ -50,7 +51,6 @@ class Game
         let direction = 0;
 
         let screen_width = 32;
-        let world_offset = 0;
         let move_area_width = 5;
         let screen_middle = 16;
         let left_border = screen_middle - move_area_width;
@@ -60,7 +60,10 @@ class Game
 
         let level_width = level.get_level_width();
         let character = level.get_character();
+
         let platforms_num = level.get_platforms_num();
+        let platforms = level.get_platforms();
+
         let sections_num = level.get_sections_num();
         let section_width = level.get_section_width();
         let sections = level.get_sections();
@@ -142,7 +145,7 @@ class Game
 
         let x = character.get_x();
 
-        do character.check_gravity(sections, get_curr_section_index(), world_offset);
+        do character.check_gravity(sections, get_curr_section_index());
 
         if (direction = 1) 
         {
@@ -163,21 +166,27 @@ class Game
     method void ScrollLeft()
     {
         var int i;
-        var Section section;
+        var Platform platform;
         var int absolute_x;
 
         let absolute_x = character.get_absolute_x();
         do character.set_absolute_x(absolute_x + 1);
 
-
-
-        while (i < sections_num)
+        while (i < platforms_num)
         {
-            let section = sections[i];
-            do section.ScrollLeft();
+            let platform = platforms[i];
+            do platform.ScrollLeft();
 
             let i = i + 1;
         }
+
+        //while (i < sections_num)
+        //{
+        //    let section = sections[i];
+        //    do section.ScrollLeft();
+
+        //    let i = i + 1;
+        //}
 
         return;
     }
@@ -185,16 +194,16 @@ class Game
     method void ScrollRight()
     {
         var int i;
-        var Section section;
+        var Platform platform;
         var int absolute_x;
 
         let absolute_x = character.get_absolute_x();
         do character.set_absolute_x(absolute_x - 1);
 
-        while (i < sections_num)
+        while (i < platforms_num)
         {
-            let section = sections[i];
-            do section.ScrollRight();
+            let platform = platforms[i];
+            do platform.ScrollRight();
 
             let i = i + 1;
         }
@@ -210,7 +219,7 @@ class Game
         let x = character.get_x();
         let abs_x = character.get_absolute_x();
 
-        do character.check_gravity(sections, get_curr_section_index(), world_offset);
+        do character.check_gravity(sections, get_curr_section_index());
 
         if (direction = 1) 
         {
