@@ -38,8 +38,8 @@ class Character
         let forceY = 0;
         let gravity = 1; //2
         let can_jump = false;
-        let jump_height = 1; //20
-        let jump_height_const = 1; //20
+        let jump_height = 5; //20
+        let jump_height_const = 5; //20
         let jump_compensation_const = 4;
 
         let lastlocation = location;
@@ -97,8 +97,12 @@ class Character
 
             let result = is_collided_right(platform);
 
+            //do Output.printInt(platform.get_size());
+            //do Output.println();
+
             if (result)
             {
+                
                 let i = platforms_num - 1;
             }
 
@@ -110,23 +114,57 @@ class Character
 
     method bool is_collided_right(Platform platform)
     {
-        //if (platform.get_size() = 1)
+        //if (platform.get_size() = 3)
         //{
-        //    do Output.printInt(platform.get_y() < (y + 16 - 1));
+        //    do Output.printInt(platform.get_y() < (y + 33));
         //    do Output.printString(" & ");
-        //    do Output.printInt((y + 16) < (platform.get_y() + 16 - 1));
+        //    do Output.printInt(y < (platform.get_y() + 1));
         //    do Output.println();
         //}
         
         
 
         //return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + 16 + 1)) & ((y + 16) < (platform.get_y() + 16 + 1));
-        return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + 17)) & (y < (platform.get_y() + 1));
+        return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + 33)) & (y < (platform.get_y() + 1));
     }
 
-    method bool check_left_collision()
+    method bool check_left_collision(Array platforms, int platforms_num)
     {
-        return 1;
+        var int i;
+        var Platform platform;
+        var Section section;
+        var bool result;
+
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+
+            let result = is_collided_left(platform);
+
+            if (result)
+            {
+                let i = platforms_num - 1;
+            }
+
+            let i = i + 1;
+        }
+
+        return result;
+    }
+
+    method bool is_collided_left(Platform platform)
+    {
+        //if (platform.get_size() = 2)
+        //{
+        //    do Output.printInt((x - 1) = (platform.get_x() + platform.get_size()));
+        //    do Output.printString(" & ");
+        //    do Output.printInt(platform.get_y() < (y + 33));
+        //    do Output.printString(" & ");
+        //    do Output.printInt(y < (platform.get_y() + 1));
+        //    do Output.println();
+        //}
+
+        return ((x - 1) = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + 33)) & (y < (platform.get_y() + 1));
     }
 
     
@@ -203,7 +241,7 @@ class Character
 
             //if (Math.abs(y - platform.get_y()) < 50)
             //{
-                if (check_platform(platform))
+                if (check_platform(platform, platforms, platforms_num))
                 {
                     let i = platforms_num - 1;
                 }
@@ -240,7 +278,7 @@ class Character
         return (is_stable_x & is_stable_y);
     }
 
-    method bool check_platform(Platform platform)
+    method bool check_platform(Platform platform, Array platforms, int platforms_num)
     {
         let lastlocation = location;
 
@@ -273,7 +311,6 @@ class Character
     method void Respawn()
     {
         let y = 100;
-
         if (x - 10 < 1)
         {
             let x = 2;
