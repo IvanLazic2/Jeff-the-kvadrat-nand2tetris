@@ -36,9 +36,9 @@ class Character
         let widthdiv16 = width / 16;
 
         let forceY = 0;
-        let gravity = 2; //2
+        let gravity = 6; //2
         let can_jump = false;
-        let jump_height = 15; //20
+        let jump_height = 30; //20, 26
         let jump_height_const = 5; //20
         let jump_compensation_const = 4;
 
@@ -295,6 +295,14 @@ class Character
         let w = x + widthdiv16;
 
         let is_stable_y = (-1 < h) & (h < (forceY + 1));
+
+        ////
+        if ((y + height + forceY) > platform.get_y())
+        {
+            let is_stable_y = true;
+        }
+        ////
+
         let is_stable_x = (x < (platform_x + platform.get_size() + 1)) & (w > (platform_x + 1));
 
         return (is_stable_x & is_stable_y);
