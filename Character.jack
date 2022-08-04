@@ -36,9 +36,9 @@ class Character
         let widthdiv16 = width / 16;
 
         let forceY = 0;
-        let gravity = 1; //2
+        let gravity = 2; //2
         let can_jump = false;
-        let jump_height = 5; //20
+        let jump_height = 15; //20
         let jump_height_const = 5; //20
         let jump_compensation_const = 4;
 
@@ -231,7 +231,7 @@ class Character
         //do Output.printInt(curr_section_index);
         //do Output.println();
 
-        let jump_height = jump_height_const + (jump_compensation_const * platforms_num); // JUMP COMENSATION
+        //let jump_height = jump_height_const + (jump_compensation_const * platforms_num); // JUMP COMENSATION
 
         let lastlocation = location;
 
@@ -249,6 +249,28 @@ class Character
 
             let i = i + 1;
         }
+
+        if (can_jump)
+        {
+            let y = platform.get_y() - height;
+           
+            let forceY = 0;
+            let location = (y * 32) + x;
+
+            do Clear();
+            do Draw();
+        }
+        // padanje
+        else
+        {
+            if (y > 219)
+            {
+                do Respawn();
+            }
+
+            let forceY = forceY + gravity;            
+        }
+
 
         let y = y + forceY;
         let location = (y * 32) + x;
@@ -284,26 +306,26 @@ class Character
 
         let can_jump = is_on_platform(platform);
 
-        if (can_jump)
-        {
-            let y = platform.get_y() - height;
-           
-            let forceY = 0;
-            let location = (y * 32) + x;
-
-            do Clear();
-            do Draw();
-        }
-        // padanje
-        else
-        {
-            if (y > 219)
-            {
-                do Respawn();
-            }
-
-            let forceY = forceY + gravity;            
-        }
+        //if (can_jump)
+        //{
+        //    let y = platform.get_y() - height;
+        //   
+        //    let forceY = 0;
+        //    let location = (y * 32) + x;
+//
+        //    do Clear();
+        //    do Draw();
+        //}
+        //// padanje
+        //else
+        //{
+        //    if (y > 219)
+        //    {
+        //        do Respawn();
+        //    }
+//
+        //    let forceY = forceY + gravity;            
+        //}
 
         return can_jump;
     }
