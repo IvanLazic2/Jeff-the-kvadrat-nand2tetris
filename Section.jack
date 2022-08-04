@@ -5,12 +5,15 @@ class Section
     field int right_border;
     field int platforms_num;
 
-    constructor Section new(Array platforms2, int left_border2, int right_border2, int platforms_num2)
+    field Array obstacles;
+    field int obstacles_num;
+
+    constructor Section new(int left_border2, int right_border2, int platforms_num2, int obstacles_num2)
     {
-        let platforms = platforms2;
         let left_border = left_border2;
         let right_border =  right_border2;
         let platforms_num = platforms_num2;
+        let obstacles_num = obstacles_num2;
 
         return this;
     }
@@ -20,41 +23,26 @@ class Section
     method int get_right_border() { return right_border; }
     method int get_platforms_num() { return platforms_num; }
 
-    //method void ScrollLeft() // kad se ide prema desno
-    //{
-    //    var int i;
-    //    var Platform platform;
-    //
-    //    while (i < platforms_num)
-    //    {
-    //        let platform = platforms[i];
-    //        do platform.ScrollLeft();
-    //
-    //        let i = i + 1;  
-    //    }
-    //
-    //    return;
-    //}
+    method Array get_obstacles() { return obstacles; }
+    method int get_obstacles_num() { return obstacles_num; }
 
-    //method void ScrollRight() // kad se ide prema lijevo
-    //{
-    //    var int i;
-    //    var Platform platform;
-    //
-    //    while (i < platforms_num)
-    //    {
-    //        let platform = platforms[i];
-    //        do platform.ScrollRight();
-    //
-    //        let i = i + 1;
-    //    }
-    //
-    //    return;
-    //}
+    method void set_platforms(Array platforms2) 
+    {
+        let platforms = platforms2;
+        return;
+    }
+
+    method void set_obstacles(Array obstacles2) 
+    {
+        let obstacles = obstacles2;
+        return;
+    }
+
 
     method void Draw()
     {
         var Platform platform;
+        var Obstacle obstacle;
         var int i;
 
         while (i < platforms_num)
@@ -62,6 +50,16 @@ class Section
             let platform = platforms[i];
 
             do platform.Draw();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < obstacles_num)
+        {
+            let obstacle = obstacles[i];
+
+            do obstacle.Draw();
 
             let i = i + 1;
         }

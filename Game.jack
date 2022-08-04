@@ -28,14 +28,18 @@ class Game
     field int right_border;
 
     field int platforms_num;
+    field int obstacles_num;
     field int sections_num;
     field int section_width;
 
     field Array platforms;
+    field Array obstacles;
     field Array sections;
 
     field Section curr_section;
-    field inr curr_section_index;
+    field Section last_section;
+    field int curr_section_index;
+    field int last_section_index;
     field Array curr_platforms;
     field int curr_platforms_num;
 
@@ -46,10 +50,14 @@ class Game
 
     field Enemy enemy;
 
-    field Obstacle obstacle1;
-    field Obstacle obstacle2;
-    field Obstacle obstacle3;
-    field Obstacle obstacle4;
+
+
+    field Array curr_obstacles;
+    field int curr_obstacles_num;
+
+
+
+    field int obstacle_redraw_delay;
 
 
 
@@ -60,7 +68,7 @@ class Game
         let direction = 0;
 
         let screen_width = 32;
-        let move_area_width = 5;
+        let move_area_width = 5; // 5
         let screen_middle = 16;
         let left_border = screen_middle - move_area_width;
         let right_border = screen_middle + move_area_width;
@@ -77,6 +85,9 @@ class Game
         let section_width = level.get_section_width();
         let sections = level.get_sections();
 
+        let obstacles_num = level.get_obstacles_num();
+        let obstacles = level.get_obstacles();
+
         let div4lookup = Array.new(level_width);
         let i = 0;
         while (i < level_width)
@@ -85,20 +96,12 @@ class Game
             let i = i + 1;
         }
 
-
-
+        let last_section = sections[get_curr_section_index()];
 
         let enemy = Enemy.new();
-        let obstacle1 = Obstacle.new(0);
-        let obstacle2 = Obstacle.new(1);
-        let obstacle3 = Obstacle.new(2);
-        let obstacle4 = Obstacle.new(3);
 
         do enemy.Draw(0);
-        do obstacle1.Draw(5, 50);
-        do obstacle2.Draw(5, 100);
-        do obstacle3.Draw(10, 100);
-        do obstacle4.Draw(15, 100);
+        
 
         return this;
     }
@@ -122,6 +125,8 @@ class Game
 
         while (~exit)
         {
+            let obstacle_redraw_delay = obstacle_redraw_delay + 1;
+
             let key = Keyboard.keyPressed();
 
             if (key = 0)
@@ -146,151 +151,100 @@ class Game
             }}}}}
             
 
-            
 
-            let curr_section = sections[get_curr_section_index()];
-            let curr_section_index = get_curr_section_index();
-            let curr_platforms = curr_section.get_platforms();
-            let curr_platforms_num = curr_section.get_platforms_num();
+            do UpdateCurrentSection();
 
-
-            //do Output.printInt(curr_section_index);
-            //do Output.println();
-
-            do move();
+            do Move();
             do Sys.wait(40); // 50
             
-
             do curr_section.Draw();
+            
+            do RedrawLastObstacle();
         }
 
         return;
     }
 
-    //method void DrawPlatforms()
-    //{
-    //    var int i;
-    //    var Platform platform;
-    //    //
-    //    while (i < curr_platforms_num)
-    //    {
-    //        let platform = curr_platforms[i];
-    //        //if (Math.abs(character.get_x() - platform.get_x()) < 5)
-    //        //{
-    //            do platform.Draw();
-    //        //}
-    //        let i = i + 1;
-    //    }
-    //    //
-    //    return;
-    //}
+    method void UpdateCurrentSection()
+    {   
+        let curr_section_index = get_curr_section_index();
 
-    //method void AddSectionBordersToCalc()
-    //{
-    //    var int i;
-    //    var int platform_counter;
-    //    var Section next_section;
-    //    var Section prev_section;
-    //    var int next_section_index;
-    //    var int prev_section_index;
-    //    var int next_platforms_num;
-    //    var int prev_platforms_num;
-    //    var Array next_platforms;
-    //    var Array prev_platforms;
-    //    var Platform platform;
-    //
-    //    let next_section_index = curr_section_index + 1;
-    //    let prev_section_index = curr_section_index - 1;
-    //    //
-    //    if (next_section_index < sections_num)
-    //    {
-    //        let next_section = sections[next_section_index];
-    //        let next_platforms = next_section.get_platforms();
-    //        let next_platforms_num = next_section.get_platforms_num();
-    //        //
-    //        let i = 0;
-    //        while (i < next_platforms_num)
-    //        {
-    //            let platform = next_platforms[i];
-    //        //
-    //            if (platform.get_x() = next_section.get_left_border())
-    //            {
-    //                let curr_platforms[curr_platforms_num + platform_counter] = platform;
-    //                let platform_counter = platform_counter + 1;
-    //            }
-    //        //
-    //            let i = i + 1;
-    //        }
-    //        //
-    //        let curr_platforms_num = curr_platforms_num + platform_counter;
-    //    }
-    //    //
-    //    let platform_counter = 0;
-    //    //
-    //    if (prev_section_index > -1)
-    //    {
-    //        let prev_section = sections[prev_section_index];
-    //        let prev_platforms = prev_section.get_platforms();
-    //        let prev_platforms_num = prev_section.get_platforms_num();
-    //    //
-    //        let i = 0;
-    //        while (i < prev_platforms_num)
-    //        {
-    //            let platform = prev_platforms[i];
-    //    //
-    //            if (platform.get_x() + platform.get_size() = prev_section.get_right_border())
-    //            {
-    //                let curr_platforms[curr_platforms_num + platform_counter] = platform;
-    //                let platform_counter = platform_counter + 1;
-    //            }
-    //        //
-    //            let i = i + 1;
-    //        }
-    //        //
-    //        let curr_platforms_num = curr_platforms_num + platform_counter;
-    //    }
-    //    return;
-    //}
+        let curr_section = sections[curr_section_index];
+        
+        let curr_platforms = curr_section.get_platforms();
+        let curr_platforms_num = curr_section.get_platforms_num();
 
+        let curr_obstacles = curr_section.get_obstacles();
+        let curr_obstacles_num = curr_section.get_obstacles_num();
 
-    // scroll test
-    method void move2()
+        return;
+    }
+
+    method void RedrawLastObstacle()
     {
-        var int x;
+        var Obstacle obs;
 
-        let x = character.get_x();
-
-        do character.check_gravity(platforms, platforms_num);
-
-        if (direction = 1) 
+        if(character.get_should_draw_last_obstacle())
         {
-            // move left -> scroll right
-
-            do ScrollRight();
+            let obs = character.get_last_obstacle();
         }
-        if (direction = 2) 
-        {
-            // move right -> scroll left
 
-            do ScrollLeft();
+        if (obstacle_redraw_delay = 5)
+        {
+            if (character.get_should_draw_last_obstacle())
+            {
+                do obs.Draw();
+            }
+            do character.set_should_draw_last_obstacle(false);
+            let obstacle_redraw_delay = 0;
         }
 
         return;
     }
+
 
     method void ScrollLeft()
     {
         var int i;
         var Platform platform;
         var int absolute_x;
+        var Obstacle obstacle;
 
         let absolute_x = character.get_absolute_x();
         do character.set_absolute_x(absolute_x + 1);
 
+        
+        while (i < obstacles_num)
+        {
+            let obstacle = obstacles[i];
+            do obstacle.ClearScrollLeft();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
         while (i < platforms_num)
         {
             let platform = platforms[i];
-            do platform.ScrollLeft();
+            do platform.ClearScrollLeft();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < obstacles_num)
+        {
+            let obstacle = obstacles[i];
+            do obstacle.DrawScrollLeft();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+            do platform.DrawScrollLeft();
 
             let i = i + 1;
         }
@@ -303,35 +257,73 @@ class Game
         var int i;
         var Platform platform;
         var int absolute_x;
+        var Obstacle obstacle;
 
         let absolute_x = character.get_absolute_x();
         do character.set_absolute_x(absolute_x - 1);
 
-        while (i < platforms_num)
+       
+        while (i < obstacles_num)
         {
-            let platform = platforms[i];
-            do platform.ScrollRight();
+            let obstacle = obstacles[i];
+            do obstacle.ClearScrollRight();
 
             let i = i + 1;
         }
 
+        let i = 0;
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+            do platform.ClearScrollRight();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < obstacles_num)
+        {
+            let obstacle = obstacles[i];
+            do obstacle.DrawScrollRight();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+            do platform.DrawScrollRight();
+
+            let i = i + 1;
+        }
+
+        
+
         return;
     }
 
-    method void move()
+    method void Move()
     {
         var int x;
         var int abs_x;
+        
 
         let x = character.get_x();
         let abs_x = character.get_absolute_x();
 
         do character.check_gravity(curr_platforms, curr_platforms_num);
+        do character.check_collision_obstacles(curr_obstacles, curr_obstacles_num);
+
+        
 
         if (direction = 1) 
         {
-            if (~character.check_left_collision(curr_platforms, curr_platforms_num))
+            if (~character.check_left_collision_platforms(curr_platforms, curr_platforms_num))
             {
+                //do Output.printInt(abs_x - screen_middle + move_area_width);
+                //do Output.printInt(abs_x);
+                //do Output.println();
                 if (abs_x - screen_middle + move_area_width > 0)
                 {
                     if (x > left_border)
@@ -351,7 +343,7 @@ class Game
         }
         if (direction = 2)
         {
-            if (~character.check_right_collision(curr_platforms, curr_platforms_num))
+            if (~character.check_right_collision_platforms(curr_platforms, curr_platforms_num))
             {
                 if (abs_x + screen_middle - move_area_width < level_width)
                 {
@@ -371,7 +363,9 @@ class Game
             }
         }
 
+        
+
         return;
     }
-
 }
+    

@@ -33,7 +33,62 @@ class Platform
         return;
     }
 
+	method void ClearScrollLeft()
+	{
+		let x = x - 1;
 
+		if ((x + size < 32) & (x + size > -1))
+        {
+            let location = (y * 32) + x;
+            let memAddress = 16384 + location + size;
+
+            do Memory.poke(memAddress + 0, 0);
+	        do Memory.poke(memAddress + 32, 0);
+	        do Memory.poke(memAddress + 64, 0);
+	        do Memory.poke(memAddress + 96, 0);
+	        do Memory.poke(memAddress + 128, 0);
+	        do Memory.poke(memAddress + 160, 0);
+	        do Memory.poke(memAddress + 192, 0);
+	        do Memory.poke(memAddress + 224, 0);
+	        do Memory.poke(memAddress + 256, 0);
+	        do Memory.poke(memAddress + 288, 0);
+	        do Memory.poke(memAddress + 320, 0);
+	        do Memory.poke(memAddress + 352, 0);
+	        do Memory.poke(memAddress + 384, 0);
+	        do Memory.poke(memAddress + 416, 0);
+	        do Memory.poke(memAddress + 448, 0);
+    	    do Memory.poke(memAddress + 480, 0);
+        }
+		return;
+	}
+
+	method void DrawScrollLeft()
+	{
+		if ((x < 32) & (x > -1))
+        {
+            let location = (y * 32) + x;
+            let memAddress = 16384 + location;
+
+            do Memory.poke(memAddress + 0, -1);
+	        do Memory.poke(memAddress + 32, -32767);
+	        do Memory.poke(memAddress + 64, -32767);
+	        do Memory.poke(memAddress + 96, -32767);
+	        do Memory.poke(memAddress + 128, -32767);
+	        do Memory.poke(memAddress + 160, -32767);
+	        do Memory.poke(memAddress + 192, -32767);
+	        do Memory.poke(memAddress + 224, -32767);
+	        do Memory.poke(memAddress + 256, -32767);
+	        do Memory.poke(memAddress + 288, -32767);
+	        do Memory.poke(memAddress + 320, -32767);
+	        do Memory.poke(memAddress + 352, -32767);
+	        do Memory.poke(memAddress + 384, -32767);
+	        do Memory.poke(memAddress + 416, -32767);
+	        do Memory.poke(memAddress + 448, -32767);
+    	    do Memory.poke(memAddress + 480, -1);
+        }
+
+		return;
+	}
 
     method void ScrollLeft()
     {
@@ -88,7 +143,63 @@ class Platform
         return;
     }
 
+	method void ClearScrollRight()
+	{
+		if ((x < 32) & (x > -1))
+        {
+            let location = (y * 32) + x;
+            let memAddress = 16384 + location;
 
+            do Memory.poke(memAddress + 0, 0);
+	        do Memory.poke(memAddress + 32, 0);
+	        do Memory.poke(memAddress + 64, 0);
+	        do Memory.poke(memAddress + 96, 0);
+	        do Memory.poke(memAddress + 128, 0);
+	        do Memory.poke(memAddress + 160, 0);
+	        do Memory.poke(memAddress + 192, 0);
+	        do Memory.poke(memAddress + 224, 0);
+	        do Memory.poke(memAddress + 256, 0);
+	        do Memory.poke(memAddress + 288, 0);
+	        do Memory.poke(memAddress + 320, 0);
+	        do Memory.poke(memAddress + 352, 0);
+	        do Memory.poke(memAddress + 384, 0);
+	        do Memory.poke(memAddress + 416, 0);
+	        do Memory.poke(memAddress + 448, 0);
+    	    do Memory.poke(memAddress + 480, 0);
+        }
+
+		let x = x + 1;
+
+		return;
+	}
+
+	method void DrawScrollRight()
+	{
+		if ((x + size < 33) & (x + size > 0)) // (x + size - 1 < 32) & (x + size - 1 > -1)
+        {
+            let location = (y * 32) + x;
+            let memAddress = 16384 + location + size - 1;
+
+            do Memory.poke(memAddress + 0, -1);
+	        do Memory.poke(memAddress + 32, -32767);
+	        do Memory.poke(memAddress + 64, -32767);
+	        do Memory.poke(memAddress + 96, -32767);
+	        do Memory.poke(memAddress + 128, -32767);
+	        do Memory.poke(memAddress + 160, -32767);
+	        do Memory.poke(memAddress + 192, -32767);
+	        do Memory.poke(memAddress + 224, -32767);
+	        do Memory.poke(memAddress + 256, -32767);
+	        do Memory.poke(memAddress + 288, -32767);
+	        do Memory.poke(memAddress + 320, -32767);
+	        do Memory.poke(memAddress + 352, -32767);
+	        do Memory.poke(memAddress + 384, -32767);
+	        do Memory.poke(memAddress + 416, -32767);
+	        do Memory.poke(memAddress + 448, -32767);
+    	    do Memory.poke(memAddress + 480, -1);
+        }
+
+		return;
+	}
 
     method void ScrollRight()
     {

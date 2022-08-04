@@ -21,6 +21,14 @@ class Character
 
     field int widthdiv16;
 
+    field int health;
+
+    field Obstacle last_obstacle;
+    field bool should_draw_last_obstacle;
+
+    field int damage_delay;
+    field int damage_cooldown;
+
     constructor Character new(int x2, int y2)
     {
         var int i;
@@ -36,11 +44,14 @@ class Character
         let widthdiv16 = width / 16;
 
         let forceY = 0;
-        let gravity = 6; //2
+        let gravity = 6; //2, 6
         let can_jump = false;
         let jump_height = 30; //20, 26
         let jump_height_const = 5; //20
         let jump_compensation_const = 4;
+
+        let health = 3;
+        let damage_cooldown = 20; // 20 game ticks
 
         let lastlocation = location;
 
@@ -49,20 +60,15 @@ class Character
         return this;
     }
 
-    method int get_x()
-    {
-        return x;
-    }
+    method int get_x() { return x; }
 
-    method int get_y()
-    {
-        return y;
-    }
+    method int get_y() { return y; }
 
-    method int get_absolute_x()
-    {
-        return absolute_x;
-    }
+    method int get_absolute_x() { return absolute_x; }
+
+    method Obstacle get_last_obstacle() { return last_obstacle; }
+
+    method bool get_should_draw_last_obstacle(){ return should_draw_last_obstacle; }
 
     method void set_x(int x2)
     {
@@ -82,9 +88,15 @@ class Character
         return;
     }
 
+    method void set_should_draw_last_obstacle(bool s)
+    {
+        let should_draw_last_obstacle = s;
+        return;
+    }
 
 
-    method bool check_right_collision(Array platforms, int platforms_num)
+    //// PLATFORM COLLISION
+    method bool check_right_collision_platforms(Array platforms, int platforms_num)
     {
         var int i;
         var Platform platform;
@@ -95,7 +107,7 @@ class Character
         {
             let platform = platforms[i];
 
-            let result = is_collided_right(platform);
+            let result = is_collided_right_platform(platform);
 
             //do Output.printInt(platform.get_size());
             //do Output.println();
@@ -112,7 +124,7 @@ class Character
         return result;
     }
 
-    method bool is_collided_right(Platform platform)
+    method bool is_collided_right_platform(Platform platform)
     {
         //if (platform.get_size() = 3)
         //{
@@ -122,13 +134,11 @@ class Character
         //    do Output.println();
         //}
         
-        
-
         //return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + 16 + 1)) & ((y + 16) < (platform.get_y() + 16 + 1));
-        return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + 33)) & (y < (platform.get_y() + 1));
+        return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + height + 1)) & (y < (platform.get_y() + 1));
     }
 
-    method bool check_left_collision(Array platforms, int platforms_num)
+    method bool check_left_collision_platforms(Array platforms, int platforms_num)
     {
         var int i;
         var Platform platform;
@@ -139,7 +149,7 @@ class Character
         {
             let platform = platforms[i];
 
-            let result = is_collided_left(platform);
+            let result = is_collided_left_platform(platform);
 
             if (result)
             {
@@ -152,7 +162,7 @@ class Character
         return result;
     }
 
-    method bool is_collided_left(Platform platform)
+    method bool is_collided_left_platform(Platform platform)
     {
         //if (platform.get_size() = 2)
         //{
@@ -164,11 +174,67 @@ class Character
         //    do Output.println();
         //}
 
-        return ((x - 1) = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + 33)) & (y < (platform.get_y() + 1));
+        return ((x - 1) = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + height + 1)) & (y < (platform.get_y() + 1));
+    }
+
+    //// OBSTACLE COLLISION
+    method void check_collision_obstacles(Array obstacles, int obstacles_num)
+    {
+        var int i;
+        var Obstacle obstacle;
+        var bool result;
+
+        while (i < obstacles_num)
+        {
+            let obstacle = obstacles[i];
+
+            let result = is_collided_obstacle(obstacle);
+
+            if (result)
+            {
+                let i = obstacles_num - 1;
+            }
+
+            let i = i + 1;
+        }
+
+        if (result)
+        {
+            do TakeDamage();
+            do Respawn();
+
+            let last_obstacle = obstacle;
+            let should_draw_last_obstacle = true;
+
+            //do obstacle.Draw();
+        }
+
+
+
+        if (damage_delay > 0)
+        {
+            let damage_delay = damage_delay - 1;
+        }
+
+
+        //if (taken_damage & damage_delay > 0)
+        //{
+        //    let damage_delay = damage_delay - 1;
+        //}
+//
+        //do Output.printInt(damage_delay);
+        //do Output.printString(" ");
+
+        return;
+    }
+
+    method bool is_collided_obstacle(Obstacle obstacle)
+    {
+        return (Math.abs(obstacle.get_x() - x) < 2) & (obstacle.get_y() - obstacle.get_height() < (y + height + 1)) & (y < (obstacle.get_y() + 1));
     }
 
     
-
+    //// MOVEMENT
     method void MoveLeft()
     {
         if ((x * 16) - 16 > 0)
@@ -222,6 +288,7 @@ class Character
         return ((y + height + forceY) > 254); //254
     }
 
+    //// GRAVITY
     method void check_gravity(Array platforms, int platforms_num)
     {
         var int i;
@@ -266,6 +333,8 @@ class Character
             if (y > 219)
             {
                 do Respawn();
+
+                // take damage
             }
 
             let forceY = forceY + gravity;            
@@ -297,7 +366,13 @@ class Character
         let is_stable_y = (-1 < h) & (h < (forceY + 1));
 
         ////
-        if ((y + height + forceY) > platform.get_y())
+        //if ((y + height + forceY + 1) > platform.get_y())
+        //{
+        //    let is_stable_y = true;
+        //}
+        ////
+        ////
+        if (Math.abs(y + height + forceY + 1 - platform.get_y()) < 16)
         {
             let is_stable_y = true;
         }
@@ -314,37 +389,20 @@ class Character
 
         let can_jump = is_on_platform(platform);
 
-        //if (can_jump)
-        //{
-        //    let y = platform.get_y() - height;
-        //   
-        //    let forceY = 0;
-        //    let location = (y * 32) + x;
-//
-        //    do Clear();
-        //    do Draw();
-        //}
-        //// padanje
-        //else
-        //{
-        //    if (y > 219)
-        //    {
-        //        do Respawn();
-        //    }
-//
-        //    let forceY = forceY + gravity;            
-        //}
-
         return can_jump;
     }
 
     method void Respawn()
     {
         let y = 100;
+
         if (x - 10 < 1)
         {
-            let x = 2;
-            let absolute_x = 2;
+            //let x = 2;
+            //let absolute_x = 2;
+            //temp
+            let x = x + 5;
+            let absolute_x = absolute_x + 5;
         }
         else
         {
@@ -352,12 +410,22 @@ class Character
             let absolute_x = absolute_x - 10;
         }
         
+        return;
+    }
 
-        
+    method void TakeDamage()
+    {
+        // dont take damage if already taken
+        if (damage_delay < 1)
+        {
+            let health = health - 1;
+            let damage_delay = damage_cooldown;
+        }
 
         return;
     }
 
+    //// DRAW/CLEAR
     method void Clear()
     {
         var bool color;

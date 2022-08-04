@@ -5,35 +5,315 @@
 
 class Obstacle
 {
+	field int x;
+	field int y;
 	field int type;
+	field int height;
 
-    constructor Obstacle new(int type2)
+    constructor Obstacle new(int x2, int y2, int type2, int height2)
     {
+		let x = x2;
+		let y = y2;
 		let type = type2;
+		let height = height2;
+
+		//if (type = 0)
+		//{
+		//	let height = 0;
+		//}
+		//else { if (type = 1)
+		//{
+		//	let height = 16;
+		//} 
+		//else { if (type = 2)
+		//{
+		//	let height = 48;
+		//} 
+		//else { if (type = 3)
+		//{
+		//	let height = 64;
+		//}}}}
+
+		do Draw();
 
         return this;
     }
 
-	method void Draw(int x, int y)
+	method int get_x() { return x; }
+	method int get_y() { return y; }
+	method int get_type() { return type; }
+	method int get_height() { return height; }
+
+	method void ClearScrollLeft()
+	{
+		do Clear();
+		let x = x - 1;
+
+		return;
+	}
+
+	method void DrawScrollLeft()
+	{
+		do Draw();
+
+		return;
+	}
+
+	method void ScrollLeft()
+	{
+		do Clear();
+		let x = x - 1;
+		do Draw();
+
+		return;
+	}
+
+	method void ClearScrollRight()
+	{
+		do Clear();
+		let x = x + 1;
+
+		return;
+	}
+
+	method void DrawScrollRight()
+	{
+		do Draw();
+		
+		return;
+	}
+
+	method void ScrollRight()
+	{
+		do Clear();
+		let x = x + 1;
+		do Draw();
+
+		return;
+	}
+
+	method void Clear()
+	{
+		var int location;
+
+		if ((x < 32) & (x > -1))
+        {
+			let location = (y * 32) + x;
+
+			if (type = 0)
+			{
+				do ClearSmallSpikes(location);
+			}
+			else { if (type = 1)
+			{
+				do ClearMediumSpikes(location);
+			} 
+			else { if (type = 2)
+			{
+				do ClearWeirdSpikes(location);
+			} 
+			else { if (type = 3)
+			{
+				do ClearLargeSpikes(location);
+			}}}}
+		}
+
+		return;
+	}
+
+	method void ClearSmallSpikes(int location)
+	{
+		var int i;
+        var Array curr_memaddr;
+		var bool color;
+		var int memAddress;
+
+		let color = false;
+
+		let memAddress = 16384 + location;
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		return;
+	}
+
+	method void ClearMediumSpikes(int location)
+	{
+		var int i;
+        var Array curr_memaddr;
+		var bool color;
+		var int memAddress;
+
+		let color = false;
+
+		let memAddress = 16384 + location;
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		let memAddress = 16384 + location - (16 * 32);
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		return;
+	}
+
+	method void ClearWeirdSpikes(int location)
+	{
+		var int i;
+        var Array curr_memaddr;
+		var bool color;
+		var int memAddress;
+
+		let color = false;
+
+		let memAddress = 16384 + location;
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		let memAddress = 16384 + location - (16 * 32);
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		let memAddress = 16384 + location - (2 * 16 * 32);
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		let memAddress = 16384 + location - (3 * 16 * 32);
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		return;
+	}
+
+	method void ClearLargeSpikes(int location)
+	{
+		var int i;
+        var Array curr_memaddr;
+		var bool color;
+		var int memAddress;
+
+		let color = false;
+
+		let memAddress = 16384 + location;
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		let memAddress = 16384 + location - (16 * 32);
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		let memAddress = 16384 + location - (2 * 16 * 32);
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		let memAddress = 16384 + location - (3 * 16 * 32);
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		let memAddress = 16384 + location - (4 * 16 * 32);
+
+        let i = 0;
+        while (i < 481)
+        {
+            let curr_memaddr = memAddress + i;
+            let curr_memaddr[0] = color;
+            let i = i + 32;                
+        }
+
+		return;
+	}
+
+	method void Draw()
 	{
 		var int location;
 
 		let location = (y * 32) + x;
 
-		if (type = 0)
-		{
-			do DrawSmallSpikes(location);
+		if ((x < 32) & (x > -1))
+    	{
+			if (type = 0)
+			{
+				do DrawSmallSpikes(location);
+			}
+			else { if (type = 1)
+			{
+				do DrawMediumSpikes(location);
+			} 
+			else { if (type = 2)
+			{
+				do DrawWeirdSpikes(location);
+			} 
+			else { if (type = 3)
+			{
+				do DrawLargeSpikes(location);
+			}}}}
 		}
-		else { if (type = 1)
-		{
-			do DrawMediumSpikes(location);
-		} else { if (type = 2)
-		{
-			do DrawWeirdSpikes(location);
-		} else { if (type = 3)
-		{
-			do DrawLargeSpikes(location);
-		}}}}
 
 		return;
 	}
