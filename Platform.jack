@@ -178,7 +178,7 @@ class Platform
 		if ((x + size < 33) & (x + size > 0)) // (x + size - 1 < 32) & (x + size - 1 > -1)
         {
             let location = (y * 32) + x;
-            let memAddress = 16384 + location + size - 1;
+            let memAddress = 16383 + location + size; // 16384 + location + size - 1
 
             do Memory.poke(memAddress + 0, -1);
 	        do Memory.poke(memAddress + 32, -32767);
@@ -231,7 +231,7 @@ class Platform
         if ((x + size < 33) & (x + size > 0)) // (x + size - 1 < 32) & (x + size - 1 > -1)
         {
             let location = (y * 32) + x;
-            let memAddress = 16384 + location + size - 1;
+            let memAddress = 16383 + location + size; // 16384 + location + size - 1
 
             do Memory.poke(memAddress + 0, -1);
 	        do Memory.poke(memAddress + 32, -32767);

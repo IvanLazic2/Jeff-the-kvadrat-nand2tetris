@@ -29,6 +29,8 @@ class Character
     field int damage_delay;
     field int damage_cooldown;
 
+    field int last_abs_x;
+
     constructor Character new(int x2, int y2)
     {
         var int i;
@@ -70,6 +72,8 @@ class Character
 
     method bool get_should_draw_last_obstacle(){ return should_draw_last_obstacle; }
 
+    method int get_last_abs_x() { return last_abs_x; }
+
     method void set_x(int x2)
     {
         let x = x2;
@@ -94,6 +98,12 @@ class Character
         return;
     }
 
+    method void increment_absolute_x(int inc)
+    {
+        let absolute_x = absolute_x + inc;
+        return;
+    }
+
 
     //// PLATFORM COLLISION
     method bool check_right_collision_platforms(Array platforms, int platforms_num)
@@ -109,12 +119,8 @@ class Character
 
             let result = is_collided_right_platform(platform);
 
-            //do Output.printInt(platform.get_size());
-            //do Output.println();
-
             if (result)
             {
-                
                 let i = platforms_num - 1;
             }
 
@@ -126,15 +132,6 @@ class Character
 
     method bool is_collided_right_platform(Platform platform)
     {
-        //if (platform.get_size() = 3)
-        //{
-        //    do Output.printInt(platform.get_y() < (y + 33));
-        //    do Output.printString(" & ");
-        //    do Output.printInt(y < (platform.get_y() + 1));
-        //    do Output.println();
-        //}
-        
-        //return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + 16 + 1)) & ((y + 16) < (platform.get_y() + 16 + 1));
         return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + height + 1)) & (y < (platform.get_y() + 1));
     }
 
@@ -164,16 +161,6 @@ class Character
 
     method bool is_collided_left_platform(Platform platform)
     {
-        //if (platform.get_size() = 2)
-        //{
-        //    do Output.printInt((x - 1) = (platform.get_x() + platform.get_size()));
-        //    do Output.printString(" & ");
-        //    do Output.printInt(platform.get_y() < (y + 33));
-        //    do Output.printString(" & ");
-        //    do Output.printInt(y < (platform.get_y() + 1));
-        //    do Output.println();
-        //}
-
         return ((x - 1) = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + height + 1)) & (y < (platform.get_y() + 1));
     }
 
@@ -200,37 +187,31 @@ class Character
 
         if (result)
         {
-            do TakeDamage();
-            do Respawn();
-
             let last_obstacle = obstacle;
             let should_draw_last_obstacle = true;
+            let last_abs_x = absolute_x;
 
-            //do obstacle.Draw();
+            do TakeDamage();
+            do Respawn();
         }
-
-
 
         if (damage_delay > 0)
         {
             let damage_delay = damage_delay - 1;
         }
 
-
-        //if (taken_damage & damage_delay > 0)
-        //{
-        //    let damage_delay = damage_delay - 1;
-        //}
-//
-        //do Output.printInt(damage_delay);
-        //do Output.printString(" ");
-
         return;
     }
 
     method bool is_collided_obstacle(Obstacle obstacle)
     {
-        return (Math.abs(obstacle.get_x() - x) < 2) & (obstacle.get_y() - obstacle.get_height() < (y + height + 1)) & (y < (obstacle.get_y() + 1));
+        var bool is_collided_y;
+        var bool is_collided_x;
+
+        let is_collided_x = (((x + 2) > (obstacle.get_x()) & (x < (obstacle.get_x() + obstacle.get_size() + 1))));
+        let is_collided_y = (obstacle.get_y() - obstacle.get_height() < (y + height + 1)) & (y < (obstacle.get_y() + 1));
+        
+        return is_collided_x & is_collided_y;
     }
 
     
@@ -294,11 +275,6 @@ class Character
         var int i;
         var Platform platform;
         var Section section;
-
-        //do Output.printInt(curr_section_index);
-        //do Output.println();
-
-        //let jump_height = jump_height_const + (jump_compensation_const * platforms_num); // JUMP COMENSATION
 
         let lastlocation = location;
 

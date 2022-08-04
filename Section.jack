@@ -8,6 +8,8 @@ class Section
     field Array obstacles;
     field int obstacles_num;
 
+    //field bool hostile;
+
     constructor Section new(int left_border2, int right_border2, int platforms_num2, int obstacles_num2)
     {
         let left_border = left_border2;

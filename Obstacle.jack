@@ -2,6 +2,7 @@
 // 1 - medium spikes
 // 2 - weird spikes
 // 3 - large spikes
+// 4 - spiked area - kao platforma samo spikeovi
 
 class Obstacle
 {
@@ -9,30 +10,15 @@ class Obstacle
 	field int y;
 	field int type;
 	field int height;
+	field int size;
 
-    constructor Obstacle new(int x2, int y2, int type2, int height2)
+    constructor Obstacle new(int x2, int y2, int type2, int height2, int size2)
     {
 		let x = x2;
 		let y = y2;
 		let type = type2;
 		let height = height2;
-
-		//if (type = 0)
-		//{
-		//	let height = 0;
-		//}
-		//else { if (type = 1)
-		//{
-		//	let height = 16;
-		//} 
-		//else { if (type = 2)
-		//{
-		//	let height = 48;
-		//} 
-		//else { if (type = 3)
-		//{
-		//	let height = 64;
-		//}}}}
+		let size = size2;
 
 		do Draw();
 
@@ -43,34 +29,134 @@ class Obstacle
 	method int get_y() { return y; }
 	method int get_type() { return type; }
 	method int get_height() { return height; }
+	method int get_size() { return size; }
 
 	method void ClearScrollLeft()
 	{
-		do Clear();
-		let x = x - 1;
+		var int location;
+		var int memAddress;
+
+		if (type = 4)
+		{
+			let x = x - 1;
+
+			if ((x + size < 32) & (x + size > -1))
+        	{
+        	    let location = (y * 32) + x;
+        	    let memAddress = 16384 + location + size;
+
+        	    do Memory.poke(memAddress + 0, 0);
+	    	    do Memory.poke(memAddress + 32, 0);
+	    	    do Memory.poke(memAddress + 64, 0);
+	    	    do Memory.poke(memAddress + 96, 0);
+	    	    do Memory.poke(memAddress + 128, 0);
+	    	    do Memory.poke(memAddress + 160, 0);
+	    	    do Memory.poke(memAddress + 192, 0);
+	    	    do Memory.poke(memAddress + 224, 0);
+	    	    do Memory.poke(memAddress + 256, 0);
+	    	    do Memory.poke(memAddress + 288, 0);
+	    	    do Memory.poke(memAddress + 320, 0);
+	    	    do Memory.poke(memAddress + 352, 0);
+	    	    do Memory.poke(memAddress + 384, 0);
+	    	    do Memory.poke(memAddress + 416, 0);
+	    	    do Memory.poke(memAddress + 448, 0);
+    		    do Memory.poke(memAddress + 480, 0);
+        	}
+		}
+		else
+		{
+			do Clear();
+			let x = x - 1;
+		}
+
+		
 
 		return;
 	}
 
 	method void DrawScrollLeft()
 	{
-		do Draw();
+		var int location;
+		var int memAddress;
+
+		if (type = 4)
+		{
+			if ((x < 32) & (x > -1))
+        	{
+        	    let location = (y * 32) + x;
+        	    let memAddress = 16384 + location;
+
+        	    do Memory.poke(memAddress + 0, 10922);
+				do Memory.poke(memAddress + 32, 21844);
+				do Memory.poke(memAddress + 64, 21844);
+				do Memory.poke(memAddress + 96, 10922);
+				do Memory.poke(memAddress + 128, -1);
+				do Memory.poke(memAddress + 160, -32767);
+				do Memory.poke(memAddress + 192, -32767);
+				do Memory.poke(memAddress + 224, -32767);
+				do Memory.poke(memAddress + 256, -32767);
+				do Memory.poke(memAddress + 288, -32767);
+				do Memory.poke(memAddress + 320, -32767);
+				do Memory.poke(memAddress + 352, -32767);
+				do Memory.poke(memAddress + 384, -32767);
+				do Memory.poke(memAddress + 416, -32767);
+				do Memory.poke(memAddress + 448, -32767);
+				do Memory.poke(memAddress + 480, -1);
+        	}
+		}
+		else
+		{
+			do Draw();
+		}
+		
 
 		return;
 	}
 
-	method void ScrollLeft()
-	{
-		do Clear();
-		let x = x - 1;
-		do Draw();
-
-		return;
-	}
+	//method void ScrollLeft()
+	//{
+	//	do Clear();
+	//	let x = x - 1;
+	//	do Draw();
+//
+	//	return;
+	//}
 
 	method void ClearScrollRight()
 	{
-		do Clear();
+		var int location;
+		var int memAddress;
+
+		if (type = 4)
+		{
+			if ((x < 32) & (x > -1))
+        	{
+        	    let location = (y * 32) + x;
+        	    let memAddress = 16384 + location;
+
+        	    do Memory.poke(memAddress + 0, 0);
+	    	    do Memory.poke(memAddress + 32, 0);
+	    	    do Memory.poke(memAddress + 64, 0);
+	    	    do Memory.poke(memAddress + 96, 0);
+	    	    do Memory.poke(memAddress + 128, 0);
+	    	    do Memory.poke(memAddress + 160, 0);
+	    	    do Memory.poke(memAddress + 192, 0);
+	    	    do Memory.poke(memAddress + 224, 0);
+	    	    do Memory.poke(memAddress + 256, 0);
+	    	    do Memory.poke(memAddress + 288, 0);
+	    	    do Memory.poke(memAddress + 320, 0);
+	    	    do Memory.poke(memAddress + 352, 0);
+	    	    do Memory.poke(memAddress + 384, 0);
+	    	    do Memory.poke(memAddress + 416, 0);
+	    	    do Memory.poke(memAddress + 448, 0);
+    		    do Memory.poke(memAddress + 480, 0);
+        	}
+		}
+		else
+		{
+			do Clear();
+		}
+		
 		let x = x + 1;
 
 		return;
@@ -78,19 +164,50 @@ class Obstacle
 
 	method void DrawScrollRight()
 	{
-		do Draw();
-		
+		var int location;
+		var int memAddress;
+
+		if (type = 4)
+		{
+			if ((x + size < 33) & (x + size > 0)) // (x + size - 1 < 32) & (x + size - 1 > -1)
+        	{
+        	    let location = (y * 32) + x;
+        	    let memAddress = 16383 + location + size; // 16384 + location + size - 1
+
+        	    do Memory.poke(memAddress + 0, 10922);
+				do Memory.poke(memAddress + 32, 21844);
+				do Memory.poke(memAddress + 64, 21844);
+				do Memory.poke(memAddress + 96, 10922);
+				do Memory.poke(memAddress + 128, -1);
+				do Memory.poke(memAddress + 160, -32767);
+				do Memory.poke(memAddress + 192, -32767);
+				do Memory.poke(memAddress + 224, -32767);
+				do Memory.poke(memAddress + 256, -32767);
+				do Memory.poke(memAddress + 288, -32767);
+				do Memory.poke(memAddress + 320, -32767);
+				do Memory.poke(memAddress + 352, -32767);
+				do Memory.poke(memAddress + 384, -32767);
+				do Memory.poke(memAddress + 416, -32767);
+				do Memory.poke(memAddress + 448, -32767);
+				do Memory.poke(memAddress + 480, -1);
+        	}
+		}
+		else
+		{
+			do Draw();
+		}
+
 		return;
 	}
 
-	method void ScrollRight()
-	{
-		do Clear();
-		let x = x + 1;
-		do Draw();
-
-		return;
-	}
+	//method void ScrollRight()
+	//{
+	//	do Clear();
+	//	let x = x + 1;
+	//	do Draw();
+//
+	//	return;
+	//}
 
 	method void Clear()
 	{
@@ -162,7 +279,7 @@ class Obstacle
             let i = i + 32;                
         }
 
-		let memAddress = 16384 + location - (16 * 32);
+		let memAddress = 15872 + location; //16384 - (16 * 32)
 
         let i = 0;
         while (i < 481)
@@ -194,7 +311,7 @@ class Obstacle
             let i = i + 32;                
         }
 
-		let memAddress = 16384 + location - (16 * 32);
+		let memAddress = 15872 + location; // 16384 - (16 * 32)
 
         let i = 0;
         while (i < 481)
@@ -204,7 +321,7 @@ class Obstacle
             let i = i + 32;                
         }
 
-		let memAddress = 16384 + location - (2 * 16 * 32);
+		let memAddress = 15360 + location; // 16384 - (2 * 16 * 32)
 
         let i = 0;
         while (i < 481)
@@ -214,7 +331,7 @@ class Obstacle
             let i = i + 32;                
         }
 
-		let memAddress = 16384 + location - (3 * 16 * 32);
+		let memAddress = 14848 + location; // 16384 - (3 * 16 * 32)
 
         let i = 0;
         while (i < 481)
@@ -246,7 +363,7 @@ class Obstacle
             let i = i + 32;                
         }
 
-		let memAddress = 16384 + location - (16 * 32);
+		let memAddress = 15872 + location; // 16384 - (16 * 32)
 
         let i = 0;
         while (i < 481)
@@ -256,7 +373,7 @@ class Obstacle
             let i = i + 32;                
         }
 
-		let memAddress = 16384 + location - (2 * 16 * 32);
+		let memAddress = 15360 + location; // 16384 - (2 * 16 * 32)
 
         let i = 0;
         while (i < 481)
@@ -266,7 +383,7 @@ class Obstacle
             let i = i + 32;                
         }
 
-		let memAddress = 16384 + location - (3 * 16 * 32);
+		let memAddress = 14848 + location; // 16384 - (3 * 16 * 32)
 
         let i = 0;
         while (i < 481)
@@ -276,7 +393,7 @@ class Obstacle
             let i = i + 32;                
         }
 
-		let memAddress = 16384 + location - (4 * 16 * 32);
+		let memAddress = 14336 + location; // 16384 - (4 * 16 * 32)
 
         let i = 0;
         while (i < 481)
@@ -312,7 +429,11 @@ class Obstacle
 			else { if (type = 3)
 			{
 				do DrawLargeSpikes(location);
-			}}}}
+			}
+			else { if (type = 4)
+			{
+				do DrawSpikedArea();
+			}}}}}
 		}
 
 		return;
@@ -572,4 +693,41 @@ class Obstacle
 
 		return;
 	}
+
+	method void DrawSpikedArea()
+    {
+		var int memAddress;
+		var int location;
+        var int i;
+
+        while (i < size)
+        {
+            if (((x + i) < 32) & ((x + i) > -1))
+            {
+                let location = (y * 32) + x;
+                let memAddress = 16384 + location + i;
+
+                do Memory.poke(memAddress + 0, 10922);
+				do Memory.poke(memAddress + 32, 21844);
+				do Memory.poke(memAddress + 64, 21844);
+				do Memory.poke(memAddress + 96, 10922);
+				do Memory.poke(memAddress + 128, -1);
+				do Memory.poke(memAddress + 160, -32767);
+				do Memory.poke(memAddress + 192, -32767);
+				do Memory.poke(memAddress + 224, -32767);
+				do Memory.poke(memAddress + 256, -32767);
+				do Memory.poke(memAddress + 288, -32767);
+				do Memory.poke(memAddress + 320, -32767);
+				do Memory.poke(memAddress + 352, -32767);
+				do Memory.poke(memAddress + 384, -32767);
+				do Memory.poke(memAddress + 416, -32767);
+				do Memory.poke(memAddress + 448, -32767);
+				do Memory.poke(memAddress + 480, -1);
+            }
+
+            let i = i + 1;
+        }
+
+        return;
+    }
 }

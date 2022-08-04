@@ -58,6 +58,7 @@ class Game
 
 
     field int obstacle_redraw_delay;
+    field int obstacle_redraw_cooldown;
 
 
 
@@ -98,6 +99,8 @@ class Game
 
         let last_section = sections[get_curr_section_index()];
 
+        let obstacle_redraw_cooldown = 6; // 6 game ticks
+
         let enemy = Enemy.new();
 
         do enemy.Draw(0);
@@ -125,7 +128,7 @@ class Game
 
         while (~exit)
         {
-            let obstacle_redraw_delay = obstacle_redraw_delay + 1;
+            
 
             let key = Keyboard.keyPressed();
 
@@ -160,6 +163,11 @@ class Game
             do curr_section.Draw();
             
             do RedrawLastObstacle();
+
+            //do Output.printInt(get_curr_section_index());
+            //do Output.println();
+
+            let last_section_index = get_curr_section_index();
         }
 
         return;
@@ -182,20 +190,30 @@ class Game
 
     method void RedrawLastObstacle()
     {
-        var Obstacle obs;
+        var int index;
+        var Section section;
+        var bool draw;
 
-        if(character.get_should_draw_last_obstacle())
+        let draw = character.get_should_draw_last_obstacle();
+
+        if (draw & (obstacle_redraw_delay < (obstacle_redraw_cooldown + 1)))
         {
-            let obs = character.get_last_obstacle();
+            let obstacle_redraw_delay = obstacle_redraw_delay + 1;
         }
 
-        if (obstacle_redraw_delay = 5)
+        if (obstacle_redraw_delay = obstacle_redraw_cooldown)
         {
-            if (character.get_should_draw_last_obstacle())
+            if (draw)
             {
-                do obs.Draw();
+                let index = div4lookup[character.get_last_abs_x()];
+
+                let section = sections[index];
+
+                do section.Draw();
+
+                do character.set_should_draw_last_obstacle(false);
             }
-            do character.set_should_draw_last_obstacle(false);
+            
             let obstacle_redraw_delay = 0;
         }
 
@@ -207,13 +225,10 @@ class Game
     {
         var int i;
         var Platform platform;
-        var int absolute_x;
         var Obstacle obstacle;
 
-        let absolute_x = character.get_absolute_x();
-        do character.set_absolute_x(absolute_x + 1);
+        do character.increment_absolute_x(1);
 
-        
         while (i < obstacles_num)
         {
             let obstacle = obstacles[i];
@@ -256,13 +271,10 @@ class Game
     {
         var int i;
         var Platform platform;
-        var int absolute_x;
         var Obstacle obstacle;
 
-        let absolute_x = character.get_absolute_x();
-        do character.set_absolute_x(absolute_x - 1);
+        do character.increment_absolute_x(-1);
 
-       
         while (i < obstacles_num)
         {
             let obstacle = obstacles[i];
@@ -298,8 +310,6 @@ class Game
             let i = i + 1;
         }
 
-        
-
         return;
     }
 
@@ -308,22 +318,16 @@ class Game
         var int x;
         var int abs_x;
         
-
         let x = character.get_x();
         let abs_x = character.get_absolute_x();
 
         do character.check_gravity(curr_platforms, curr_platforms_num);
         do character.check_collision_obstacles(curr_obstacles, curr_obstacles_num);
 
-        
-
         if (direction = 1) 
         {
             if (~character.check_left_collision_platforms(curr_platforms, curr_platforms_num))
             {
-                //do Output.printInt(abs_x - screen_middle + move_area_width);
-                //do Output.printInt(abs_x);
-                //do Output.println();
                 if (abs_x - screen_middle + move_area_width > 0)
                 {
                     if (x > left_border)
@@ -362,9 +366,7 @@ class Game
                 }
             }
         }
-
         
-
         return;
     }
 }
