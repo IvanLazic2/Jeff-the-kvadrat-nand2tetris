@@ -1,21 +1,26 @@
+// 0 - simple ground platform
+// 1 - simple platform - TO DO
+
 class Platform
 {
     field int x;
     field int y;
     field int size;
+	field int type;
     field int location;
     
     field int memAddress;
 
 
-    constructor Platform new(int x2, int y2, int size2)
+    constructor Platform new(int x2, int y2, int type2, int size2)
     {
         let x = x2;
         let y = y2;
         let location = (y * 32) + x;
 
+		let type = type2;
         let size = size2;
-
+		
         do Draw();
 
         return this;
@@ -25,6 +30,7 @@ class Platform
     method int get_x() { return x; }
     method int get_y() { return y; }
     method int get_size() { return size; }
+	method int get_type() { return type; }
 
     // TO DO
     method void set_moving()
@@ -258,11 +264,13 @@ class Platform
     {
         var int i;
 
+		let location = (y * 32) + x;
+
         while (i < size)
         {
             if (((x + i) < 32) & ((x + i) > -1))
             {
-                let location = (y * 32) + x;
+                //let location = (y * 32) + x;
                 let memAddress = 16384 + location + i;
 
                 do Memory.poke(memAddress + 0, -1);
