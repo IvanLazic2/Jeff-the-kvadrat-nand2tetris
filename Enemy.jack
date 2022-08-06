@@ -7,9 +7,17 @@ class Enemy
 	field int y;
 	field int type;
 
-	field bool spider_draw_first_frame;
-	field int spider_animation_delay;
-	field int spider_animation_cooldown;
+	field int width; // spider - 1
+	field int height; // spider - 0
+
+
+
+
+	field int number_of_frames;
+	field int curr_frame;
+
+	field int animation_delay;
+	field int animation_timer;
 
     constructor Enemy new(int x2, int y2, int type2)
     {	
@@ -17,7 +25,24 @@ class Enemy
 		let y = y2;
 		let type = type2;
 
-		let spider_animation_cooldown = 3; // 10 game ticks
+
+
+		if (type = 0)
+		{
+			let number_of_frames = 0;
+			let animation_delay = 0;
+		}
+		else { if (type = 1)
+		{
+			let number_of_frames = 2;
+			let animation_delay = 3;
+		}}
+
+		let curr_frame = 0;
+		let animation_timer = animation_delay;
+
+
+
 
         return this;
     }
@@ -38,7 +63,38 @@ class Enemy
         return;
     }
 
+	method void CheckTimer()
+	{
+		if (animation_timer < 1)
+		{
+			do ChangeFrame();
 
+			let animation_timer = animation_delay;
+		}
+
+		return;
+	}
+
+	method void DecrementTimer()
+	{
+		let animation_timer = animation_timer - 1;
+		return;
+	}
+
+
+	method void ChangeFrame()
+	{
+		if (curr_frame < (number_of_frames - 1))
+		{
+			let curr_frame = curr_frame + 1;
+		}
+		else
+		{
+			let curr_frame = 0;
+		}
+
+		return;
+	}
 
     method void Draw()
     {
@@ -83,34 +139,14 @@ class Enemy
 
 	method void DrawSpider(int memAddress)
 	{
-		if (spider_draw_first_frame)
+		if (curr_frame = 0)
 		{
 			do DrawSpiderFrame1(memAddress);
-
-			if (spider_animation_delay < 1)
-			{
-				let spider_draw_first_frame = false;
-				let spider_animation_delay = spider_animation_cooldown;
-			}
-			else
-			{
-				let spider_animation_delay = spider_animation_delay - 1;
-			}
 		}
-		else
+		else { if (curr_frame = 1)
 		{
 			do DrawSpiderFrame2(memAddress);
-
-			if (spider_animation_delay < 1)
-			{
-				let spider_draw_first_frame = true;
-				let spider_animation_delay = spider_animation_cooldown;
-			}
-			else
-			{
-				let spider_animation_delay = spider_animation_delay - 1;
-			}
-		}
+		}}
 
 		return;
 	}

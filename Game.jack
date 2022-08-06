@@ -57,8 +57,13 @@ class Game
 
 
 
-    field int obstacle_redraw_delay;
-    field int obstacle_redraw_cooldown;
+
+    field int game_delay;
+
+    field int timer3;
+    field int timer6;
+    field int timer100;
+
 
 
 
@@ -99,11 +104,21 @@ class Game
 
         let last_section = sections[get_curr_section_index()];
 
-        let obstacle_redraw_cooldown = 6; // 6 game ticks
+
+
+        let game_delay = 20;
+
+        let timer3 = 3;
+        let timer6 = 6;
+        let timer100 = 100;
+
+
+
+
 
         let enemy = Enemy.new(0, 99, 1);
 
-        do enemy.Draw();
+        
         
 
         return this;
@@ -158,21 +173,54 @@ class Game
             do UpdateCurrentSection();
 
             do Move();
-            do Sys.wait(40); // 50
+            do Sys.wait(game_delay);
             
             do curr_section.Draw();
-            
-            do RedrawLastObstacle();
+            do enemy.Draw();
 
-            //do Output.printInt(get_curr_section_index());
-            //do Output.println();
+            do CheckTimers();
 
 
-            //do enemy.Draw();
+
 
 
             let last_section_index = get_curr_section_index();
+
+            do DecrementTimers();
         }
+
+        return;
+    }
+
+    method void CheckTimers()
+    {
+        if (timer6 < 1)
+        {
+            do RedrawLastSection();
+
+            let timer6 = 6;
+        }
+
+        if (timer100 < 1)
+        {
+            //do Screen.drawLine(0, 255-80, 511, 255-80);
+
+            let timer100 = 100;
+        }
+
+        
+        do enemy.CheckTimer();
+
+        return;
+    }
+
+    method void DecrementTimers()
+    {
+        let timer3 = timer3 - 1;
+        let timer6 = timer6 - 1;
+        let timer100 = timer100 - 1;
+
+        do enemy.DecrementTimer();
 
         return;
     }
@@ -192,33 +240,17 @@ class Game
         return;
     }
 
-    method void RedrawLastObstacle()
+    method void RedrawLastSection()
     {
         var int index;
         var Section section;
-        var bool draw;
 
-        let draw = character.get_should_draw_last_obstacle();
-
-        if (draw & (obstacle_redraw_delay < (obstacle_redraw_cooldown + 1)))
+        if (character.get_should_draw_last_obstacle())
         {
-            let obstacle_redraw_delay = obstacle_redraw_delay + 1;
-        }
-
-        if (obstacle_redraw_delay = obstacle_redraw_cooldown)
-        {
-            if (draw)
-            {
-                let index = div4lookup[character.get_last_abs_x()];
-
-                let section = sections[index];
-
-                do section.Draw();
-
-                do character.set_should_draw_last_obstacle(false);
-            }
-            
-            let obstacle_redraw_delay = 0;
+            let index = div4lookup[character.get_last_abs_x()];
+            let section = sections[index];
+            do section.Draw();
+            do character.set_should_draw_last_obstacle(false);
         }
 
         return;
