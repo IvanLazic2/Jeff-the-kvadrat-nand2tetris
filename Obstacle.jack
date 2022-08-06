@@ -346,58 +346,26 @@ class Obstacle
 
 	method void Draw()
 	{
+		var int i;
 		var int location;
 		var int memAddress;
 
 		let location = (y * 32) + x;
 		let memAddress = 16384 + location;
 
-		do DrawBlocks(memAddress);
-
-		//if ((x < 32) & (x > -1))
-    	//{
-		//	if (type = 0)
-		//	{
-		//		do DrawSmallSpikes(location);
-		//	}
-		//	else { if (type = 1)
-		//	{
-		//		do DrawMediumSpikes(location);
-		//	} 
-		//	else { if (type = 2)
-		//	{
-		//		do DrawWeirdSpikes(location);
-		//	} 
-		//	else { if (type = 3)
-		//	{
-		//		do DrawLargeSpikes(location);
-		//	}
-		//	else { if (type = 4)
-		//	{
-		//		do DrawSpikedArea();
-		//	}}}}}
-		//}
-
-		return;
-	}
-
-	method void DrawBlocks(int memAddress)
-    {
-        var int i;
-
         while (i < size)
         {
             if (((x + i) < 32) & ((x + i) > -1))
             {
 				do DrawBlock(memAddress);
-				let memAddress = memAddress + 1;
             }
 
             let i = i + 1;
+			let memAddress = memAddress + 1;
         }
 
         return;
-    }
+	}
 
 	method void DrawBlock(int memAddress)
 	{

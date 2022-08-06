@@ -31,6 +31,8 @@ class Character
 
     field int last_abs_x;
 
+    field bool draw_character_left;
+
     constructor Character new(int x2, int y2)
     {
         var int i;
@@ -104,6 +106,12 @@ class Character
         return;
     }
 
+    method void set_draw_character_left(bool b)
+    {
+        let draw_character_left = b;
+        return;
+    }
+
 
     //// PLATFORM COLLISION
     method bool check_right_collision_platforms(Array platforms, int platforms_num)
@@ -132,7 +140,7 @@ class Character
 
     method bool is_collided_right_platform(Platform platform)
     {
-        return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + height + 1)) & (y < (platform.get_y() + 1));
+        return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
     }
 
     method bool check_left_collision_platforms(Array platforms, int platforms_num)
@@ -161,7 +169,7 @@ class Character
 
     method bool is_collided_left_platform(Platform platform)
     {
-        return ((x - 1) = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + height + 1)) & (y < (platform.get_y() + 1));
+        return ((x - 1) = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
     }
 
     //// OBSTACLE COLLISION
@@ -209,7 +217,7 @@ class Character
         var bool is_collided_x;
 
         let is_collided_x = (((x + 2) > (obstacle.get_x()) & (x < (obstacle.get_x() + obstacle.get_size() + 1))));
-        let is_collided_y = (obstacle.get_y() - obstacle.get_height() < (y + height + 1)) & (y < (obstacle.get_y() + 1));
+        let is_collided_y = (obstacle.get_y() - obstacle.get_height() < (y + height)) & (y < (obstacle.get_y() + 1));
         
         return is_collided_x & is_collided_y;
     }
@@ -348,7 +356,7 @@ class Character
         //}
         ////
         ////
-        if (Math.abs(y + height + forceY + 1 - platform.get_y()) < 16)
+        if (Math.abs(y + height + forceY + 1 - platform.get_y()) < 8) // < 16
         {
             let is_stable_y = true;
         }
@@ -469,12 +477,29 @@ class Character
 
     method void Draw()
     {
+        if (draw_character_left)
+        {
+            do DrawLeft();
+        }
+        else
+        {
+            do DrawRight();
+        }
+
+        return;
+    }
+
+    method void DrawRight()
+    {
         if (~(lastlocation = location) & (location < 7199))
         // (~(lastlocation = location) & (16384+513+480+location < 24575))
         {
-            
+            let memAddress = 16384 + location;
+
             // faca
-            let memAddress = 16384 + location + 512;
+            //let memAddress = 16384 + location + 512;
+            let memAddress = memAddress + 512;
+
 	        do Memory.poke(memAddress + 0, -1);
 	        do Memory.poke(memAddress + 32, -32767);
 	        do Memory.poke(memAddress + 64, -32767);
@@ -494,7 +519,9 @@ class Character
 
 
             // desna ruka donji dio
-            let memAddress = 16384 + location + 513;
+            //let memAddress = 16384 + location + 513;
+            let memAddress = memAddress + 1; // memAddres - 512 + 513
+
 	        do Memory.poke(memAddress + 0, 4128);
 	        do Memory.poke(memAddress + 32, 8256);
             do Memory.poke(memAddress + 64, 8320);
@@ -513,7 +540,9 @@ class Character
 	        do Memory.poke(memAddress + 480, 0);
 
             // lijeva ruka donji dio
-            let memAddress = 16384 + location + 511;
+            //let memAddress = 16384 + location + 511;
+            let memAddress = memAddress - 2; // memAddress - 1 + 511
+
 	        do Memory.poke(memAddress + 0, 520);
 	        do Memory.poke(memAddress + 32, 516);
 	        do Memory.poke(memAddress + 64, 260);
@@ -532,7 +561,9 @@ class Character
 	        do Memory.poke(memAddress + 480, 0);
 
             // desna ruka gornji dio
-            let memAddress = 16384 + location + 1;
+            //let memAddress = 16384 + location + 1;
+            let memAddress = memAddress - 510; // memAddres - 511 + 1
+
 	        do Memory.poke(memAddress + 0, 0);
 	        do Memory.poke(memAddress + 32, 0);
 	        do Memory.poke(memAddress + 64, 0);
@@ -552,7 +583,9 @@ class Character
 
 
             // lijeva ruka gornji dio
-            let memAddress = 16384 + location - 1;
+            //let memAddress = 16384 + location - 1;
+            let memAddress = memAddress - 2; // memAddress + 1 - 2
+
 	        do Memory.poke(memAddress + 0, 0);
 	        do Memory.poke(memAddress + 32, 0);
 	        do Memory.poke(memAddress + 64, 0);
@@ -570,21 +603,124 @@ class Character
 	        do Memory.poke(memAddress + 448, 528);
 	        do Memory.poke(memAddress + 480, 520);
         }
-
         return;
     }
 
+    method void DrawLeft()
+    {
+        if (~(lastlocation = location) & (location < 7199))
+        // (~(lastlocation = location) & (16384+513+480+location < 24575))
+        {
+            let memAddress = 16384 + location;
 
+            // faca
+            //let memAddress = 16384 + location + 512;
+            let memAddress = memAddress + 512;
 
+            do Memory.poke(memAddress + 0, -1);
+	        do Memory.poke(memAddress + 32, -32767);
+	        do Memory.poke(memAddress + 64, -32767);
+	        do Memory.poke(memAddress + 96, -30703);
+	        do Memory.poke(memAddress + 128, -31711);
+	        do Memory.poke(memAddress + 160, -32191);
+	        do Memory.poke(memAddress + 192, -31727);
+	        do Memory.poke(memAddress + 224, -32767);
+	        do Memory.poke(memAddress + 256, -32767);
+	        do Memory.poke(memAddress + 288, -32767);
+	        do Memory.poke(memAddress + 320, -31807);
+	        do Memory.poke(memAddress + 352, -31711);
+	        do Memory.poke(memAddress + 384, -31711);
+	        do Memory.poke(memAddress + 416, -32767);
+	        do Memory.poke(memAddress + 448, -32767);
+	        do Memory.poke(memAddress + 480, -1);
 
+            // desna ruka donji dio
+            //let memAddress = 16384 + location + 511;
+            let memAddress = memAddress - 1; // memAdress - 512 + 511
 
+            do Memory.poke(memAddress + 0, 1032);
+	        do Memory.poke(memAddress + 32, 516);
+	        do Memory.poke(memAddress + 64, 260);
+	        do Memory.poke(memAddress + 96, -8062);
+	        do Memory.poke(memAddress + 128, 7010);
+	        do Memory.poke(memAddress + 160, 1041);
+	        do Memory.poke(memAddress + 192, 1);
+	        do Memory.poke(memAddress + 224, 1);
+	        do Memory.poke(memAddress + 256, 2);
+	        do Memory.poke(memAddress + 288, 2);
+	        do Memory.poke(memAddress + 320, 4);
+	        do Memory.poke(memAddress + 352, 56);
+	        do Memory.poke(memAddress + 384, 1984);
+	        do Memory.poke(memAddress + 416, -2048);
+	        do Memory.poke(memAddress + 448, 0);
+	        do Memory.poke(memAddress + 480, 0);
 
+            // lijeva ruka donji dio
+            //let memAddress = 16384 + location + 513;
+            let memAddress = memAddress + 2; // memAddress - 511 + 513
 
+            do Memory.poke(memAddress + 0, 4160);
+	        do Memory.poke(memAddress + 32, 8256);
+	        do Memory.poke(memAddress + 64, 8320);
+	        do Memory.poke(memAddress + 96, 16647);
+	        do Memory.poke(memAddress + 128, 18136);
+	        do Memory.poke(memAddress + 160, -30688);
+	        do Memory.poke(memAddress + 192, ~32767);
+	        do Memory.poke(memAddress + 224, ~32767);
+	        do Memory.poke(memAddress + 256, 16384);
+	        do Memory.poke(memAddress + 288, 16384);
+	        do Memory.poke(memAddress + 320, 8192);
+	        do Memory.poke(memAddress + 352, 7168);
+	        do Memory.poke(memAddress + 384, 992);
+	        do Memory.poke(memAddress + 416, 31);
+	        do Memory.poke(memAddress + 448, 0);
+	        do Memory.poke(memAddress + 480, 0);
 
+            // desna ruka gornji dio
+            //let memAddress = 16384 + location - 1;
+            let memAddress = memAddress - 514; //memAddress - 513 - 1
 
+            do Memory.poke(memAddress + 0, 0);
+	        do Memory.poke(memAddress + 32, 0);
+	        do Memory.poke(memAddress + 64, 0);
+	        do Memory.poke(memAddress + 96, 8184);
+	        do Memory.poke(memAddress + 128, 8184);
+	        do Memory.poke(memAddress + 160, 8184);
+	        do Memory.poke(memAddress + 192, 16128);
+	        do Memory.poke(memAddress + 224, 19584);
+	        do Memory.poke(memAddress + 256, 24320);
+	        do Memory.poke(memAddress + 288, 22784);
+	        do Memory.poke(memAddress + 320, 8704);
+	        do Memory.poke(memAddress + 352, 4352);
+	        do Memory.poke(memAddress + 384, 2176);
+	        do Memory.poke(memAddress + 416, 2112);
+	        do Memory.poke(memAddress + 448, 2080);
+	        do Memory.poke(memAddress + 480, 1040);
 
+            // lijeva ruka gornji dio
+            //let memAddress = 16384 + location + 1;
+            let memAddress = memAddress + 2; // + 1 + 1
 
+            do Memory.poke(memAddress + 0, 0);
+	        do Memory.poke(memAddress + 32, 0);
+	        do Memory.poke(memAddress + 64, 0);
+	        do Memory.poke(memAddress + 96, 1023);
+	        do Memory.poke(memAddress + 128, 1023);
+	        do Memory.poke(memAddress + 160, 2047);
+	        do Memory.poke(memAddress + 192, 2032);
+	        do Memory.poke(memAddress + 224, 1032);
+	        do Memory.poke(memAddress + 256, 1040);
+	        do Memory.poke(memAddress + 288, 544);
+	        do Memory.poke(memAddress + 320, 544);
+	        do Memory.poke(memAddress + 352, 1088);
+	        do Memory.poke(memAddress + 384, 1088);
+	        do Memory.poke(memAddress + 416, 2112);
+	        do Memory.poke(memAddress + 448, 2112);
+	        do Memory.poke(memAddress + 480, 4160);
+        }
 
+        return;
+    }    
 
 
 

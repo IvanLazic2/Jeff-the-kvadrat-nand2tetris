@@ -101,9 +101,9 @@ class Game
 
         let obstacle_redraw_cooldown = 6; // 6 game ticks
 
-        let enemy = Enemy.new();
+        let enemy = Enemy.new(0, 99, 1);
 
-        do enemy.Draw(0);
+        do enemy.Draw();
         
 
         return this;
@@ -166,6 +166,10 @@ class Game
 
             //do Output.printInt(get_curr_section_index());
             //do Output.println();
+
+
+            //do enemy.Draw();
+
 
             let last_section_index = get_curr_section_index();
         }
@@ -326,6 +330,8 @@ class Game
 
         if (direction = 1) 
         {
+            do character.set_draw_character_left(true);
+
             if (~character.check_left_collision_platforms(curr_platforms, curr_platforms_num))
             {
                 if (abs_x - screen_middle + move_area_width > 0)
@@ -347,6 +353,8 @@ class Game
         }
         if (direction = 2)
         {
+            do character.set_draw_character_left(false);
+
             if (~character.check_right_collision_platforms(curr_platforms, curr_platforms_num))
             {
                 if (abs_x + screen_middle - move_area_width < level_width)
