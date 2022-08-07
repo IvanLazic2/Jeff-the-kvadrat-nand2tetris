@@ -69,7 +69,7 @@ class Platform
             let location = (y * 32) + x;
             let memAddress = 16384 + location;
 
-            do DrawPlatformBlock(0, memAddress);
+            do Platform.DrawBlock(0, type, memAddress);
         }
 
 		return;
@@ -98,7 +98,7 @@ class Platform
             let location = (y * 32) + x;
             let memAddress = 16383 + location + size; // 16384 + location + size - 1
 
-            do DrawPlatformBlock(size-1, memAddress);
+            do Platform.DrawBlock(size-1, type, memAddress);
         }
 
 		return;
@@ -141,7 +141,7 @@ class Platform
                 //let location = (y * 32) + x;
                 //let memAddress = 16384 + location + i;
 			
-                do DrawPlatformBlock(i, memAddress);
+                do Platform.DrawBlock(i, type, memAddress);
             }
 
             let i = i + 1;
@@ -151,53 +151,55 @@ class Platform
         return;
     }
 
-	method void DrawPlatformBlock(int i, int memAddress)
+
+
+	function void DrawBlock(int i, int type, int memAddress)
 	{
 		if (type = 0)
 		{
-			do DrawSimpleGroundPlatformBlock(memAddress);
+			do Platform.DrawSimpleGroundPlatformBlock(memAddress);
 		}
 		else { if (type = 1) 
 		{
-			do DrawSimplePlatformBlock(memAddress);
+			do Platform.DrawSimplePlatformBlock(memAddress);
 		}
 		else { if (type = 2)
 		{
-			do DrawStonePlatformBlock(memAddress);
+			do Platform.DrawStonePlatformBlock(memAddress);
 		}
 		else { if (type = 3)
 		{
-			do DrawBrick1PlatformBlock(i, memAddress);
+			do Platform.DrawBrick1PlatformBlock(i, memAddress);
 		}
 		else { if (type = 4)
 		{
-			do DrawBrick2PlatformBlock(memAddress);
+			do Platform.DrawBrick2PlatformBlock(memAddress);
 		}
 		else { if (type = 5)
 		{
-			do DrawRoboticPlatformBlock(memAddress);
+			do Platform.DrawRoboticPlatformBlock(memAddress);
 		}
 		else { if (type = 6)
 		{
-			do DrawSmallStonePlatformBlock(memAddress);
+			do Platform.DrawSmallStonePlatformBlock(memAddress);
 		}
 		else { if (type = 7)
 		{
-			do DrawSmallBrick1PlatformBlock(i, memAddress);
+			do Platform.DrawSmallBrick1PlatformBlock(i, memAddress);
 		}
 		else { if (type = 8)
 		{
-			do DrawSmallBrick2PlatformBlock(memAddress);
+			do Platform.DrawSmallBrick2PlatformBlock(memAddress);
 		}
 		else { if (type = 9)
 		{
-			do DrawSmallRoboticPlatformBlock(memAddress);
+			do Platform.DrawSmallRoboticPlatformBlock(memAddress);
 		}}}}}}}}}}
 
 		return;
 	}
 
-	method void DrawSimpleGroundPlatformBlock(int memAddress)
+	function void DrawSimpleGroundPlatformBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, -1);
 	    do Memory.poke(memAddress + 32, -32767);
@@ -218,7 +220,7 @@ class Platform
 		return;
 	}
 
-	method void DrawSimplePlatformBlock(int memAddress)
+	function void DrawSimplePlatformBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, -1);
 		do Memory.poke(memAddress + 32, -32767);
@@ -239,7 +241,7 @@ class Platform
 		return;
 	}
 
-	method void DrawStonePlatformBlock(int memAddress)
+	function void DrawStonePlatformBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, -1);
 		do Memory.poke(memAddress + 32, -16189);
@@ -260,70 +262,87 @@ class Platform
 		return;
 	}
 
-	method void DrawBrick1PlatformBlock(int i, int memAddress)
+	function void DrawBrick1PlatformBlock(int i, int memAddress)
 	{
-		if (i = 0)
-		{
-			do Memory.poke(memAddress + 0, -1);
-			do Memory.poke(memAddress + 32, 17);
-			do Memory.poke(memAddress + 64, 17);
-			do Memory.poke(memAddress + 96, 17);
-			do Memory.poke(memAddress + 128, 17);
-			do Memory.poke(memAddress + 160, -1);
-			do Memory.poke(memAddress + 192, 2049);
-			do Memory.poke(memAddress + 224, 2049);
-			do Memory.poke(memAddress + 256, 2049);
-			do Memory.poke(memAddress + 288, 2049);
-			do Memory.poke(memAddress + 320, -1);
-			do Memory.poke(memAddress + 352, 65);
-			do Memory.poke(memAddress + 384, 65);
-			do Memory.poke(memAddress + 416, 65);
-			do Memory.poke(memAddress + 448, 65);
-			do Memory.poke(memAddress + 480, -1);
-		}
-		else { if (i = (size - 1))
-		{
-			do Memory.poke(memAddress + 0, -1);
-			do Memory.poke(memAddress + 32, -32752);
-			do Memory.poke(memAddress + 64, -32752);
-			do Memory.poke(memAddress + 96, -32752);
-			do Memory.poke(memAddress + 128, -32752);
-			do Memory.poke(memAddress + 160, -1);
-			do Memory.poke(memAddress + 192, -30720);
-			do Memory.poke(memAddress + 224, -30720);
-			do Memory.poke(memAddress + 256, -30720);
-			do Memory.poke(memAddress + 288, -30720);
-			do Memory.poke(memAddress + 320, -1);
-			do Memory.poke(memAddress + 352, -32704);
-			do Memory.poke(memAddress + 384, -32704);
-			do Memory.poke(memAddress + 416, -32704);
-			do Memory.poke(memAddress + 448, -32704);
-			do Memory.poke(memAddress + 480, -1);
-		}
-		else
-		{
-			do Memory.poke(memAddress + 0, -1);
-			do Memory.poke(memAddress + 32, 16);
-			do Memory.poke(memAddress + 64, 16);
-			do Memory.poke(memAddress + 96, 16);
-			do Memory.poke(memAddress + 128, 16);
-			do Memory.poke(memAddress + 160, -1);
-			do Memory.poke(memAddress + 192, 2048);
-			do Memory.poke(memAddress + 224, 2048);
-			do Memory.poke(memAddress + 256, 2048);
-			do Memory.poke(memAddress + 288, 2048);
-			do Memory.poke(memAddress + 320, -1);
-			do Memory.poke(memAddress + 352, 64);
-			do Memory.poke(memAddress + 384, 64);
-			do Memory.poke(memAddress + 416, 64);
-			do Memory.poke(memAddress + 448, 64);
-			do Memory.poke(memAddress + 480, -1);
-		}}
+		//if (i = 0)
+		//{
+		//	do Memory.poke(memAddress + 0, -1);
+		//	do Memory.poke(memAddress + 32, 17);
+		//	do Memory.poke(memAddress + 64, 17);
+		//	do Memory.poke(memAddress + 96, 17);
+		//	do Memory.poke(memAddress + 128, 17);
+		//	do Memory.poke(memAddress + 160, -1);
+		//	do Memory.poke(memAddress + 192, 2049);
+		//	do Memory.poke(memAddress + 224, 2049);
+		//	do Memory.poke(memAddress + 256, 2049);
+		//	do Memory.poke(memAddress + 288, 2049);
+		//	do Memory.poke(memAddress + 320, -1);
+		//	do Memory.poke(memAddress + 352, 65);
+		//	do Memory.poke(memAddress + 384, 65);
+		//	do Memory.poke(memAddress + 416, 65);
+		//	do Memory.poke(memAddress + 448, 65);
+		//	do Memory.poke(memAddress + 480, -1);
+		//}
+		//else { if (i = (size - 1))
+		//{
+		//	do Memory.poke(memAddress + 0, -1);
+		//	do Memory.poke(memAddress + 32, -32752);
+		//	do Memory.poke(memAddress + 64, -32752);
+		//	do Memory.poke(memAddress + 96, -32752);
+		//	do Memory.poke(memAddress + 128, -32752);
+		//	do Memory.poke(memAddress + 160, -1);
+		//	do Memory.poke(memAddress + 192, -30720);
+		//	do Memory.poke(memAddress + 224, -30720);
+		//	do Memory.poke(memAddress + 256, -30720);
+		//	do Memory.poke(memAddress + 288, -30720);
+		//	do Memory.poke(memAddress + 320, -1);
+		//	do Memory.poke(memAddress + 352, -32704);
+		//	do Memory.poke(memAddress + 384, -32704);
+		//	do Memory.poke(memAddress + 416, -32704);
+		//	do Memory.poke(memAddress + 448, -32704);
+		//	do Memory.poke(memAddress + 480, -1);
+		//}
+		//else
+		//{
+		//	do Memory.poke(memAddress + 0, -1);
+		//	do Memory.poke(memAddress + 32, 16);
+		//	do Memory.poke(memAddress + 64, 16);
+		//	do Memory.poke(memAddress + 96, 16);
+		//	do Memory.poke(memAddress + 128, 16);
+		//	do Memory.poke(memAddress + 160, -1);
+		//	do Memory.poke(memAddress + 192, 2048);
+		//	do Memory.poke(memAddress + 224, 2048);
+		//	do Memory.poke(memAddress + 256, 2048);
+		//	do Memory.poke(memAddress + 288, 2048);
+		//	do Memory.poke(memAddress + 320, -1);
+		//	do Memory.poke(memAddress + 352, 64);
+		//	do Memory.poke(memAddress + 384, 64);
+		//	do Memory.poke(memAddress + 416, 64);
+		//	do Memory.poke(memAddress + 448, 64);
+		//	do Memory.poke(memAddress + 480, -1);
+		//}}
+
+		do Memory.poke(memAddress + 0, -1);
+		do Memory.poke(memAddress + 32, -32751);
+		do Memory.poke(memAddress + 64, -32751);
+		do Memory.poke(memAddress + 96, -32751);
+		do Memory.poke(memAddress + 128, -32751);
+		do Memory.poke(memAddress + 160, -1);
+		do Memory.poke(memAddress + 192, -30719);
+		do Memory.poke(memAddress + 224, -30719);
+		do Memory.poke(memAddress + 256, -30719);
+		do Memory.poke(memAddress + 288, -30719);
+		do Memory.poke(memAddress + 320, -1);
+		do Memory.poke(memAddress + 352, -32703);
+		do Memory.poke(memAddress + 384, -32703);
+		do Memory.poke(memAddress + 416, -32703);
+		do Memory.poke(memAddress + 448, -32703);
+		do Memory.poke(memAddress + 480, -1);
 
 		return;
 	}
 
-	method void DrawBrick2PlatformBlock(int memAdress)
+	function void DrawBrick2PlatformBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, -1);
 		do Memory.poke(memAddress + 32, -32767);
@@ -344,7 +363,7 @@ class Platform
 		return;
 	}
 
-	method void DrawRoboticPlatformBlock(int memAddress)
+	function void DrawRoboticPlatformBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, -1);
 		do Memory.poke(memAddress + 32, -16375);
@@ -365,7 +384,7 @@ class Platform
 		return;
 	}
 
-	method void DrawSmallStonePlatformBlock(int memAddress)
+	function void DrawSmallStonePlatformBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, -1);
 		do Memory.poke(memAddress + 32, -28655);
@@ -386,70 +405,87 @@ class Platform
 		return;
 	}
 
-	method void DrawSmallBrick1PlatformBlock(int i, int memAdress)
+	function void DrawSmallBrick1PlatformBlock(int i, int memAddress)
 	{
-		if (i = 0)
-		{
-			do Memory.poke(memAddress + 0, -1);
-			do Memory.poke(memAddress + 32, 17);
-			do Memory.poke(memAddress + 64, 17);
-			do Memory.poke(memAddress + 96, 17);
-			do Memory.poke(memAddress + 128, -1);
-			do Memory.poke(memAddress + 160, 513);
-			do Memory.poke(memAddress + 192, 513);
-			do Memory.poke(memAddress + 224, 513);
-			do Memory.poke(memAddress + 256, -1);
-			do Memory.poke(memAddress + 288, 0);
-			do Memory.poke(memAddress + 320, 0);
-			do Memory.poke(memAddress + 352, 0);
-			do Memory.poke(memAddress + 384, 0);
-			do Memory.poke(memAddress + 416, 0);
-			do Memory.poke(memAddress + 448, 0);
-			do Memory.poke(memAddress + 480, 0);
-		}
-		else { if (i = (size - 1))
-		{
-			do Memory.poke(memAddress + 0, -1);
-			do Memory.poke(memAddress + 32, -32752);
-			do Memory.poke(memAddress + 64, -32752);
-			do Memory.poke(memAddress + 96, -32752);
-			do Memory.poke(memAddress + 128, -1);
-			do Memory.poke(memAddress + 160, -32256);
-			do Memory.poke(memAddress + 192, -32256);
-			do Memory.poke(memAddress + 224, -32256);
-			do Memory.poke(memAddress + 256, -1);
-			do Memory.poke(memAddress + 288, 0);
-			do Memory.poke(memAddress + 320, 0);
-			do Memory.poke(memAddress + 352, 0);
-			do Memory.poke(memAddress + 384, 0);
-			do Memory.poke(memAddress + 416, 0);
-			do Memory.poke(memAddress + 448, 0);
-			do Memory.poke(memAddress + 480, 0);
-		}
-		else
-		{
-			do Memory.poke(memAddress + 0, -1);
-			do Memory.poke(memAddress + 32, 16);
-			do Memory.poke(memAddress + 64, 16);
-			do Memory.poke(memAddress + 96, 16);
-			do Memory.poke(memAddress + 128, -1);
-			do Memory.poke(memAddress + 160, 512);
-			do Memory.poke(memAddress + 192, 512);
-			do Memory.poke(memAddress + 224, 512);
-			do Memory.poke(memAddress + 256, -1);
-			do Memory.poke(memAddress + 288, 0);
-			do Memory.poke(memAddress + 320, 0);
-			do Memory.poke(memAddress + 352, 0);
-			do Memory.poke(memAddress + 384, 0);
-			do Memory.poke(memAddress + 416, 0);
-			do Memory.poke(memAddress + 448, 0);
-			do Memory.poke(memAddress + 480, 0);
-		}}
+		//if (i = 0)
+		//{
+		//	do Memory.poke(memAddress + 0, -1);
+		//	do Memory.poke(memAddress + 32, 17);
+		//	do Memory.poke(memAddress + 64, 17);
+		//	do Memory.poke(memAddress + 96, 17);
+		//	do Memory.poke(memAddress + 128, -1);
+		//	do Memory.poke(memAddress + 160, 513);
+		//	do Memory.poke(memAddress + 192, 513);
+		//	do Memory.poke(memAddress + 224, 513);
+		//	do Memory.poke(memAddress + 256, -1);
+		//	do Memory.poke(memAddress + 288, 0);
+		//	do Memory.poke(memAddress + 320, 0);
+		//	do Memory.poke(memAddress + 352, 0);
+		//	do Memory.poke(memAddress + 384, 0);
+		//	do Memory.poke(memAddress + 416, 0);
+		//	do Memory.poke(memAddress + 448, 0);
+		//	do Memory.poke(memAddress + 480, 0);
+		//}
+		//else { if (i = (size - 1))
+		//{
+		//	do Memory.poke(memAddress + 0, -1);
+		//	do Memory.poke(memAddress + 32, -32752);
+		//	do Memory.poke(memAddress + 64, -32752);
+		//	do Memory.poke(memAddress + 96, -32752);
+		//	do Memory.poke(memAddress + 128, -1);
+		//	do Memory.poke(memAddress + 160, -32256);
+		//	do Memory.poke(memAddress + 192, -32256);
+		//	do Memory.poke(memAddress + 224, -32256);
+		//	do Memory.poke(memAddress + 256, -1);
+		//	do Memory.poke(memAddress + 288, 0);
+		//	do Memory.poke(memAddress + 320, 0);
+		//	do Memory.poke(memAddress + 352, 0);
+		//	do Memory.poke(memAddress + 384, 0);
+		//	do Memory.poke(memAddress + 416, 0);
+		//	do Memory.poke(memAddress + 448, 0);
+		//	do Memory.poke(memAddress + 480, 0);
+		//}
+		//else
+		//{
+		//	do Memory.poke(memAddress + 0, -1);
+		//	do Memory.poke(memAddress + 32, 16);
+		//	do Memory.poke(memAddress + 64, 16);
+		//	do Memory.poke(memAddress + 96, 16);
+		//	do Memory.poke(memAddress + 128, -1);
+		//	do Memory.poke(memAddress + 160, 512);
+		//	do Memory.poke(memAddress + 192, 512);
+		//	do Memory.poke(memAddress + 224, 512);
+		//	do Memory.poke(memAddress + 256, -1);
+		//	do Memory.poke(memAddress + 288, 0);
+		//	do Memory.poke(memAddress + 320, 0);
+		//	do Memory.poke(memAddress + 352, 0);
+		//	do Memory.poke(memAddress + 384, 0);
+		//	do Memory.poke(memAddress + 416, 0);
+		//	do Memory.poke(memAddress + 448, 0);
+		//	do Memory.poke(memAddress + 480, 0);
+		//}}
+
+		do Memory.poke(memAddress + 0, -1);
+		do Memory.poke(memAddress + 32, -32751);
+		do Memory.poke(memAddress + 64, -32751);
+		do Memory.poke(memAddress + 96, -32751);
+		do Memory.poke(memAddress + 128, -1);
+		do Memory.poke(memAddress + 160, -32255);
+		do Memory.poke(memAddress + 192, -32255);
+		do Memory.poke(memAddress + 224, -32255);
+		do Memory.poke(memAddress + 256, -1);
+		do Memory.poke(memAddress + 288, 0);
+		do Memory.poke(memAddress + 320, 0);
+		do Memory.poke(memAddress + 352, 0);
+		do Memory.poke(memAddress + 384, 0);
+		do Memory.poke(memAddress + 416, 0);
+		do Memory.poke(memAddress + 448, 0);
+		do Memory.poke(memAddress + 480, 0);
 
 		return;
 	}
 
-	method void DrawSmallBrick2PlatformBlock(int memAddress)
+	function void DrawSmallBrick2PlatformBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, -1);
 		do Memory.poke(memAddress + 32, -32767);
@@ -471,7 +507,7 @@ class Platform
 		return;
 	}
 
-	method void DrawSmallRoboticPlatformBlock(int memAddress)
+	function void DrawSmallRoboticPlatformBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, -1);
 		do Memory.poke(memAddress + 32, -4081);

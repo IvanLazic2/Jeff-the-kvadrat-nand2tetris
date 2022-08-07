@@ -64,7 +64,11 @@ class Game
     field int timer6;
     field int timer100;
 
+    field Array Map;
+    field int MapWidth;
+    field int MapHeight;
 
+    field int WorldOffset;
 
 
     constructor Game new()
@@ -80,6 +84,9 @@ class Game
         let right_border = screen_middle + move_area_width;
 
         let level = Level3.new();
+        let Map = level.get_map();
+        let MapWidth = level.get_map_width();
+        let MapHeight = level.get_map_height();
 
         let level_width = level.get_level_width();
         let character = level.get_character();
@@ -111,6 +118,8 @@ class Game
         let timer3 = 3;
         let timer6 = 6;
         let timer100 = 100;
+
+        let WorldOffset = 0;
 
 
 
@@ -175,15 +184,17 @@ class Game
             do Move();
             do Sys.wait(game_delay);
             
-            do curr_section.Draw();
+            //do curr_section.Draw();
+            do character.RedrawPlatforms(Map, MapWidth, MapHeight, WorldOffset);
+            
 
             //do enemy.Draw(true, false);
             //do enemy.MoveRight();
             //do enemy.MoveLeft();
 
-            do enemy.check_gravity(platforms, platforms_num);
-            do enemy.Jump();
-            do enemy.MoveRight();
+            //do enemy.check_gravity2(Map, MapWidth, MapHeight);
+            //do enemy.Jump();
+            //do enemy.MoveRight();
             
 
             do CheckTimers();
@@ -204,7 +215,8 @@ class Game
     {
         if (timer6 < 1)
         {
-            do RedrawLastSection();
+            //do RedrawLastSection();
+            do RedrawAllObstacles();
 
             let timer6 = 6;
         }
@@ -264,6 +276,27 @@ class Game
         return;
     }
 
+    method void RedrawAllObstacles()
+    {
+        var Obstacle obstacle;
+        var int i;
+
+        if (character.get_should_draw_last_obstacle())
+        {
+            while (i < obstacles_num)
+            {
+                let obstacle = obstacles[i];
+
+                do obstacle.Draw();
+
+                let i = i + 1;
+            }
+            do character.set_should_draw_last_obstacle(false);
+        }
+
+        return;
+    }
+
 
     method void ScrollLeft()
     {
@@ -271,6 +304,7 @@ class Game
         var Platform platform;
         var Obstacle obstacle;
 
+        let WorldOffset = WorldOffset + 1;
         do character.increment_absolute_x(1);
 
         while (i < obstacles_num)
@@ -317,6 +351,7 @@ class Game
         var Platform platform;
         var Obstacle obstacle;
 
+        let WorldOffset = WorldOffset - 1;
         do character.increment_absolute_x(-1);
 
         while (i < obstacles_num)
@@ -365,14 +400,14 @@ class Game
         let x = character.get_x();
         let abs_x = character.get_absolute_x();
 
-        do character.check_gravity(curr_platforms, curr_platforms_num);
-        do character.check_collision_obstacles(curr_obstacles, curr_obstacles_num);
+        do character.check_gravity2(Map, MapWidth, MapHeight);
+        do character.check_collision_obstacles2(Map, MapWidth, MapHeight);
 
         if (direction = 1) 
         {
             do character.set_draw_character_left(true);
 
-            if (~character.check_left_collision_platforms(curr_platforms, curr_platforms_num))
+            if (~character.check_left_collision_platforms2(Map, MapWidth, MapHeight))
             {
                 // nesto s apsolutnom vrijednosti izmedju x i pocetka mape?
                 if (abs_x - screen_middle + move_area_width > 0)
@@ -396,7 +431,7 @@ class Game
         {
             do character.set_draw_character_left(false);
 
-            if (~character.check_right_collision_platforms(curr_platforms, curr_platforms_num))
+            if (~character.check_right_collision_platforms2(Map, MapWidth, MapHeight))
             {
                 if (abs_x + screen_middle - move_area_width < level_width)
                 {

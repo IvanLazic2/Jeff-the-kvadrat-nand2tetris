@@ -1,6 +1,77 @@
 class Collision
 {
     //// PLATFORMS
+
+    static int lastY;
+    static int platformY;
+
+    
+
+
+    function int getLastY() { return lastY; }
+    function int getPlatformY() { return platformY; }
+
+    function int getNearestPlatformY(Array x_map, int y, int height, int mapHeight)
+    {
+        var int currIndex;
+        var int nearestPlatformY;
+
+        let currIndex = y / 16;
+
+        while (currIndex < mapHeight)
+        {
+            if ((0 < x_map[currIndex]) & (x_map[currIndex] < 11))
+            {   
+                let nearestPlatformY = currIndex * 16;
+                let currIndex = mapHeight;
+            }
+
+            let currIndex = currIndex + 1;
+        }
+
+        return nearestPlatformY;
+    }
+
+    function bool IsOnAnyPlatform(int x, int y, int width, int height, int forceY, Array map, int mapWidth, int mapHeight)
+    {
+        var bool is_stable_x;
+        var bool is_stable_y;
+        var int platform_x;
+        var int h;
+        var int w;
+        var Array x_map;
+        var int nearestPlatformY;
+        var int i;
+        var int minNearestPlatformY;
+        var int py;
+
+        let minNearestPlatformY = (mapHeight - 1) * 16;
+        while (i < width)
+        {
+            let x_map = map[x + i];
+            let py = Collision.getNearestPlatformY(x_map, y, height, mapHeight);
+            if (~(py = 0) & (py < minNearestPlatformY))
+            {
+                let minNearestPlatformY = py;
+            }
+
+            let i = i + 1;
+        }
+
+
+
+        let platformY = minNearestPlatformY;
+        let h = minNearestPlatformY - y - height;
+        let is_stable_y = (-1 < h) & (h < (forceY + 1));
+
+        if (Math.abs(y + height + forceY - minNearestPlatformY) < 7) // < 15
+        {
+            let is_stable_y = true;
+        }
+
+        return is_stable_y;
+    }
+
     function bool IsOnPlatform(Platform platform, int x, int y, int width, int height, int forceY)
     {
         var bool is_stable_x;
@@ -23,6 +94,16 @@ class Collision
         let is_stable_x = (x < (platform.get_x() + platform.get_size())) & (w > platform.get_x());
 
         return (is_stable_x & is_stable_y);
+    }
+
+    function bool CheckAnyPlatformCollisionRight(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight)
+    {
+        var Array x_map;
+
+        let x_map = map[x + width];
+
+        //return x_map[(y + height - 1) / 16] < 10;
+        return (0 < x_map[(y + height - 1) / 16]) & (x_map[(y + height - 1) / 16] < 11);
     }
 
     function bool CheckPlatformCollisionRight(Array platforms, int platforms_num, int x, int y, int width, int height)
@@ -52,6 +133,21 @@ class Collision
     function bool IsCollidedPlatformRight(Platform platform, int x, int y, int width, int height)
     {
         return ((x + width) = platform.get_x()) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
+    }
+
+    function bool CheckAnyPlatformCollisionLeft(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight)
+    {
+        var Array x_map;
+        var bool result;
+
+        if (~(x = 0))
+        {
+            let x_map = map[x - 1];
+            //let result = x_map[(y + height - 1) / 16] < 10;
+            let result = (0 < x_map[(y + height - 1) / 16]) & (x_map[(y + height - 1) / 16] < 11);
+        }
+        
+        return result;
     }
 
     function bool CheckPlatformCollisionLeft(Array platforms, int platforms_num, int x, int y, int width, int height)
@@ -87,6 +183,29 @@ class Collision
 
 
     //// OBSTACLES
+
+    function bool IsCollidedAnyObstacle(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight)
+    {
+        var Array x_map;
+        var bool result;
+        var int i;
+        var int blockValue;
+
+        while (i < width)
+        {
+            let x_map = map[x + i];
+            let blockValue = x_map[(y + height - 1) / 16];
+
+            if ((10 < blockValue) & (blockValue < 16))
+            {
+                let result = true;
+                let i = width;
+            }
+            let i = i + 1;
+        }
+        
+        return result;
+    }
 
     function bool IsCollidedObstacle(Obstacle obstacle, int x, int y, int width, int height)
     {

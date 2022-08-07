@@ -42,15 +42,15 @@ class Character
         let location = (y * 32) + x;
         let absolute_x = x2;
 
-        let width = 3; // 48
+        let width = 3; // 3
         let height = 32; // 32
 
         //let widthdiv16 = width / 16;
 
         let forceY = 0;
-        let gravity = 6; //2, 6
+        let gravity = 6; // 6
         let can_jump = false;
-        let jump_height = 30; //20, 26
+        let jump_height = 50; // 30
         let jump_height_const = 5; //20
         let jump_compensation_const = 4;
 
@@ -113,10 +113,189 @@ class Character
     }
 
 
+
+
+    method void RedrawPlatforms(Array map, int mapWidth, int mapHeight, int worldOffset)
+    {
+        var int i;
+        var int j;
+        var int px;
+        var int py;
+        var int location;
+        var int memAddress;
+        var Array x_map;
+
+        let i = absolute_x - 1;
+        while (i < (absolute_x + width + 1))
+        {
+            let x_map = map[i];
+
+            let j = (y / 16) - 2;
+            while (j < (((y + height) / 16) + 1))
+            //let j = 0; // TEMP
+            //while (j < 16) // TEMP
+            {
+                if ((0 < x_map[j]) & (x_map[j] < 11))
+                {
+                    let location = (j * 16 * 32) + i - worldOffset;
+		            let memAddress = 16384 + location;
+
+                    do Platform.DrawBlock(0, x_map[j] - 1, memAddress);
+                }
+
+                let j = j + 1;
+            }
+
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void RedrawObstacles(Array map, int mapWidth, int mapHeight, int worldOffset)
+    {
+        var int i;
+        var int j;
+        var int px;
+        var int py;
+        var int location;
+        var int memAddress;
+        var Array x_map;
+
+        let i = absolute_x - 1;
+        while (i < (absolute_x + width + 1))
+        {
+            let x_map = map[i];
+
+            let j = (y / 16) - 2;
+            while (j < (((y + height) / 16) + 1))
+            //let j = 0; // TEMP
+            //while (j < 16) // TEMP
+            {
+                if ((0 < x_map[j]) & (x_map[j] < 11))
+                {
+                    let location = (j * 16 * 32) + i - worldOffset;
+		            let memAddress = 16384 + location;
+
+                    do Platform.DrawBlock(0, x_map[j] - 1, memAddress);
+                }
+
+                let j = j + 1;
+            }
+
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+
+
+    method void RedrawPlatform2(Array platforms, int platforms_num, Array map, int mapWidth, int mapHeight)
+    {
+        var int i;
+        var int j;
+        var int px;
+        var int py;
+        var int location;
+        var int memAddress;
+        var Array x_map;
+
+        let i = absolute_x - 1;
+        while (i < (absolute_x + width + 1))
+        {
+            let x_map = map[i];
+
+            let j = y - 16;
+            while (j < (y + height + 16))
+            {
+                if ((1 < x_map[j / 16]) & (x_map[j / 16] < 10))
+                {
+                    //do Output.printString("a");
+                }
+
+                let j = j + 16;
+            }
+
+            let i = i + 1;
+        }
+
+        let i = absolute_x - 1;
+        while (i < (absolute_x + width + 1))
+        {
+            let x_map = map[i];
+
+            let j = 0;
+            while (j < 16)
+            {
+                if ((1 < x_map[j]) & (x_map[j] < 10))
+                {
+                    if((i < 32) & (i > -1))
+                    {
+                        let location = (j * 16 * 32) + i;
+		                let memAddress = 16384 + location;
+                        do Memory.poke(memAddress + 0, -1);
+	                    do Memory.poke(memAddress + 32, -32767);
+	                    do Memory.poke(memAddress + 64, -32767);
+	                    do Memory.poke(memAddress + 96, -32767);
+	                    do Memory.poke(memAddress + 128, -32767);
+	                    do Memory.poke(memAddress + 160, -32767);
+	                    do Memory.poke(memAddress + 192, -32767);
+	                    do Memory.poke(memAddress + 224, -32767);
+	                    do Memory.poke(memAddress + 256, -32767);
+	                    do Memory.poke(memAddress + 288, -32767);
+	                    do Memory.poke(memAddress + 320, -32767);
+	                    do Memory.poke(memAddress + 352, -32767);
+	                    do Memory.poke(memAddress + 384, -32767);
+	                    do Memory.poke(memAddress + 416, -32767);
+	                    do Memory.poke(memAddress + 448, -32767);
+    	                do Memory.poke(memAddress + 480, -1);
+                    }
+                    
+                }
+
+                let j = j + 1;
+            }
+
+            let i = i + 1;
+        }
+
+
+
+
+        //let location = (py * 32) + px;
+		//let memAddress = 16384 + location;
+        //do Memory.poke(memAddress + 0, -1);
+	    //do Memory.poke(memAddress + 32, -32767);
+	    //do Memory.poke(memAddress + 64, -32767);
+	    //do Memory.poke(memAddress + 96, -32767);
+	    //do Memory.poke(memAddress + 128, -32767);
+	    //do Memory.poke(memAddress + 160, -32767);
+	    //do Memory.poke(memAddress + 192, -32767);
+	    //do Memory.poke(memAddress + 224, -32767);
+	    //do Memory.poke(memAddress + 256, -32767);
+	    //do Memory.poke(memAddress + 288, -32767);
+	    //do Memory.poke(memAddress + 320, -32767);
+	    //do Memory.poke(memAddress + 352, -32767);
+	    //do Memory.poke(memAddress + 384, -32767);
+	    //do Memory.poke(memAddress + 416, -32767);
+	    //do Memory.poke(memAddress + 448, -32767);
+    	//do Memory.poke(memAddress + 480, -1);
+        
+
+        return;
+    }
+
+
     //// PLATFORM COLLISION
     method bool check_right_collision_platforms(Array platforms, int platforms_num)
     {
         return Collision.CheckPlatformCollisionRight(platforms, platforms_num, x, y, width, height);
+    }
+
+    method bool check_right_collision_platforms2(Array map, int mapWidth, int mapHeight)
+    {
+        return Collision.CheckAnyPlatformCollisionRight(absolute_x, y, width, height, map, mapWidth, mapHeight);
     }
 
     method bool check_left_collision_platforms(Array platforms, int platforms_num)
@@ -124,7 +303,40 @@ class Character
         return Collision.CheckPlatformCollisionLeft(platforms, platforms_num, x, y, width, height);
     }
 
+    method bool check_left_collision_platforms2(Array map, int mapWidth, int mapHeight)
+    {
+        return Collision.CheckAnyPlatformCollisionLeft(absolute_x, y, width, height, map, mapWidth, mapHeight);
+    }
+
     //// OBSTACLE COLLISION
+
+    method void check_collision_obstacles2(Array map, int mapWidth, int mapHeight)
+    {
+        var int i;
+        //var Obstacle obstacle;
+        var bool result;
+
+
+        let result = Collision.IsCollidedAnyObstacle(absolute_x, y, width, height, map, mapWidth, mapHeight);
+
+        if (result)
+        {
+            //let last_obstacle = obstacle;
+            let should_draw_last_obstacle = true;
+            let last_abs_x = absolute_x;
+
+            do TakeDamage();
+            do Respawn();
+        }
+
+        if (damage_timer > 0)
+        {
+            let damage_timer = damage_timer - 1;
+        }
+
+        return;
+    }
+
     method void check_collision_obstacles(Array obstacles, int obstacles_num)
     {
         var int i;
@@ -218,6 +430,76 @@ class Character
     //}
 
     //// GRAVITY
+
+
+
+
+    method void check_gravity2(Array map, int mapWidth, int mapHeight)
+    {
+        var int i;
+        var Platform platform;
+        var Section section;
+        var bool is_on_platform;
+
+        let lastlocation = location;
+
+        let can_jump = Collision.IsOnAnyPlatform(absolute_x, y, width, height, forceY, map, mapWidth, mapHeight);
+
+
+        if (can_jump)
+        {
+            
+            let y = Collision.getPlatformY() - height;
+            //do Output.printInt(y);
+            //do Output.println();
+            
+           
+            let forceY = 0;
+            let location = (y * 32) + x;
+
+            //do Output.printInt(y);
+            //do Output.println();
+            do Clear();
+            //do Output.printInt(y);
+            //do Output.println();
+            do Draw();
+            //do Output.printInt(y);
+            //do Output.println();
+        }
+        // padanje
+        else
+        {
+            if (y > 219)
+            {
+                //do Respawn();
+
+                // take damage
+            }
+
+            let forceY = forceY + gravity;            
+        }
+
+
+        let y = y + forceY;
+        let location = (y * 32) + x;
+
+        
+
+
+        
+        do Clear();
+        
+        do Draw();
+        
+
+        return;
+    }
+
+
+
+
+
+
     method void check_gravity(Array platforms, int platforms_num)
     {
         var int i;

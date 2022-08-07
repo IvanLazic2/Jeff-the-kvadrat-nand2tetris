@@ -72,7 +72,7 @@ class Obstacle
 
 		if ((x < 32) & (x > -1))
 		{
-			do DrawBlock(memAddress);
+			do Obstacle.DrawBlock(type, memAddress);
 		}
 
 		return;
@@ -117,7 +117,7 @@ class Obstacle
             let location = (y * 32) + x;
             let memAddress = 16383 + location + size; // 16384 + location + size - 1
 
-            do DrawBlock(memAddress);
+            do Obstacle.DrawBlock(type, memAddress);
         }
 
 		return;
@@ -357,7 +357,7 @@ class Obstacle
         {
             if (((x + i) < 32) & ((x + i) > -1))
             {
-				do DrawBlock(memAddress);
+				do Obstacle.DrawBlock(type, memAddress);
             }
 
             let i = i + 1;
@@ -367,33 +367,33 @@ class Obstacle
         return;
 	}
 
-	method void DrawBlock(int memAddress)
+	function void DrawBlock(int type, int memAddress)
 	{
 		if (type = 0)
 		{
-			do DrawSmallSpikesBlock(memAddress);
+			do Obstacle.DrawSmallSpikesBlock(memAddress);
 		}
 		else { if (type = 1)
 		{
-			do DrawMediumSpikesBlock(memAddress);
+			do Obstacle.DrawMediumSpikesBlock(memAddress);
 		} 
 		else { if (type = 2)
 		{
-			do DrawWeirdSpikesBlock(memAddress);
+			do Obstacle.DrawWeirdSpikesBlock(memAddress);
 		} 
 		else { if (type = 3)
 		{
-			do DrawLargeSpikesBlock(memAddress);
+			do Obstacle.DrawLargeSpikesBlock(memAddress);
 		}
 		else { if (type = 4)
 		{
-			do DrawSpikedAreaBlockAlt(memAddress);
+			do Obstacle.DrawSpikedAreaBlockAlt(memAddress);
 		}}}}}
 
 		return;
 	}
 
-    method void DrawSmallSpikesBlock(int memAddress)
+    function void DrawSmallSpikesBlock(int memAddress)
     {
 	    do Memory.poke(memAddress + 0, 0);
 	    do Memory.poke(memAddress + 32, 0);
@@ -414,7 +414,7 @@ class Obstacle
 	    return;
     }
 
-	method void DrawMediumSpikesBlock(int memAddress)
+	function void DrawMediumSpikesBlock(int memAddress)
     {
 	    do Memory.poke(memAddress + 0, 15356);
 		do Memory.poke(memAddress + 32, 15356);
@@ -455,7 +455,7 @@ class Obstacle
 	    return;
     }
 
-	method void DrawWeirdSpikesBlock(int memAddress)
+	function void DrawWeirdSpikesBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, -8225);
 		do Memory.poke(memAddress + 32, -8241);
@@ -534,7 +534,7 @@ class Obstacle
 		return;
 	}
 
-	method void DrawLargeSpikesBlock(int memAddress)
+	function void DrawLargeSpikesBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, 7160);
 		do Memory.poke(memAddress + 32, 6136);
@@ -634,7 +634,7 @@ class Obstacle
 
 	
 
-	method void DrawSpikedAreaBlock(int memAddress)
+	function void DrawSpikedAreaBlock(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, 2320);
 		do Memory.poke(memAddress + 32, 2320);
@@ -656,7 +656,7 @@ class Obstacle
 		return;
 	}
 
-	method void DrawSpikedAreaBlockAlt(int memAddress)
+	function void DrawSpikedAreaBlockAlt(int memAddress)
 	{
 		do Memory.poke(memAddress + 0, 2320);
 		do Memory.poke(memAddress + 32, 2320);

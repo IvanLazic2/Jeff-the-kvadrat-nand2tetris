@@ -206,6 +206,59 @@ class Enemy
     }
 
 	//// GRAVITY
+
+	method void check_gravity2(Array map, int mapWidth, int mapHeight)
+    {
+        var int i;
+        var Platform platform;
+        var Section section;
+        var bool is_on_platform;
+
+        let lastLocation = location;
+
+        let canJump = Collision.IsOnAnyPlatform(x, y, width, height, forceY, map, mapWidth, mapHeight);
+
+
+        if (canJump)
+        {
+			
+
+            let y = Collision.getPlatformY() - height;
+            let forceY = 0;
+            let location = (y * 32) + x;
+			//let memAddress = 16384 + location;
+
+            //do Clear();
+            //do Draw();
+			do Clear();
+			do Draw(16384 + location, true, false);
+        }
+        // padanje
+        else
+        {
+            if (y > 219)
+            {
+                //do Respawn();
+
+                // take damage
+            }
+
+            let forceY = forceY + gravity;            
+        }
+
+		
+
+        let y = y + forceY;
+        let location = (y * 32) + x;
+        
+        //do Clear();
+        //do Draw();
+		do Clear();
+		do Draw(16384 + location, true, false);
+
+        return;
+    }
+
     method void check_gravity(Array platforms, int platforms_num)
     {
         var int i;
