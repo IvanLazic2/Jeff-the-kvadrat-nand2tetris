@@ -50,7 +50,7 @@ class Character
         let forceY = 0;
         let gravity = 6; // 6
         let can_jump = false;
-        let jump_height = 50; // 30
+        let jump_height = 40; // 30
         let jump_height_const = 5; //20
         let jump_compensation_const = 4;
 
@@ -445,11 +445,14 @@ class Character
 
         let can_jump = Collision.IsOnAnyPlatform(absolute_x, y, width, height, forceY, map, mapWidth, mapHeight);
 
+        //do Output.printInt(y);
+        //do Output.println();
 
         if (can_jump)
         {
             
-            let y = Collision.getPlatformY() - height;
+            
+            let y = Collision.getPlatformY() - 16; // -> blockHeight
             //do Output.printInt(y);
             //do Output.println();
             
@@ -609,7 +612,8 @@ class Character
         // 16384+513+480 = 17377
         // 24576 - 17377 = 7199
         {
-            let memAddress = 16897 + lastlocation; // 513
+            //let memAddress = 16897 + lastlocation; // 513
+            let memAddress = 16384 + lastlocation + 1;
 
             let i = 0;
             while (i < 481)
@@ -619,7 +623,9 @@ class Character
                 let i = i + 32;                
             }
 
-            let memAddress = 16898 + lastlocation; // 514
+            //let memAddress = 16898 + lastlocation; // 514
+            let memAddress = 16384 + lastlocation + 2;
+
             let i = 0;
             while (i < 481)
             {
@@ -628,7 +634,9 @@ class Character
                 let i = i + 32;
             }
 
-            let memAddress = 16896 + lastlocation; // 512
+            //let memAddress = 16896 + lastlocation; // 512
+            let memAddress = 16384 + lastlocation;
+
             let i = 0;
 
             while (i < 481)
@@ -638,7 +646,9 @@ class Character
                 let i = i + 32;
             }
 
-            let memAddress = 16386 + lastlocation; // 2
+            //let memAddress = 16386 + lastlocation; // 2
+            let memAddress = 16384 + lastlocation - 510;
+
             let i = 0;
             while (i < 481)
             {
@@ -647,7 +657,9 @@ class Character
                 let i = i + 32;
             }
 
-            let memAddress = 16384 + lastlocation; // 0
+            //let memAddress = 16384 + lastlocation; // 0
+            let memAddress = 16384 + lastlocation - 512;
+
             let i = 0;
             while (i < 481)
             {
@@ -665,11 +677,11 @@ class Character
     {
         if (draw_character_left)
         {
-            do DrawLeft();
+            do DrawRight();
         }
         else
         {
-            do DrawRight();
+            do DrawRight(); // TEMP
         }
 
         return;
@@ -685,7 +697,8 @@ class Character
             // faca
             //let memAddress = 16384 + location + 512;
             //let memAddress = memAddress + 512;
-            let memAddress = 16384 + location + 513;
+            //let memAddress = 16384 + location + 513;
+            let memAddress = 16384 + location + 1;
 
 	        do Memory.poke(memAddress + 0, -1);
 	        do Memory.poke(memAddress + 32, -32767);
@@ -708,7 +721,8 @@ class Character
             // desna ruka donji dio
             //let memAddress = 16384 + location + 513;
             //let memAddress = memAddress + 1; // memAddres - 512 + 513
-            let memAddress = 16384 + location + 514;
+            //let memAddress = 16384 + location + 514;
+            let memAddress = 16384 + location + 2;
 
 	        do Memory.poke(memAddress + 0, 4128);
 	        do Memory.poke(memAddress + 32, 8256);
@@ -730,7 +744,8 @@ class Character
             // lijeva ruka donji dio
             //let memAddress = 16384 + location + 511;
             //let memAddress = memAddress - 2; // memAddress - 1 + 511
-            let memAddress = 16384 + location + 512;
+            //let memAddress = 16384 + location + 512;
+            let memAddress = 16384 + location;
 
 	        do Memory.poke(memAddress + 0, 520);
 	        do Memory.poke(memAddress + 32, 516);
@@ -752,7 +767,8 @@ class Character
             // desna ruka gornji dio
             //let memAddress = 16384 + location + 1;
             //let memAddress = memAddress - 510; // memAddres - 511 + 1
-            let memAddress = 16384 + location + 2;
+            //let memAddress = 16384 + location + 2;
+            let memAddress = 16384 + location - 510;
 
 	        do Memory.poke(memAddress + 0, 0);
 	        do Memory.poke(memAddress + 32, 0);
@@ -775,7 +791,8 @@ class Character
             // lijeva ruka gornji dio
             //let memAddress = 16384 + location - 1;
             //let memAddress = memAddress - 2; // memAddress + 1 - 2
-            let memAddress = 16384 + location;
+            //let memAddress = 16384 + location;
+            let memAddress = 16384 + location - 512;
 
 	        do Memory.poke(memAddress + 0, 0);
 	        do Memory.poke(memAddress + 32, 0);

@@ -34,6 +34,19 @@ class Enemy
 
 	field bool canMove;
 
+	field bool roamRight;
+
+
+
+
+	field bool Roaming;
+    field bool Flying;
+    field bool GravityAffected;
+    field bool Melee;
+    field bool Shooting;
+    field bool DamageOnSquish;
+	field bool Following;
+
     constructor Enemy new(int x2, int y2, int type2)
     {	
 		let x = x2;
@@ -57,7 +70,10 @@ class Enemy
 			let frameCount = Spider.GetFrameCount();
 			let animationDelay = 3;
 			let movementDelay = 2;
+
+			let Roaming = true;
 		}
+		// EVIL JEFF MELEE
 		else { if (type = 2)
 		{
 			let width = 1;
@@ -79,6 +95,8 @@ class Enemy
 		let jumpHeight = 30; // 30
 
 		let lastLocation = location;
+
+		let roamRight = true;
 
 
         return this;
@@ -143,9 +161,46 @@ class Enemy
 
 
 
+	method void DoActions(Array map, int mapWidth, int mapHeight)
+	{
+		if (Roaming)
+		{
+			do Roam(map, mapWidth, mapHeight);
+		}
 
+		return;
+	}
 
 	//// MOVEMENT
+	method void Roam(Array map, int mapWidth, int mapHeight)
+	{
+		if (roamRight)
+		{
+			do MoveRight();
+		}
+		else 
+		{
+			do MoveLeft();
+		}
+
+		if (Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, map, mapWidth, mapHeight) | 
+		    Collision.IsAtPlatformBoundaryLeft(x, y, width, height, map, mapWidth, mapHeight))
+		{
+			let roamRight = true;
+		}
+		else { if (Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight) | 
+		           Collision.IsAtPlatformBoundaryRight(x, y, width, height, map, mapWidth, mapHeight))
+		{
+			let roamRight = false;
+		}}
+
+		return;
+	}
+
+
+
+
+
     method void MoveLeft()
     {
         if (x > 0)
@@ -159,7 +214,7 @@ class Enemy
 				let location = location - 1;
             	let x = x - 1;
 				do Clear();
-				do Draw(16384 + location, true, false);
+				do Draw(16384 + location, true, true);
 
 				let canMove = false;
 			}

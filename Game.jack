@@ -19,46 +19,42 @@
 
 class Game
 {
-    field int direction;
-    field Character character;
-    field int screen_width;
-    field int move_area_width;
-    field int screen_middle;
-    field int left_border;
-    field int right_border;
+    field int Direction;
+    field Character Character;
+    field int ScreenWidth;
+    field int MoveAreaWidth;
+    field int ScreenMiddle;
+    field int LeftBorder;
+    field int RightBorder;
 
-    field int platforms_num;
-    field int obstacles_num;
-    field int sections_num;
-    field int section_width;
+    field int PlatformsCount;
+    field int ObstaclesCount;
+    //field int sections_num;
+    //field int section_width;
 
-    field Array platforms;
-    field Array obstacles;
-    field Array sections;
+    field Array Platforms;
+    field Array Obstacles;
+    //field Array sections;
 
-    field Section curr_section;
-    field Section last_section;
-    field int curr_section_index;
-    field int last_section_index;
-    field Array curr_platforms;
-    field int curr_platforms_num;
+    //field Section curr_section;
+    //field Section last_section;
+    //field int curr_section_index;
+    //field int last_section_index;
+    //field Array curr_Platforms;
+    //field int curr_PlatformsCount;
 
     field Array div4lookup;
 
-    field Level3 level;
-    field int level_width;
-
-    field Enemy enemy;
+    field Level3 Level;
 
 
-
-    field Array curr_obstacles;
-    field int curr_obstacles_num;
+    //field Array curr_Obstacles;
+    //field int curr_ObstaclesCount;
 
 
 
 
-    field int game_delay;
+    field int GameDelay;
 
     field int timer3;
     field int timer6;
@@ -70,50 +66,57 @@ class Game
 
     field int WorldOffset;
 
+    field int EnemiesCount;
+    field Array Enemies;
+
+
+
+    
+    
+
 
     constructor Game new()
     {
         var int i;
 
-        let direction = 0;
+        let Direction = 0;
 
-        let screen_width = 32;
-        let move_area_width = 5; // 5
-        let screen_middle = 16;
-        let left_border = screen_middle - move_area_width;
-        let right_border = screen_middle + move_area_width;
+        let ScreenWidth = 32;
+        let MoveAreaWidth = 5; // 5
+        let ScreenMiddle = 16;
+        let LeftBorder = ScreenMiddle - MoveAreaWidth;
+        let RightBorder = ScreenMiddle + MoveAreaWidth;
 
-        let level = Level3.new();
-        let Map = level.get_map();
-        let MapWidth = level.get_map_width();
-        let MapHeight = level.get_map_height();
+        let Level = Level3.new();
+        let Map = Level.getMap();
+        let MapWidth = Level.getMapWidth();
+        let MapHeight = Level.getMapHeight();
 
-        let level_width = level.get_level_width();
-        let character = level.get_character();
+        let Character = Level.getCharacter();
 
-        let platforms_num = level.get_platforms_num();
-        let platforms = level.get_platforms();
+        let PlatformsCount = Level.getPlatformsCount();
+        let Platforms = Level.getPlatforms();
 
-        let sections_num = level.get_sections_num();
-        let section_width = level.get_section_width();
-        let sections = level.get_sections();
+        //let sections_num = Level.get_sections_num();
+        //let section_width = Level.get_section_width();
+        //let sections = Level.get_sections();
 
-        let obstacles_num = level.get_obstacles_num();
-        let obstacles = level.get_obstacles();
+        let ObstaclesCount = Level.getObstaclesCount();
+        let Obstacles = Level.getObstacles();
 
-        let div4lookup = Array.new(level_width);
+        let div4lookup = Array.new(MapWidth);
         let i = 0;
-        while (i < level_width)
+        while (i < MapWidth)
         {
             let div4lookup[i] = i / 4;
             let i = i + 1;
         }
 
-        let last_section = sections[get_curr_section_index()];
+        //let last_section = sections[get_curr_section_index()];
 
 
 
-        let game_delay = 20;
+        let GameDelay = 20;
 
         let timer3 = 3;
         let timer6 = 6;
@@ -122,10 +125,10 @@ class Game
         let WorldOffset = 0;
 
 
+        do DrawAllPlatforms();
 
 
-
-        let enemy = Enemy.new(0, 200, 2);
+        //let enemy = Enemy.new(10, 224, 1);
         //do enemy.Draw(true, false);
         
         
@@ -133,10 +136,10 @@ class Game
         return this;
     }
 
-    method int get_curr_section_index()
-    {
-        return div4lookup[character.get_absolute_x()];
-    }
+    //method int get_curr_section_index()
+    //{
+    //    return div4lookup[Character.get_absolute_x()];
+    //}
 
     method void start()
     {
@@ -158,11 +161,11 @@ class Game
 
             if (key = 0)
             {
-                let direction = 0;
+                let Direction = 0;
             }
             else { if (key = 131)
             {
-                do character.Jump();
+                do Character.Jump();
             }
             else { if (key = 81) 
             {
@@ -170,22 +173,22 @@ class Game
             }
             else { if (key = 130) 
             {
-                let direction = 1;
+                let Direction = 1;
             }
             else { if (key = 132) 
             {
-                let direction = 2;
+                let Direction = 2;
             }}}}}
             
 
 
-            do UpdateCurrentSection();
+            //do UpdateCurrentSection();
 
             do Move();
-            do Sys.wait(game_delay);
+            do Sys.wait(GameDelay);
             
             //do curr_section.Draw();
-            do character.RedrawPlatforms(Map, MapWidth, MapHeight, WorldOffset);
+            do Character.RedrawPlatforms(Map, MapWidth, MapHeight, WorldOffset);
             
 
             //do enemy.Draw(true, false);
@@ -195,6 +198,9 @@ class Game
             //do enemy.check_gravity2(Map, MapWidth, MapHeight);
             //do enemy.Jump();
             //do enemy.MoveRight();
+
+
+            //do enemy.Roam(Map, MapWidth, MapHeight);
             
 
             do CheckTimers();
@@ -203,7 +209,7 @@ class Game
 
 
 
-            let last_section_index = get_curr_section_index();
+            //let last_section_index = get_curr_section_index();
 
             do DecrementTimers();
         }
@@ -229,7 +235,7 @@ class Game
         }
 
         
-        do enemy.CheckTimers();
+        //do enemy.CheckTimers();
 
         return;
     }
@@ -240,37 +246,52 @@ class Game
         let timer6 = timer6 - 1;
         let timer100 = timer100 - 1;
 
-        do enemy.DecrementTimers();
+        //do enemy.DecrementTimers();
 
         return;
     }
 
-    method void UpdateCurrentSection()
-    {   
-        let curr_section_index = get_curr_section_index();
+    //method void UpdateCurrentSection()
+    //{   
+    //    let curr_section_index = get_curr_section_index();
 
-        let curr_section = sections[curr_section_index];
-        
-        let curr_platforms = curr_section.get_platforms();
-        let curr_platforms_num = curr_section.get_platforms_num();
+    //    let curr_section = sections[curr_section_index];
+    //    
+    //    let curr_Platforms = curr_section.get_Platforms();
+    //    let curr_PlatformsCount = curr_section.get_PlatformsCount();
 
-        let curr_obstacles = curr_section.get_obstacles();
-        let curr_obstacles_num = curr_section.get_obstacles_num();
+    //    let curr_Obstacles = curr_section.get_Obstacles();
+    //    let curr_ObstaclesCount = curr_section.get_ObstaclesCount();
 
-        return;
-    }
+    //    return;
+    //}
 
-    method void RedrawLastSection()
+    //method void RedrawLastSection()
+    //{
+    //    var int index;
+    //    var Section section;
+
+    //    if (Character.get_should_draw_last_obstacle())
+    //    {
+    //        let index = div4lookup[Character.get_last_abs_x()];
+    //        let section = sections[index];
+    //        do section.Draw();
+    //        do Character.set_should_draw_last_obstacle(false);
+    //    }
+
+    //    return;
+    //}
+
+    method void DrawAllPlatforms()
     {
-        var int index;
-        var Section section;
+        var Platform platform;
+        var int i;
 
-        if (character.get_should_draw_last_obstacle())
+        while (i < PlatformsCount)
         {
-            let index = div4lookup[character.get_last_abs_x()];
-            let section = sections[index];
-            do section.Draw();
-            do character.set_should_draw_last_obstacle(false);
+            let platform = Platforms[i];
+            do platform.Draw();
+            let i = i + 1;
         }
 
         return;
@@ -281,17 +302,17 @@ class Game
         var Obstacle obstacle;
         var int i;
 
-        if (character.get_should_draw_last_obstacle())
+        if (Character.get_should_draw_last_obstacle())
         {
-            while (i < obstacles_num)
+            while (i < ObstaclesCount)
             {
-                let obstacle = obstacles[i];
+                let obstacle = Obstacles[i];
 
                 do obstacle.Draw();
 
                 let i = i + 1;
             }
-            do character.set_should_draw_last_obstacle(false);
+            do Character.set_should_draw_last_obstacle(false);
         }
 
         return;
@@ -305,38 +326,38 @@ class Game
         var Obstacle obstacle;
 
         let WorldOffset = WorldOffset + 1;
-        do character.increment_absolute_x(1);
+        do Character.increment_absolute_x(1);
 
-        while (i < obstacles_num)
+        while (i < ObstaclesCount)
         {
-            let obstacle = obstacles[i];
+            let obstacle = Obstacles[i];
             do obstacle.ClearScrollLeft();
 
             let i = i + 1;
         }
 
         let i = 0;
-        while (i < platforms_num)
+        while (i < PlatformsCount)
         {
-            let platform = platforms[i];
+            let platform = Platforms[i];
             do platform.ClearScrollLeft();
 
             let i = i + 1;
         }
 
         let i = 0;
-        while (i < obstacles_num)
+        while (i < ObstaclesCount)
         {
-            let obstacle = obstacles[i];
+            let obstacle = Obstacles[i];
             do obstacle.DrawScrollLeft();
 
             let i = i + 1;
         }
 
         let i = 0;
-        while (i < platforms_num)
+        while (i < PlatformsCount)
         {
-            let platform = platforms[i];
+            let platform = Platforms[i];
             do platform.DrawScrollLeft();
 
             let i = i + 1;
@@ -352,38 +373,38 @@ class Game
         var Obstacle obstacle;
 
         let WorldOffset = WorldOffset - 1;
-        do character.increment_absolute_x(-1);
+        do Character.increment_absolute_x(-1);
 
-        while (i < obstacles_num)
+        while (i < ObstaclesCount)
         {
-            let obstacle = obstacles[i];
+            let obstacle = Obstacles[i];
             do obstacle.ClearScrollRight();
 
             let i = i + 1;
         }
 
         let i = 0;
-        while (i < platforms_num)
+        while (i < PlatformsCount)
         {
-            let platform = platforms[i];
+            let platform = Platforms[i];
             do platform.ClearScrollRight();
 
             let i = i + 1;
         }
 
         let i = 0;
-        while (i < obstacles_num)
+        while (i < ObstaclesCount)
         {
-            let obstacle = obstacles[i];
+            let obstacle = Obstacles[i];
             do obstacle.DrawScrollRight();
 
             let i = i + 1;
         }
 
         let i = 0;
-        while (i < platforms_num)
+        while (i < PlatformsCount)
         {
-            let platform = platforms[i];
+            let platform = Platforms[i];
             do platform.DrawScrollRight();
 
             let i = i + 1;
@@ -397,24 +418,24 @@ class Game
         var int x;
         var int abs_x;
         
-        let x = character.get_x();
-        let abs_x = character.get_absolute_x();
+        let x = Character.get_x();
+        let abs_x = Character.get_absolute_x();
 
-        do character.check_gravity2(Map, MapWidth, MapHeight);
-        do character.check_collision_obstacles2(Map, MapWidth, MapHeight);
+        do Character.check_gravity2(Map, MapWidth, MapHeight);
+        do Character.check_collision_obstacles2(Map, MapWidth, MapHeight);
 
-        if (direction = 1) 
+        if (Direction = 1) 
         {
-            do character.set_draw_character_left(true);
+            do Character.set_draw_character_left(true);
 
-            if (~character.check_left_collision_platforms2(Map, MapWidth, MapHeight))
+            if (~Character.check_left_collision_platforms2(Map, MapWidth, MapHeight))
             {
                 // nesto s apsolutnom vrijednosti izmedju x i pocetka mape?
-                if (abs_x - screen_middle + move_area_width > 0)
+                if (abs_x - ScreenMiddle + MoveAreaWidth > 0)
                 {
-                    if (x > left_border)
+                    if (x > LeftBorder)
                     {
-                        do character.MoveLeft();
+                        do Character.MoveLeft();
                     }
                     else
                     {
@@ -423,21 +444,21 @@ class Game
                 }
                 else
                 {
-                    do character.MoveLeft();
+                    do Character.MoveLeft();
                 }
             }
         }
-        if (direction = 2)
+        if (Direction = 2)
         {
-            do character.set_draw_character_left(false);
+            do Character.set_draw_character_left(false);
 
-            if (~character.check_right_collision_platforms2(Map, MapWidth, MapHeight))
+            if (~Character.check_right_collision_platforms2(Map, MapWidth, MapHeight))
             {
-                if (abs_x + screen_middle - move_area_width < level_width)
+                if (abs_x + ScreenMiddle - MoveAreaWidth < MapWidth)
                 {
-                    if (x < right_border)
+                    if (x < RightBorder)
                     {   
-                        do character.MoveRight();
+                        do Character.MoveRight();
                     }
                     else
                     {
@@ -446,7 +467,7 @@ class Game
                 }
                 else
                 {
-                    do character.MoveRight();
+                    do Character.MoveRight();
                 }
             }
         }
