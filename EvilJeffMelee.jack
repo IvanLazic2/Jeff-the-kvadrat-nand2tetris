@@ -1,0 +1,79 @@
+class EvilJeffMelee
+{
+    static Array HeadFrame1;
+
+    static Array HeadFrame1Mirrored;
+
+    static Array HeadFrames;
+
+    static Array HeadFramesMirrored;
+
+    static int FrameCount;
+
+    function int GetFrameCount() { return FrameCount; }
+
+    function void DrawFrame(int memAddress, int currFrame, bool display, bool mirrored)
+    {
+        if (mirrored)
+        {
+            do Sprite.Draw(memAddress, HeadFramesMirrored[currFrame], display);
+        }
+        else
+        {
+            do Sprite.Draw(memAddress, HeadFrames[currFrame], display);
+        }
+
+        return;
+    }
+
+    function void init()
+    {
+        let FrameCount = 1;
+
+        //NORMAL - facing right
+        let HeadFrame1 = Array.new(16);
+        let HeadFrame1[0] = -1;
+        let HeadFrame1[1] = -1;
+        let HeadFrame1[2] = -1;
+        let HeadFrame1[3] = -4113;
+        let HeadFrame1[4] = -2081;
+        let HeadFrame1[5] = -1089;
+        let HeadFrame1[6] = -4129;
+        let HeadFrame1[7] = -4129;
+        let HeadFrame1[8] = -4129;
+        let HeadFrame1[9] = -1;
+        let HeadFrame1[10] = -1;
+        let HeadFrame1[11] = -1985;
+        let HeadFrame1[12] = -2081;
+        let HeadFrame1[13] = -2081;
+        let HeadFrame1[14] = -1;
+        let HeadFrame1[15] = -1;
+
+        let HeadFrames = Array.new(FrameCount);
+        let HeadFrames[0] = HeadFrame1;
+
+        // MIRRORED - facing left
+        let HeadFrame1Mirrored = Array.new(16);
+        let HeadFrame1Mirrored[0] = -1;
+        let HeadFrame1Mirrored[1] = -1;
+        let HeadFrame1Mirrored[2] = -1;
+        let HeadFrame1Mirrored[3] = -2057;
+        let HeadFrame1Mirrored[4] = -1041;
+        let HeadFrame1Mirrored[5] = -545;
+        let HeadFrame1Mirrored[6] = -1033;
+        let HeadFrame1Mirrored[7] = -1033;
+        let HeadFrame1Mirrored[8] = -1033;
+        let HeadFrame1Mirrored[9] = -1;
+        let HeadFrame1Mirrored[10] = -1;
+        let HeadFrame1Mirrored[11] = -993;
+        let HeadFrame1Mirrored[12] = -1041;
+        let HeadFrame1Mirrored[13] = -1041;
+        let HeadFrame1Mirrored[14] = -1;
+        let HeadFrame1Mirrored[15] = -1;
+
+        let HeadFramesMirrored = Array.new(FrameCount);
+        let HeadFramesMirrored[0] = HeadFrame1Mirrored;
+
+        return;
+    }
+}

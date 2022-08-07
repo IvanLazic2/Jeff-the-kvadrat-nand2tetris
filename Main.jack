@@ -3,6 +3,10 @@ class Main
     function void main()
     {
         var Game game;
+
+        do Spider.init();
+        do EvilJeffMelee.init();
+
         let game = Game.new();
 
         do game.start();

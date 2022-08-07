@@ -116,8 +116,8 @@ class Game
 
 
 
-        let enemy = Enemy.new(0, 99, 1);
-
+        let enemy = Enemy.new(0, 200, 2);
+        //do enemy.Draw(true, false);
         
         
 
@@ -176,7 +176,15 @@ class Game
             do Sys.wait(game_delay);
             
             do curr_section.Draw();
-            do enemy.Draw();
+
+            //do enemy.Draw(true, false);
+            //do enemy.MoveRight();
+            //do enemy.MoveLeft();
+
+            do enemy.check_gravity(platforms, platforms_num);
+            do enemy.Jump();
+            do enemy.MoveRight();
+            
 
             do CheckTimers();
 
@@ -209,7 +217,7 @@ class Game
         }
 
         
-        do enemy.CheckTimer();
+        do enemy.CheckTimers();
 
         return;
     }
@@ -220,7 +228,7 @@ class Game
         let timer6 = timer6 - 1;
         let timer100 = timer100 - 1;
 
-        do enemy.DecrementTimer();
+        do enemy.DecrementTimers();
 
         return;
     }
@@ -366,6 +374,7 @@ class Game
 
             if (~character.check_left_collision_platforms(curr_platforms, curr_platforms_num))
             {
+                // nesto s apsolutnom vrijednosti izmedju x i pocetka mape?
                 if (abs_x - screen_middle + move_area_width > 0)
                 {
                     if (x > left_border)

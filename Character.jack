@@ -26,7 +26,7 @@ class Character
     field Obstacle last_obstacle;
     field bool should_draw_last_obstacle;
 
-    field int damage_delay;
+    field int damage_timer;
     field int damage_cooldown;
 
     field int last_abs_x;
@@ -42,10 +42,10 @@ class Character
         let location = (y * 32) + x;
         let absolute_x = x2;
 
-        let width = 48; // TEMP
-        let height = 32; // TEMP
+        let width = 3; // 48
+        let height = 32; // 32
 
-        let widthdiv16 = width / 16;
+        //let widthdiv16 = width / 16;
 
         let forceY = 0;
         let gravity = 6; //2, 6
@@ -116,60 +116,12 @@ class Character
     //// PLATFORM COLLISION
     method bool check_right_collision_platforms(Array platforms, int platforms_num)
     {
-        var int i;
-        var Platform platform;
-        var Section section;
-        var bool result;
-
-        while (i < platforms_num)
-        {
-            let platform = platforms[i];
-
-            let result = is_collided_right_platform(platform);
-
-            if (result)
-            {
-                let i = platforms_num - 1;
-            }
-
-            let i = i + 1;
-        }
-
-        return result;
-    }
-
-    method bool is_collided_right_platform(Platform platform)
-    {
-        return ((x + 2) = platform.get_x()) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
+        return Collision.CheckPlatformCollisionRight(platforms, platforms_num, x, y, width, height);
     }
 
     method bool check_left_collision_platforms(Array platforms, int platforms_num)
     {
-        var int i;
-        var Platform platform;
-        var Section section;
-        var bool result;
-
-        while (i < platforms_num)
-        {
-            let platform = platforms[i];
-
-            let result = is_collided_left_platform(platform);
-
-            if (result)
-            {
-                let i = platforms_num - 1;
-            }
-
-            let i = i + 1;
-        }
-
-        return result;
-    }
-
-    method bool is_collided_left_platform(Platform platform)
-    {
-        return ((x - 1) = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
+        return Collision.CheckPlatformCollisionLeft(platforms, platforms_num, x, y, width, height);
     }
 
     //// OBSTACLE COLLISION
@@ -183,7 +135,7 @@ class Character
         {
             let obstacle = obstacles[i];
 
-            let result = is_collided_obstacle(obstacle);
+            let result = Collision.IsCollidedObstacle(obstacle, x, y, width, height);
 
             if (result)
             {
@@ -203,30 +155,18 @@ class Character
             do Respawn();
         }
 
-        if (damage_delay > 0)
+        if (damage_timer > 0)
         {
-            let damage_delay = damage_delay - 1;
+            let damage_timer = damage_timer - 1;
         }
 
         return;
     }
-
-    method bool is_collided_obstacle(Obstacle obstacle)
-    {
-        var bool is_collided_y;
-        var bool is_collided_x;
-
-        let is_collided_x = (((x + 2) > (obstacle.get_x()) & (x < (obstacle.get_x() + obstacle.get_size() + 1))));
-        let is_collided_y = (obstacle.get_y() - obstacle.get_height() < (y + height)) & (y < (obstacle.get_y() + 1));
-        
-        return is_collided_x & is_collided_y;
-    }
-
     
     //// MOVEMENT
     method void MoveLeft()
     {
-        if ((x * 16) - 16 > 0)
+        if (x > 0)
         {
             let lastlocation = location;
 
@@ -243,7 +183,7 @@ class Character
 
     method void MoveRight()
     {
-        if(((x + 1) * 16) + 16 < 512)
+        if((x + width) < 32)
         {
             let lastlocation = location;
 
@@ -272,10 +212,10 @@ class Character
         return;
     }
 
-    method bool at_canvas_boundary()
-    {
-        return ((y + height + forceY) > 254); //254
-    }
+    //method bool at_canvas_boundary()
+    //{
+    //    return ((y + height + forceY) > 254); //254
+    //}
 
     //// GRAVITY
     method void check_gravity(Array platforms, int platforms_num)
@@ -283,6 +223,7 @@ class Character
         var int i;
         var Platform platform;
         var Section section;
+        var bool is_on_platform;
 
         let lastlocation = location;
 
@@ -292,7 +233,11 @@ class Character
 
             //if (Math.abs(y - platform.get_y()) < 50)
             //{
-                if (check_platform(platform, platforms, platforms_num))
+                let is_on_platform = Collision.IsOnPlatform(platform, x, y, width, height, forceY);
+                //let lastlocation = location;
+                let can_jump = is_on_platform;
+
+                if (is_on_platform)
                 {
                     let i = platforms_num - 1;
                 }
@@ -334,47 +279,6 @@ class Character
         return;
     }
 
-    method bool is_on_platform(Platform platform)
-    {
-        var bool is_stable_x;
-        var bool is_stable_y;
-        var int platform_x;
-        var int h;
-        var int w;
-
-        let platform_x = platform.get_x();
-
-        let h = platform.get_y() - y - height;
-        let w = x + widthdiv16;
-
-        let is_stable_y = (-1 < h) & (h < (forceY + 1));
-
-        ////
-        //if ((y + height + forceY + 1) > platform.get_y())
-        //{
-        //    let is_stable_y = true;
-        //}
-        ////
-        ////
-        if (Math.abs(y + height + forceY + 1 - platform.get_y()) < 8) // < 16
-        {
-            let is_stable_y = true;
-        }
-        ////
-
-        let is_stable_x = (x < (platform_x + platform.get_size() + 1)) & (w > (platform_x + 1));
-
-        return (is_stable_x & is_stable_y);
-    }
-
-    method bool check_platform(Platform platform, Array platforms, int platforms_num)
-    {
-        let lastlocation = location;
-
-        let can_jump = is_on_platform(platform);
-
-        return can_jump;
-    }
 
     method void Respawn()
     {
@@ -400,10 +304,10 @@ class Character
     method void TakeDamage()
     {
         // dont take damage if already taken
-        if (damage_delay < 1)
+        if (damage_timer < 1)
         {
             let health = health - 1;
-            let damage_delay = damage_cooldown;
+            let damage_timer = damage_cooldown;
         }
 
         return;
@@ -423,7 +327,7 @@ class Character
         // 16384+513+480 = 17377
         // 24576 - 17377 = 7199
         {
-            let memAddress = 16896 + lastlocation; // 512
+            let memAddress = 16897 + lastlocation; // 513
 
             let i = 0;
             while (i < 481)
@@ -433,7 +337,7 @@ class Character
                 let i = i + 32;                
             }
 
-            let memAddress = 16897 + lastlocation; // 513
+            let memAddress = 16898 + lastlocation; // 514
             let i = 0;
             while (i < 481)
             {
@@ -442,7 +346,7 @@ class Character
                 let i = i + 32;
             }
 
-            let memAddress = 16895 + lastlocation; // 511
+            let memAddress = 16896 + lastlocation; // 512
             let i = 0;
 
             while (i < 481)
@@ -452,7 +356,7 @@ class Character
                 let i = i + 32;
             }
 
-            let memAddress = 16385 + lastlocation; // 1
+            let memAddress = 16386 + lastlocation; // 2
             let i = 0;
             while (i < 481)
             {
@@ -461,7 +365,7 @@ class Character
                 let i = i + 32;
             }
 
-            let memAddress = 16383 + lastlocation; // -1
+            let memAddress = 16384 + lastlocation; // 0
             let i = 0;
             while (i < 481)
             {
@@ -498,7 +402,8 @@ class Character
 
             // faca
             //let memAddress = 16384 + location + 512;
-            let memAddress = memAddress + 512;
+            //let memAddress = memAddress + 512;
+            let memAddress = 16384 + location + 513;
 
 	        do Memory.poke(memAddress + 0, -1);
 	        do Memory.poke(memAddress + 32, -32767);
@@ -520,7 +425,8 @@ class Character
 
             // desna ruka donji dio
             //let memAddress = 16384 + location + 513;
-            let memAddress = memAddress + 1; // memAddres - 512 + 513
+            //let memAddress = memAddress + 1; // memAddres - 512 + 513
+            let memAddress = 16384 + location + 514;
 
 	        do Memory.poke(memAddress + 0, 4128);
 	        do Memory.poke(memAddress + 32, 8256);
@@ -541,7 +447,8 @@ class Character
 
             // lijeva ruka donji dio
             //let memAddress = 16384 + location + 511;
-            let memAddress = memAddress - 2; // memAddress - 1 + 511
+            //let memAddress = memAddress - 2; // memAddress - 1 + 511
+            let memAddress = 16384 + location + 512;
 
 	        do Memory.poke(memAddress + 0, 520);
 	        do Memory.poke(memAddress + 32, 516);
@@ -562,7 +469,8 @@ class Character
 
             // desna ruka gornji dio
             //let memAddress = 16384 + location + 1;
-            let memAddress = memAddress - 510; // memAddres - 511 + 1
+            //let memAddress = memAddress - 510; // memAddres - 511 + 1
+            let memAddress = 16384 + location + 2;
 
 	        do Memory.poke(memAddress + 0, 0);
 	        do Memory.poke(memAddress + 32, 0);
@@ -584,7 +492,8 @@ class Character
 
             // lijeva ruka gornji dio
             //let memAddress = 16384 + location - 1;
-            let memAddress = memAddress - 2; // memAddress + 1 - 2
+            //let memAddress = memAddress - 2; // memAddress + 1 - 2
+            let memAddress = 16384 + location;
 
 	        do Memory.poke(memAddress + 0, 0);
 	        do Memory.poke(memAddress + 32, 0);
@@ -615,7 +524,8 @@ class Character
 
             // faca
             //let memAddress = 16384 + location + 512;
-            let memAddress = memAddress + 512;
+            //let memAddress = memAddress + 512;
+            let memAddress = 16384 + location + 513;
 
             do Memory.poke(memAddress + 0, -1);
 	        do Memory.poke(memAddress + 32, -32767);
@@ -636,7 +546,8 @@ class Character
 
             // desna ruka donji dio
             //let memAddress = 16384 + location + 511;
-            let memAddress = memAddress - 1; // memAdress - 512 + 511
+            //let memAddress = memAddress - 1; // memAdress - 512 + 511
+            let memAddress = 16384 + location + 512;
 
             do Memory.poke(memAddress + 0, 1032);
 	        do Memory.poke(memAddress + 32, 516);
@@ -657,7 +568,8 @@ class Character
 
             // lijeva ruka donji dio
             //let memAddress = 16384 + location + 513;
-            let memAddress = memAddress + 2; // memAddress - 511 + 513
+            //let memAddress = memAddress + 2; // memAddress - 511 + 513
+            let memAddress = 16384 + location + 514;
 
             do Memory.poke(memAddress + 0, 4160);
 	        do Memory.poke(memAddress + 32, 8256);
@@ -678,7 +590,8 @@ class Character
 
             // desna ruka gornji dio
             //let memAddress = 16384 + location - 1;
-            let memAddress = memAddress - 514; //memAddress - 513 - 1
+            //let memAddress = memAddress - 514; //memAddress - 513 - 1
+            let memAddress = 16384 + location;
 
             do Memory.poke(memAddress + 0, 0);
 	        do Memory.poke(memAddress + 32, 0);
@@ -699,7 +612,8 @@ class Character
 
             // lijeva ruka gornji dio
             //let memAddress = 16384 + location + 1;
-            let memAddress = memAddress + 2; // + 1 + 1
+            //let memAddress = memAddress + 2; // + 1 + 1
+            let memAddress = 16384 + location + 2;
 
             do Memory.poke(memAddress + 0, 0);
 	        do Memory.poke(memAddress + 32, 0);

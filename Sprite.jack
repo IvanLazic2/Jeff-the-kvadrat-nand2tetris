@@ -1,0 +1,30 @@
+class Sprite
+{
+    function void Draw(int memAddress, Array sprite, bool display)
+	{
+		var int i;
+		var int j;
+        if (display)
+        {
+            while (i < 481)
+		    {
+		    	do Memory.poke(memAddress + i, sprite[j]);
+		    	let j = j + 1;
+		    	let i = i + 32;
+		    }
+        }
+		else
+        {
+            while (i < 481)
+		    {
+		    	do Memory.poke(memAddress + i, 0);
+                let i = i + 32;
+		    }
+            
+        }
+
+        
+
+		return;
+	}
+}

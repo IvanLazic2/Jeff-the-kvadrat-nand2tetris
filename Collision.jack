@@ -1,0 +1,101 @@
+class Collision
+{
+    //// PLATFORMS
+    function bool IsOnPlatform(Platform platform, int x, int y, int width, int height, int forceY)
+    {
+        var bool is_stable_x;
+        var bool is_stable_y;
+        var int platform_x;
+        var int h;
+        var int w;
+
+        let h = platform.get_y() - y - height;
+        let w = x + width;
+
+        let is_stable_y = (-1 < h) & (h < (forceY + 1));
+
+        //if (Math.abs(y + height + forceY + 1 - platform.get_y()) < 8) // < 16
+        if (Math.abs(y + height + forceY - platform.get_y()) < 7) // < 15
+        {
+            let is_stable_y = true;
+        }
+
+        let is_stable_x = (x < (platform.get_x() + platform.get_size())) & (w > platform.get_x());
+
+        return (is_stable_x & is_stable_y);
+    }
+
+    function bool CheckPlatformCollisionRight(Array platforms, int platforms_num, int x, int y, int width, int height)
+    {
+        var int i;
+        var Platform platform;
+        var Section section;
+        var bool result;
+
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+
+            let result = Collision.IsCollidedPlatformRight(platform, x, y, width, height);
+
+            if (result)
+            {
+                let i = platforms_num - 1;
+            }
+
+            let i = i + 1;
+        }
+
+        return result;
+    }
+
+    function bool IsCollidedPlatformRight(Platform platform, int x, int y, int width, int height)
+    {
+        return ((x + width) = platform.get_x()) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
+    }
+
+    function bool CheckPlatformCollisionLeft(Array platforms, int platforms_num, int x, int y, int width, int height)
+    {
+        var int i;
+        var Platform platform;
+        var Section section;
+        var bool result;
+
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+
+            let result = Collision.IsCollidedPlatformLeft(platform, x, y, width, height);
+
+            if (result)
+            {
+                let i = platforms_num - 1;
+            }
+
+            let i = i + 1;
+        }
+
+        return result;
+    }
+
+    function bool IsCollidedPlatformLeft(Platform platform, int x, int y, int width, int height)
+    {
+        return (x = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
+    }
+
+
+
+
+    //// OBSTACLES
+
+    function bool IsCollidedObstacle(Obstacle obstacle, int x, int y, int width, int height)
+    {
+        var bool is_collided_y;
+        var bool is_collided_x;
+
+        let is_collided_x = (((x + width) > (obstacle.get_x()) & (x < (obstacle.get_x() + obstacle.get_size()))));
+        let is_collided_y = (obstacle.get_y() - obstacle.get_height() < (y + height)) & (y < (obstacle.get_y() + 1));
+        
+        return is_collided_x & is_collided_y;
+    }
+}

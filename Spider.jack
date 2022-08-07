@@ -1,0 +1,210 @@
+class Spider
+{
+    static Array BodyFrame1;
+    static Array HeadFrame1;
+    static Array BodyFrame2;
+    static Array HeadFrame2;
+
+    static Array BodyFrame1Mirrored;
+    static Array HeadFrame1Mirrored;
+    static Array BodyFrame2Mirrored;
+    static Array HeadFrame2Mirrored;
+
+    static Array BodyFrames;
+    static Array HeadFrames;
+
+    static Array BodyFramesMirrored;
+    static Array HeadFramesMirrored;
+    
+    static int FrameCount;
+
+    function int GetFrameCount() { return FrameCount; }
+
+    function void DrawFrame(int memAddress, int currFrame, bool display, bool mirrored)
+	{
+        if (mirrored)
+        {
+            do Sprite.Draw(memAddress, BodyFramesMirrored[currFrame], display);
+            let memAddress = memAddress + 1;
+            do Sprite.Draw(memAddress, HeadFramesMirrored[currFrame], display);
+        }
+        else
+        {
+            do Sprite.Draw(memAddress, BodyFrames[currFrame], display);
+            let memAddress = memAddress + 1;
+            do Sprite.Draw(memAddress, HeadFrames[currFrame], display);
+        }
+
+		return;
+	}
+
+    function void init()
+    {
+        let FrameCount = 2;
+
+        // NORMAL - facing right
+        let BodyFrame1 = Array.new(16);
+        let BodyFrame1[0] = 0;
+        let BodyFrame1[1] = 32704;
+        let BodyFrame1[2] = -16;
+        let BodyFrame1[3] = -8;
+        let BodyFrame1[4] = -8;
+        let BodyFrame1[5] = -4;
+        let BodyFrame1[6] = -2;
+        let BodyFrame1[7] = -2;
+        let BodyFrame1[8] = -2;
+        let BodyFrame1[9] = -4;
+        let BodyFrame1[10] = -8;
+        let BodyFrame1[11] = -16;
+        let BodyFrame1[12] = -1016;
+        let BodyFrame1[13] = 31752;
+        let BodyFrame1[14] = 17158;
+        let BodyFrame1[15] = 8321;
+
+        let HeadFrame1 = Array.new(16);
+        let HeadFrame1[0] = 0;
+        let HeadFrame1[1] = 0;
+        let HeadFrame1[2] = 1;
+        let HeadFrame1[3] = 3;
+        let HeadFrame1[4] = 3;
+        let HeadFrame1[5] = 7;
+        let HeadFrame1[6] = 7;
+        let HeadFrame1[7] = 4071;
+        let HeadFrame1[8] = 8191;
+        let HeadFrame1[9] = 6015;
+        let HeadFrame1[10] = 4735;
+        let HeadFrame1[11] = 8191;
+        let HeadFrame1[12] = 8191;
+        let HeadFrame1[13] = 8188;
+        let HeadFrame1[14] = 27844;
+        let HeadFrame1[15] = -28414;
+
+        let BodyFrame2 = Array.new(16);
+        let BodyFrame2[0] = 0;
+        let BodyFrame2[1] = 32704;
+        let BodyFrame2[2] = -16;
+        let BodyFrame2[3] = -8;
+        let BodyFrame2[4] = -8;
+        let BodyFrame2[5] = -4;
+        let BodyFrame2[6] = -2;
+        let BodyFrame2[7] = -2;
+        let BodyFrame2[8] = -2;
+        let BodyFrame2[9] = -4;
+        let BodyFrame2[10] = -8;
+        let BodyFrame2[11] = -16;
+        let BodyFrame2[12] = -1008;
+        let BodyFrame2[13] = 31760;
+        let BodyFrame2[14] = 17440;
+        let BodyFrame2[15] = -30656;
+
+        let HeadFrame2 = Array.new(16);
+        let HeadFrame2[0] = 0;
+        let HeadFrame2[1] = 0;
+        let HeadFrame2[2] = 1;
+        let HeadFrame2[3] = 3;
+        let HeadFrame2[4] = 3;
+        let HeadFrame2[5] = 7;
+        let HeadFrame2[6] = 7;
+        let HeadFrame2[7] = 4071;
+        let HeadFrame2[8] = 8191;
+        let HeadFrame2[9] = 6015;
+        let HeadFrame2[10] = 4735;
+        let HeadFrame2[11] = 8191;
+        let HeadFrame2[12] = 8191;
+        let HeadFrame2[13] = 8188;
+        let HeadFrame2[14] = 11460;
+        let HeadFrame2[15] = 8738;
+
+        let BodyFrames = Array.new(FrameCount);
+        let BodyFrames[0] = BodyFrame1;
+        let BodyFrames[1] = BodyFrame2;
+
+        let HeadFrames = Array.new(FrameCount);
+        let HeadFrames[0] = HeadFrame1;
+        let HeadFrames[1] = HeadFrame2;
+
+        // MIRRORED - facing left
+        let BodyFrame1Mirrored = Array.new(16);
+        let BodyFrame1Mirrored[0] = 0;
+        let BodyFrame1Mirrored[1] = 0;
+        let BodyFrame1Mirrored[2] = ~32767;
+        let BodyFrame1Mirrored[3] = -16384;
+        let BodyFrame1Mirrored[4] = -16384;
+        let BodyFrame1Mirrored[5] = -8192;
+        let BodyFrame1Mirrored[6] = -8192;
+        let BodyFrame1Mirrored[7] = -6160;
+        let BodyFrame1Mirrored[8] = -8;
+        let BodyFrame1Mirrored[9] = -280;
+        let BodyFrame1Mirrored[10] = -440;
+        let BodyFrame1Mirrored[11] = -8;
+        let BodyFrame1Mirrored[12] = -8;
+        let BodyFrame1Mirrored[13] = 16376;
+        let BodyFrame1Mirrored[14] = 9014;
+        let BodyFrame1Mirrored[15] = 16521;
+
+        let HeadFrame1Mirrored = Array.new(16);
+        let HeadFrame1Mirrored[0] = 0;
+        let HeadFrame1Mirrored[1] = 1022;
+        let HeadFrame1Mirrored[2] = 4095;
+        let HeadFrame1Mirrored[3] = 8191;
+        let HeadFrame1Mirrored[4] = 8191;
+        let HeadFrame1Mirrored[5] = 16383;
+        let HeadFrame1Mirrored[6] = 32767;
+        let HeadFrame1Mirrored[7] = 32767;
+        let HeadFrame1Mirrored[8] = 32767;
+        let HeadFrame1Mirrored[9] = 16383;
+        let HeadFrame1Mirrored[10] = 8191;
+        let HeadFrame1Mirrored[11] = 4095;
+        let HeadFrame1Mirrored[12] = 4159;
+        let HeadFrame1Mirrored[13] = 4158;
+        let HeadFrame1Mirrored[14] = 24770;
+        let HeadFrame1Mirrored[15] = -32508;
+
+        let BodyFrame2Mirrored = Array.new(16);
+        let BodyFrame2Mirrored[0] = 0;
+        let BodyFrame2Mirrored[1] = 0;
+        let BodyFrame2Mirrored[2] = ~32767;
+        let BodyFrame2Mirrored[3] = -16384;
+        let BodyFrame2Mirrored[4] = -16384;
+        let BodyFrame2Mirrored[5] = -8192;
+        let BodyFrame2Mirrored[6] = -8192;
+        let BodyFrame2Mirrored[7] = -6160;
+        let BodyFrame2Mirrored[8] = -8;
+        let BodyFrame2Mirrored[9] = -280;
+        let BodyFrame2Mirrored[10] = -440;
+        let BodyFrame2Mirrored[11] = -8;
+        let BodyFrame2Mirrored[12] = -8;
+        let BodyFrame2Mirrored[13] = 16376;
+        let BodyFrame2Mirrored[14] = 9012;
+        let BodyFrame2Mirrored[15] = 17476;
+
+        let HeadFrame2Mirrored = Array.new(16);
+        let HeadFrame2Mirrored[0] = 0;
+        let HeadFrame2Mirrored[1] = 1022;
+        let HeadFrame2Mirrored[2] = 4095;
+        let HeadFrame2Mirrored[3] = 8191;
+        let HeadFrame2Mirrored[4] = 8191;
+        let HeadFrame2Mirrored[5] = 16383;
+        let HeadFrame2Mirrored[6] = 32767;
+        let HeadFrame2Mirrored[7] = 32767;
+        let HeadFrame2Mirrored[8] = 32767;
+        let HeadFrame2Mirrored[9] = 16383;
+        let HeadFrame2Mirrored[10] = 8191;
+        let HeadFrame2Mirrored[11] = 4095;
+        let HeadFrame2Mirrored[12] = 2111;
+        let HeadFrame2Mirrored[13] = 2110;
+        let HeadFrame2Mirrored[14] = 1058;
+        let HeadFrame2Mirrored[15] = 529;
+
+        let BodyFramesMirrored = Array.new(FrameCount);
+        let BodyFramesMirrored[0] = BodyFrame1Mirrored;
+        let BodyFramesMirrored[1] = BodyFrame2Mirrored;
+
+        let HeadFramesMirrored = Array.new(FrameCount);
+        let HeadFramesMirrored[0] = HeadFrame1Mirrored;
+        let HeadFramesMirrored[1] = HeadFrame2Mirrored;
+
+
+        return;
+    }
+}

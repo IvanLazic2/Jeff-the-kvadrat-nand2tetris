@@ -8,6 +8,12 @@ class Section
     field Array obstacles;
     field int obstacles_num;
 
+    field Array Enemies;
+    field Array GravityAffectedEnemies;
+    field Array SideMovingEnemies;
+    field Array StationaryEnemies;
+    field Array ShootingEnemies;
+
     //field bool hostile;
 
     constructor Section new(int left_border2, int right_border2, int platforms_num2, int obstacles_num2)

@@ -1,5 +1,6 @@
 // 0 - mali prcmoljak
-// 1 - spider
+// 1 - spider - pauk se moze kretat samo po jednoj platformi (od pocetka do kraja ili do neke prepreke, npr. druge platforme ili obstacle-a)
+// 2 - evil jeff
 
 class Enemy
 {
@@ -8,16 +9,30 @@ class Enemy
 	field int type;
 
 	field int width; // spider - 1
-	field int height; // spider - 0
+	field int height; // spider - 16
+
+	field int location;
+	field int lastLocation;
+	field int memAddress;
+	field int lastMemAddress;
+
+	field int gravity;
+	field bool canJump;
+	field int forceY;
+	field int jumpHeight;
 
 
 
+	field int frameCount;
+	field int currFrame;
 
-	field int number_of_frames;
-	field int curr_frame;
+	field int animationDelay;
+	field int animationTimer;
 
-	field int animation_delay;
-	field int animation_timer;
+	field int movementDelay;
+	field int movementTimer;
+
+	field bool canMove;
 
     constructor Enemy new(int x2, int y2, int type2)
     {	
@@ -25,23 +40,45 @@ class Enemy
 		let y = y2;
 		let type = type2;
 
+		let location = (32 * y) + x;
+		let memAddress = 16384 + location;
 
-
+		// PRCMOLJAK
 		if (type = 0)
 		{
-			let number_of_frames = 0;
-			let animation_delay = 0;
+			let frameCount = 0;
+			let animationDelay = 0;
 		}
+		// SPIDER
 		else { if (type = 1)
 		{
-			let number_of_frames = 2;
-			let animation_delay = 3;
-		}}
+			let width = 2;
+			let height = 16;
+			let frameCount = Spider.GetFrameCount();
+			let animationDelay = 3;
+			let movementDelay = 2;
+		}
+		else { if (type = 2)
+		{
+			let width = 1;
+			let height = 16;
+			let frameCount = EvilJeffMelee.GetFrameCount();
+			
+			let movementDelay = 2;
+		}}}
 
-		let curr_frame = 0;
-		let animation_timer = animation_delay;
+		let currFrame = 0;
 
+		let animationTimer = animationDelay;
+		let movementTimer = movementDelay;
 
+		let canMove = true;
+
+		let forceY = 0;
+		let gravity = 6; // 6
+		let jumpHeight = 30; // 30
+
+		let lastLocation = location;
 
 
         return this;
@@ -63,46 +100,221 @@ class Enemy
         return;
     }
 
-	method void CheckTimer()
+	method void CheckTimers()
 	{
-		if (animation_timer < 1)
+		if (animationTimer < 1)
 		{
 			do ChangeFrame();
+			let animationTimer = animationDelay;
+		}
 
-			let animation_timer = animation_delay;
+		if (movementTimer < 1)
+		{
+			let canMove = true;
+			let movementTimer = movementDelay;
 		}
 
 		return;
 	}
 
-	method void DecrementTimer()
+	method void DecrementTimers()
 	{
-		let animation_timer = animation_timer - 1;
+		let animationTimer = animationTimer - 1;
+		let movementTimer = movementTimer - 1;
 		return;
 	}
 
 
 	method void ChangeFrame()
 	{
-		if (curr_frame < (number_of_frames - 1))
+		if (currFrame < (frameCount - 1))
 		{
-			let curr_frame = curr_frame + 1;
+			let currFrame = currFrame + 1;
 		}
 		else
 		{
-			let curr_frame = 0;
+			let currFrame = 0;
 		}
 
 		return;
 	}
 
-    method void Draw()
-    {
-		var int location;
-        var int memAddress;
 
-		let location = (y * 32) + x;
-	    let memAddress = 16384 + location;
+
+
+
+
+
+	//// MOVEMENT
+    method void MoveLeft()
+    {
+        if (x > 0)
+        {
+			if (canMove)
+			{
+				let lastLocation = location;
+			
+				
+
+				let location = location - 1;
+            	let x = x - 1;
+				do Clear();
+				do Draw(16384 + location, true, false);
+
+				let canMove = false;
+			}
+            
+        }
+
+        return;
+    }
+
+    method void MoveRight()
+    {
+        if((x + width + 2) < 32)
+        {
+			if (canMove)
+			{
+            	let lastLocation = location;
+
+
+				let location = location + 1;
+            	let x = x + 1;
+				do Clear();
+				//do Draw(true, false);
+				do Draw(16384 + location, true, false);
+
+				let canMove = false;
+			}
+        }
+
+
+        return;
+
+    }
+
+    method void Jump()
+    {
+        let lastLocation = location;
+
+        if (canJump)
+        {
+            let forceY = forceY - jumpHeight;
+        }
+
+        return;
+    }
+
+	//// GRAVITY
+    method void check_gravity(Array platforms, int platforms_num)
+    {
+        var int i;
+        var Platform platform;
+        var Section section;
+        var bool isOnPlatform;
+
+        let lastLocation = location;
+
+        while (i < platforms_num)
+        {
+            let platform = platforms[i];
+
+            //if (Math.abs(y - platform.get_y()) < 50)
+            //{
+                let isOnPlatform = Collision.IsOnPlatform(platform, x, y, width, height, forceY);
+
+                let canJump = isOnPlatform;
+
+                if (isOnPlatform)
+                {
+                    let i = platforms_num - 1;
+                }
+            //}
+
+            let i = i + 1;
+        }
+
+        if (canJump)
+        {
+			
+
+            let y = platform.get_y() - height;
+            let forceY = 0;
+            let location = (y * 32) + x;
+			//let memAddress = 16384 + location;
+
+            //do Clear();
+            //do Draw();
+			do Clear();
+			do Draw(16384 + location, true, false);
+        }
+        // padanje
+        else
+        {
+            if (y > 219)
+            {
+                //do Respawn();
+
+                // take damage
+            }
+
+            let forceY = forceY + gravity;            
+        }
+
+		
+
+        let y = y + forceY;
+        let location = (y * 32) + x;
+        
+        //do Clear();
+        //do Draw();
+		do Clear();
+		do Draw(16384 + location, true, false);
+
+        return;
+    }
+
+
+    method void Respawn()
+    {
+        let y = 100;
+
+        if (x - 10 < 1)
+        {
+            //let x = 2;
+            //let absolute_x = 2;
+            //temp
+            let x = x + 5;
+            //let absolute_x = absolute_x + 5;
+        }
+        else
+        {
+            let x = x - 10;
+            //let absolute_x = absolute_x - 10;
+        }
+        
+        return;
+    }
+
+
+
+	method void Clear()
+	{
+		if (~(lastLocation = location))
+		{
+			do Draw(16384 + lastLocation, false, false);
+		}
+
+		return;
+	}
+
+    method void Draw(int memAddress, bool display, bool mirrored)
+    {
+		//var int location;
+        //var int memAddress;
+//
+		//let location = (y * 32) + x;
+	    //let memAddress = 16384 + location;
 
 		if (type = 0)
 		{
@@ -110,11 +322,39 @@ class Enemy
 		}
 		else { if (type = 1)
 		{
-			do DrawSpider(memAddress);
-		}}
+			do Spider.DrawFrame(memAddress, currFrame, display, mirrored);
+		}
+		else { if (type = 2)
+		{
+			do EvilJeffMelee.DrawFrame(memAddress, currFrame, display, mirrored);
+		}}}
 
 		return;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	method void DrawPrcmoljak(int memAddress)
 	{
@@ -137,185 +377,173 @@ class Enemy
 		return;
 	}
 
-	method void DrawSpider(int memAddress)
-	{
-		if (curr_frame = 0)
-		{
-			do DrawSpiderFrame1(memAddress);
-		}
-		else { if (curr_frame = 1)
-		{
-			do DrawSpiderFrame2(memAddress);
-		}}
+	//method void DrawSpider(int memAddress, bool display)
+	//{
+	//	//if (curr_frame = 0)
+	//	//{
+	//	//	do DrawSpiderFrame1(memAddress, display);
+	//	//}
+	//	//else { if (curr_frame = 1)
+	//	//{
+	//	//	do DrawSpiderFrame2(memAddress, display);
+	//	//}}
+//
+	//	do Sprites.DrawSpiderFrame(memAddress, curr_frame, display);
+//
+	//	return;
+	//}
 
-		return;
-	}
+	//method void DrawSpiderFrame1(int memAddress, bool display)
+	//{
+	//	var int i;
+	//	var int j;
+	//	var Array sprite;
+//
+	//	let sprite = Sprites.GetSpiderBodyFrame1();
+	//	do Sprites.DrawSprite(memAddress, sprite, display);
+//
+	//	let memAddress = memAddress + 1;
+//
+	//	let sprite = Sprites.GetSpiderHeadFrame1();
+	//	do Sprites.DrawSprite(memAddress, sprite, display);
+//
+	//	return;
+	//}
 
-	method void DrawSpiderFrame1(int memAddress)
-	{
-		do Memory.poke(memAddress + 0, 0);
-		do Memory.poke(memAddress + 32, 32704);
-		do Memory.poke(memAddress + 64, -16);
-		do Memory.poke(memAddress + 96, -8);
-		do Memory.poke(memAddress + 128, -8);
-		do Memory.poke(memAddress + 160, -4);
-		do Memory.poke(memAddress + 192, -2);
-		do Memory.poke(memAddress + 224, -2);
-		do Memory.poke(memAddress + 256, -2);
-		do Memory.poke(memAddress + 288, -4);
-		do Memory.poke(memAddress + 320, -8);
-		do Memory.poke(memAddress + 352, -16);
-		do Memory.poke(memAddress + 384, -1016);
-		do Memory.poke(memAddress + 416, 31752);
-		do Memory.poke(memAddress + 448, 17158);
-		do Memory.poke(memAddress + 480, 8321);
+	//method void DrawSpiderFrame2(int memAddress, bool display)
+	//{
+	//	var Array sprite;
+//
+	//	//do Memory.poke(memAddress + 0, 0);
+	//	//do Memory.poke(memAddress + 32, 32704);
+	//	//do Memory.poke(memAddress + 64, -16);
+	//	//do Memory.poke(memAddress + 96, -8);
+	//	//do Memory.poke(memAddress + 128, -8);
+	//	//do Memory.poke(memAddress + 160, -4);
+	//	//do Memory.poke(memAddress + 192, -2);
+	//	//do Memory.poke(memAddress + 224, -2);
+	//	//do Memory.poke(memAddress + 256, -2);
+	//	//do Memory.poke(memAddress + 288, -4);
+	//	//do Memory.poke(memAddress + 320, -8);
+	//	//do Memory.poke(memAddress + 352, -16);
+	//	//do Memory.poke(memAddress + 384, -1008);
+	//	//do Memory.poke(memAddress + 416, 31760);
+	//	//do Memory.poke(memAddress + 448, 17440);
+	//	//do Memory.poke(memAddress + 480, -30656);
+//
+//
+//
+	//	let sprite = Sprites.GetSpiderBodyFrame2();
+	//	do Sprites.DrawSprite(memAddress, sprite, display);
+//
+	//	let memAddress = memAddress + 1;
+//
+	//	let sprite = Sprites.GetSpiderHeadFrame2();
+	//	do Sprites.DrawSprite(memAddress, sprite, display);
+//
+	//	// glava
+	//	//do Memory.poke(memAddress + 0, 0);
+	//	//do Memory.poke(memAddress + 32, 0);
+	//	//do Memory.poke(memAddress + 64, 1);
+	//	//do Memory.poke(memAddress + 96, 3);
+	//	//do Memory.poke(memAddress + 128, 3);
+	//	//do Memory.poke(memAddress + 160, 7);
+	//	//do Memory.poke(memAddress + 192, 7);
+	//	//do Memory.poke(memAddress + 224, 4071);
+	//	//do Memory.poke(memAddress + 256, 8191);
+	//	//do Memory.poke(memAddress + 288, 6015);
+	//	//do Memory.poke(memAddress + 320, 4735);
+	//	//do Memory.poke(memAddress + 352, 8191);
+	//	//do Memory.poke(memAddress + 384, 8191);
+	//	//do Memory.poke(memAddress + 416, 8188);
+	//	//do Memory.poke(memAddress + 448, 11460);
+	//	//do Memory.poke(memAddress + 480, 8738);
+//
+	//	return;
+	//}
 
-		let memAddress = memAddress + 1;
-
-		do Memory.poke(memAddress + 0, 0);
-		do Memory.poke(memAddress + 32, 0);
-		do Memory.poke(memAddress + 64, 1);
-		do Memory.poke(memAddress + 96, 3);
-		do Memory.poke(memAddress + 128, 3);
-		do Memory.poke(memAddress + 160, 7);
-		do Memory.poke(memAddress + 192, 7);
-		do Memory.poke(memAddress + 224, 4071);
-		do Memory.poke(memAddress + 256, 8191);
-		do Memory.poke(memAddress + 288, 6015);
-		do Memory.poke(memAddress + 320, 4735);
-		do Memory.poke(memAddress + 352, 8191);
-		do Memory.poke(memAddress + 384, 8191);
-		do Memory.poke(memAddress + 416, 8188);
-		do Memory.poke(memAddress + 448, 27844);
-		do Memory.poke(memAddress + 480, -28414);
-
-		return;
-	}
-
-	method void DrawSpiderFrame2(int memAddress)
-	{
-		do Memory.poke(memAddress + 0, 0);
-		do Memory.poke(memAddress + 32, 32704);
-		do Memory.poke(memAddress + 64, -16);
-		do Memory.poke(memAddress + 96, -8);
-		do Memory.poke(memAddress + 128, -8);
-		do Memory.poke(memAddress + 160, -4);
-		do Memory.poke(memAddress + 192, -2);
-		do Memory.poke(memAddress + 224, -2);
-		do Memory.poke(memAddress + 256, -2);
-		do Memory.poke(memAddress + 288, -4);
-		do Memory.poke(memAddress + 320, -8);
-		do Memory.poke(memAddress + 352, -16);
-		do Memory.poke(memAddress + 384, -1008);
-		do Memory.poke(memAddress + 416, 31760);
-		do Memory.poke(memAddress + 448, 17440);
-		do Memory.poke(memAddress + 480, -30656);
-
-		let memAddress = memAddress + 1;
-
-		// glava
-		do Memory.poke(memAddress + 0, 0);
-		do Memory.poke(memAddress + 32, 0);
-		do Memory.poke(memAddress + 64, 1);
-		do Memory.poke(memAddress + 96, 3);
-		do Memory.poke(memAddress + 128, 3);
-		do Memory.poke(memAddress + 160, 7);
-		do Memory.poke(memAddress + 192, 7);
-		do Memory.poke(memAddress + 224, 4071);
-		do Memory.poke(memAddress + 256, 8191);
-		do Memory.poke(memAddress + 288, 6015);
-		do Memory.poke(memAddress + 320, 4735);
-		do Memory.poke(memAddress + 352, 8191);
-		do Memory.poke(memAddress + 384, 8191);
-		do Memory.poke(memAddress + 416, 8188);
-		do Memory.poke(memAddress + 448, 11460);
-		do Memory.poke(memAddress + 480, 8738);
-
-		return;
-	}
-
-	method void DrawSpiderMirroredFrame1(int memAddress)
-	{
-		// glava
-		do Memory.poke(memAddress + 0, 0);
-		do Memory.poke(memAddress + 32, 0);
-		do Memory.poke(memAddress + 64, ~32767); // -32768
-		do Memory.poke(memAddress + 96, -16384);
-		do Memory.poke(memAddress + 128, -16384);
-		do Memory.poke(memAddress + 160, -8192);
-		do Memory.poke(memAddress + 192, -8192);
-		do Memory.poke(memAddress + 224, -6160);
-		do Memory.poke(memAddress + 256, -8);
-		do Memory.poke(memAddress + 288, -280);
-		do Memory.poke(memAddress + 320, -440);
-		do Memory.poke(memAddress + 352, -8);
-		do Memory.poke(memAddress + 384, -8);
-		do Memory.poke(memAddress + 416, 16376);
-		do Memory.poke(memAddress + 448, 9014);
-		do Memory.poke(memAddress + 480, 16521);
-
-		let memAddress = memAddress + 1;
-
-		do Memory.poke(memAddress + 0, 0);
-		do Memory.poke(memAddress + 32, 1022);
-		do Memory.poke(memAddress + 64, 4095);
-		do Memory.poke(memAddress + 96, 8191);
-		do Memory.poke(memAddress + 128, 8191);
-		do Memory.poke(memAddress + 160, 16383);
-		do Memory.poke(memAddress + 192, 32767);
-		do Memory.poke(memAddress + 224, 32767);
-		do Memory.poke(memAddress + 256, 32767);
-		do Memory.poke(memAddress + 288, 16383);
-		do Memory.poke(memAddress + 320, 8191);
-		do Memory.poke(memAddress + 352, 4095);
-		do Memory.poke(memAddress + 384, 4159);
-		do Memory.poke(memAddress + 416, 4158);
-		do Memory.poke(memAddress + 448, 24770);
-		do Memory.poke(memAddress + 480, -32508);
-
-		return;
-	}
-
-	method void DrawSpiderMirroredFrame2(int memAddress)
-	{
-		do Memory.poke(memAddress + 0, 0);
-		do Memory.poke(memAddress + 32, 0);
-		do Memory.poke(memAddress + 64, ~32767); // -32768
-		do Memory.poke(memAddress + 96, -16384);
-		do Memory.poke(memAddress + 128, -16384);
-		do Memory.poke(memAddress + 160, -8192);
-		do Memory.poke(memAddress + 192, -8192);
-		do Memory.poke(memAddress + 224, -6160);
-		do Memory.poke(memAddress + 256, -8);
-		do Memory.poke(memAddress + 288, -280);
-		do Memory.poke(memAddress + 320, -440);
-		do Memory.poke(memAddress + 352, -8);
-		do Memory.poke(memAddress + 384, -8);
-		do Memory.poke(memAddress + 416, 16376);
-		do Memory.poke(memAddress + 448, 9012);
-		do Memory.poke(memAddress + 480, 17476);
-
-		let memAddress = memAddress + 1;
-
-		do Memory.poke(memAddress + 0, 0);
-		do Memory.poke(memAddress + 32, 1022);
-		do Memory.poke(memAddress + 64, 4095);
-		do Memory.poke(memAddress + 96, 8191);
-		do Memory.poke(memAddress + 128, 8191);
-		do Memory.poke(memAddress + 160, 16383);
-		do Memory.poke(memAddress + 192, 32767);
-		do Memory.poke(memAddress + 224, 32767);
-		do Memory.poke(memAddress + 256, 32767);
-		do Memory.poke(memAddress + 288, 16383);
-		do Memory.poke(memAddress + 320, 8191);
-		do Memory.poke(memAddress + 352, 4095);
-		do Memory.poke(memAddress + 384, 2111);
-		do Memory.poke(memAddress + 416, 2110);
-		do Memory.poke(memAddress + 448, 1058);
-		do Memory.poke(memAddress + 480, 529);
-
-		return;
-	}
+	//method void DrawSpiderMirroredFrame1(int memAddress)
+	//{
+	//	// glava
+	//	do Memory.poke(memAddress + 0, 0);
+	//	do Memory.poke(memAddress + 32, 0);
+	//	do Memory.poke(memAddress + 64, ~32767); // -32768
+	//	do Memory.poke(memAddress + 96, -16384);
+	//	do Memory.poke(memAddress + 128, -16384);
+	//	do Memory.poke(memAddress + 160, -8192);
+	//	do Memory.poke(memAddress + 192, -8192);
+	//	do Memory.poke(memAddress + 224, -6160);
+	//	do Memory.poke(memAddress + 256, -8);
+	//	do Memory.poke(memAddress + 288, -280);
+	//	do Memory.poke(memAddress + 320, -440);
+	//	do Memory.poke(memAddress + 352, -8);
+	//	do Memory.poke(memAddress + 384, -8);
+	//	do Memory.poke(memAddress + 416, 16376);
+	//	do Memory.poke(memAddress + 448, 9014);
+	//	do Memory.poke(memAddress + 480, 16521);
+//
+	//	let memAddress = memAddress + 1;
+//
+	//	do Memory.poke(memAddress + 0, 0);
+	//	do Memory.poke(memAddress + 32, 1022);
+	//	do Memory.poke(memAddress + 64, 4095);
+	//	do Memory.poke(memAddress + 96, 8191);
+	//	do Memory.poke(memAddress + 128, 8191);
+	//	do Memory.poke(memAddress + 160, 16383);
+	//	do Memory.poke(memAddress + 192, 32767);
+	//	do Memory.poke(memAddress + 224, 32767);
+	//	do Memory.poke(memAddress + 256, 32767);
+	//	do Memory.poke(memAddress + 288, 16383);
+	//	do Memory.poke(memAddress + 320, 8191);
+	//	do Memory.poke(memAddress + 352, 4095);
+	//	do Memory.poke(memAddress + 384, 4159);
+	//	do Memory.poke(memAddress + 416, 4158);
+	//	do Memory.poke(memAddress + 448, 24770);
+	//	do Memory.poke(memAddress + 480, -32508);
+//
+	//	return;
+	//}
+//
+	//method void DrawSpiderMirroredFrame2(int memAddress)
+	//{
+	//	do Memory.poke(memAddress + 0, 0);
+	//	do Memory.poke(memAddress + 32, 0);
+	//	do Memory.poke(memAddress + 64, ~32767); // -32768
+	//	do Memory.poke(memAddress + 96, -16384);
+	//	do Memory.poke(memAddress + 128, -16384);
+	//	do Memory.poke(memAddress + 160, -8192);
+	//	do Memory.poke(memAddress + 192, -8192);
+	//	do Memory.poke(memAddress + 224, -6160);
+	//	do Memory.poke(memAddress + 256, -8);
+	//	do Memory.poke(memAddress + 288, -280);
+	//	do Memory.poke(memAddress + 320, -440);
+	//	do Memory.poke(memAddress + 352, -8);
+	//	do Memory.poke(memAddress + 384, -8);
+	//	do Memory.poke(memAddress + 416, 16376);
+	//	do Memory.poke(memAddress + 448, 9012);
+	//	do Memory.poke(memAddress + 480, 17476);
+//
+	//	let memAddress = memAddress + 1;
+//
+	//	do Memory.poke(memAddress + 0, 0);
+	//	do Memory.poke(memAddress + 32, 1022);
+	//	do Memory.poke(memAddress + 64, 4095);
+	//	do Memory.poke(memAddress + 96, 8191);
+	//	do Memory.poke(memAddress + 128, 8191);
+	//	do Memory.poke(memAddress + 160, 16383);
+	//	do Memory.poke(memAddress + 192, 32767);
+	//	do Memory.poke(memAddress + 224, 32767);
+	//	do Memory.poke(memAddress + 256, 32767);
+	//	do Memory.poke(memAddress + 288, 16383);
+	//	do Memory.poke(memAddress + 320, 8191);
+	//	do Memory.poke(memAddress + 352, 4095);
+	//	do Memory.poke(memAddress + 384, 2111);
+	//	do Memory.poke(memAddress + 416, 2110);
+	//	do Memory.poke(memAddress + 448, 1058);
+	//	do Memory.poke(memAddress + 480, 529);
+//
+	//	return;
+	//}
 
 	//// spider animation 2. frame
 	//// dupe
@@ -389,4 +617,52 @@ class Enemy
 	//do Memory.poke(memAddress + 448, 9012);
 	//do Memory.poke(memAddress + 480, 17476);
 
+
+
+
+	method void DrawEvilJeff(int memAddress)
+	{
+		do Memory.poke(memAddress + 0, -1);
+		do Memory.poke(memAddress + 32, -1);
+		do Memory.poke(memAddress + 64, -1);
+		do Memory.poke(memAddress + 96, -4113);
+		do Memory.poke(memAddress + 128, -2081);
+		do Memory.poke(memAddress + 160, -1089);
+		do Memory.poke(memAddress + 192, -4129);
+		do Memory.poke(memAddress + 224, -4129);
+		do Memory.poke(memAddress + 256, -4129);
+		do Memory.poke(memAddress + 288, -1);
+		do Memory.poke(memAddress + 320, -1);
+		do Memory.poke(memAddress + 352, -1985);
+		do Memory.poke(memAddress + 384, -2081);
+		do Memory.poke(memAddress + 416, -2081);
+		do Memory.poke(memAddress + 448, -1);
+		do Memory.poke(memAddress + 480, -1);
+
+		return;
+	}
+
+	method void DrawEvilJeffMirrored(int memAddress)
+	{
+		do Memory.poke(memAddress + 0, -1);
+		do Memory.poke(memAddress + 32, -1);
+		do Memory.poke(memAddress + 64, -1);
+		do Memory.poke(memAddress + 96, -2057);
+		do Memory.poke(memAddress + 128, -1041);
+		do Memory.poke(memAddress + 160, -545);
+		do Memory.poke(memAddress + 192, -1033);
+		do Memory.poke(memAddress + 224, -1033);
+		do Memory.poke(memAddress + 256, -1033);
+		do Memory.poke(memAddress + 288, -1);
+		do Memory.poke(memAddress + 320, -1);
+		do Memory.poke(memAddress + 352, -993);
+		do Memory.poke(memAddress + 384, -1041);
+		do Memory.poke(memAddress + 416, -1041);
+		do Memory.poke(memAddress + 448, -1);
+		do Memory.poke(memAddress + 480, -1);
+
+		return;
+	}
+
 }
+
