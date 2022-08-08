@@ -1,5 +1,8 @@
 class Spider
 {
+    static int Width;
+    static int Height;
+
     static Array BodyFrame1;
     static Array HeadFrame1;
     static Array BodyFrame2;
@@ -15,31 +18,138 @@ class Spider
 
     static Array BodyFramesMirrored;
     static Array HeadFramesMirrored;
+
+    static Array sprite;
+    static Array _spriteHeight0;
+
+    static Array spriteMirrored;
+    static Array _spriteHeight0Mirrored;
     
     static int FrameCount;
 
     function int GetFrameCount() { return FrameCount; }
 
-    function void DrawFrame(int memAddress, int currFrame, bool display, bool mirrored)
+    function bool IsInScreen(int x)
+	{
+		return ((-1 < x) & (x < 32));
+	}
+
+    function void DrawFrame(int memAddress, int currFrame, bool display, bool mirrored, int x, int y)
 	{
         if (mirrored)
         {
-            do Sprite.Draw(memAddress, BodyFramesMirrored[currFrame], display);
-            let memAddress = memAddress + 1;
-            do Sprite.Draw(memAddress, HeadFramesMirrored[currFrame], display);
+            do Sprite.Draw(memAddress, spriteMirrored, Width, Height, currFrame, display, x, y);
         }
         else
         {
-            do Sprite.Draw(memAddress, BodyFrames[currFrame], display);
-            let memAddress = memAddress + 1;
-            do Sprite.Draw(memAddress, HeadFrames[currFrame], display);
+            do Sprite.Draw(memAddress, sprite, Width, Height, currFrame, display, x, y);
         }
+
+        //if (mirrored)
+        //{
+        //    if (Spider.IsInScreen(x))
+        //    {
+        //        do Sprite.Draw(memAddress, HeadFramesMirrored[currFrame], display, x);
+        //    }
+//
+        //    if (Spider.IsInScreen(x + 1))
+        //    {
+        //        let memAddress = memAddress + 1;
+        //        do Sprite.Draw(memAddress, BodyFramesMirrored[currFrame], display, x + 1);
+        //    }
+        //}
+        //else
+        //{
+        //    if (Spider.IsInScreen(x))
+        //    {
+        //        do Sprite.Draw(memAddress, BodyFrames[currFrame], display, x);
+        //    }
+//
+        //    if (Spider.IsInScreen(x + 1))
+        //    {
+        //        let memAddress = memAddress + 1;
+        //        do Sprite.Draw(memAddress, HeadFrames[currFrame], display, x + 1);
+        //    }
+        //}
+
+        ////if (display)
+        ////{
+        ////    if (mirrored)
+        ////    {
+        ////        if (Spider.IsInScreen(x))
+        ////        {
+        ////            do Sprite.Draw(memAddress, HeadFramesMirrored[currFrame], display, x);
+////
+        ////            if (Spider.IsInScreen(x + 1))
+        ////            {
+        ////                let memAddress = memAddress + 1;
+        ////                do Sprite.Draw(memAddress, BodyFramesMirrored[currFrame], display, x + 1);
+        ////            }
+        ////        }
+        ////    }
+        ////    else
+        ////    {
+        ////        if (Spider.IsInScreen(x))
+        ////        {
+        ////            do Sprite.Draw(memAddress, BodyFrames[currFrame], display, x);
+////
+        ////            if (Spider.IsInScreen(x + 1))
+        ////            {
+        ////                let memAddress = memAddress + 1;
+        ////                do Sprite.Draw(memAddress, HeadFrames[currFrame], display, x + 1);
+        ////            }
+        ////        }
+        ////    }
+        ////}
+        ////else
+        ////{
+        ////    if (mirrored)
+        ////    {
+        ////        if ((-2 < x) & (x < 31))
+        ////        {
+        ////            do Sprite.Draw(memAddress, HeadFramesMirrored[currFrame], display, x);
+        ////        }
+        ////        
+        ////        if ((-3 < x) & (x < 30))
+        ////        {
+        ////            let memAddress = memAddress + 1;
+        ////            do Sprite.Draw(memAddress, BodyFramesMirrored[currFrame], display, x + 1);
+        ////        }
+        ////        
+        ////    }
+        ////    else
+        ////    {
+        ////        if ((0 < x) & (x < 33))
+        ////        {
+        ////            do Sprite.Draw(memAddress, BodyFrames[currFrame], display, x);
+        ////        }
+////
+        ////        if ((1 < x) & (x < 30))
+        ////        {
+        ////            let memAddress = memAddress + 1;
+        ////            do Sprite.Draw(memAddress, HeadFrames[currFrame], display, x + 1);
+        ////        }
+        ////        
+////
+        ////    }
+        ////}
+
+        
 
 		return;
 	}
 
     function void init()
     {
+        let Width = 2;
+        let Height = 1;
+
+        let sprite = Array.new(Height);
+        let _spriteHeight0 = Array.new(Width);
+
+        let spriteMirrored = Array.new(Height);
+        let _spriteHeight0Mirrored = Array.new(Width);
+
         let FrameCount = 2;
 
         // NORMAL - facing right
@@ -123,78 +233,82 @@ class Spider
         let HeadFrames[0] = HeadFrame1;
         let HeadFrames[1] = HeadFrame2;
 
+        let _spriteHeight0[0] = BodyFrames;
+        let _spriteHeight0[1] = HeadFrames;
+        let sprite[0] = _spriteHeight0;
+
         // MIRRORED - facing left
         let BodyFrame1Mirrored = Array.new(16);
         let BodyFrame1Mirrored[0] = 0;
-        let BodyFrame1Mirrored[1] = 0;
-        let BodyFrame1Mirrored[2] = ~32767;
-        let BodyFrame1Mirrored[3] = -16384;
-        let BodyFrame1Mirrored[4] = -16384;
-        let BodyFrame1Mirrored[5] = -8192;
-        let BodyFrame1Mirrored[6] = -8192;
-        let BodyFrame1Mirrored[7] = -6160;
-        let BodyFrame1Mirrored[8] = -8;
-        let BodyFrame1Mirrored[9] = -280;
-        let BodyFrame1Mirrored[10] = -440;
-        let BodyFrame1Mirrored[11] = -8;
-        let BodyFrame1Mirrored[12] = -8;
-        let BodyFrame1Mirrored[13] = 16376;
-        let BodyFrame1Mirrored[14] = 9014;
-        let BodyFrame1Mirrored[15] = 16521;
+        let BodyFrame1Mirrored[1] = 1022;
+        let BodyFrame1Mirrored[2] = 4095;
+        let BodyFrame1Mirrored[3] = 8191;
+        let BodyFrame1Mirrored[4] = 8191;
+        let BodyFrame1Mirrored[5] = 16383;
+        let BodyFrame1Mirrored[6] = 32767;
+        let BodyFrame1Mirrored[7] = 32767;
+        let BodyFrame1Mirrored[8] = 32767;
+        let BodyFrame1Mirrored[9] = 16383;
+        let BodyFrame1Mirrored[10] = 8191;
+        let BodyFrame1Mirrored[11] = 4095;
+        let BodyFrame1Mirrored[12] = 4159;
+        let BodyFrame1Mirrored[13] = 4158;
+        let BodyFrame1Mirrored[14] = 24770;
+        let BodyFrame1Mirrored[15] = -32508;
 
         let HeadFrame1Mirrored = Array.new(16);
         let HeadFrame1Mirrored[0] = 0;
-        let HeadFrame1Mirrored[1] = 1022;
-        let HeadFrame1Mirrored[2] = 4095;
-        let HeadFrame1Mirrored[3] = 8191;
-        let HeadFrame1Mirrored[4] = 8191;
-        let HeadFrame1Mirrored[5] = 16383;
-        let HeadFrame1Mirrored[6] = 32767;
-        let HeadFrame1Mirrored[7] = 32767;
-        let HeadFrame1Mirrored[8] = 32767;
-        let HeadFrame1Mirrored[9] = 16383;
-        let HeadFrame1Mirrored[10] = 8191;
-        let HeadFrame1Mirrored[11] = 4095;
-        let HeadFrame1Mirrored[12] = 4159;
-        let HeadFrame1Mirrored[13] = 4158;
-        let HeadFrame1Mirrored[14] = 24770;
-        let HeadFrame1Mirrored[15] = -32508;
+        let HeadFrame1Mirrored[1] = 0;
+        let HeadFrame1Mirrored[2] = ~32767;
+        let HeadFrame1Mirrored[3] = -16384;
+        let HeadFrame1Mirrored[4] = -16384;
+        let HeadFrame1Mirrored[5] = -8192;
+        let HeadFrame1Mirrored[6] = -8192;
+        let HeadFrame1Mirrored[7] = -6160;
+        let HeadFrame1Mirrored[8] = -8;
+        let HeadFrame1Mirrored[9] = -280;
+        let HeadFrame1Mirrored[10] = -440;
+        let HeadFrame1Mirrored[11] = -8;
+        let HeadFrame1Mirrored[12] = -8;
+        let HeadFrame1Mirrored[13] = 16376;
+        let HeadFrame1Mirrored[14] = 9014;
+        let HeadFrame1Mirrored[15] = 16521;
 
         let BodyFrame2Mirrored = Array.new(16);
         let BodyFrame2Mirrored[0] = 0;
-        let BodyFrame2Mirrored[1] = 0;
-        let BodyFrame2Mirrored[2] = ~32767;
-        let BodyFrame2Mirrored[3] = -16384;
-        let BodyFrame2Mirrored[4] = -16384;
-        let BodyFrame2Mirrored[5] = -8192;
-        let BodyFrame2Mirrored[6] = -8192;
-        let BodyFrame2Mirrored[7] = -6160;
-        let BodyFrame2Mirrored[8] = -8;
-        let BodyFrame2Mirrored[9] = -280;
-        let BodyFrame2Mirrored[10] = -440;
-        let BodyFrame2Mirrored[11] = -8;
-        let BodyFrame2Mirrored[12] = -8;
-        let BodyFrame2Mirrored[13] = 16376;
-        let BodyFrame2Mirrored[14] = 9012;
-        let BodyFrame2Mirrored[15] = 17476;
+        let BodyFrame2Mirrored[1] = 1022;
+        let BodyFrame2Mirrored[2] = 4095;
+        let BodyFrame2Mirrored[3] = 8191;
+        let BodyFrame2Mirrored[4] = 8191;
+        let BodyFrame2Mirrored[5] = 16383;
+        let BodyFrame2Mirrored[6] = 32767;
+        let BodyFrame2Mirrored[7] = 32767;
+        let BodyFrame2Mirrored[8] = 32767;
+        let BodyFrame2Mirrored[9] = 16383;
+        let BodyFrame2Mirrored[10] = 8191;
+        let BodyFrame2Mirrored[11] = 4095;
+        let BodyFrame2Mirrored[12] = 2111;
+        let BodyFrame2Mirrored[13] = 2110;
+        let BodyFrame2Mirrored[14] = 1058;
+        let BodyFrame2Mirrored[15] = 529;
 
         let HeadFrame2Mirrored = Array.new(16);
         let HeadFrame2Mirrored[0] = 0;
-        let HeadFrame2Mirrored[1] = 1022;
-        let HeadFrame2Mirrored[2] = 4095;
-        let HeadFrame2Mirrored[3] = 8191;
-        let HeadFrame2Mirrored[4] = 8191;
-        let HeadFrame2Mirrored[5] = 16383;
-        let HeadFrame2Mirrored[6] = 32767;
-        let HeadFrame2Mirrored[7] = 32767;
-        let HeadFrame2Mirrored[8] = 32767;
-        let HeadFrame2Mirrored[9] = 16383;
-        let HeadFrame2Mirrored[10] = 8191;
-        let HeadFrame2Mirrored[11] = 4095;
-        let HeadFrame2Mirrored[12] = 2111;
-        let HeadFrame2Mirrored[13] = 2110;
-        let HeadFrame2Mirrored[14] = 1058;
-        let HeadFrame2Mirrored[15] = 529;
+        let HeadFrame2Mirrored[1] = 0;
+        let HeadFrame2Mirrored[2] = ~32767;
+        let HeadFrame2Mirrored[3] = -16384;
+        let HeadFrame2Mirrored[4] = -16384;
+        let HeadFrame2Mirrored[5] = -8192;
+        let HeadFrame2Mirrored[6] = -8192;
+        let HeadFrame2Mirrored[7] = -6160;
+        let HeadFrame2Mirrored[8] = -8;
+        let HeadFrame2Mirrored[9] = -280;
+        let HeadFrame2Mirrored[10] = -440;
+        let HeadFrame2Mirrored[11] = -8;
+        let HeadFrame2Mirrored[12] = -8;
+        let HeadFrame2Mirrored[13] = 16376;
+        let HeadFrame2Mirrored[14] = 9012;
+        let HeadFrame2Mirrored[15] = 17476;
 
         let BodyFramesMirrored = Array.new(FrameCount);
         let BodyFramesMirrored[0] = BodyFrame1Mirrored;
@@ -203,6 +317,10 @@ class Spider
         let HeadFramesMirrored = Array.new(FrameCount);
         let HeadFramesMirrored[0] = HeadFrame1Mirrored;
         let HeadFramesMirrored[1] = HeadFrame2Mirrored;
+
+        let _spriteHeight0Mirrored[0] = HeadFramesMirrored;
+        let _spriteHeight0Mirrored[1] = BodyFramesMirrored;
+        let spriteMirrored[0] = _spriteHeight0Mirrored;
 
 
         return;

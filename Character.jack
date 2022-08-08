@@ -293,9 +293,14 @@ class Character
         return Collision.CheckPlatformCollisionRight(platforms, platforms_num, x, y, width, height);
     }
 
-    method bool check_right_collision_platforms2(Array map, int mapWidth, int mapHeight)
+    method bool check_right_collision_platforms2(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
-        return Collision.CheckAnyPlatformCollisionRight(absolute_x, y, width, height, map, mapWidth, mapHeight);
+        //do Output.printInt(x);
+        //do Output.printString(", ");
+        //do Output.printInt(absolute_x);
+        //do Output.println();
+
+        return Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset);
     }
 
     method bool check_left_collision_platforms(Array platforms, int platforms_num)
@@ -303,9 +308,9 @@ class Character
         return Collision.CheckPlatformCollisionLeft(platforms, platforms_num, x, y, width, height);
     }
 
-    method bool check_left_collision_platforms2(Array map, int mapWidth, int mapHeight)
+    method bool check_left_collision_platforms2(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
-        return Collision.CheckAnyPlatformCollisionLeft(absolute_x, y, width, height, map, mapWidth, mapHeight);
+        return Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset);
     }
 
     //// OBSTACLE COLLISION

@@ -244,6 +244,7 @@ class Game
         return;
     }
 
+    // GAME TIMERS
     method void DecrementTimers()
     {
         let timer3 = timer3 - 1;
@@ -255,36 +256,36 @@ class Game
         return;
     }
 
-    //method void UpdateCurrentSection()
-    //{   
-    //    let curr_section_index = get_curr_section_index();
+    // ENEMY TIMERS
+    method void CheckAllEnemyTimers()
+    {
+        var Enemy enemy;
+        var int i;
 
-    //    let curr_section = sections[curr_section_index];
-    //    
-    //    let curr_Platforms = curr_section.get_Platforms();
-    //    let curr_PlatformsCount = curr_section.get_PlatformsCount();
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.CheckTimers();
+            let i = i + 1;
+        }
 
-    //    let curr_Obstacles = curr_section.get_Obstacles();
-    //    let curr_ObstaclesCount = curr_section.get_ObstaclesCount();
+        return;
+    }
 
-    //    return;
-    //}
+    method void DecrementAllEnemyTimers()
+    {
+        var Enemy enemy;
+        var int i;
 
-    //method void RedrawLastSection()
-    //{
-    //    var int index;
-    //    var Section section;
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.DecrementTimers();
+            let i = i + 1;
+        }
 
-    //    if (Character.get_should_draw_last_obstacle())
-    //    {
-    //        let index = div4lookup[Character.get_last_abs_x()];
-    //        let section = sections[index];
-    //        do section.Draw();
-    //        do Character.set_should_draw_last_obstacle(false);
-    //    }
-
-    //    return;
-    //}
+        return;
+    }
 
     method void DrawAllPlatforms()
     {
@@ -322,35 +323,8 @@ class Game
         return;
     }
 
-    method void CheckAllEnemyTimers()
-    {
-        var Enemy enemy;
-        var int i;
 
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-            do enemy.CheckTimers();
-            let i = i + 1;
-        }
 
-        return;
-    }
-
-    method void DecrementAllEnemyTimers()
-    {
-        var Enemy enemy;
-        var int i;
-
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-            do enemy.DecrementTimers();
-            let i = i + 1;
-        }
-
-        return;
-    }
 
     method void DoAllEnemyActions()
     {
@@ -360,7 +334,7 @@ class Game
         while (i < EnemiesCount)
         {
             let enemy = Enemies[i];
-            do enemy.DoActions(Map, MapWidth, MapHeight);
+            do enemy.DoActions(Map, MapWidth, MapHeight, WorldOffset);
             let i = i + 1;
         }
 
@@ -368,11 +342,14 @@ class Game
     }
 
 
+
+
     method void ScrollLeft()
     {
         var int i;
         var Platform platform;
         var Obstacle obstacle;
+        var Enemy enemy;
 
         let WorldOffset = WorldOffset + 1;
         do Character.increment_absolute_x(1);
@@ -412,6 +389,15 @@ class Game
             let i = i + 1;
         }
 
+        let i = 0;
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.ScrollLeft();
+
+            let i = i + 1;
+        }
+
         return;
     }
 
@@ -420,6 +406,7 @@ class Game
         var int i;
         var Platform platform;
         var Obstacle obstacle;
+        var Enemy enemy;
 
         let WorldOffset = WorldOffset - 1;
         do Character.increment_absolute_x(-1);
@@ -459,6 +446,15 @@ class Game
             let i = i + 1;
         }
 
+        let i = 0;
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.ScrollRight();
+
+            let i = i + 1;
+        }
+
         return;
     }
 
@@ -477,7 +473,7 @@ class Game
         {
             do Character.set_draw_character_left(true);
 
-            if (~Character.check_left_collision_platforms2(Map, MapWidth, MapHeight))
+            if (~Character.check_left_collision_platforms2(Map, MapWidth, MapHeight, WorldOffset))
             {
                 // nesto s apsolutnom vrijednosti izmedju x i pocetka mape?
                 if (abs_x - ScreenMiddle + MoveAreaWidth > 0)
@@ -501,7 +497,7 @@ class Game
         {
             do Character.set_draw_character_left(false);
 
-            if (~Character.check_right_collision_platforms2(Map, MapWidth, MapHeight))
+            if (~Character.check_right_collision_platforms2(Map, MapWidth, MapHeight, WorldOffset))
             {
                 if (abs_x + ScreenMiddle - MoveAreaWidth < MapWidth)
                 {

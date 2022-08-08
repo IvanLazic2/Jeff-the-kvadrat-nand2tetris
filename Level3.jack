@@ -142,17 +142,17 @@ class Level3
 	field int MapHeight;
 	constructor Level3 new()
 	{
-		let character = Character.new(3, 200);
+		let character = Character.new(5, 200);
 		let PlatformsCount = 3;
 		let ObstaclesCount = 0;
 		let EnemiesCount = 1;
 		let CollectablesCount = 0;
 		let Platforms = Array.new(3);
-		let Platforms[0] = Platform.new(11, 224, 0, 1);
-		let Platforms[1] = Platform.new(22, 224, 0, 1);
-		let Platforms[2] = Platform.new(0, 240, 0, 23);
+		let Platforms[0] = Platform.new(17, 224, 0, 1);
+		let Platforms[1] = Platform.new(26, 224, 0, 1);
+		let Platforms[2] = Platform.new(0, 240, 0, 30);
 		let Enemies = Array.new(1);
-		let Enemies[0] = Enemy.new(17, 224, 0);
+		let Enemies[0] = Enemy.new(20, 224, 0);
 		let Map = Array.new(128);
 		let map0 = Array.new(16);
 		let map0[0] = 0;
@@ -367,7 +367,7 @@ class Level3
 		let map11[11] = 0;
 		let map11[12] = 0;
 		let map11[13] = 0;
-		let map11[14] = 1;
+		let map11[14] = 0;
 		let map11[15] = 1;
 		let Map[11] = map11;
 		let map12 = Array.new(16);
@@ -475,7 +475,7 @@ class Level3
 		let map17[11] = 0;
 		let map17[12] = 0;
 		let map17[13] = 0;
-		let map17[14] = 0;
+		let map17[14] = 1;
 		let map17[15] = 1;
 		let Map[17] = map17;
 		let map18 = Array.new(16);
@@ -565,7 +565,7 @@ class Level3
 		let map22[11] = 0;
 		let map22[12] = 0;
 		let map22[13] = 0;
-		let map22[14] = 1;
+		let map22[14] = 0;
 		let map22[15] = 1;
 		let Map[22] = map22;
 		let map23 = Array.new(16);
@@ -584,7 +584,7 @@ class Level3
 		let map23[12] = 0;
 		let map23[13] = 0;
 		let map23[14] = 0;
-		let map23[15] = 0;
+		let map23[15] = 1;
 		let Map[23] = map23;
 		let map24 = Array.new(16);
 		let map24[0] = 0;
@@ -602,7 +602,7 @@ class Level3
 		let map24[12] = 0;
 		let map24[13] = 0;
 		let map24[14] = 0;
-		let map24[15] = 0;
+		let map24[15] = 1;
 		let Map[24] = map24;
 		let map25 = Array.new(16);
 		let map25[0] = 0;
@@ -620,7 +620,7 @@ class Level3
 		let map25[12] = 0;
 		let map25[13] = 0;
 		let map25[14] = 0;
-		let map25[15] = 0;
+		let map25[15] = 1;
 		let Map[25] = map25;
 		let map26 = Array.new(16);
 		let map26[0] = 0;
@@ -637,8 +637,8 @@ class Level3
 		let map26[11] = 0;
 		let map26[12] = 0;
 		let map26[13] = 0;
-		let map26[14] = 0;
-		let map26[15] = 0;
+		let map26[14] = 1;
+		let map26[15] = 1;
 		let Map[26] = map26;
 		let map27 = Array.new(16);
 		let map27[0] = 0;
@@ -656,7 +656,7 @@ class Level3
 		let map27[12] = 0;
 		let map27[13] = 0;
 		let map27[14] = 0;
-		let map27[15] = 0;
+		let map27[15] = 1;
 		let Map[27] = map27;
 		let map28 = Array.new(16);
 		let map28[0] = 0;
@@ -674,7 +674,7 @@ class Level3
 		let map28[12] = 0;
 		let map28[13] = 0;
 		let map28[14] = 0;
-		let map28[15] = 0;
+		let map28[15] = 1;
 		let Map[28] = map28;
 		let map29 = Array.new(16);
 		let map29[0] = 0;
@@ -692,7 +692,7 @@ class Level3
 		let map29[12] = 0;
 		let map29[13] = 0;
 		let map29[14] = 0;
-		let map29[15] = 0;
+		let map29[15] = 1;
 		let Map[29] = map29;
 		let map30 = Array.new(16);
 		let map30[0] = 0;

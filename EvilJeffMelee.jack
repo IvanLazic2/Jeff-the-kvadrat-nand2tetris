@@ -16,11 +16,11 @@ class EvilJeffMelee
     {
         if (mirrored)
         {
-            do Sprite.Draw(memAddress, HeadFramesMirrored[currFrame], display);
+            //do Sprite.Draw(memAddress, HeadFramesMirrored[currFrame], display);
         }
         else
         {
-            do Sprite.Draw(memAddress, HeadFrames[currFrame], display);
+            //do Sprite.Draw(memAddress, HeadFrames[currFrame], display);
         }
 
         return;
