@@ -1,26 +1,55 @@
 class EvilJeffMelee
 {
+    static int Width;
+    static int Height;
+
+    static Array EmptyFrames;
+
+    static Array ArmBottomLeftFrame1;
     static Array HeadFrame1;
+    static Array ArmBottomRightFrame1;
+    static Array ArmTopLeftFrame1;
+    static Array ArmTopRightFrame1;
 
+    static Array ArmBottomLeftFrame1Mirrored;
     static Array HeadFrame1Mirrored;
+    static Array ArmBottomRightFrame1Mirrored;
+    static Array ArmTopLeftFrame1Mirrored;
+    static Array ArmTopRightFrame1Mirrored;
 
+    static Array ArmBottomLeftFrames;
     static Array HeadFrames;
+    static Array ArmBottomRightFrames;
+    static Array ArmTopLeftFrames;
+    static Array ArmTopRightFrames;
 
+    static Array ArmBottomLeftFramesMirrored;
     static Array HeadFramesMirrored;
+    static Array ArmBottomRightFramesMirrored;
+    static Array ArmTopLeftFramesMirrored;
+    static Array ArmTopRightFramesMirrored;
+
+    static Array sprite;
+    static Array _spriteHeight0;
+    static Array _spriteHeight1;
+
+    static Array spriteMirrored;
+    static Array _spriteHeight0Mirrored;
+    static Array _spriteHeight1Mirrored;
 
     static int FrameCount;
 
     function int GetFrameCount() { return FrameCount; }
 
-    function void DrawFrame(int memAddress, int currFrame, bool display, bool mirrored)
+    function void DrawFrame(int memAddress, int currFrame, bool display, bool mirrored, int x, int y)
     {
         if (mirrored)
         {
-            //do Sprite.Draw(memAddress, HeadFramesMirrored[currFrame], display);
+            do Sprite.Draw(memAddress, spriteMirrored, Width, Height, currFrame, display, x, y);
         }
         else
         {
-            //do Sprite.Draw(memAddress, HeadFrames[currFrame], display);
+            do Sprite.Draw(memAddress, sprite, Width, Height, currFrame, display, x, y);
         }
 
         return;
@@ -28,9 +57,24 @@ class EvilJeffMelee
 
     function void init()
     {
+        var int i;
+
+        let Width = 3;
+        let Height = 2;
+
+        let sprite = Array.new(Height);
+        let _spriteHeight0 = Array.new(Width);
+        let _spriteHeight1 = Array.new(Width);
+
+        let spriteMirrored = Array.new(Height);
+        let _spriteHeight0Mirrored = Array.new(Width);
+        let _spriteHeight1Mirrored = Array.new(Width);
+
         let FrameCount = 1;
 
         //NORMAL - facing right
+        let ArmBottomLeftFrame1 = Array.new(16);
+
         let HeadFrame1 = Array.new(16);
         let HeadFrame1[0] = -1;
         let HeadFrame1[1] = -1;
@@ -49,10 +93,48 @@ class EvilJeffMelee
         let HeadFrame1[14] = -1;
         let HeadFrame1[15] = -1;
 
+        let ArmBottomRightFrame1 = Array.new(16);
+
+        let ArmTopLeftFrame1 = Array.new(16);
+
+        let ArmTopRightFrame1 = Array.new(16);
+
+        //////////////////////////////////////////////
+
+        let EmptyFrames = Array.new(FrameCount);
+        let EmptyFrames[0] = Sprite.getEmpty();
+
+        let ArmBottomLeftFrames = Array.new(FrameCount);
+        let ArmBottomLeftFrames[0] = ArmBottomLeftFrame1;
+
         let HeadFrames = Array.new(FrameCount);
         let HeadFrames[0] = HeadFrame1;
 
+        let ArmBottomRightFrames = Array.new(FrameCount);
+        let ArmBottomRightFrames[0] = ArmBottomRightFrame1;
+
+        let ArmTopLeftFrames = Array.new(FrameCount);
+        let ArmTopLeftFrames[0] = ArmTopLeftFrame1;
+
+        let ArmTopRightFrames = Array.new(FrameCount);
+        let ArmTopRightFrames[0] = ArmTopRightFrame1;
+
+        let _spriteHeight0[0] = ArmBottomLeftFrames;
+        let _spriteHeight0[1] = HeadFrames;
+        let _spriteHeight0[2] = ArmBottomRightFrames;
+
+        let _spriteHeight1[0] = ArmTopLeftFrames;
+        let _spriteHeight1[1] = EmptyFrames;
+        let _spriteHeight1[2] = ArmTopRightFrames;
+
+        let sprite[0] = _spriteHeight0;
+        let sprite[1] = _spriteHeight1;
+
+
+
         // MIRRORED - facing left
+        let ArmBottomLeftFrame1Mirrored = Array.new(16);
+
         let HeadFrame1Mirrored = Array.new(16);
         let HeadFrame1Mirrored[0] = -1;
         let HeadFrame1Mirrored[1] = -1;
@@ -71,8 +153,39 @@ class EvilJeffMelee
         let HeadFrame1Mirrored[14] = -1;
         let HeadFrame1Mirrored[15] = -1;
 
+        let ArmBottomRightFrame1Mirrored = Array.new(16);
+
+        let ArmTopLeftFrame1Mirrored = Array.new(16);
+
+        let ArmTopRightFrame1Mirrored = Array.new(16);
+
+        ////////////////////////////////////////////////
+
+        let ArmBottomLeftFramesMirrored = Array.new(FrameCount);
+        let ArmBottomLeftFramesMirrored[0] = ArmBottomLeftFrame1Mirrored;
+
         let HeadFramesMirrored = Array.new(FrameCount);
         let HeadFramesMirrored[0] = HeadFrame1Mirrored;
+
+        let ArmBottomRightFramesMirrored = Array.new(FrameCount);
+        let ArmBottomRightFramesMirrored[0] = ArmBottomRightFrame1Mirrored;
+
+        let ArmTopLeftFramesMirrored = Array.new(FrameCount);
+        let ArmTopLeftFramesMirrored[0] = ArmTopLeftFrame1Mirrored;
+
+        let ArmTopRightFramesMirrored = Array.new(FrameCount);
+        let ArmTopRightFramesMirrored[0] = ArmTopRightFrame1Mirrored;
+
+        let _spriteHeight0Mirrored[0] = ArmBottomLeftFramesMirrored;
+        let _spriteHeight0Mirrored[1] = HeadFramesMirrored;
+        let _spriteHeight0Mirrored[2] = ArmBottomRightFramesMirrored;
+
+        let _spriteHeight1Mirrored[0] = ArmTopLeftFramesMirrored;
+        let _spriteHeight1Mirrored[1] = EmptyFrames;
+        let _spriteHeight1Mirrored[2] = ArmTopRightFramesMirrored;
+
+        let spriteMirrored[0] = _spriteHeight0Mirrored;
+        let spriteMirrored[1] = _spriteHeight1Mirrored;
 
         return;
     }

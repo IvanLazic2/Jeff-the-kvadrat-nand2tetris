@@ -186,13 +186,20 @@ class Game
 
             //do UpdateCurrentSection();
 
+            
             do Move();
             do Sys.wait(GameDelay);
             
             //do curr_section.Draw();
+
             do Character.RedrawPlatforms(Map, MapWidth, MapHeight, WorldOffset);
 
             do DoAllEnemyActions();
+
+            //do Output.printInt(Character.get_y());
+            //do Output.printString(", ");
+
+            
             
 
             //do enemy.Draw(true, false);
@@ -301,6 +308,8 @@ class Game
 
         return;
     }
+
+
 
     method void RedrawAllObstacles()
     {

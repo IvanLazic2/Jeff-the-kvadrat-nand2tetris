@@ -142,17 +142,15 @@ class Level3
 	field int MapHeight;
 	constructor Level3 new()
 	{
-		let character = Character.new(5, 200);
+		let character = Character.new(2, 200);
 		let PlatformsCount = 3;
 		let ObstaclesCount = 0;
-		let EnemiesCount = 1;
+		let EnemiesCount = 0;
 		let CollectablesCount = 0;
 		let Platforms = Array.new(3);
-		let Platforms[0] = Platform.new(17, 224, 0, 1);
-		let Platforms[1] = Platform.new(26, 224, 0, 1);
-		let Platforms[2] = Platform.new(0, 240, 0, 30);
-		let Enemies = Array.new(1);
-		let Enemies[0] = Enemy.new(20, 224, 0);
+		let Platforms[0] = Platform.new(15, 192, 0, 1);
+		let Platforms[1] = Platform.new(8, 208, 0, 1);
+		let Platforms[2] = Platform.new(0, 240, 0, 54);
 		let Map = Array.new(128);
 		let map0 = Array.new(16);
 		let map0[0] = 0;
@@ -312,7 +310,7 @@ class Level3
 		let map8[10] = 0;
 		let map8[11] = 0;
 		let map8[12] = 0;
-		let map8[13] = 0;
+		let map8[13] = 1;
 		let map8[14] = 0;
 		let map8[15] = 1;
 		let Map[8] = map8;
@@ -437,7 +435,7 @@ class Level3
 		let map15[9] = 0;
 		let map15[10] = 0;
 		let map15[11] = 0;
-		let map15[12] = 0;
+		let map15[12] = 1;
 		let map15[13] = 0;
 		let map15[14] = 0;
 		let map15[15] = 1;
@@ -475,7 +473,7 @@ class Level3
 		let map17[11] = 0;
 		let map17[12] = 0;
 		let map17[13] = 0;
-		let map17[14] = 1;
+		let map17[14] = 0;
 		let map17[15] = 1;
 		let Map[17] = map17;
 		let map18 = Array.new(16);
@@ -637,7 +635,7 @@ class Level3
 		let map26[11] = 0;
 		let map26[12] = 0;
 		let map26[13] = 0;
-		let map26[14] = 1;
+		let map26[14] = 0;
 		let map26[15] = 1;
 		let Map[26] = map26;
 		let map27 = Array.new(16);
@@ -710,7 +708,7 @@ class Level3
 		let map30[12] = 0;
 		let map30[13] = 0;
 		let map30[14] = 0;
-		let map30[15] = 0;
+		let map30[15] = 1;
 		let Map[30] = map30;
 		let map31 = Array.new(16);
 		let map31[0] = 0;
@@ -728,7 +726,7 @@ class Level3
 		let map31[12] = 0;
 		let map31[13] = 0;
 		let map31[14] = 0;
-		let map31[15] = 0;
+		let map31[15] = 1;
 		let Map[31] = map31;
 		let map32 = Array.new(16);
 		let map32[0] = 0;
@@ -746,7 +744,7 @@ class Level3
 		let map32[12] = 0;
 		let map32[13] = 0;
 		let map32[14] = 0;
-		let map32[15] = 0;
+		let map32[15] = 1;
 		let Map[32] = map32;
 		let map33 = Array.new(16);
 		let map33[0] = 0;
@@ -764,7 +762,7 @@ class Level3
 		let map33[12] = 0;
 		let map33[13] = 0;
 		let map33[14] = 0;
-		let map33[15] = 0;
+		let map33[15] = 1;
 		let Map[33] = map33;
 		let map34 = Array.new(16);
 		let map34[0] = 0;
@@ -782,7 +780,7 @@ class Level3
 		let map34[12] = 0;
 		let map34[13] = 0;
 		let map34[14] = 0;
-		let map34[15] = 0;
+		let map34[15] = 1;
 		let Map[34] = map34;
 		let map35 = Array.new(16);
 		let map35[0] = 0;
@@ -800,7 +798,7 @@ class Level3
 		let map35[12] = 0;
 		let map35[13] = 0;
 		let map35[14] = 0;
-		let map35[15] = 0;
+		let map35[15] = 1;
 		let Map[35] = map35;
 		let map36 = Array.new(16);
 		let map36[0] = 0;
@@ -818,7 +816,7 @@ class Level3
 		let map36[12] = 0;
 		let map36[13] = 0;
 		let map36[14] = 0;
-		let map36[15] = 0;
+		let map36[15] = 1;
 		let Map[36] = map36;
 		let map37 = Array.new(16);
 		let map37[0] = 0;
@@ -836,7 +834,7 @@ class Level3
 		let map37[12] = 0;
 		let map37[13] = 0;
 		let map37[14] = 0;
-		let map37[15] = 0;
+		let map37[15] = 1;
 		let Map[37] = map37;
 		let map38 = Array.new(16);
 		let map38[0] = 0;
@@ -854,7 +852,7 @@ class Level3
 		let map38[12] = 0;
 		let map38[13] = 0;
 		let map38[14] = 0;
-		let map38[15] = 0;
+		let map38[15] = 1;
 		let Map[38] = map38;
 		let map39 = Array.new(16);
 		let map39[0] = 0;
@@ -872,7 +870,7 @@ class Level3
 		let map39[12] = 0;
 		let map39[13] = 0;
 		let map39[14] = 0;
-		let map39[15] = 0;
+		let map39[15] = 1;
 		let Map[39] = map39;
 		let map40 = Array.new(16);
 		let map40[0] = 0;
@@ -890,7 +888,7 @@ class Level3
 		let map40[12] = 0;
 		let map40[13] = 0;
 		let map40[14] = 0;
-		let map40[15] = 0;
+		let map40[15] = 1;
 		let Map[40] = map40;
 		let map41 = Array.new(16);
 		let map41[0] = 0;
@@ -908,7 +906,7 @@ class Level3
 		let map41[12] = 0;
 		let map41[13] = 0;
 		let map41[14] = 0;
-		let map41[15] = 0;
+		let map41[15] = 1;
 		let Map[41] = map41;
 		let map42 = Array.new(16);
 		let map42[0] = 0;
@@ -926,7 +924,7 @@ class Level3
 		let map42[12] = 0;
 		let map42[13] = 0;
 		let map42[14] = 0;
-		let map42[15] = 0;
+		let map42[15] = 1;
 		let Map[42] = map42;
 		let map43 = Array.new(16);
 		let map43[0] = 0;
@@ -944,7 +942,7 @@ class Level3
 		let map43[12] = 0;
 		let map43[13] = 0;
 		let map43[14] = 0;
-		let map43[15] = 0;
+		let map43[15] = 1;
 		let Map[43] = map43;
 		let map44 = Array.new(16);
 		let map44[0] = 0;
@@ -962,7 +960,7 @@ class Level3
 		let map44[12] = 0;
 		let map44[13] = 0;
 		let map44[14] = 0;
-		let map44[15] = 0;
+		let map44[15] = 1;
 		let Map[44] = map44;
 		let map45 = Array.new(16);
 		let map45[0] = 0;
@@ -980,7 +978,7 @@ class Level3
 		let map45[12] = 0;
 		let map45[13] = 0;
 		let map45[14] = 0;
-		let map45[15] = 0;
+		let map45[15] = 1;
 		let Map[45] = map45;
 		let map46 = Array.new(16);
 		let map46[0] = 0;
@@ -998,7 +996,7 @@ class Level3
 		let map46[12] = 0;
 		let map46[13] = 0;
 		let map46[14] = 0;
-		let map46[15] = 0;
+		let map46[15] = 1;
 		let Map[46] = map46;
 		let map47 = Array.new(16);
 		let map47[0] = 0;
@@ -1016,7 +1014,7 @@ class Level3
 		let map47[12] = 0;
 		let map47[13] = 0;
 		let map47[14] = 0;
-		let map47[15] = 0;
+		let map47[15] = 1;
 		let Map[47] = map47;
 		let map48 = Array.new(16);
 		let map48[0] = 0;
@@ -1034,7 +1032,7 @@ class Level3
 		let map48[12] = 0;
 		let map48[13] = 0;
 		let map48[14] = 0;
-		let map48[15] = 0;
+		let map48[15] = 1;
 		let Map[48] = map48;
 		let map49 = Array.new(16);
 		let map49[0] = 0;
@@ -1052,7 +1050,7 @@ class Level3
 		let map49[12] = 0;
 		let map49[13] = 0;
 		let map49[14] = 0;
-		let map49[15] = 0;
+		let map49[15] = 1;
 		let Map[49] = map49;
 		let map50 = Array.new(16);
 		let map50[0] = 0;
@@ -1070,7 +1068,7 @@ class Level3
 		let map50[12] = 0;
 		let map50[13] = 0;
 		let map50[14] = 0;
-		let map50[15] = 0;
+		let map50[15] = 1;
 		let Map[50] = map50;
 		let map51 = Array.new(16);
 		let map51[0] = 0;
@@ -1088,7 +1086,7 @@ class Level3
 		let map51[12] = 0;
 		let map51[13] = 0;
 		let map51[14] = 0;
-		let map51[15] = 0;
+		let map51[15] = 1;
 		let Map[51] = map51;
 		let map52 = Array.new(16);
 		let map52[0] = 0;
@@ -1106,7 +1104,7 @@ class Level3
 		let map52[12] = 0;
 		let map52[13] = 0;
 		let map52[14] = 0;
-		let map52[15] = 0;
+		let map52[15] = 1;
 		let Map[52] = map52;
 		let map53 = Array.new(16);
 		let map53[0] = 0;
@@ -1124,7 +1122,7 @@ class Level3
 		let map53[12] = 0;
 		let map53[13] = 0;
 		let map53[14] = 0;
-		let map53[15] = 0;
+		let map53[15] = 1;
 		let Map[53] = map53;
 		let map54 = Array.new(16);
 		let map54[0] = 0;
@@ -2459,7 +2457,7 @@ class Level3
 		let map127[15] = 0;
 		let Map[127] = map127;
 		let MapWidth = 128;
-		let MapHeight = 128;
+		let MapHeight = 16;
 		return this;
 	}
 	method int getPlatformsCount() { return PlatformsCount; }

@@ -61,7 +61,7 @@ class Enemy
 		if (type = 0)
 		{
 			let width = 2;
-			let height = 16;
+			let height = 1;
 			let frameCount = Spider.GetFrameCount();
 			let animationDelay = 3;
 			let movementDelay = 2;
@@ -71,16 +71,17 @@ class Enemy
 		// EVIL JEFF MELEE
 		else { if (type = 1)
 		{
-			let width = 1;
-			let height = 16;
+			let width = 3;
+			let height = 1;
 			let frameCount = EvilJeffMelee.GetFrameCount();
 			
 			let movementDelay = 2;
 
-			let GravityAffected = true;
+			//let GravityAffected = true;
 			let Melee = true;
 			let DamageOnSquish = true;
 			let Following = true;
+			let Roaming = true; // TEMP
 		}}
 
 		let currFrame = 0;
@@ -164,6 +165,7 @@ class Enemy
 		if (GravityAffected)
 		{
 			do check_gravity2(map, mapWidth, mapHeight);
+			do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, height, worldOffset);
 		}
 		if (Roaming)
 		{
@@ -189,12 +191,12 @@ class Enemy
 			do MoveRight();
 		}
 
-		if (Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset) | 
+		if (Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY) | 
 		    Collision.IsAtPlatformBoundaryLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset))
 		{
 			let movingLeft = false;
 		}
-		else { if (Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset) | 
+		else { if (Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY) | 
 		           Collision.IsAtPlatformBoundaryRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset))
 		{
 			let movingLeft = true;
@@ -478,7 +480,7 @@ class Enemy
 		}
 		else { if (type = 1)
 		{
-			do EvilJeffMelee.DrawFrame(memAddress, currFrame, display, mirrored);
+			do EvilJeffMelee.DrawFrame(memAddress, currFrame, display, mirrored, x, y);
 		}
 		else { if (type = 2)
 		{

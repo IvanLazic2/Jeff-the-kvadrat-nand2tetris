@@ -4,6 +4,8 @@ class Main
     {
         var Game game;
 
+        do Collision.init();
+        do Sprite.init();
         do Spider.init();
         do EvilJeffMelee.init();
 

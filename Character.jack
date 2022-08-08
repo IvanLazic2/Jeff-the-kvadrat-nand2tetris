@@ -43,14 +43,14 @@ class Character
         let absolute_x = x2;
 
         let width = 3; // 3
-        let height = 32; // 32
+        let height = 2; // 32
 
         //let widthdiv16 = width / 16;
 
         let forceY = 0;
         let gravity = 6; // 6
         let can_jump = false;
-        let jump_height = 35; // 30
+        let jump_height = 35; // 30, 35
         let jump_height_const = 5; //20
         let jump_compensation_const = 4;
 
@@ -117,37 +117,7 @@ class Character
 
     method void RedrawPlatforms(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
-        var int i;
-        var int j;
-        var int px;
-        var int py;
-        var int location;
-        var int memAddress;
-        var Array x_map;
-
-        let i = absolute_x - 1;
-        while (i < (absolute_x + width + 1))
-        {
-            let x_map = map[i];
-
-            let j = (y / 16) - 2;
-            while (j < (((y + height) / 16) + 1))
-            //let j = 0; // TEMP
-            //while (j < 16) // TEMP
-            {
-                if ((0 < x_map[j]) & (x_map[j] < 11))
-                {
-                    let location = (j * 16 * 32) + i - worldOffset;
-		            let memAddress = 16384 + location;
-
-                    do Platform.DrawBlock(0, x_map[j] - 1, memAddress);
-                }
-
-                let j = j + 1;
-            }
-
-            let i = i + 1;
-        }
+        do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, height, worldOffset);
 
         return;
     }
@@ -191,74 +161,74 @@ class Character
 
 
 
-    method void RedrawPlatform2(Array platforms, int platforms_num, Array map, int mapWidth, int mapHeight)
-    {
-        var int i;
-        var int j;
-        var int px;
-        var int py;
-        var int location;
-        var int memAddress;
-        var Array x_map;
-
-        let i = absolute_x - 1;
-        while (i < (absolute_x + width + 1))
-        {
-            let x_map = map[i];
-
-            let j = y - 16;
-            while (j < (y + height + 16))
-            {
-                if ((1 < x_map[j / 16]) & (x_map[j / 16] < 10))
-                {
-                    //do Output.printString("a");
-                }
-
-                let j = j + 16;
-            }
-
-            let i = i + 1;
-        }
-
-        let i = absolute_x - 1;
-        while (i < (absolute_x + width + 1))
-        {
-            let x_map = map[i];
-
-            let j = 0;
-            while (j < 16)
-            {
-                if ((1 < x_map[j]) & (x_map[j] < 10))
-                {
-                    if((i < 32) & (i > -1))
-                    {
-                        let location = (j * 16 * 32) + i;
-		                let memAddress = 16384 + location;
-                        do Memory.poke(memAddress + 0, -1);
-	                    do Memory.poke(memAddress + 32, -32767);
-	                    do Memory.poke(memAddress + 64, -32767);
-	                    do Memory.poke(memAddress + 96, -32767);
-	                    do Memory.poke(memAddress + 128, -32767);
-	                    do Memory.poke(memAddress + 160, -32767);
-	                    do Memory.poke(memAddress + 192, -32767);
-	                    do Memory.poke(memAddress + 224, -32767);
-	                    do Memory.poke(memAddress + 256, -32767);
-	                    do Memory.poke(memAddress + 288, -32767);
-	                    do Memory.poke(memAddress + 320, -32767);
-	                    do Memory.poke(memAddress + 352, -32767);
-	                    do Memory.poke(memAddress + 384, -32767);
-	                    do Memory.poke(memAddress + 416, -32767);
-	                    do Memory.poke(memAddress + 448, -32767);
-    	                do Memory.poke(memAddress + 480, -1);
-                    }
-                    
-                }
-
-                let j = j + 1;
-            }
-
-            let i = i + 1;
-        }
+    //method void RedrawPlatform2(Array platforms, int platforms_num, Array map, int mapWidth, int mapHeight)
+    //{
+    //    var int i;
+    //    var int j;
+    //    var int px;
+    //    var int py;
+    //    var int location;
+    //    var int memAddress;
+    //    var Array x_map;
+//
+    //    let i = absolute_x - 1;
+    //    while (i < (absolute_x + width + 1))
+    //    {
+    //        let x_map = map[i];
+//
+    //        let j = y - 16;
+    //        while (j < (y + height + 16))
+    //        {
+    //            if ((1 < x_map[j / 16]) & (x_map[j / 16] < 10))
+    //            {
+    //                //do Output.printString("a");
+    //            }
+//
+    //            let j = j + 16;
+    //        }
+//
+    //        let i = i + 1;
+    //    }
+//
+    //    let i = absolute_x - 1;
+    //    while (i < (absolute_x + width + 1))
+    //    {
+    //        let x_map = map[i];
+//
+    //        let j = 0;
+    //        while (j < 16)
+    //        {
+    //            if ((1 < x_map[j]) & (x_map[j] < 10))
+    //            {
+    //                if((i < 32) & (i > -1))
+    //                {
+    //                    let location = (j * 16 * 32) + i;
+	//	                let memAddress = 16384 + location;
+    //                    do Memory.poke(memAddress + 0, -1);
+	//                    do Memory.poke(memAddress + 32, -32767);
+	//                    do Memory.poke(memAddress + 64, -32767);
+	//                    do Memory.poke(memAddress + 96, -32767);
+	//                    do Memory.poke(memAddress + 128, -32767);
+	//                    do Memory.poke(memAddress + 160, -32767);
+	//                    do Memory.poke(memAddress + 192, -32767);
+	//                    do Memory.poke(memAddress + 224, -32767);
+	//                    do Memory.poke(memAddress + 256, -32767);
+	//                    do Memory.poke(memAddress + 288, -32767);
+	//                    do Memory.poke(memAddress + 320, -32767);
+	//                    do Memory.poke(memAddress + 352, -32767);
+	//                    do Memory.poke(memAddress + 384, -32767);
+	//                    do Memory.poke(memAddress + 416, -32767);
+	//                    do Memory.poke(memAddress + 448, -32767);
+    //	                do Memory.poke(memAddress + 480, -1);
+    //                }
+    //                
+    //            }
+//
+    //            let j = j + 1;
+    //        }
+//
+    //        let i = i + 1;
+    //    }
 
 
 
@@ -283,8 +253,8 @@ class Character
     	//do Memory.poke(memAddress + 480, -1);
         
 
-        return;
-    }
+       // return;
+    //}
 
 
     //// PLATFORM COLLISION
@@ -300,7 +270,7 @@ class Character
         //do Output.printInt(absolute_x);
         //do Output.println();
 
-        return Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset);
+        return Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY);
     }
 
     method bool check_left_collision_platforms(Array platforms, int platforms_num)
@@ -310,7 +280,7 @@ class Character
 
     method bool check_left_collision_platforms2(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
-        return Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset);
+        return Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY);
     }
 
     //// OBSTACLE COLLISION
@@ -461,7 +431,8 @@ class Character
             //do Output.printInt(y);
             //do Output.println();
             
-           
+            
+
             let forceY = 0;
             let location = (y * 32) + x;
 
@@ -484,7 +455,9 @@ class Character
                 // take damage
             }
 
-            let forceY = forceY + gravity;            
+            let forceY = forceY + gravity;      
+
+               
         }
 
 

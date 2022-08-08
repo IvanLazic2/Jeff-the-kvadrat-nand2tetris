@@ -1,5 +1,7 @@
 class Sprite
 {
+	static Array Empty;
+
 	function bool IsInScreen(int x)
 	{
 		return ((-1 < x) & (x < 32));
@@ -53,11 +55,14 @@ class Sprite
 
 		let frame = sprite[currFrame];
 
-		while (i < 481)
+		if (~(frame = Empty))
 		{
-			do Memory.poke(memAddress + i, frame[j]);
-			let j = j + 1;
-			let i = i + 32;
+			while (i < 481)
+			{
+				do Memory.poke(memAddress + i, frame[j]);
+				let j = j + 1;
+				let i = i + 32;
+			}
 		}
 
 		return;
@@ -75,4 +80,20 @@ class Sprite
 
 		return;
 	}
+
+	function void init()
+	{
+		var int i;
+
+		let Empty = Array.new(16);
+        while (i < 16)
+        {
+            let Empty[i] = 0;
+            let i = i + 1;
+        }
+
+		return;
+	}
+
+	function Array getEmpty() { return Empty; }
 }
