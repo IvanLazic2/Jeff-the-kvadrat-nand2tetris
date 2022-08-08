@@ -29,11 +29,15 @@ class Game
 
     field int PlatformsCount;
     field int ObstaclesCount;
+    field int EnemiesCount;
+    field int CollectablesCount;
     //field int sections_num;
     //field int section_width;
 
     field Array Platforms;
     field Array Obstacles;
+    field Array Enemies;
+    field Array Collectables;
     //field Array sections;
 
     //field Section curr_section;
@@ -66,8 +70,6 @@ class Game
 
     field int WorldOffset;
 
-    field int EnemiesCount;
-    field Array Enemies;
 
 
 
@@ -95,14 +97,14 @@ class Game
         let Character = Level.getCharacter();
 
         let PlatformsCount = Level.getPlatformsCount();
-        let Platforms = Level.getPlatforms();
-
-        //let sections_num = Level.get_sections_num();
-        //let section_width = Level.get_section_width();
-        //let sections = Level.get_sections();
-
         let ObstaclesCount = Level.getObstaclesCount();
+        let EnemiesCount = Level.getEnemiesCount();
+        let CollectablesCount = Level.getCollectablesCount();
+
+        let Platforms = Level.getPlatforms();
         let Obstacles = Level.getObstacles();
+        let Enemies = Level.getEnemies();
+        let Collectables = Level.getCollectables();
 
         let div4lookup = Array.new(MapWidth);
         let i = 0;
@@ -189,6 +191,8 @@ class Game
             
             //do curr_section.Draw();
             do Character.RedrawPlatforms(Map, MapWidth, MapHeight, WorldOffset);
+
+            do DoAllEnemyActions();
             
 
             //do enemy.Draw(true, false);
@@ -235,7 +239,7 @@ class Game
         }
 
         
-        //do enemy.CheckTimers();
+        do CheckAllEnemyTimers();
 
         return;
     }
@@ -246,7 +250,7 @@ class Game
         let timer6 = timer6 - 1;
         let timer100 = timer100 - 1;
 
-        //do enemy.DecrementTimers();
+        do DecrementAllEnemyTimers();
 
         return;
     }
@@ -313,6 +317,51 @@ class Game
                 let i = i + 1;
             }
             do Character.set_should_draw_last_obstacle(false);
+        }
+
+        return;
+    }
+
+    method void CheckAllEnemyTimers()
+    {
+        var Enemy enemy;
+        var int i;
+
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.CheckTimers();
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void DecrementAllEnemyTimers()
+    {
+        var Enemy enemy;
+        var int i;
+
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.DecrementTimers();
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void DoAllEnemyActions()
+    {
+        var Enemy enemy;
+        var int i;
+
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.DoActions(Map, MapWidth, MapHeight);
+            let i = i + 1;
         }
 
         return;

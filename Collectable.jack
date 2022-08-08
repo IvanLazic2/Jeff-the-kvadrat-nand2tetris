@@ -1,0 +1,18 @@
+// 0 - coin
+// 1 - life
+
+class Collectable
+{
+    field int x;
+    field int y;
+    field int type;
+
+    constructor Collectable new(int x2, int y2, int type2)
+    {
+        let x = x2;
+        let y = y2;
+        let type = type2;
+
+        return this;
+    }
+}
