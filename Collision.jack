@@ -38,7 +38,7 @@ class Collision
         return nearestPlatformY;
     }
 
-    function bool IsOnAnyPlatform(int x, int y, int width, int height, int forceY, Array map, int mapWidth, int mapHeight)
+    function bool IsOnAnyPlatform(int x, int y, int width, int height, int forceY, Array map, int mapWidth, int mapHeight, int worldOffset)
     {
         var bool is_stable_x;
         var bool is_stable_y;
@@ -55,7 +55,7 @@ class Collision
         let minNearestPlatformY = (mapHeight - 1) * 16;
         while (i < width)
         {
-            let x_map = map[x + i];
+            let x_map = map[x + i + worldOffset];
             let py = Collision.getNearestPlatformY(x_map, y, height, mapHeight);
             if (~(py = 0) & (py < minNearestPlatformY))
             {

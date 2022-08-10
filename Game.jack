@@ -148,6 +148,7 @@ class Game
         var char key;
         var bool exit;
         var int i;
+        var int temp;
         var Platform platform;
 
 
@@ -215,9 +216,6 @@ class Game
             
 
             do CheckTimers();
-
-
-
 
 
             //let last_section_index = get_curr_section_index();
@@ -475,7 +473,7 @@ class Game
         let x = Character.get_x();
         let abs_x = Character.get_absolute_x();
 
-        do Character.check_gravity2(Map, MapWidth, MapHeight);
+        do Character.check_gravity2(Map, MapWidth, MapHeight, WorldOffset);
         do Character.check_collision_obstacles2(Map, MapWidth, MapHeight);
 
         if (Direction = 1) 

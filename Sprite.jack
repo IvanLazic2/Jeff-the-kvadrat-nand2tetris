@@ -7,29 +7,32 @@ class Sprite
 		return ((-1 < x) & (x < 32));
 	}
 
-	function void Draw(int memAddress, Array sprite, int width, int height, int currFrame, bool display, int x, int y)
+	function void Draw(int memAddress, Array frame, int width, int height, bool display, int x, int y)
 	{
 		var int i;
 		var int j;
-		var Array spriteHeight;
+		var Array frameRow;
 		var int tempMemAddress;
 
 		let tempMemAddress = memAddress;
-
+		
 		while (j < height)
 		{
-			let spriteHeight = sprite[j];
+			let frameRow = frame[j];
 
 			let tempMemAddress = memAddress - (j * 512);
 
+			
 			let i = 0;
 			while (i < width)
 			{
+				
 				if (Sprite.IsInScreen(x + i))
 				{
+					
 					if (display)
 					{
-						do Sprite.drawBlock(tempMemAddress, spriteHeight[i], currFrame, x, y);
+						do Sprite.drawBlock(tempMemAddress, frameRow[i], x, y);
 					}
 					else
 					{
@@ -47,19 +50,16 @@ class Sprite
 		return;
 	}
 
-    function void drawBlock(int memAddress, Array sprite, int currFrame, int x, int y)
+    function void drawBlock(int memAddress, Array spritePart, int x, int y)
 	{
 		var int i;
 		var int j;
-		var Array frame;
 
-		let frame = sprite[currFrame];
-
-		if (~(frame = Empty))
+		if (~(spritePart = Empty))
 		{
 			while (i < 481)
 			{
-				do Memory.poke(memAddress + i, frame[j]);
+				do Memory.poke(memAddress + i, spritePart[j]);
 				let j = j + 1;
 				let i = i + 32;
 			}

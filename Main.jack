@@ -6,8 +6,14 @@ class Main
 
         do Collision.init();
         do Sprite.init();
+
+        do Jeff.init();
+
         do Spider.init();
         do EvilJeffMelee.init();
+        do EvilJeffRanged.init();
+        do Bat.init();
+        do Shooter.init();
 
         let game = Game.new();
 

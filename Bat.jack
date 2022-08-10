@@ -1,4 +1,4 @@
-class Spider
+class Bat
 {
 	static int Width;
 	static int Height;
@@ -37,52 +37,56 @@ class Spider
 		let Frame1Row0Mirrored = Array.new(Width);
 		let Frame1Part00 = Array.new(16);
 		let Frame1Part00Mirrored = Array.new(16);
-		let Frame1Part00[4] = -1024;
-		let Frame1Part00[5] = 1792;
-		let Frame1Part00[6] = 384;
-		let Frame1Part00[7] = 128;
-		let Frame1Part00[8] = 128;
-		let Frame1Part00[9] = 384;
-		let Frame1Part00[10] = 960;
-		let Frame1Part00[11] = -392;
-		let Frame1Part00[12] = -29682;
-		let Frame1Part00[13] = 1536;
-		let Frame1Part00Mirrored[4] = -8192;
-		let Frame1Part00Mirrored[5] = 16352;
-		let Frame1Part00Mirrored[6] = 3184;
-		let Frame1Part00Mirrored[7] = 3168;
-		let Frame1Part00Mirrored[8] = 8128;
-		let Frame1Part00Mirrored[9] = 12288;
-		let Frame1Part00Mirrored[10] = -4096;
-		let Frame1Part00Mirrored[11] = -26624;
-		let Frame1Part00Mirrored[12] = -29184;
-		let Frame1Part00Mirrored[13] = -31872;
-		let Frame1Part00Mirrored[14] = -32640;
+		let Frame1Part00[1] = 28;
+		let Frame1Part00[2] = 246;
+		let Frame1Part00[3] = 1922;
+		let Frame1Part00[4] = -25597;
+		let Frame1Part00[5] = -4071;
+		let Frame1Part00[6] = 16447;
+		let Frame1Part00[7] = 26150;
+		let Frame1Part00[8] = 12128;
+		let Frame1Part00[9] = 12480;
+		let Frame1Part00[10] = 24576;
+		let Frame1Part00[11] = -16384;
+		let Frame1Part00Mirrored[1] = 14;
+		let Frame1Part00Mirrored[2] = 122;
+		let Frame1Part00Mirrored[3] = -32574;
+		let Frame1Part00Mirrored[4] = -6270;
+		let Frame1Part00Mirrored[5] = 15366;
+		let Frame1Part00Mirrored[6] = 6158;
+		let Frame1Part00Mirrored[7] = 2074;
+		let Frame1Part00Mirrored[8] = 3024;
+		let Frame1Part00Mirrored[9] = 2144;
+		let Frame1Part00Mirrored[10] = 2144;
+		let Frame1Part00Mirrored[11] = -10176;
+		let Frame1Part00Mirrored[12] = 28672;
 		let Frame1Row0[0] = Frame1Part00;
 		let Frame1Row0Mirrored[0] = Frame1Part00Mirrored;
 		let Frame1Part01 = Array.new(16);
 		let Frame1Part01Mirrored = Array.new(16);
-		let Frame1Part01[4] = 7;
-		let Frame1Part01[5] = 2044;
-		let Frame1Part01[6] = 3632;
-		let Frame1Part01[7] = 1584;
-		let Frame1Part01[8] = 1016;
-		let Frame1Part01[9] = 12;
-		let Frame1Part01[10] = 15;
-		let Frame1Part01[11] = 25;
-		let Frame1Part01[12] = 113;
-		let Frame1Part01[13] = 449;
-		let Frame1Part01[14] = 257;
-		let Frame1Part01Mirrored[4] = 63;
-		let Frame1Part01Mirrored[5] = 224;
-		let Frame1Part01Mirrored[6] = 384;
-		let Frame1Part01Mirrored[7] = 256;
-		let Frame1Part01Mirrored[8] = 256;
-		let Frame1Part01Mirrored[9] = 384;
-		let Frame1Part01Mirrored[10] = 960;
-		let Frame1Part01Mirrored[11] = 7807;
-		let Frame1Part01Mirrored[12] = 28721;
-		let Frame1Part01Mirrored[13] = 96;
+		let Frame1Part01[1] = 28672;
+		let Frame1Part01[2] = 24064;
+		let Frame1Part01[3] = 17153;
+		let Frame1Part01[4] = 16871;
+		let Frame1Part01[5] = 24636;
+		let Frame1Part01[6] = 28696;
+		let Frame1Part01[7] = 22544;
+		let Frame1Part01[8] = 3024;
+		let Frame1Part01[9] = 1552;
+		let Frame1Part01[10] = 1552;
+		let Frame1Part01[11] = 539;
+		let Frame1Part01[12] = 14;
+		let Frame1Part01Mirrored[1] = 14336;
+		let Frame1Part01Mirrored[2] = 28416;
+		let Frame1Part01Mirrored[3] = 16864;
+		let Frame1Part01Mirrored[4] = -16327;
+		let Frame1Part01Mirrored[5] = -26609;
+		let Frame1Part01Mirrored[6] = -1022;
+		let Frame1Part01Mirrored[7] = 25702;
+		let Frame1Part01Mirrored[8] = 1780;
+		let Frame1Part01Mirrored[9] = 780;
+		let Frame1Part01Mirrored[10] = 6;
+		let Frame1Part01Mirrored[11] = 3;
 		let Frame1Row0[1] = Frame1Part01;
 		let Frame1Row0Mirrored[1] = Frame1Part01Mirrored;
 		let Frame1[0] = Frame1Row0;
@@ -95,7 +99,7 @@ class Spider
 	{
 		if (animationTimer < 1)
 		{
-			do Spider.ChangeFrame();
+			do Bat.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
 		if (specialFrameTimer < 1)

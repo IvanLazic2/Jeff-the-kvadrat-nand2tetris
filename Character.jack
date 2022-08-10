@@ -33,6 +33,21 @@ class Character
 
     field bool draw_character_left;
 
+
+
+
+
+    field int animationFrameCount;
+	field int currFrame;
+
+    field bool playSpecificFrame;
+    field int idleFrame; // = 2
+
+    field int animationDelay;
+	field int animationTimer;
+
+    
+
     constructor Character new(int x2, int y2)
     {
         var int i;
@@ -56,6 +71,12 @@ class Character
 
         let health = 3;
         let damage_cooldown = 20; // 20 game ticks
+
+
+        let currFrame = 0;
+        let animationTimer = animationDelay;
+
+
 
         let lastlocation = location;
 
@@ -111,6 +132,41 @@ class Character
         let draw_character_left = b;
         return;
     }
+
+
+
+    
+    method void CheckTimers()
+	{
+		if (animationTimer < 1)
+		{
+			do ChangeFrame();
+			let animationTimer = animationDelay;
+		}
+
+		return;
+	}
+
+	method void DecrementTimers()
+	{
+		let animationTimer = animationTimer - 1;
+		return;
+	}
+
+
+	method void ChangeFrame()
+	{
+		if (currFrame < (animationFrameCount - 1))
+		{
+			let currFrame = currFrame + 1;
+		}
+		else
+		{
+			let currFrame = 0;
+		}
+
+		return;
+	}
 
 
 
@@ -409,7 +465,7 @@ class Character
 
 
 
-    method void check_gravity2(Array map, int mapWidth, int mapHeight)
+    method void check_gravity2(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
         var int i;
         var Platform platform;
@@ -418,7 +474,7 @@ class Character
 
         let lastlocation = location;
 
-        let can_jump = Collision.IsOnAnyPlatform(absolute_x, y, width, height, forceY, map, mapWidth, mapHeight);
+        let can_jump = Collision.IsOnAnyPlatform(x, y, width, height, forceY, map, mapWidth, mapHeight, worldOffset);
 
         //do Output.printInt(y);
         //do Output.println();

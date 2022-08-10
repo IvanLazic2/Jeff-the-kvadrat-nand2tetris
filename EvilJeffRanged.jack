@@ -1,4 +1,4 @@
-class EvilJeffMelee
+class EvilJeffRanged
 {
 	static int Width;
 	static int Height;
@@ -133,13 +133,7 @@ class EvilJeffMelee
 		let Frame1Row1Mirrored = Array.new(Width);
 		let Frame1Part10 = Array.new(16);
 		let Frame1Part10Mirrored = Array.new(16);
-		let Frame1Part10[2] = 2048;
-		let Frame1Part10[3] = 2048;
-		let Frame1Part10[4] = 2048;
-		let Frame1Part10[5] = 2048;
-		let Frame1Part10[6] = 2048;
-		let Frame1Part10[7] = 2048;
-		let Frame1Part10[8] = 7168;
+		let Frame1Part10[8] = -2048;
 		let Frame1Part10[9] = 2048;
 		let Frame1Part10[10] = 7680;
 		let Frame1Part10[11] = 2944;
@@ -147,13 +141,9 @@ class EvilJeffMelee
 		let Frame1Part10[13] = 64;
 		let Frame1Part10[14] = 64;
 		let Frame1Part10[15] = 64;
-		let Frame1Part10Mirrored[2] = 128;
-		let Frame1Part10Mirrored[3] = 128;
-		let Frame1Part10Mirrored[4] = 128;
-		let Frame1Part10Mirrored[5] = 128;
-		let Frame1Part10Mirrored[6] = 128;
+		let Frame1Part10Mirrored[6] = 254;
 		let Frame1Part10Mirrored[7] = 128;
-		let Frame1Part10Mirrored[8] = 448;
+		let Frame1Part10Mirrored[8] = 128;
 		let Frame1Part10Mirrored[9] = 128;
 		let Frame1Part10Mirrored[10] = 4080;
 		let Frame1Part10Mirrored[11] = 6272;
@@ -169,13 +159,9 @@ class EvilJeffMelee
 		let Frame1Row1Mirrored[1] = Frame1Part11Mirrored;
 		let Frame1Part12 = Array.new(16);
 		let Frame1Part12Mirrored = Array.new(16);
-		let Frame1Part12[2] = 256;
-		let Frame1Part12[3] = 256;
-		let Frame1Part12[4] = 256;
-		let Frame1Part12[5] = 256;
-		let Frame1Part12[6] = 256;
+		let Frame1Part12[6] = 32512;
 		let Frame1Part12[7] = 256;
-		let Frame1Part12[8] = 896;
+		let Frame1Part12[8] = 256;
 		let Frame1Part12[9] = 256;
 		let Frame1Part12[10] = 4080;
 		let Frame1Part12[11] = 280;
@@ -183,13 +169,7 @@ class EvilJeffMelee
 		let Frame1Part12[13] = 8;
 		let Frame1Part12[14] = 8;
 		let Frame1Part12[15] = 24;
-		let Frame1Part12Mirrored[2] = 16;
-		let Frame1Part12Mirrored[3] = 16;
-		let Frame1Part12Mirrored[4] = 16;
-		let Frame1Part12Mirrored[5] = 16;
-		let Frame1Part12Mirrored[6] = 16;
-		let Frame1Part12Mirrored[7] = 16;
-		let Frame1Part12Mirrored[8] = 56;
+		let Frame1Part12Mirrored[8] = 31;
 		let Frame1Part12Mirrored[9] = 16;
 		let Frame1Part12Mirrored[10] = 120;
 		let Frame1Part12Mirrored[11] = 464;
@@ -209,7 +189,7 @@ class EvilJeffMelee
 	{
 		if (animationTimer < 1)
 		{
-			do EvilJeffMelee.ChangeFrame();
+			do EvilJeffRanged.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
 		if (specialFrameTimer < 1)
