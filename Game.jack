@@ -181,7 +181,11 @@ class Game
             else { if (key = 132) 
             {
                 let Direction = 2;
-            }}}}}
+            }
+            else { if (key = 32)
+            {
+                do Character.Shoot();
+            }}}}}}
             
 
 
@@ -197,10 +201,11 @@ class Game
 
             do DoAllEnemyActions();
 
+            do CheckEnemyAndCharacterCollision();
+
             //do Output.printInt(Character.get_y());
             //do Output.printString(", ");
 
-            
             
 
             //do enemy.Draw(true, false);
@@ -243,7 +248,7 @@ class Game
             let timer100 = 100;
         }
 
-        
+        do Character.CheckTimers();
         do CheckAllEnemyTimers();
 
         return;
@@ -256,6 +261,7 @@ class Game
         let timer6 = timer6 - 1;
         let timer100 = timer100 - 1;
 
+        do Character.DecrementTimers();
         do DecrementAllEnemyTimers();
 
         return;
@@ -342,6 +348,53 @@ class Game
         {
             let enemy = Enemies[i];
             do enemy.DoActions(Map, MapWidth, MapHeight, WorldOffset);
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void CheckEnemyAndCharacterCollision()
+    {
+        var int i;
+        var Enemy enemy;
+        var bool collided_sides;
+        var bool collided_top;
+
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+
+            if (enemy.getIsAlive())
+            {
+                let collided_sides = Collision.IsCharacterCollidedWithEnemySides(Character.get_x(), Character.get_y(), Character.getWidth(), Character.getHeight(), enemy.get_x(), enemy.get_y(), enemy.getWidth(), enemy.getHeight());
+                let collided_top = Collision.IsCharacterCollidedWithEnemyTop(Character.get_x(), Character.get_y(), Character.getWidth(), Character.getHeight(), enemy.get_x(), enemy.get_y(), enemy.getWidth(), enemy.getHeight());
+
+                if (collided_top)
+                {
+                    if (enemy.getIsDamageOnSquish())
+                    {
+                        do Character.Respawn();
+                        do Character.TakeDamage();
+                    }   
+                    else
+                    {
+                        do enemy.Die();
+                    }
+                }
+                else { if (collided_sides)
+                {
+                    do Character.Respawn();
+                    do Character.TakeDamage();
+                }}
+            }
+
+            
+            
+            
+            
+            
+
             let i = i + 1;
         }
 

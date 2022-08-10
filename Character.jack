@@ -46,6 +46,25 @@ class Character
     field int animationDelay;
 	field int animationTimer;
 
+
+
+    field int HeightInPixels;
+
+
+
+
+
+    field Array Bullets;
+    field int BulletsCount;
+    field int AvailableBulletsCount;
+    field int currBulletIndex;
+    field Bullet currBullet;
+
+    field int bulletTimer;
+    field int bulletDelay;
+
+    field bool canShoot;
+
     
 
     constructor Character new(int x2, int y2)
@@ -62,7 +81,7 @@ class Character
 
         //let widthdiv16 = width / 16;
 
-        let forceY = 0;
+        //let forceY = 0;
         let gravity = 6; // 6
         let can_jump = false;
         let jump_height = 35; // 30, 35
@@ -73,10 +92,25 @@ class Character
         let damage_cooldown = 20; // 20 game ticks
 
 
-        let currFrame = 0;
         let animationTimer = animationDelay;
 
+        let HeightInPixels = height * 16;
 
+
+        let BulletsCount = 5;
+        let AvailableBulletsCount = BulletsCount;
+        let Bullets = Array.new(BulletsCount);
+        while (i < BulletsCount)
+        {
+            let Bullets[i] = Bullet.new(-10, -10);
+            let i = i + 1;
+        }
+        let currBullet = Bullets[currBulletIndex];
+
+        let bulletDelay = 10;
+        let bulletTimer = bulletDelay;
+
+        let canShoot = true;
 
         let lastlocation = location;
 
@@ -88,6 +122,9 @@ class Character
     method int get_x() { return x; }
 
     method int get_y() { return y; }
+
+    method int getWidth() { return width; }
+    method int getHeight() { return HeightInPixels; }
 
     method int get_absolute_x() { return absolute_x; }
 
@@ -138,35 +175,49 @@ class Character
     
     method void CheckTimers()
 	{
-		if (animationTimer < 1)
-		{
-			do ChangeFrame();
-			let animationTimer = animationDelay;
-		}
+		//if (animationTimer < 1)
+		//{
+		//	do ChangeFrame();
+		//	let animationTimer = animationDelay;
+		//}
+
+        
+
+        if (bulletTimer < 1)
+        {
+            let canShoot = true;
+            let bulletTimer = bulletDelay;
+        }
+
+        do currBullet.CheckTimers();
 
 		return;
 	}
 
 	method void DecrementTimers()
 	{
-		let animationTimer = animationTimer - 1;
-		return;
-	}
+		//let animationTimer = animationTimer - 1;
+        let bulletTimer = bulletTimer - 1;
 
-
-	method void ChangeFrame()
-	{
-		if (currFrame < (animationFrameCount - 1))
-		{
-			let currFrame = currFrame + 1;
-		}
-		else
-		{
-			let currFrame = 0;
-		}
+        do currBullet.DecrementTimers();
 
 		return;
 	}
+
+
+	//method void ChangeFrame()
+	//{
+	//	if (currFrame < (animationFrameCount - 1))
+	//	{
+	//		let currFrame = currFrame + 1;
+	//	}
+	//	else
+	//	{
+	//		let currFrame = 0;
+	//	}
+//
+	//	return;
+	//}
 
 
 
@@ -472,6 +523,8 @@ class Character
         var Section section;
         var bool is_on_platform;
 
+        
+
         let lastlocation = location;
 
         let can_jump = Collision.IsOnAnyPlatform(x, y, width, height, forceY, map, mapWidth, mapHeight, worldOffset);
@@ -627,6 +680,30 @@ class Character
         {
             let health = health - 1;
             let damage_timer = damage_cooldown;
+        }
+
+        return;
+    }
+
+    method void Shoot()
+    {
+        if (canShoot)
+        {
+            if (currBullet.IsAvailable())
+            {
+                do currBullet.Shoot(5, 100, draw_character_left);
+
+                let currBulletIndex = currBulletIndex + 1;
+
+                if (currBulletIndex > (BulletsCount - 1))
+                {
+                    let currBulletIndex = 0;
+                }
+                
+                let currBullet = Bullets[currBulletIndex];
+            }
+
+            let canShoot = false;
         }
 
         return;

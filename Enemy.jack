@@ -45,14 +45,19 @@ class Enemy
 
 
 
-	field bool Roaming;
-    field bool Flying;
-    field bool GravityAffected;
-    field bool Melee;
-    field bool Shooting;
-    field bool DamageOnSquish;
-	field bool Following;
-	field bool Stacionary;
+	field bool IsRoaming;
+    field bool IsFlying;
+    field bool IsGravityAffected;
+    field bool IsMelee;
+    field bool IsShooting;
+    field bool IsDamageOnSquish;
+	field bool IsFollowing;
+	field bool IsStacionary;
+
+	field bool IsAlive;
+
+
+	field int HeightInPixels;
 
 
 
@@ -75,24 +80,24 @@ class Enemy
 			//let animationDelay = 3;
 			let movementDelay = 2;
 
-			let Roaming = true;
+			let IsRoaming = true;
 		}
 		// EVIL JEFF MELEE
 		else { if (type = 1)
 		{
 			let width = 3;
-			let height = 1;
+			let height = 2;
 			//let animationFrameCount = EvilJeffMelee.GetAnimationFrameCount();
 			
 			//let animationDelay = 3;
 			let movementDelay = 2;
 
-			let GravityAffected = true;
-			let Melee = true;
-			//let DamageOnSquish = true;
-			//let Following = true;
-			//let Stacionary = true;
-			//let Roaming = true; // TEMP
+			//let IsGravityAffected = true;
+			//let IsMelee = true;
+			let IsDamageOnSquish = true;
+			//let IsFollowing = true;
+			let IsStacionary = true;
+			//let IsRoaming = true; // TEMP
 		}
 		else { if (type = 2)
 		{
@@ -100,20 +105,23 @@ class Enemy
 			let height = 2;
 
 			let movementDelay = 2;
-			let GravityAffected = true;
-			let Melee = true;
+			let IsGravityAffected = true;
+			let IsMelee = true;
 		}
 		else { if (type = 3)
 		{
 			let width = 2;
 			let height = 1;
 
-			let Stacionary = true;
+			let IsStacionary = true;
 		}}}}
 
 		//let currFrame = 0;
 
 		//let animationTimer = animationDelay;
+
+		let HeightInPixels = height * 16;
+
 		let movementTimer = movementDelay;
 
 		let canMove = true;
@@ -121,6 +129,8 @@ class Enemy
 		let forceY = 0;
 		let gravity = 6; // 6
 		let jumpHeight = 30; // 30
+
+		let IsAlive = true;
 
 		let lastLocation = location;
 
@@ -130,7 +140,20 @@ class Enemy
 
 	method int get_x() { return x; }
 	method int get_y() { return y; }
+	method int getWidth() { return width; }
+	method int getHeight() { return HeightInPixels; }
 	method int get_type() { return type; }
+
+	method bool getIsRoaming() { return IsRoaming; }
+    method bool getIsFlying() { return IsFlying; }
+    method bool getIsGravityAffected() { return IsGravityAffected; }
+    method bool getIsMelee() { return IsMelee; }
+    method bool getIsShooting() { return IsShooting; }
+    method bool getIsDamageOnSquish() { return IsDamageOnSquish; }
+	method bool getIsFollowing() { return IsFollowing; }
+	method bool getIsStacionary() { return IsStacionary; }
+
+	method bool getIsAlive() { return IsAlive; }
 
 	method void set_x(int x2)
     {
@@ -203,23 +226,27 @@ class Enemy
 
 	method void DoActions(Array map, int mapWidth, int mapHeight, int worldOffset)
 	{
-		if (GravityAffected)
+		if (IsAlive)
 		{
-			do check_gravity2(map, mapWidth, mapHeight, worldOffset);
-			do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, height, worldOffset);
-		}
-		if (Roaming)
-		{
-			do Roam(map, mapWidth, mapHeight, worldOffset);
-		}
-		if (Melee)
-		{
-			do Jump();
-		}
-		if (Stacionary)
-		{
-			do Clear();
-			do Draw(memAddress, true, false);
+			if (IsGravityAffected)
+			{
+				do check_gravity2(map, mapWidth, mapHeight, worldOffset);
+				do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, height, worldOffset);
+			}
+			if (IsRoaming)
+			{
+				do Roam(map, mapWidth, mapHeight, worldOffset);
+			}
+			if (IsMelee)
+			{
+				do Jump();
+			}
+			if (IsStacionary)
+			{
+				//do Clear();
+				do Draw(memAddress, true, false);
+			}
+
 		}
 
 		return;
@@ -362,7 +389,9 @@ class Enemy
 			
 			do Clear();
 
-            let y = Collision.getPlatformY() - height;
+			
+
+            let y = Collision.getPlatformY() - 16; // blockHeight = 16
             let forceY = 0;
             let location = (y * 32) + x;
 			let memAddress = 16384 + location;
@@ -377,9 +406,7 @@ class Enemy
         {
             if (y > 219)
             {
-                //do Respawn();
-
-                // take damage
+                // do Die();
             }
 
             let forceY = forceY + gravity;            
@@ -486,6 +513,17 @@ class Enemy
         
         return;
     }
+
+	method void Die()
+	{
+		do Output.printString("dead");
+		do Output.println();
+
+		let IsAlive = false;
+		do Clear();
+
+		return;
+	}
 
 	method bool IsInScreen()
 	{

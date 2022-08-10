@@ -1,0 +1,99 @@
+class SimpleBullet
+{
+	static int Width;
+	static int Height;
+	static int AnimationFramesCount;
+	static int SpecialFramesCount;
+	static int TotalFramesCount;
+	static bool stopAnimation;
+	static int currFrame;
+	static int animationTimer;
+	static int animationDelay;
+	static int specialFrameTimer;
+	static Array Frames;
+	static Array FramesMirrored;
+	static Array Frame1;
+	static Array Frame1Mirrored;
+	static Array Frame1Row0;
+	static Array Frame1Row0Mirrored;
+	static Array Frame1Part00;
+	static Array Frame1Part00Mirrored;
+	function void init()
+	{
+///////////////// CONFIG /////////////////
+//////////////////////////////////////////
+		let Width = 1;
+		let Height = 1;
+		let AnimationFramesCount = 1;
+		let SpecialFramesCount = 0;
+		let TotalFramesCount = 1;
+		let Frames = Array.new(TotalFramesCount);
+		let FramesMirrored = Array.new(TotalFramesCount);
+		let Frame1 = Array.new(Height);
+		let Frame1Mirrored = Array.new(Height);
+		let Frame1Row0 = Array.new(Width);
+		let Frame1Row0Mirrored = Array.new(Width);
+		let Frame1Part00 = Array.new(16);
+		let Frame1Part00Mirrored = Array.new(16);
+		let Frame1Part00[3] = -8192;
+		let Frame1Part00[4] = -8192;
+		let Frame1Part00[5] = -8192;
+		let Frame1Part00Mirrored[3] = 7;
+		let Frame1Part00Mirrored[4] = 7;
+		let Frame1Part00Mirrored[5] = 7;
+		let Frame1Row0[0] = Frame1Part00;
+		let Frame1Row0Mirrored[0] = Frame1Part00Mirrored;
+		let Frame1[0] = Frame1Row0;
+		let Frame1Mirrored[0] = Frame1Row0Mirrored;
+		let Frames[0] = Frame1;
+		let FramesMirrored[0] = Frame1Mirrored;
+		return;
+	}
+	function void CheckTimers()
+	{
+		if (animationTimer < 1)
+		{
+			do SimpleBullet.ChangeFrame();
+			let animationTimer = animationDelay;
+		}
+		if (specialFrameTimer < 1)
+		{
+			let stopAnimation = false;
+			let specialFrameTimer = 0;
+		}
+		return;
+	}
+	function void DecrementTimers()
+	{
+		let animationTimer = animationTimer - 1;
+		let specialFrameTimer = specialFrameTimer - 1;
+		return;
+	}
+	function void ChangeFrame()
+	{
+		if (~(stopAnimation | (AnimationFramesCount = 0)))
+		{
+			if (currFrame < (AnimationFramesCount - 1))
+			{
+				let currFrame = currFrame + 1;
+			}
+			else
+			{
+				let currFrame = 0;
+			}
+		}
+		return;
+	}
+	function void DrawFrame(int memAddress, bool display, bool mirrored, int x, int y)
+	{
+		if (mirrored)
+		{
+			do Sprite.Draw(memAddress, FramesMirrored[currFrame], Width, Height, display, x, y);
+		}
+		else
+		{
+			do Sprite.Draw(memAddress, Frames[currFrame], Width, Height, display, x, y);
+		}
+		return;
+	}
+}

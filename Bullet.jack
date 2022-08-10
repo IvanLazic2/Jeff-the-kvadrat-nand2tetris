@@ -1,0 +1,156 @@
+class Bullet
+{
+    field int X;
+    field int Y;
+
+    field int location;
+    field int memAddress;
+
+    field int movementTimer;
+    field int movementDelay;
+    field bool canMove;
+
+    field bool drawLeft;
+
+
+    constructor Bullet new(int x, int y)
+    {
+        let X = x;
+        let Y = y;
+
+        let movementDelay = 10;
+        let movementTimer = movementDelay;
+
+        let canMove = true;
+
+        return this;
+    }
+
+    method void CheckTimers()
+	{
+		if (movementTimer < 1)
+		{
+			let canMove = true;
+			let movementTimer = movementDelay;
+		}
+
+		return;
+	}
+
+	method void DecrementTimers()
+	{
+		let movementTimer = movementTimer - 1;
+
+		return;
+	}
+
+    method bool IsAvailable()
+    {
+        return (X = -10) & (Y = -10);
+    }
+
+    method void Shoot(int x, int y, bool drawLeft2)
+    {
+        var int i;
+
+        do Output.printString("bang");
+        do Output.println();
+
+        let drawLeft = drawLeft2;
+
+        let X = x;
+        let Y = y;
+
+        let location = (y * 32) + x;
+        let memAddress = 16384 + location;
+
+        
+
+        return;
+    }
+
+    method void CheckBullet() // TREBAM CHECKIRAT SVAKI ISPALJENI METAK
+    {
+        if (drawLeft)
+        {
+            if (X < 32)
+            {
+                do MoveRight();
+            }
+            else
+            {
+                do Reset();
+            }
+        }
+        else
+        {
+            if (X > -1)
+            {
+                do MoveRight();
+            }
+            else
+            {
+                do Reset();
+            }
+        }
+        
+
+        return;
+    }
+
+    method void Reset()
+    {
+        let X = -10;
+        let Y = -10;
+        return;
+    }
+
+    //// MOVEMENT
+    method void MoveLeft()
+    {
+		if (canMove)
+		{
+			//let lastLocation = location;
+
+			//do Clear();
+            do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+			
+			let location = location - 1;
+			let memAddress = 16384 + location;
+        	let X = X - 1;
+			
+			//do Draw(memAddress, true, true);
+            do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+
+			let canMove = false;
+		}
+
+        return;
+    }
+
+    method void MoveRight()
+    {
+
+		if (canMove)
+		{
+        	//let lastLocation = location;
+
+			//do Clear();
+            do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+
+			let location = location + 1;
+			let memAddress = 16384 + location;
+        	let X = X + 1;
+
+			//do Draw(memAddress, true, false);
+            do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+
+			let canMove = false;
+		}
+
+
+        return;
+
+    }
+
+}

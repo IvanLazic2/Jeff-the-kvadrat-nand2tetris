@@ -65,6 +65,8 @@ class Collision
             let i = i + 1;
         }
 
+        
+
         let platformY = minNearestPlatformY;
         let h = minNearestPlatformY - y - blockHeight; // blockHeight;
         let is_stable_y = (-1 < h) & (h < (forceY + 1));
@@ -340,5 +342,33 @@ class Collision
     function bool IsInScreen(int x)
     {
         return (-1 < x) & (x < 32);
+    }
+
+    function bool IsCharacterCollidedWithEnemySides(int cx, int cy, int cw, int ch, int ex, int ey, int ew, int eh)
+    {
+        var bool is_collided_left;
+        var bool is_collided_right;
+
+        let is_collided_left = (ex < (cx + cw)) & ((cx + cw) < (ex + ew)) & ((ey - 16) < cy) & (cy < (ey + eh));
+        let is_collided_right = ((ex - 1) < cx) & (cx < (ex + ew)) & ((ey - 16) < cy) & (cy < (ey + eh));
+
+        //do Output.printInt(is_collided_left | is_collided_right);
+
+        return is_collided_left | is_collided_right;
+    }
+
+    function bool IsCharacterCollidedWithEnemyTop(int cx, int cy, int cw, int ch, int ex, int ey, int ew, int eh)
+    {
+        var bool is_collided_left;
+        var bool is_collided_right;
+
+        let is_collided_left = (ex < (cx + cw)) & ((cx + cw) < (ex + ew)) & ((ey - eh) < (cy + 16)) & ((cy + 16) < (ey - eh + 8));
+        let is_collided_right = ((ex - 1) < cx) & (cx < (ex + ew)) & ((ey - eh) < (cy + 16)) & ((cy + 16) < (ey - eh + 8));
+
+        //do Output.printInt(is_collided_left | is_collided_right);
+
+
+
+        return is_collided_left | is_collided_right;
     }
 }
