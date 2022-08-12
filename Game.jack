@@ -31,6 +31,7 @@ class Game
     field int ObstaclesCount;
     field int EnemiesCount;
     field int CollectablesCount;
+    field int BulletsCount;
     //field int sections_num;
     //field int section_width;
 
@@ -38,6 +39,7 @@ class Game
     field Array Obstacles;
     field Array Enemies;
     field Array Collectables;
+    field Array Bullets;
     //field Array sections;
 
     //field Section curr_section;
@@ -71,6 +73,7 @@ class Game
     field int WorldOffset;
 
 
+    
 
 
     
@@ -126,8 +129,15 @@ class Game
 
         let WorldOffset = 0;
 
+        do GetBulletsCount();
+        let Bullets = Array.new(BulletsCount);
+        do GetBullets();
+
 
         do DrawAllPlatforms();
+        do DrawAllCollectables();
+
+        
 
 
         //let enemy = Enemy.new(10, 224, 1);
@@ -202,6 +212,10 @@ class Game
             do DoAllEnemyActions();
 
             do CheckEnemyAndCharacterCollision();
+
+            do CheckAllBullets();
+
+            do CheckAllBulletCollisions();
 
             //do Output.printInt(Character.get_y());
             //do Output.printString(", ");
@@ -313,7 +327,20 @@ class Game
         return;
     }
 
+    method void DrawAllCollectables()
+    {
+        var int i;
+        var Collectable collectable;
 
+        while (i < CollectablesCount)
+        {
+            let collectable = Collectables[i];
+            do collectable.Draw(true);
+            let i = i + 1;
+        }
+
+        return;
+    }
 
     method void RedrawAllObstacles()
     {
@@ -390,16 +417,148 @@ class Game
             }
 
             
-            
-            
-            
-            
+        
 
             let i = i + 1;
         }
 
         return;
     }
+
+
+    method void CheckAllBullets()
+    {
+        var int i;
+        var Enemy enemy;
+
+        do Character.CheckBullets(Map, MapWidth, MapHeight);
+
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.CheckBullets(Map, MapWidth, MapHeight);
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void GetBulletsCount()
+    {
+        var int i;
+        var int count;
+        var Enemy enemy;
+
+        let count = Character.getBulletsCount();
+
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            let count = count + enemy.getBulletsCount();
+            let i = i + 1;
+        }
+
+        let BulletsCount = count;
+
+        return;
+    }
+
+    method void GetBullets()
+    {
+        var int i;
+        var int j;
+        var Array bullets;
+        var Enemy enemy;
+        var int arrSize;
+
+        let bullets = Character.getBullets();
+
+        while (i < Character.getBulletsCount())
+        {
+            let Bullets[i] = bullets[i];
+            let i = i + 1;
+        }
+
+        let arrSize = Character.getBulletsCount();
+
+        let i = 0;
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            let bullets = enemy.getBullets();
+
+            while (j < enemy.getBulletsCount())
+            {
+                let Bullets[arrSize + j] = bullets[j];
+
+                let j = j + 1;
+            }
+
+            let arrSize = arrSize + enemy.getBulletsCount();
+
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void CheckAllBulletCollisions()
+    {
+        var int i;
+        var int j;
+        var Enemy enemy;
+        var Bullet bullet;
+
+        while (i < BulletsCount)
+        {
+            let bullet = Bullets[i];
+
+            if (Collision.IsBulletCollidedWithEntity(Character.get_x(), Character.get_y(), Character.getWidth(), Character.getHeight(), bullet.getX(), bullet.getY()))
+            {
+                do bullet.setCollided(true);
+                do Character.Respawn();
+                do Character.TakeDamage();
+            }
+
+            while (j < EnemiesCount)
+            {
+                let enemy = Enemies[j];
+
+                if (enemy.getIsAlive())
+                {
+                    if (Collision.IsBulletCollidedWithEntity(enemy.get_x(), enemy.get_y(), enemy.getWidth(), enemy.getHeight(), bullet.getX(), bullet.getY()))
+                    {
+                        do bullet.setCollided(true);
+                        do enemy.Die();
+                    }
+                }
+
+                let j = j + 1;
+            }
+
+            let i = i + 1;
+        }       
+
+        return;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -410,6 +569,7 @@ class Game
         var Platform platform;
         var Obstacle obstacle;
         var Enemy enemy;
+        var Collectable collectable;
 
         let WorldOffset = WorldOffset + 1;
         do Character.increment_absolute_x(1);
@@ -458,6 +618,16 @@ class Game
             let i = i + 1;
         }
 
+        let i = 0;
+        while (i < CollectablesCount)
+        {
+            let collectable = Collectables[i];
+            do collectable.ScrollLeft();
+
+            let i = i + 1;
+        }
+
+
         return;
     }
 
@@ -467,6 +637,7 @@ class Game
         var Platform platform;
         var Obstacle obstacle;
         var Enemy enemy;
+        var Collectable collectable;
 
         let WorldOffset = WorldOffset - 1;
         do Character.increment_absolute_x(-1);
@@ -511,6 +682,15 @@ class Game
         {
             let enemy = Enemies[i];
             do enemy.ScrollRight();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < CollectablesCount)
+        {
+            let collectable = Collectables[i];
+            do collectable.ScrollRight();
 
             let i = i + 1;
         }

@@ -3,8 +3,8 @@ class Bullet
     field int X;
     field int Y;
 
-    field int location;
     field int memAddress;
+    field int resetMemAddress;
 
     field int movementTimer;
     field int movementDelay;
@@ -12,19 +12,28 @@ class Bullet
 
     field bool drawLeft;
 
+    field bool isCollided;
 
-    constructor Bullet new(int x, int y)
+
+    constructor Bullet new()
     {
-        let X = x;
-        let Y = y;
+        let resetMemAddress = Constants.getMemAddress(X, Y);
+        let X = -10;
+        let Y = -10;
+        let memAddress = resetMemAddress;
 
-        let movementDelay = 10;
+        let movementDelay = 1;
         let movementTimer = movementDelay;
 
         let canMove = true;
 
         return this;
     }
+
+    method int getX() { return X; }
+    method int getY() { return Y; }
+
+    method void setCollided(bool c) { let isCollided = c; return; }
 
     method void CheckTimers()
 	{
@@ -46,62 +55,61 @@ class Bullet
 
     method bool IsAvailable()
     {
-        return (X = -10) & (Y = -10);
+        return memAddress = resetMemAddress;
     }
 
     method void Shoot(int x, int y, bool drawLeft2)
     {
         var int i;
 
-        do Output.printString("bang");
-        do Output.println();
+        let isCollided = false;
 
         let drawLeft = drawLeft2;
 
         let X = x;
         let Y = y;
 
-        let location = (y * 32) + x;
-        let memAddress = 16384 + location;
-
-        
+        let memAddress = Constants.getMemAddress(x, y);
 
         return;
     }
 
-    method void CheckBullet() // TREBAM CHECKIRAT SVAKI ISPALJENI METAK
+    method void CheckBullet(Array map, int mapWidth, int mapHeight)
     {
-        if (drawLeft)
-        {
-            if (X < 32)
-            {
-                do MoveRight();
-            }
-            else
-            {
-                do Reset();
-            }
-        }
-        else
-        {
-            if (X > -1)
-            {
-                do MoveRight();
-            }
-            else
-            {
-                do Reset();
-            }
-        }
-        
+        do CheckTimers();
 
+        if (~(memAddress = resetMemAddress)) // podsjetnik svaki enemy dobije jedan bullet i svaki bullet daje damage svakome
+        {
+            if (isCollided)
+            {
+                do Reset();
+            }
+            else
+            {
+                let isCollided = Collision.IsBulletCollidedWithMap(map, mapWidth, mapHeight, X, Y, drawLeft);
+
+                if (drawLeft)
+                {
+                    do MoveLeft();
+                }
+                else
+                {
+                    do MoveRight();
+                }
+            }
+        }
+
+        do DecrementTimers();
+        
         return;
     }
 
     method void Reset()
     {
+        do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
         let X = -10;
         let Y = -10;
+        let memAddress = resetMemAddress;
         return;
     }
 
@@ -110,16 +118,11 @@ class Bullet
     {
 		if (canMove)
 		{
-			//let lastLocation = location;
-
-			//do Clear();
             do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
 			
-			let location = location - 1;
-			let memAddress = 16384 + location;
+            let memAddress = memAddress - 1;
         	let X = X - 1;
 			
-			//do Draw(memAddress, true, true);
             do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
 
 			let canMove = false;
@@ -133,16 +136,11 @@ class Bullet
 
 		if (canMove)
 		{
-        	//let lastLocation = location;
-
-			//do Clear();
             do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
 
-			let location = location + 1;
-			let memAddress = 16384 + location;
+            let memAddress = memAddress + 1;
         	let X = X + 1;
 
-			//do Draw(memAddress, true, false);
             do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
 
 			let canMove = false;
@@ -151,6 +149,12 @@ class Bullet
 
         return;
 
+    }
+
+    method void Clear()
+    {
+        do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+        return;
     }
 
 }

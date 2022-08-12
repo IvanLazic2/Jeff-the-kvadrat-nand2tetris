@@ -1,0 +1,176 @@
+class Coin
+{
+	static int Width;
+	static int Height;
+	static int AnimationFramesCount;
+	static int SpecialFramesCount;
+	static int TotalFramesCount;
+	static bool stopAnimation;
+	static int currFrame;
+	static int animationTimer;
+	static int animationDelay;
+	static int specialFrameTimer;
+	static Array Frames;
+	static Array FramesMirrored;
+	static Array Frame1;
+	static Array Frame1Mirrored;
+	static Array Frame2;
+	static Array Frame2Mirrored;
+	static Array Frame1Row0;
+	static Array Frame1Row0Mirrored;
+	static Array Frame1Part00;
+	static Array Frame1Part00Mirrored;
+	static Array Frame2Row0;
+	static Array Frame2Row0Mirrored;
+	static Array Frame2Part00;
+	static Array Frame2Part00Mirrored;
+	function void init()
+	{
+///////////////// CONFIG /////////////////
+		let animationDelay = 3;
+//////////////////////////////////////////
+		let Width = 1;
+		let Height = 1;
+		let AnimationFramesCount = 2;
+		let SpecialFramesCount = 0;
+		let TotalFramesCount = 2;
+		let Frames = Array.new(TotalFramesCount);
+		let FramesMirrored = Array.new(TotalFramesCount);
+		let Frame1 = Array.new(Height);
+		let Frame1Mirrored = Array.new(Height);
+		let Frame1Row0 = Array.new(Width);
+		let Frame1Row0Mirrored = Array.new(Width);
+		let Frame1Part00 = Array.new(16);
+		let Frame1Part00Mirrored = Array.new(16);
+		let Frame1Part00[0] = 2016;
+		let Frame1Part00[1] = 6168;
+		let Frame1Part00[2] = 10212;
+		let Frame1Part00[3] = 22554;
+		let Frame1Part00[4] = 20490;
+		let Frame1Part00[5] = -24059;
+		let Frame1Part00[6] = -24059;
+		let Frame1Part00[7] = -24059;
+		let Frame1Part00[8] = -24059;
+		let Frame1Part00[9] = -23995;
+		let Frame1Part00[10] = -24187;
+		let Frame1Part00[11] = 20490;
+		let Frame1Part00[12] = 22554;
+		let Frame1Part00[13] = 10212;
+		let Frame1Part00[14] = 6168;
+		let Frame1Part00[15] = 2016;
+		let Frame1Part00Mirrored[0] = 2016;
+		let Frame1Part00Mirrored[1] = 6168;
+		let Frame1Part00Mirrored[2] = 10212;
+		let Frame1Part00Mirrored[3] = 22554;
+		let Frame1Part00Mirrored[4] = 20490;
+		let Frame1Part00Mirrored[5] = -24507;
+		let Frame1Part00Mirrored[6] = -24507;
+		let Frame1Part00Mirrored[7] = -24507;
+		let Frame1Part00Mirrored[8] = -24507;
+		let Frame1Part00Mirrored[9] = -23995;
+		let Frame1Part00Mirrored[10] = -24187;
+		let Frame1Part00Mirrored[11] = 20490;
+		let Frame1Part00Mirrored[12] = 22554;
+		let Frame1Part00Mirrored[13] = 10212;
+		let Frame1Part00Mirrored[14] = 6168;
+		let Frame1Part00Mirrored[15] = 2016;
+		let Frame1Row0[0] = Frame1Part00;
+		let Frame1Row0Mirrored[0] = Frame1Part00Mirrored;
+		let Frame1[0] = Frame1Row0;
+		let Frame1Mirrored[0] = Frame1Row0Mirrored;
+		let Frames[0] = Frame1;
+		let FramesMirrored[0] = Frame1Mirrored;
+		let Frame2 = Array.new(Height);
+		let Frame2Mirrored = Array.new(Height);
+		let Frame2Row0 = Array.new(Width);
+		let Frame2Row0Mirrored = Array.new(Width);
+		let Frame2Part00 = Array.new(16);
+		let Frame2Part00Mirrored = Array.new(16);
+		let Frame2Part00[0] = 384;
+		let Frame2Part00[1] = 576;
+		let Frame2Part00[2] = 576;
+		let Frame2Part00[3] = 576;
+		let Frame2Part00[4] = 576;
+		let Frame2Part00[5] = 576;
+		let Frame2Part00[6] = 576;
+		let Frame2Part00[7] = 576;
+		let Frame2Part00[8] = 576;
+		let Frame2Part00[9] = 576;
+		let Frame2Part00[10] = 576;
+		let Frame2Part00[11] = 576;
+		let Frame2Part00[12] = 576;
+		let Frame2Part00[13] = 576;
+		let Frame2Part00[14] = 576;
+		let Frame2Part00[15] = 384;
+		let Frame2Part00Mirrored[0] = 384;
+		let Frame2Part00Mirrored[1] = 576;
+		let Frame2Part00Mirrored[2] = 576;
+		let Frame2Part00Mirrored[3] = 576;
+		let Frame2Part00Mirrored[4] = 576;
+		let Frame2Part00Mirrored[5] = 576;
+		let Frame2Part00Mirrored[6] = 576;
+		let Frame2Part00Mirrored[7] = 576;
+		let Frame2Part00Mirrored[8] = 576;
+		let Frame2Part00Mirrored[9] = 576;
+		let Frame2Part00Mirrored[10] = 576;
+		let Frame2Part00Mirrored[11] = 576;
+		let Frame2Part00Mirrored[12] = 576;
+		let Frame2Part00Mirrored[13] = 576;
+		let Frame2Part00Mirrored[14] = 576;
+		let Frame2Part00Mirrored[15] = 384;
+		let Frame2Row0[0] = Frame2Part00;
+		let Frame2Row0Mirrored[0] = Frame2Part00Mirrored;
+		let Frame2[0] = Frame2Row0;
+		let Frame2Mirrored[0] = Frame2Row0Mirrored;
+		let Frames[1] = Frame2;
+		let FramesMirrored[1] = Frame2Mirrored;
+		return;
+	}
+	function void CheckTimers()
+	{
+		if (animationTimer < 1)
+		{
+			do Coin.ChangeFrame();
+			let animationTimer = animationDelay;
+		}
+		if (specialFrameTimer < 1)
+		{
+			let stopAnimation = false;
+			let specialFrameTimer = 0;
+		}
+		return;
+	}
+	function void DecrementTimers()
+	{
+		let animationTimer = animationTimer - 1;
+		let specialFrameTimer = specialFrameTimer - 1;
+		return;
+	}
+	function void ChangeFrame()
+	{
+		if (~(stopAnimation | (AnimationFramesCount = 0)))
+		{
+			if (currFrame < (AnimationFramesCount - 1))
+			{
+				let currFrame = currFrame + 1;
+			}
+			else
+			{
+				let currFrame = 0;
+			}
+		}
+		return;
+	}
+	function void DrawFrame(int memAddress, bool display, bool mirrored, int x, int y)
+	{
+		if (mirrored)
+		{
+			do Sprite.Draw(memAddress, FramesMirrored[currFrame], Width, Height, display, x, y);
+		}
+		else
+		{
+			do Sprite.Draw(memAddress, Frames[currFrame], Width, Height, display, x, y);
+		}
+		return;
+	}
+}

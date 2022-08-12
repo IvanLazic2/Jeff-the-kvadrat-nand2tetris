@@ -4,6 +4,7 @@ class Main
     {
         var Game game;
 
+        do Constants.init();
         do Collision.init();
         do Sprite.init();
 
@@ -16,6 +17,9 @@ class Main
         do Shooter.init();
 
         do SimpleBullet.init();
+
+        do Heart.init();
+        do Coin.init();
 
         let game = Game.new();
 

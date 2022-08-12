@@ -371,4 +371,32 @@ class Collision
 
         return is_collided_left | is_collided_right;
     }
+
+    function bool IsBulletCollidedWithMap(Array map, int mapWidth, int mapHeight, int x, int y, bool drawLeft)
+    {
+        var bool result;
+        var Array x_map;
+
+        if (Constants.IsInScreen(x, y))
+        {
+            if (drawLeft)
+            {
+                let x_map = map[x - 1];
+            }
+            else 
+            {
+                let x_map = map[x + 1];
+            }
+
+            let result = x_map[(y + 8)/16] = 0;
+        }
+
+        return ~result;
+    }
+
+    function bool IsBulletCollidedWithEntity(int ex, int ey, int ewidth, int eheight, int bx, int by)
+    {
+        //return Collision.IsCharacterCollidedWithEnemySides(ex, ey, ewidth, eheight, bx, by + 8, 1, 16);
+        return Collision.IsCharacterCollidedWithEnemySides(bx, by + 8, 1, 16, ex, ey, ewidth, eheight);
+    }
 }

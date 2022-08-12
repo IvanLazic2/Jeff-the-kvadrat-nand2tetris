@@ -15,7 +15,9 @@ class Sprite
 		var int tempMemAddress;
 
 		let tempMemAddress = memAddress;
-		
+
+		//do Output.printInt(height);
+
 		while (j < height)
 		{
 			let frameRow = frame[j];
@@ -26,6 +28,7 @@ class Sprite
 			let i = 0;
 			while (i < width)
 			{
+				
 				
 				if (Sprite.IsInScreen(x + i))
 				{
@@ -54,6 +57,8 @@ class Sprite
 	{
 		var int i;
 		var int j;
+
+		
 
 		if (~(spritePart = Empty))
 		{

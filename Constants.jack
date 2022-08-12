@@ -1,0 +1,29 @@
+class Constants
+{
+    static int screenStart;
+    static int blockHeight;
+
+    function void init()
+    {
+        let screenStart = 16384;
+        let blockHeight = 16;
+
+        return;
+    }
+
+    function int getScreenStart() { return screenStart; }
+    function int getBlockHeight() { return blockHeight; }
+
+    function int getLeftBlock(int memAddress) { return memAddress - 1; }
+    function int getRightBlock(int memAddress) { return memAddress + 1; }
+    function int getUpBlock(int memAddress) { return memAddress - 512; }
+    function itn getDownBlock(int memAddress) { return memAddress + 512; }
+
+    function int getLocation(int x, int y) { return (y * 32) + x; }
+    function int getLocationMemAddress(int location) { return screenStart + location; }
+    function int getMemAddress(int x, int y) { return screenStart + Constants.getLocation(x, y); }
+
+    function int IsInScreenX(int x) { return (-1 < x) & (x < 32); }
+    function int IsInScreenY(int y) { return (-16 < y) & (y < 256); }
+    function int IsInScreen(int x, int y) { return Constants.IsInScreenX(x) & Constants.IsInScreenY(y); }
+}

@@ -3,16 +3,69 @@
 
 class Collectable
 {
-    field int x;
-    field int y;
-    field int type;
+    field int X;
+    field int Y;
+    field int Type;
+    field int memAddress;
 
-    constructor Collectable new(int x2, int y2, int type2)
+    field bool IsAvailable;
+
+    constructor Collectable new(int x, int y, int type)
     {
-        let x = x2;
-        let y = y2;
-        let type = type2;
+        let X = x;
+        let Y = y;
+        let memAddress = Constants.getMemAddress(x, y);
+        let Type = type;
+
+        let IsAvailable = true;
 
         return this;
+    }
+
+    method void ScrollRight()
+	{
+        if (IsAvailable)
+        {
+            do Clear();
+            let memAddress = memAddress + 1;
+            do Draw(true);
+        }
+
+        return;
+	}
+
+	method void ScrollLeft()
+    {
+        if (IsAvailable)
+        {
+            do Clear();
+            let memAddress = memAddress - 1;
+            do Draw(true);
+        }
+
+		return;
+    }
+
+    method void Clear()
+	{
+		do Draw(false);
+		return;
+	}
+
+    method void Draw(bool display)
+    {
+        // COIN
+		if (Type = 0)
+		{
+			do Coin.DrawFrame(memAddress, display, false, X, Y);
+		}
+        // LIFE
+		else { if (Type = 1)
+		{
+			do Heart.DrawFrame(memAddress, display, false, X, Y);
+		}}
+		
+
+		return;
     }
 }

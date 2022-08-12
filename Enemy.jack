@@ -60,10 +60,23 @@ class Enemy
 	field int HeightInPixels;
 
 
+	field Array Bullets;
+    field int BulletsCount;
+    field int currBulletIndex;
+    field Bullet currBullet;
+
+    field int bulletTimer;
+    field int bulletDelay;
+
+    field bool canShoot;
+
+
 
 
     constructor Enemy new(int x2, int y2, int type2)
     {	
+		var int i;
+
 		let x = x2;
 		let y = y2;
 		let type = type2;
@@ -92,11 +105,14 @@ class Enemy
 			//let animationDelay = 3;
 			let movementDelay = 2;
 
+
+
 			//let IsGravityAffected = true;
 			//let IsMelee = true;
-			let IsDamageOnSquish = true;
+			//let IsDamageOnSquish = true;
 			//let IsFollowing = true;
 			let IsStacionary = true;
+			//let IsShooting = true;
 			//let IsRoaming = true; // TEMP
 		}
 		else { if (type = 2)
@@ -105,6 +121,9 @@ class Enemy
 			let height = 2;
 
 			let movementDelay = 2;
+
+
+
 			let IsGravityAffected = true;
 			let IsMelee = true;
 		}
@@ -115,6 +134,18 @@ class Enemy
 
 			let IsStacionary = true;
 		}}}}
+
+		if (IsShooting)
+		{
+			let BulletsCount = 1;
+        	let Bullets = Array.new(BulletsCount);
+        	while (i < BulletsCount)
+        	{
+        	    let Bullets[i] = Bullet.new();
+        	    let i = i + 1;
+        	}
+        	let currBullet = Bullets[currBulletIndex];
+		}
 
 		//let currFrame = 0;
 
@@ -131,6 +162,9 @@ class Enemy
 		let jumpHeight = 30; // 30
 
 		let IsAlive = true;
+
+		let bulletDelay = 10;
+        let bulletTimer = bulletDelay;
 
 		let lastLocation = location;
 
@@ -154,6 +188,8 @@ class Enemy
 	method bool getIsStacionary() { return IsStacionary; }
 
 	method bool getIsAlive() { return IsAlive; }
+	method Array getBullets() { return Bullets; }
+	method int getBulletsCount() { return BulletsCount; }
 
 	method void set_x(int x2)
     {
@@ -169,56 +205,33 @@ class Enemy
 
 	method void CheckTimers()
 	{
-		//if (animationTimer < 1)
-		//{
-		//	do ChangeFrame();
-		//	let animationTimer = animationDelay;
-		//}
-
 		if (movementTimer < 1)
 		{
 			let canMove = true;
 			let movementTimer = movementDelay;
 		}
 
-		// CHECK TIMERS ZA SVE ENEMYJE - ZASAD NE
+		if (bulletTimer < 1)
+        {
+            let canShoot = true;
+            let bulletTimer = bulletDelay;
+        }
+		
+
+		// CHECK TIMERS ZA SVE VRSTRE ENEMYJA - ZASAD NE
+
 
 		return;
 	}
 
 	method void DecrementTimers()
 	{
-		//let animationTimer = animationTimer - 1;
 		let movementTimer = movementTimer - 1;
+		let bulletTimer = bulletTimer - 1;
 
-		//if (type = 0)
-		//{
-		//}
-		//else { if (type = 1)
-		//{
-		//	do Jeff.DecrementTimers();
-		//}
-		//else { if (type = 2)
-		//{
-		//}}}
 
 		return;
 	}
-
-
-	//method void ChangeFrame()
-	//{
-	//	if (currFrame < (animationFrameCount - 1))
-	//	{
-	//		let currFrame = currFrame + 1;
-	//	}
-	//	else
-	//	{
-	//		let currFrame = 0;
-	//	}
-//
-	//	return;
-	//}
 
 
 
@@ -232,6 +245,8 @@ class Enemy
 			{
 				do check_gravity2(map, mapWidth, mapHeight, worldOffset);
 				do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, height, worldOffset);
+
+				
 			}
 			if (IsRoaming)
 			{
@@ -240,6 +255,10 @@ class Enemy
 			if (IsMelee)
 			{
 				do Jump();
+			}
+			if (IsShooting)
+			{
+				do Shoot();
 			}
 			if (IsStacionary)
 			{
@@ -251,6 +270,78 @@ class Enemy
 
 		return;
 	}
+
+
+
+
+
+
+
+
+	method void Shoot()
+    {
+        var int bulletX;
+        var int bulletY;
+
+        if (movingLeft)
+        {
+            let bulletX = x - 1;
+        }
+        else
+        {
+            let bulletX = x + width;
+        }
+        let bulletY = y - Constants.getBlockHeight();
+
+        if (canShoot)
+        {
+            if (currBullet.IsAvailable())
+            {
+                do currBullet.Shoot(bulletX, bulletY, movingLeft);
+
+                let currBulletIndex = currBulletIndex + 1;
+
+                if (currBulletIndex > (BulletsCount - 1))
+                {
+                    let currBulletIndex = 0;
+                }
+                
+                let currBullet = Bullets[currBulletIndex];
+            }
+
+            let canShoot = false;
+        }
+
+        return;
+    }
+
+    method void CheckBullets(Array map, int mapWidth, int mapHeight)
+    {
+        var int i;
+        var Bullet bullet;
+
+		if (IsShooting)
+		{
+			while (i < BulletsCount)
+        	{
+        	    let bullet = Bullets[i];
+        	    do bullet.CheckBullet(map, mapWidth, mapHeight);
+        	    let i = i + 1;
+        	}
+		}
+
+        return;
+    }
+
+
+
+
+
+
+
+
+
+
 
 	//// MOVEMENT
 	method void Roam(Array map, int mapWidth, int mapHeight, int worldOffset)
@@ -284,54 +375,63 @@ class Enemy
 
 	method void ScrollRight()
 	{
-        let lastLocation = location;
+		if (IsAlive)
+		{
+			let lastLocation = location;
 
-		do Clear();
+			do Clear();
 
-		let location = location + 1;
-		let memAddress = 16384 + location;
-        let x = x + 1;
+			let location = location + 1;
+			let memAddress = 16384 + location;
+        	let x = x + 1;
 
-		do Draw(memAddress, true, movingLeft);
+			do Draw(memAddress, true, movingLeft);
 
-		return;
+			
+		}
+
+        return;
 	}
 
 	method void ScrollLeft()
     {
-		let lastLocation = location;
+		if (IsAlive)
+		{
+			let lastLocation = location;
 
-		do Clear();
+			do Clear();
 
-		let location = location - 1;
-		let memAddress = 16384 + location;
-        let x = x - 1;
-		
-		do Draw(memAddress, true, movingLeft);
+			let location = location - 1;
+			let memAddress = 16384 + location;
+			let x = x - 1;
 
-        return;
+			do Draw(memAddress, true, movingLeft);
+
+			
+		}	
+
+		return;
     }
 
     method void MoveLeft()
     {
 		let movingLeft = true;
-
 		if (canMove)
 		{
 			let lastLocation = location;
 
 			do Clear();
-			
+
 			let location = location - 1;
 			let memAddress = 16384 + location;
-        	let x = x - 1;
-			
+       		let x = x - 1;
+
 			do Draw(memAddress, true, true);
 
 			let canMove = false;
 		}
-
-        return;
+       	return;
+		
     }
 
     method void MoveRight()
@@ -340,22 +440,20 @@ class Enemy
 
 		if (canMove)
 		{
-        	let lastLocation = location;
+			let lastLocation = location;
 
 			do Clear();
 
 			let location = location + 1;
 			let memAddress = 16384 + location;
-        	let x = x + 1;
+			let x = x + 1;
 
 			do Draw(memAddress, true, false);
 
 			let canMove = false;
+
 		}
-
-
-        return;
-
+        	return;
     }
 
     method void Jump()
@@ -493,42 +591,31 @@ class Enemy
     }
 
 
-    method void Respawn()
-    {
-        let y = 100;
-
-        if (x - 10 < 1)
-        {
-            //let x = 2;
-            //let absolute_x = 2;
-            //temp
-            let x = x + 5;
-            //let absolute_x = absolute_x + 5;
-        }
-        else
-        {
-            let x = x - 10;
-            //let absolute_x = absolute_x - 10;
-        }
-        
-        return;
-    }
-
 	method void Die()
 	{
+		var int i;
+		var Bullet bullet;
+
 		do Output.printString("dead");
 		do Output.println();
 
-		let IsAlive = false;
 		do Clear();
+		let IsAlive = false;
+
+		let x = -10;
+		let y = -10;
+
+		let location = (32 * y) + x;
+		let memAddress = 16384 + location;
+		
 
 		return;
 	}
 
-	method bool IsInScreen()
-	{
-		return ((-1 < x) & ((x + width) < 32));
-	}
+	//method bool IsInScreen()
+	//{
+	//	return ((-1 < x) & ((x + width) < 32));
+	//}
 
 	method void Clear()
 	{
@@ -564,23 +651,27 @@ class Enemy
 
     method void Draw(int memAddress, bool display, bool mirrored)
     {
-		if (type = 0)
+		if (IsAlive)
 		{
-			do Spider.DrawFrame(memAddress, display, mirrored, x, y);
+			if (type = 0)
+			{
+				do Spider.DrawFrame(memAddress, display, mirrored, x, y);
+			}
+			// EVIL JEFF MELEE
+			else { if (type = 1)
+			{
+				do EvilJeffMelee.DrawFrame(memAddress, display, mirrored, x, y);
+			}
+			else { if (type = 2)
+			{
+				do EvilJeffRanged.DrawFrame(memAddress, display, mirrored, x, y);
+			}
+			else { if (type = 3)
+			{
+				do Bat.DrawFrame(memAddress, display, mirrored, x, y);
+			}}}}
 		}
-		// EVIL JEFF MELEE
-		else { if (type = 1)
-		{
-			do EvilJeffMelee.DrawFrame(memAddress, display, mirrored, x, y);
-		}
-		else { if (type = 2)
-		{
-			do EvilJeffRanged.DrawFrame(memAddress, display, mirrored, x, y);
-		}
-		else { if (type = 3)
-		{
-			do Bat.DrawFrame(memAddress, display, mirrored, x, y);
-		}}}}
+		
 
 		return;
     }
