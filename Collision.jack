@@ -1,32 +1,30 @@
 class Collision
 {
-    static int blockHeight;
 
     //// PLATFORMS
-
     static int lastY;
     static int platformY;
 
     
     function void init()
     {
-        let blockHeight = 16;
         return;
     }
 
     function int getLastY() { return lastY; }
     function int getPlatformY() { return platformY; }
 
-    function int getNearestPlatformY(Array x_map, int y, int height, int mapHeight)
+    function int getNearestPlatformY(int col, int y, int height, int mapHeight)
     {
         var int currIndex;
         var int nearestPlatformY;
 
-        let currIndex = y/16;
+        let currIndex = (y/16) + 1;
+
 
         while (currIndex < mapHeight)
         {
-            if (Collision.IsPlatform(x_map[currIndex]))
+            if (Collision.IsPlatform(Map.getValue(col, currIndex)))
             {   
                 let nearestPlatformY = currIndex * 16;
                 let currIndex = mapHeight;
@@ -45,7 +43,7 @@ class Collision
         var int platform_x;
         var int h;
         var int w;
-        var Array x_map;
+        //var Array x_map;
         var int nearestPlatformY;
         var int i;
         var int minNearestPlatformY;
@@ -55,8 +53,8 @@ class Collision
         let minNearestPlatformY = (mapHeight - 1) * 16;
         while (i < width)
         {
-            let x_map = map[x + i + worldOffset];
-            let py = Collision.getNearestPlatformY(x_map, y, height, mapHeight);
+            //let x_map = map[x + i + worldOffset];
+            let py = Collision.getNearestPlatformY(x + i + worldOffset, y, height, mapHeight);
             if (~(py = 0) & (py < minNearestPlatformY))
             {
                 let minNearestPlatformY = py;
@@ -65,21 +63,12 @@ class Collision
             let i = i + 1;
         }
 
-        
 
         let platformY = minNearestPlatformY;
-        let h = minNearestPlatformY - y - blockHeight; // blockHeight;
+        let h = minNearestPlatformY - y - Constants.getBlockHeight(); // blockHeight;
         let is_stable_y = (-1 < h) & (h < (forceY + 1));
 
-
-        //do Output.printInt(y);
-        //do Output.println();
-        //do Output.printInt(is_stable_y);
-        //do Output.println();
-
-
-        // + 16 -> blockHeight
-        if (Math.abs(y + blockHeight + forceY - minNearestPlatformY) < 7) // < 15
+        if (Math.abs(y + Constants.getBlockHeight() + forceY - minNearestPlatformY) < 7) // < 15
         {
             let is_stable_y = true;
         }
@@ -98,42 +87,39 @@ class Collision
 
 
 
-    function bool IsOnPlatform(Platform platform, int x, int y, int width, int height, int forceY)
-    {
-        var bool is_stable_x;
-        var bool is_stable_y;
-        var int platform_x;
-        var int h;
-        var int w;
-
-        let h = platform.get_y() - y - height;
-        let w = x + width;
-
-        let is_stable_y = (-1 < h) & (h < (forceY + 1));
-
-        //if (Math.abs(y + height + forceY + 1 - platform.get_y()) < 8) // < 16
-        if (Math.abs(y + height + forceY - platform.get_y()) < 7) // < 15
-        {
-            let is_stable_y = true;
-        }
-
-        let is_stable_x = (x < (platform.get_x() + platform.get_size())) & (w > platform.get_x());
-
-        return (is_stable_x & is_stable_y);
-    }
+    //function bool IsOnPlatform(Platform platform, int x, int y, int width, int height, int forceY)
+    //{
+    //    var bool is_stable_x;
+    //    var bool is_stable_y;
+    //    var int platform_x;
+    //    var int h;
+    //    var int w;
+//
+    //    let h = platform.get_y() - y - height;
+    //    let w = x + width;
+//
+    //    let is_stable_y = (-1 < h) & (h < (forceY + 1));
+//
+    //    //if (Math.abs(y + height + forceY + 1 - platform.get_y()) < 8) // < 16
+    //    if (Math.abs(y + height + forceY - platform.get_y()) < 7) // < 15
+    //    {
+    //        let is_stable_y = true;
+    //    }
+//
+    //    let is_stable_x = (x < (platform.get_x() + platform.get_size())) & (w > platform.get_x());
+//
+    //    return (is_stable_x & is_stable_y);
+    //}
 
     function bool CheckAnyPlatformCollisionRight(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight, int worldOffset, int forceY)
     {
-        var Array x_map;
         var int i;
         var bool result;
-
-        let x_map = map[x + width + worldOffset];
 
         let i = (y/16) - (height - 1);
-        while (i < ((y/16) + 1 + (forceY/16))) // TEMP FIX !!!!!!!!!!!!!!!!
+        while (i < ((y/16) + 1)) // +(forceY/16) TEMP FIX !!!!!!!!!!!!!!!!
         {
-            let result = result | (Collision.IsPlatform(x_map[i]));
+            let result = result | (Collision.IsPlatform(Map.getValue(x + width + worldOffset, i)));
 
             let i = i + 1;
         }
@@ -141,81 +127,78 @@ class Collision
         return result;
     }
 
-    function bool CheckPlatformCollisionRight(Array platforms, int platforms_num, int x, int y, int width, int height)
-    {
-        var int i;
-        var Platform platform;
-        var Section section;
-        var bool result;
+    //function bool CheckPlatformCollisionRight(Array platforms, int platforms_num, int x, int y, int width, int height)
+    //{
+    //    var int i;
+    //    var Platform platform;
+    //    var Section section;
+    //    var bool result;
+//
+    //    while (i < platforms_num)
+    //    {
+    //        let platform = platforms[i];
+//
+    //        let result = Collision.IsCollidedPlatformRight(platform, x, y, width, height);
+//
+    //        if (result)
+    //        {
+    //            let i = platforms_num - 1;
+    //        }
+//
+    //        let i = i + 1;
+    //    }
+//
+    //    return result;
+    //}
 
-        while (i < platforms_num)
-        {
-            let platform = platforms[i];
-
-            let result = Collision.IsCollidedPlatformRight(platform, x, y, width, height);
-
-            if (result)
-            {
-                let i = platforms_num - 1;
-            }
-
-            let i = i + 1;
-        }
-
-        return result;
-    }
-
-    function bool IsCollidedPlatformRight(Platform platform, int x, int y, int width, int height)
-    {
-        return ((x + width) = platform.get_x()) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
-    }
+    //function bool IsCollidedPlatformRight(Platform platform, int x, int y, int width, int height)
+    //{
+    //    return ((x + width) = platform.get_x()) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
+    //}
 
     function bool CheckAnyPlatformCollisionLeft(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight, int worldOffset, int forceY)
     {
-        var Array x_map;
         var int i;
         var bool result;
-
-        let x_map = map[x - 1 + worldOffset];
 
         let i = (y/16) - (height - 1);
-        while (i < ((y/16) + 1 + (forceY/16))) // TEMP FIX !!!!!!!!!!!!!
+        while (i < ((y/16) + 1))
         {
-            let result = result | (Collision.IsPlatform(x_map[i]));
+            let result = result | (Collision.IsPlatform(Map.getValue(x - 1 + worldOffset, i)));
             let i = i + 1;
         }
 
         return result;
     }
 
-    function bool CheckPlatformCollisionLeft(Array platforms, int platforms_num, int x, int y, int width, int height)
-    {
-        var int i;
-        var Platform platform;
-        var Section section;
-        var bool result;
+    //function bool CheckPlatformCollisionLeft(Array platforms, int platforms_num, int x, int y, int width, int height)
+    //{
+    //    var int i;
+    //    var Platform platform;
+    //    var Section section;
+    //    var bool result;
+//
+    //    while (i < platforms_num)
+    //    {
+    //        let platform = platforms[i];
+//
+    //        let result = Collision.IsCollidedPlatformLeft(platform, x, y, width, height);
+//
+    //        if (result)
+    //        {
+    //            let i = platforms_num - 1;
+    //        }
+//
+    //        let i = i + 1;
+    //    }
+//
+    //    return result;
+    //}
 
-        while (i < platforms_num)
-        {
-            let platform = platforms[i];
-
-            let result = Collision.IsCollidedPlatformLeft(platform, x, y, width, height);
-
-            if (result)
-            {
-                let i = platforms_num - 1;
-            }
-
-            let i = i + 1;
-        }
-
-        return result;
-    }
-
-    function bool IsCollidedPlatformLeft(Platform platform, int x, int y, int width, int height)
-    {
-        return (x = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
-    }
+    //function bool IsCollidedPlatformLeft(Platform platform, int x, int y, int width, int height)
+    //{
+    //    return (x = (platform.get_x() + platform.get_size())) & (platform.get_y() < (y + height)) & (y < (platform.get_y()));
+    //}
 
     function bool IsPlatform(int value)
     {
@@ -227,14 +210,32 @@ class Collision
         return ((10 < value) & (value < 16));
     }
 
+    function bool IsCollectable(int value)
+    {
+        return ((15 < value) & (value < 18));
+    }
+
+    function bool GetPlatformType(int value)
+    {
+        return value - 1;
+    }   
+
+    //function bool GetObstacleType(int value)
+    //{
+    //    return value - 10 - 1;
+    //}
+//
+    //function bool GetCollectableType(int value)
+    //{
+    //    return ;
+    //}
+
+
     function bool IsAtPlatformBoundaryLeft(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight, int worldOffset)
     {
-        var Array x_map;
         var bool result;
 
-        let x_map = map[x - 1 + worldOffset];
-
-        let result = ~Collision.IsPlatform(x_map[(y/16) + 1]);
+        let result = ~Collision.IsPlatform(Map.getValue(x - 1 + worldOffset, (y/16) + 1));
 
         return result;
     }
@@ -244,20 +245,20 @@ class Collision
         var Array x_map;
         var bool result;
 
-
-        let x_map = map[x + width + worldOffset];
-
-        let result = ~Collision.IsPlatform(x_map[(y/16) + 1]);
+        let result = ~Collision.IsPlatform(Map.getValue(x + width + worldOffset, (y/16) + 1));
 
         return result;
     }
+
+
+
 
 
     //// OBSTACLES
 
     function bool IsCollidedAnyObstacle(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight)
     {
-        var Array x_map;
+        //var Array x_map;
         var bool result;
         var int i;
         var int j;
@@ -265,13 +266,13 @@ class Collision
 
         while (i < width)
         {
-            let x_map = map[x + i];
+            //let x_map = map[x + i];
 
             let j = (y/16) - (height - 1); // TEMP -> Jeff height is 16
 
             while (j < ((y/16) + 1)) // y + blockHeight
             {
-                let result = result | (Collision.IsObstacle(x_map[j]));
+                let result = result | (Collision.IsObstacle(Map.getValue(x + i, j)));
 
                 let j = j + 1;
             }
@@ -306,27 +307,31 @@ class Collision
         var int py;
         var int location;
         var int memAddress;
-        var Array x_map;
+        //var Array x_map;
 
-        if (Collision.IsInScreen(x - 1) & Collision.IsInScreen(x + width + 1))
+        if (Constants.IsInScreenX(x - 1) & Constants.IsInScreenX(x + width + 1))
         {
             let i = x - 1;
             while (i < (x + width + 1))
             {
-                let x_map = map[i + worldOffset];
+                //let x_map = map[i + worldOffset];
 
                 let j = (y / 16) - height - 2;
-                while (j < (((y + blockHeight) / 16) + 2)) // 16 = blockHeight
+                while (j < (((y + Constants.getBlockHeight()) / 16) + 2)) // 16 = blockHeight
                 //let j = (y / 16) - 2;
                 //while (j < (((y + height) / 16) + 1))
                 {
-                    if ((0 < x_map[j]) & (x_map[j] < 11))
+                    if (((i + worldOffset) < mapWidth) & (j < mapHeight))
                     {
-                        let location = (j * 512) + i; // 16 * 32 = 512
-		                let memAddress = 16384 + location;
+                        if (Collision.IsPlatform(Map.getValue(i + worldOffset, j)))
+                        {
+                            let location = (j * 512) + i; // 16 * 32 = 512
+		                    let memAddress = 16384 + location;
 
-                        do Platform.DrawBlock(0, x_map[j] - 1, memAddress);
+                            do Platform.DrawBlock(0, Map.getValue(i + worldOffset, j) - 1, memAddress);
+                        }
                     }
+                    
 
                     let j = j + 1;
                 }
@@ -339,11 +344,6 @@ class Collision
         return;
     }
 
-    function bool IsInScreen(int x)
-    {
-        return (-1 < x) & (x < 32);
-    }
-
     function bool IsCharacterCollidedWithEnemySides(int cx, int cy, int cw, int ch, int ex, int ey, int ew, int eh)
     {
         var bool is_collided_left;
@@ -351,8 +351,6 @@ class Collision
 
         let is_collided_left = (ex < (cx + cw)) & ((cx + cw) < (ex + ew)) & ((ey - 16) < cy) & (cy < (ey + eh));
         let is_collided_right = ((ex - 1) < cx) & (cx < (ex + ew)) & ((ey - 16) < cy) & (cy < (ey + eh));
-
-        //do Output.printInt(is_collided_left | is_collided_right);
 
         return is_collided_left | is_collided_right;
     }
@@ -365,30 +363,26 @@ class Collision
         let is_collided_left = (ex < (cx + cw)) & ((cx + cw) < (ex + ew)) & ((ey - eh) < (cy + 16)) & ((cy + 16) < (ey - eh + 8));
         let is_collided_right = ((ex - 1) < cx) & (cx < (ex + ew)) & ((ey - eh) < (cy + 16)) & ((cy + 16) < (ey - eh + 8));
 
-        //do Output.printInt(is_collided_left | is_collided_right);
-
-
-
         return is_collided_left | is_collided_right;
     }
 
-    function bool IsBulletCollidedWithMap(Array map, int mapWidth, int mapHeight, int x, int y, bool drawLeft)
+    function bool IsBulletCollidedWithMap(Array map, int mapWidth, int mapHeight, int x, int y, bool drawLeft, int worldOffset)
     {
         var bool result;
-        var Array x_map;
+        var int col;
 
         if (Constants.IsInScreen(x, y))
         {
             if (drawLeft)
             {
-                let x_map = map[x - 1];
+                let col = x - 2 + worldOffset;
             }
             else 
             {
-                let x_map = map[x + 1];
+                let col = x + 2 + worldOffset;
             }
 
-            let result = x_map[(y + 8)/16] = 0;
+            let result = (Map.getValue(col, (y + 8)/16) = 0);
         }
 
         return ~result;
@@ -396,7 +390,6 @@ class Collision
 
     function bool IsBulletCollidedWithEntity(int ex, int ey, int ewidth, int eheight, int bx, int by)
     {
-        //return Collision.IsCharacterCollidedWithEnemySides(ex, ey, ewidth, eheight, bx, by + 8, 1, 16);
         return Collision.IsCharacterCollidedWithEnemySides(bx, by + 8, 1, 16, ex, ey, ewidth, eheight);
     }
 }

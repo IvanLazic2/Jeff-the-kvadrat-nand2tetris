@@ -83,9 +83,9 @@ class Character
         //let widthdiv16 = width / 16;
 
         //let forceY = 0;
-        let gravity = 1; // 6
+        let gravity = 6; // 6
         let can_jump = false;
-        let jump_height = 15; // 35
+        let jump_height = 35; // 35
         let jump_height_const = 5; //20
         let jump_compensation_const = 4;
 
@@ -137,6 +137,12 @@ class Character
     method Array getBullets() { return Bullets; }
 
     method int getBulletsCount() { return BulletsCount; }
+
+    method int getHealth() { return health; }
+    method int getCoins() { return Coins; }
+
+    method void addCoin() { let Coins = Coins + 1; return; }
+    method void addLife() { let health = health + 1; return; }
 
     method void set_x(int x2)
     {
@@ -231,42 +237,42 @@ class Character
         return;
     }
 
-    method void RedrawObstacles(Array map, int mapWidth, int mapHeight, int worldOffset)
-    {
-        var int i;
-        var int j;
-        var int px;
-        var int py;
-        var int location;
-        var int memAddress;
-        var Array x_map;
-
-        let i = absolute_x - 1;
-        while (i < (absolute_x + width + 1))
-        {
-            let x_map = map[i];
-
-            let j = (y / 16) - 2;
-            while (j < (((y + height) / 16) + 1))
-            //let j = 0; // TEMP
-            //while (j < 16) // TEMP
-            {
-                if ((0 < x_map[j]) & (x_map[j] < 11))
-                {
-                    let location = (j * 16 * 32) + i - worldOffset;
-		            let memAddress = 16384 + location;
-
-                    do Platform.DrawBlock(0, x_map[j] - 1, memAddress);
-                }
-
-                let j = j + 1;
-            }
-
-            let i = i + 1;
-        }
-
-        return;
-    }
+    //method void RedrawObstacles(Array map, int mapWidth, int mapHeight, int worldOffset)
+    //{
+    //    var int i;
+    //    var int j;
+    //    var int px;
+    //    var int py;
+    //    var int location;
+    //    var int memAddress;
+    //    var Array x_map;
+//
+    //    let i = absolute_x - 1;
+    //    while (i < (absolute_x + width + 1))
+    //    {
+    //        let x_map = map[i];
+//
+    //        let j = (y / 16) - 2;
+    //        while (j < (((y + height) / 16) + 1))
+    //        //let j = 0; // TEMP
+    //        //while (j < 16) // TEMP
+    //        {
+    //            if ((0 < x_map[j]) & (x_map[j] < 11))
+    //            {
+    //                let location = (j * 16 * 32) + i - worldOffset;
+	//	            let memAddress = 16384 + location;
+//
+    //                do Platform.DrawBlock(0, x_map[j] - 1, memAddress);
+    //            }
+//
+    //            let j = j + 1;
+    //        }
+//
+    //        let i = i + 1;
+    //    }
+//
+    //    return;
+    //}
 
 
 
@@ -367,10 +373,10 @@ class Character
 
 
     //// PLATFORM COLLISION
-    method bool check_right_collision_platforms(Array platforms, int platforms_num)
-    {
-        return Collision.CheckPlatformCollisionRight(platforms, platforms_num, x, y, width, height);
-    }
+    //method bool check_right_collision_platforms(Array platforms, int platforms_num)
+    //{
+    //    return Collision.CheckPlatformCollisionRight(platforms, platforms_num, x, y, width, height);
+    //}
 
     method bool check_right_collision_platforms2(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
@@ -378,14 +384,15 @@ class Character
         //do Output.printString(", ");
         //do Output.printInt(absolute_x);
         //do Output.println();
+        
 
         return Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY);
     }
 
-    method bool check_left_collision_platforms(Array platforms, int platforms_num)
-    {
-        return Collision.CheckPlatformCollisionLeft(platforms, platforms_num, x, y, width, height);
-    }
+    //method bool check_left_collision_platforms(Array platforms, int platforms_num)
+    //{
+    //    return Collision.CheckPlatformCollisionLeft(platforms, platforms_num, x, y, width, height);
+    //}
 
     method bool check_left_collision_platforms2(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
@@ -420,6 +427,8 @@ class Character
 
         return;
     }
+
+
 
     method void check_collision_obstacles(Array obstacles, int obstacles_num)
     {
@@ -458,6 +467,8 @@ class Character
 
         return;
     }
+
+
     
     //// MOVEMENT
     method void MoveLeft()
@@ -592,66 +603,66 @@ class Character
 
 
 
-    method void check_gravity(Array platforms, int platforms_num)
-    {
-        var int i;
-        var Platform platform;
-        var Section section;
-        var bool is_on_platform;
-
-        let lastlocation = location;
-
-        while (i < platforms_num)
-        {
-            let platform = platforms[i];
-
-            //if (Math.abs(y - platform.get_y()) < 50)
-            //{
-                let is_on_platform = Collision.IsOnPlatform(platform, x, y, width, height, forceY);
-                //let lastlocation = location;
-                let can_jump = is_on_platform;
-
-                if (is_on_platform)
-                {
-                    let i = platforms_num - 1;
-                }
-            //}
-
-            let i = i + 1;
-        }
-
-        if (can_jump)
-        {
-            let y = platform.get_y() - height;
-           
-            let forceY = 0;
-            let location = (y * 32) + x;
-
-            do Clear();
-            do Draw();
-        }
-        // padanje
-        else
-        {
-            if (y > 219)
-            {
-                do Respawn();
-
-                // take damage
-            }
-
-            let forceY = forceY + gravity;            
-        }
-
-
-        let y = y + forceY;
-        let location = (y * 32) + x;
-        
-        do Clear();
-        do Draw();
-
-        return;
-    }
+    //method void check_gravity(Array platforms, int platforms_num)
+    //{
+    //    var int i;
+    //    var Platform platform;
+    //    var Section section;
+    //    var bool is_on_platform;
+//
+    //    let lastlocation = location;
+//
+    //    while (i < platforms_num)
+    //    {
+    //        let platform = platforms[i];
+//
+    //        //if (Math.abs(y - platform.get_y()) < 50)
+    //        //{
+    //            let is_on_platform = Collision.IsOnPlatform(platform, x, y, width, height, forceY);
+    //            //let lastlocation = location;
+    //            let can_jump = is_on_platform;
+//
+    //            if (is_on_platform)
+    //            {
+    //                let i = platforms_num - 1;
+    //            }
+    //        //}
+//
+    //        let i = i + 1;
+    //    }
+//
+    //    if (can_jump)
+    //    {
+    //        let y = platform.get_y() - height;
+    //       
+    //        let forceY = 0;
+    //        let location = (y * 32) + x;
+//
+    //        do Clear();
+    //        do Draw();
+    //    }
+    //    // padanje
+    //    else
+    //    {
+    //        if (y > 219)
+    //        {
+    //            do Respawn();
+//
+    //            // take damage
+    //        }
+//
+    //        let forceY = forceY + gravity;            
+    //    }
+//
+//
+    //    let y = y + forceY;
+    //    let location = (y * 32) + x;
+    //    
+    //    do Clear();
+    //    do Draw();
+//
+    //    return;
+    //}
 
 
     method void Respawn()
@@ -690,7 +701,7 @@ class Character
         return;
     }
 
-    method void Shoot()
+    method void Shoot(int worldOffset)
     {
         var int bulletX;
         var int bulletY;
@@ -709,7 +720,7 @@ class Character
         {
             if (currBullet.IsAvailable())
             {
-                do currBullet.Shoot(bulletX, bulletY, draw_character_left);
+                do currBullet.Shoot(bulletX, bulletY, draw_character_left, worldOffset);
 
                 let currBulletIndex = currBulletIndex + 1;
 
@@ -727,7 +738,7 @@ class Character
         return;
     }
 
-    method void CheckBullets(Array map, int mapWidth, int mapHeight)
+    method void CheckBullets(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
         var int i;
         var Bullet bullet;
@@ -735,7 +746,7 @@ class Character
         while (i < BulletsCount)
         {
             let bullet = Bullets[i];
-            do bullet.CheckBullet(map, mapWidth, mapHeight);
+            do bullet.CheckBullet(map, mapWidth, mapHeight, worldOffset);
             let i = i + 1;
         }
 

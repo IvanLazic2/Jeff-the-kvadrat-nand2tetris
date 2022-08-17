@@ -1,0 +1,36 @@
+class MapNode
+{
+    field int x;
+    field int y;
+
+    field int f;
+    field int g;
+    field int h;
+
+    field bool done;
+
+    field Array neighbours;
+
+    constructor MapNode new(int x2, int y2, int f2, int g2, int h2)
+    {
+        let x = x2;
+        let y = y2;
+        let f = f2;
+        let g = g2;
+        let h = h2;
+
+        return this;
+    }
+
+    method int getX() { return x; }
+    method int getY() { return y; }
+    method int getF() { return f; }
+    method int getG() { return g; }
+    method int getH() { return h; }
+
+    method void setX(int x2) { let x = x2; return; }
+    method void setY(int y2) { let y = y2; return; }
+    method void setF(int f2) { let f = f2; return; }
+    method void setG(int g2) { let g = g2; return; }
+    method void setH(int h2) { let h = h2; return; }
+}

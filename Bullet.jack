@@ -58,23 +58,38 @@ class Bullet
         return memAddress = resetMemAddress;
     }
 
-    method void Shoot(int x, int y, bool drawLeft2)
+    method void Shoot(int x, int y, bool drawLeft2, int worldOffset)
     {
         var int i;
+        var int temp;
 
-        let isCollided = false;
+        if (drawLeft)
+        {
+            let temp = -1;
+        }
+        else
+        {
+            let temp = 1;
+        }
 
-        let drawLeft = drawLeft2;
+        if (Map.getValue(x + worldOffset + temp, y/16) = 0)
+        {
+            let isCollided = false;
 
-        let X = x;
-        let Y = y;
+            let drawLeft = drawLeft2;
 
-        let memAddress = Constants.getMemAddress(x, y);
+            let X = x;
+            let Y = y;
+
+            let memAddress = Constants.getMemAddress(x, y);
+
+            do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+        }
 
         return;
     }
 
-    method void CheckBullet(Array map, int mapWidth, int mapHeight)
+    method void CheckBullet(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
         do CheckTimers();
 
@@ -86,7 +101,7 @@ class Bullet
             }
             else
             {
-                let isCollided = Collision.IsBulletCollidedWithMap(map, mapWidth, mapHeight, X, Y, drawLeft);
+                let isCollided = Collision.IsBulletCollidedWithMap(map, mapWidth, mapHeight, X, Y, drawLeft, worldOffset);
 
                 if (drawLeft)
                 {

@@ -6,6 +6,10 @@
 //https://arieljannai.gitlab.io/Nand2TetrisBitmapEditor/
 //https://github.com/ErikUmble/nand2tetris/tree/main/DinoAdventure
 
+//https://www.redblobgames.com/pathfinding/a-star/introduction.html
+//https://www.youtube.com/watch?v=5DhCoqoPmzs
+
+//https://github.com/IshankGulati/Image-Processing-Mini-projects/blob/master/Astar%20Search/pathPlanning.py
 
 
 
@@ -66,11 +70,14 @@ class Game
     field int timer6;
     field int timer100;
 
-    field Array Map;
-    field int MapWidth;
-    field int MapHeight;
+    field Array map;
+    field int mapWidth;
+    field int mapHeight;
 
     field int WorldOffset;
+
+
+
 
 
     
@@ -83,6 +90,8 @@ class Game
     constructor Game new()
     {
         var int i;
+        var int j;
+        var int value;
 
         let Direction = 0;
 
@@ -93,9 +102,16 @@ class Game
         let RightBorder = ScreenMiddle + MoveAreaWidth;
 
         let Level = Level3.new();
-        let Map = Level.getMap();
-        let MapWidth = Level.getMapWidth();
-        let MapHeight = Level.getMapHeight();
+        let map = Level.getMap();
+        let mapWidth = Level.getMapWidth();
+        let mapHeight = Level.getMapHeight();
+        do Map.setWidth(mapWidth);
+        do Map.setHeight(mapHeight);
+        do Map.setMap(map);
+
+        do Pathfinding.setMap(map);
+
+        //do Output.printInt(Map.getValue(0, 15));
 
         let Character = Level.getCharacter();
 
@@ -109,9 +125,9 @@ class Game
         let Enemies = Level.getEnemies();
         let Collectables = Level.getCollectables();
 
-        let div4lookup = Array.new(MapWidth);
+        let div4lookup = Array.new(mapWidth);
         let i = 0;
-        while (i < MapWidth)
+        while (i < mapWidth)
         {
             let div4lookup[i] = i / 4;
             let i = i + 1;
@@ -137,29 +153,27 @@ class Game
         do DrawAllPlatforms();
         do DrawAllCollectables();
 
+
+
+
         
 
 
-        //let enemy = Enemy.new(10, 224, 1);
-        //do enemy.Draw(true, false);
-        
-        
+ 
 
         return this;
     }
 
-    //method int get_curr_section_index()
-    //{
-    //    return div4lookup[Character.get_absolute_x()];
-    //}
 
     method void start()
     {
         var char key;
         var bool exit;
         var int i;
+        var int j;
         var int temp;
         var Platform platform;
+        var int value;
 
 
         let exit = false;
@@ -194,20 +208,18 @@ class Game
             }
             else { if (key = 32)
             {
-                do Character.Shoot();
+                do Character.Shoot(WorldOffset);
             }}}}}}
             
 
-
-            //do UpdateCurrentSection();
 
             
             do Move();
             do Sys.wait(GameDelay);
             
-            //do curr_section.Draw();
 
-            do Character.RedrawPlatforms(Map, MapWidth, MapHeight, WorldOffset);
+
+            do Character.RedrawPlatforms(map, mapWidth, mapHeight, WorldOffset);
 
             do DoAllEnemyActions();
 
@@ -217,34 +229,28 @@ class Game
 
             do CheckAllBulletCollisions();
 
-            //do Output.printInt(Character.get_y());
-            //do Output.printString(", ");
-
-            
-
-            //do enemy.Draw(true, false);
-            //do enemy.MoveRight();
-            //do enemy.MoveLeft();
-
-            //do enemy.check_gravity2(Map, MapWidth, MapHeight);
-            //do enemy.Jump();
-            //do enemy.MoveRight();
+            do CheckCollectableAndCharacterCollision();
 
 
-            //do enemy.Roam(Map, MapWidth, MapHeight);
             
 
             do CheckTimers();
 
 
-            //let last_section_index = get_curr_section_index();
 
             do DecrementTimers();
+
+            do Pathfinding.search(0, 0, 6, 6);
+
+
+
         }
 
         return;
     }
 
+
+    // GAME TIMERS
     method void CheckTimers()
     {
         if (timer6 < 1)
@@ -268,7 +274,7 @@ class Game
         return;
     }
 
-    // GAME TIMERS
+    
     method void DecrementTimers()
     {
         let timer3 = timer3 - 1;
@@ -312,10 +318,16 @@ class Game
         return;
     }
 
+
+
+
+
     method void DrawAllPlatforms()
     {
         var Platform platform;
         var int i;
+
+        
 
         while (i < PlatformsCount)
         {
@@ -347,6 +359,8 @@ class Game
         var Obstacle obstacle;
         var int i;
 
+        
+
         if (Character.get_should_draw_last_obstacle())
         {
             while (i < ObstaclesCount)
@@ -374,7 +388,7 @@ class Game
         while (i < EnemiesCount)
         {
             let enemy = Enemies[i];
-            do enemy.DoActions(Map, MapWidth, MapHeight, WorldOffset);
+            do enemy.DoActions(map, mapWidth, mapHeight, WorldOffset, Character.get_x(), Character.get_y());
             let i = i + 1;
         }
 
@@ -431,12 +445,12 @@ class Game
         var int i;
         var Enemy enemy;
 
-        do Character.CheckBullets(Map, MapWidth, MapHeight);
+        do Character.CheckBullets(map, mapWidth, mapHeight, WorldOffset);
 
         while (i < EnemiesCount)
         {
             let enemy = Enemies[i];
-            do enemy.CheckBullets(Map, MapWidth, MapHeight);
+            do enemy.CheckBullets(map, mapWidth, mapHeight, WorldOffset);
             let i = i + 1;
         }
 
@@ -542,6 +556,48 @@ class Game
         return;
     }
 
+    // ideja: na pocetku skenirat cijeli ekran i iscrtat sve, onda svaki puta zapamtit x, x + width i y koordinate od objekta koji se treba scrollat
+    //        i gledat samo granice ekrana (prvi i zadnji stupac, sve zavisi kako se scrolla)
+
+    // ideja2: spremat te objekte (klase GameObject koja ima x, y, w i h) u array velicine 512 i spremat je li na nekom indeksu pojle zauzeto
+    //         u drugo polje koje sadrzi 512 bool-ova koji govore jeli mjesto zauzeto ili ne
+
+    method void CheckCollectableAndCharacterCollision()
+    {
+        var int i;
+        var Collectable collectable;
+
+        while (i < CollectablesCount)
+        {
+            let collectable = Collectables[i];
+
+            if ((-1 < collectable.getX()) & (collectable.getX() < 32) & collectable.getIsAvailable())
+            {
+                if (Collision.IsBulletCollidedWithEntity(Character.get_x(), Character.get_y(), Character.getWidth(), Character.getHeight(), collectable.getX(), collectable.getY()))
+                {
+                    do Output.printString("bling");
+
+                    if (collectable.getType() = 0)
+                    {
+                        do Character.addCoin();
+                    }   
+                    else
+                    {
+                        do Character.addLife();
+                    }
+
+                    do collectable.setIsAvailable(false);
+                }
+            }   
+
+            
+
+            let i = i + 1;
+        }
+
+        return;
+    }
+
 
 
 
@@ -571,8 +627,28 @@ class Game
         var Enemy enemy;
         var Collectable collectable;
 
+        
+
         let WorldOffset = WorldOffset + 1;
         do Character.increment_absolute_x(1);
+
+        let i = 0;
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.ScrollLeft();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < CollectablesCount)
+        {
+            let collectable = Collectables[i];
+            do collectable.ScrollLeft();
+
+            let i = i + 1;
+        }
 
         while (i < ObstaclesCount)
         {
@@ -609,24 +685,6 @@ class Game
             let i = i + 1;
         }
 
-        let i = 0;
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-            do enemy.ScrollLeft();
-
-            let i = i + 1;
-        }
-
-        let i = 0;
-        while (i < CollectablesCount)
-        {
-            let collectable = Collectables[i];
-            do collectable.ScrollLeft();
-
-            let i = i + 1;
-        }
-
 
         return;
     }
@@ -641,6 +699,24 @@ class Game
 
         let WorldOffset = WorldOffset - 1;
         do Character.increment_absolute_x(-1);
+
+        let i = 0;
+        while (i < EnemiesCount)
+        {
+            let enemy = Enemies[i];
+            do enemy.ScrollRight();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < CollectablesCount)
+        {
+            let collectable = Collectables[i];
+            do collectable.ScrollRight();
+
+            let i = i + 1;
+        }
 
         while (i < ObstaclesCount)
         {
@@ -677,24 +753,6 @@ class Game
             let i = i + 1;
         }
 
-        let i = 0;
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-            do enemy.ScrollRight();
-
-            let i = i + 1;
-        }
-
-        let i = 0;
-        while (i < CollectablesCount)
-        {
-            let collectable = Collectables[i];
-            do collectable.ScrollRight();
-
-            let i = i + 1;
-        }
-
         return;
     }
 
@@ -706,14 +764,14 @@ class Game
         let x = Character.get_x();
         let abs_x = Character.get_absolute_x();
 
-        do Character.check_gravity2(Map, MapWidth, MapHeight, WorldOffset);
-        do Character.check_collision_obstacles2(Map, MapWidth, MapHeight);
+        do Character.check_gravity2(map, mapWidth, mapHeight, WorldOffset);
+        do Character.check_collision_obstacles2(map, mapWidth, mapHeight);
 
         if (Direction = 1) 
         {
             do Character.set_draw_character_left(true);
 
-            if (~Character.check_left_collision_platforms2(Map, MapWidth, MapHeight, WorldOffset))
+            if (~Character.check_left_collision_platforms2(map, mapWidth, mapHeight, WorldOffset))
             {
                 // nesto s apsolutnom vrijednosti izmedju x i pocetka mape?
                 if (abs_x - ScreenMiddle + MoveAreaWidth > 0)
@@ -737,9 +795,9 @@ class Game
         {
             do Character.set_draw_character_left(false);
 
-            if (~Character.check_right_collision_platforms2(Map, MapWidth, MapHeight, WorldOffset))
+            if (~Character.check_right_collision_platforms2(map, mapWidth, mapHeight, WorldOffset))
             {
-                if (abs_x + ScreenMiddle - MoveAreaWidth < MapWidth)
+                if (abs_x + ScreenMiddle - MoveAreaWidth < mapWidth)
                 {
                     if (x < RightBorder)
                     {   

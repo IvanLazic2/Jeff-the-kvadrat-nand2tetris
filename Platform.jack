@@ -30,7 +30,7 @@ class Platform
 		let type = type2;
         let size = size2;
 		
-        do Draw();
+        //do Draw();
 
         return this;
 

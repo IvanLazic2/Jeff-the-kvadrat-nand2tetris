@@ -1,0 +1,34 @@
+class Matrix
+{
+    function int getValue(int col, int row, Array matrix, int width, int height)
+    {
+        var int result;
+
+        if ((col < width) & (row < height))
+        {
+            let result = matrix[(col * height) + row];
+        }
+        else
+        {
+            do Output.printString("indeksi izasli iz matrice");
+        }
+
+        return result;
+    }
+
+    function int getIndex(int col, int row, int width, int height)
+    {
+        var int result;
+
+        if ((col < width) & (row < height))
+        {
+            let result = (col * height) + row;
+        }
+        else
+        {
+            do Output.printString("indeksi izasli iz matrice 2");
+        }
+
+        return result;
+    }
+}

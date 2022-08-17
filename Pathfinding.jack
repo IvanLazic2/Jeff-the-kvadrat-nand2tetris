@@ -1,0 +1,197 @@
+class Pathfinding
+{
+    static Map map;
+    static Array mapArray;
+
+    static int rows;
+    static int cols;
+
+
+
+
+    // direction vectors
+    static Array rowsDir; 
+    static Array colsDir;
+
+    function void init()
+    {
+        let rowsDir = Array.new(4);
+        let colsDir = Array.new(4);
+
+        let rowsDir[0] = -1;
+        let rowsDir[1] = 1;
+        let rowsDir[2] = 0;
+        let rowsDir[3] = 0;
+
+        let colsDir[0] = 0;
+        let colsDir[1] = 0;
+        let colsDir[2] = 1;
+        let colsDir[3] = -1;
+
+
+        
+        return;
+    }
+
+    function void setMap(Map m) 
+    { 
+        let map = m; 
+        let cols = Map.getWidth();
+        let rows = Map.getHeight();
+        let mapArray = Map.getMap();
+        return; 
+    }
+
+
+
+    function int exploreNeighbours(int r, int c, PQueue rowsQ, PQueue colsQ, Array visited)
+    {
+        var int i;
+        var int rr;
+        var int cc;
+        var int nodesInNextLayer;
+
+
+        //do Output.printInt(visited[17]);
+
+        
+
+        while (i < 4)
+        {
+            let rr = r + rowsDir[i];
+            let cc = c + colsDir[i];
+
+            if ((rr > -1) & (cc > -1) & (rr < rows) & (cc < cols) & ~(visited[Matrix.getIndex(cc, rr, cols, rows)]) & (Matrix.getValue(cc, rr, mapArray, rows, cols) = 0))
+            {
+                //do Output.printInt(rr);
+                //do Output.printString(", ");
+                //do Output.printInt(cc);
+                //do Output.printString(", ");
+                //do Output.printInt(visited[Matrix.getIndex(cc, rr, cols, rows)]);
+                //do Output.printString(", ");
+                //do Output.printInt(Matrix.getValue(cc, rr, mapArray, rows, cols));
+                //do Output.println();
+                
+                
+                do rowsQ.enqueue(rr);
+                do colsQ.enqueue(cc);
+                let visited[Matrix.getIndex(cc, rr, cols, rows)] = true;
+                let nodesInNextLayer = nodesInNextLayer + 1;
+            }
+
+            let i = i + 1;
+        }
+
+        return nodesInNextLayer;
+    }
+
+    function void search(int rowS, int colS, int rowE, int colE)
+    {
+        var PQueue rowsQ;
+        var PQueue colsQ;
+        var int moveCount;
+        var int nodesLeftInLayer;
+        var int nodesInNextLayer;
+        var bool reachedEnd;
+        var Array visited; // visited matrix
+        var int r;
+        var int c;
+        var int i;
+        var int temp;
+
+        let rowsQ = PQueue.new();
+        let colsQ = PQueue.new();
+
+        do Output.printInt(nodesLeftInLayer);///////////////////////
+
+        let nodesLeftInLayer = 1;
+
+        let visited = Array.new(cols * rows);
+
+        do rowsQ.enqueue(rowS);
+        do colsQ.enqueue(colS);
+
+        let visited[Matrix.getIndex(colS, rowS, cols, rows)] = true;
+
+        
+
+        
+        
+        let i = rowsQ.get_size();
+        while (i > 0)
+        {
+            
+
+            //do rowsQ.print();
+            //do Output.printString(", ");
+            //do colsQ.print();
+            ////do Output.println();
+            //do Output.printString(" : ");
+
+            let r = rowsQ.dequeue();
+            let c = colsQ.dequeue();
+
+            
+
+            
+            
+
+            
+
+           //do Output.printInt(r);
+           //do Output.printString(", ");
+           //do Output.printInt(c);
+           //do Output.println();
+
+           //do Output.printInt(r);
+
+
+            
+
+
+            if ((r = rowE) & (c = colE))
+            {
+                let reachedEnd = true;
+                let i = 0;
+            }
+            else
+            {
+                let temp = Pathfinding.exploreNeighbours(r, c, rowsQ, colsQ, visited);
+                let nodesInNextLayer = nodesInNextLayer + temp;
+                let nodesLeftInLayer = nodesLeftInLayer - 1;
+                if (nodesLeftInLayer = 0)
+                {
+                    let nodesLeftInLayer = nodesInNextLayer;
+                    let nodesInNextLayer = 0;
+                    let moveCount = moveCount + 1;
+                }
+
+                let i = rowsQ.get_size();
+            }
+
+           
+
+            
+        }
+
+        //do Output.printInt(moveCount);
+
+        if (reachedEnd)
+        {
+            //do Output.printInt(moveCount);
+        }
+
+
+
+
+
+
+
+
+        do rowsQ.dispose();
+        do colsQ.dispose();
+        do visited.dispose();
+
+        return;
+    }
+}

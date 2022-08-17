@@ -1,0 +1,19 @@
+class Map
+{
+    static int width;
+    static int height;
+    static Array map;
+
+    function int getWidth() { return width; }
+    function int getHeight() { return height; }
+    function Array getMap() { return map; }
+
+    function void setWidth(int w) { let width = w; return; }
+    function void setHeight(int h) { let height = h; return; }
+    function void setMap(Array m) { let map = m; return; }
+
+    function int getValue(int col, int row)
+    {
+        return Matrix.getValue(col, row, map, width, height);
+    }
+}

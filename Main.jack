@@ -21,6 +21,8 @@ class Main
         do Heart.init();
         do Coin.init();
 
+        do Pathfinding.init();
+
         let game = Game.new();
 
         do game.start();

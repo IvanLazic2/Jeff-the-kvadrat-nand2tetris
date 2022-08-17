@@ -22,6 +22,19 @@ class Collectable
         return this;
     }
 
+    method int getX() { return X; }
+    method int getY() { return Y; }
+    method int getType() { return Type; }
+    method bool getIsAvailable() { return IsAvailable; }
+    
+    method void setIsAvailable(int b) { let IsAvailable = b; return; }
+
+    method void Collect()
+    {
+        let IsAvailable = false;
+        return;
+    }
+
     method void ScrollRight()
 	{
         if (IsAvailable)
