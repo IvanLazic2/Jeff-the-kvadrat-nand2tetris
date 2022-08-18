@@ -78,9 +78,10 @@ class Game
 
 
 
+    field Pathfinding pathfinding;
 
-
-    
+    field int pathFindingTimer;
+    field int pathFindingDelay;
 
 
     
@@ -109,7 +110,7 @@ class Game
         do Map.setHeight(mapHeight);
         do Map.setMap(map);
 
-        do Pathfinding.setMap(map);
+        //do Pathfinding.setMap(map);
 
         //do Output.printInt(Map.getValue(0, 15));
 
@@ -153,11 +154,13 @@ class Game
         do DrawAllPlatforms();
         do DrawAllCollectables();
 
-
-
-
         
+        let pathfinding = Pathfinding.new(map, mapWidth, mapHeight);
 
+        //do pathfinding.search(1, 1, 6, 6);
+        
+        
+        let pathFindingDelay = 100;
 
  
 
@@ -240,7 +243,7 @@ class Game
 
             do DecrementTimers();
 
-            do Pathfinding.search(0, 0, 6, 6);
+            
 
 
 
@@ -268,6 +271,13 @@ class Game
             let timer100 = 100;
         }
 
+        if (pathFindingTimer < 1)
+        {
+            //do pathfinding.search(0, 0, 6, 6);
+            //do Output.printString("nig");
+            let pathFindingTimer = pathFindingDelay;
+        }
+
         do Character.CheckTimers();
         do CheckAllEnemyTimers();
 
@@ -280,6 +290,8 @@ class Game
         let timer3 = timer3 - 1;
         let timer6 = timer6 - 1;
         let timer100 = timer100 - 1;
+
+        let pathFindingTimer = pathFindingTimer - 1;
 
         do Character.DecrementTimers();
         do DecrementAllEnemyTimers();

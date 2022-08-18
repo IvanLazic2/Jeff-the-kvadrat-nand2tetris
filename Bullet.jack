@@ -95,14 +95,13 @@ class Bullet
 
         if (~(memAddress = resetMemAddress)) // podsjetnik svaki enemy dobije jedan bullet i svaki bullet daje damage svakome
         {
+            let isCollided = Collision.IsBulletCollidedWithMap(map, mapWidth, mapHeight, X, Y, drawLeft, worldOffset);
             if (isCollided)
             {
                 do Reset();
             }
             else
             {
-                let isCollided = Collision.IsBulletCollidedWithMap(map, mapWidth, mapHeight, X, Y, drawLeft, worldOffset);
-
                 if (drawLeft)
                 {
                     do MoveLeft();

@@ -95,6 +95,7 @@ class Enemy
 			let movementDelay = 2;
 
 			let IsRoaming = true;
+			//let IsStacionary = true;
 		}
 		// EVIL JEFF MELEE
 		else { if (type = 1)
@@ -110,7 +111,6 @@ class Enemy
 
 			//let IsGravityAffected = true;
 			//let IsMelee = true;
-			//let IsDamageOnSquish = true;
 			//let IsFollowing = true;
 			let IsStacionary = true;
 			//let IsShooting = true;
@@ -127,7 +127,7 @@ class Enemy
 
 
 			let IsGravityAffected = true;
-			let IsMelee = true;
+			let IsShooting = true;
 		}
 		// BAT
 		else { if (type = 3)
@@ -254,8 +254,6 @@ class Enemy
 			{
 				do check_gravity2(map, mapWidth, mapHeight, worldOffset);
 				do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, height, worldOffset);
-
-				
 			}
 			if (IsRoaming)
 			{

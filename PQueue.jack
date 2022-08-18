@@ -13,36 +13,6 @@ class PQueue
         var int i;
         var Node iter;
 
-        //if (A.get_size() = 0)
-        //{
-        //    do A.push_back(element);
-        //    return;
-        //}
-//
-        //let i = 0;
-        //let iter = A.back();
-        //while (i < A.get_size())
-        //{
-        //    if (iter.get_element() < element)
-        //    {
-        //        if (i = 0)
-        //        {
-        //            do A.push_back(element);
-//
-        //            return;
-        //        }
-        //        else
-        //        {
-        //            do A.insert(element, i - 1);
-//
-        //            return;
-        //        }
-        //    }
-//
-        //    let i = i + 1;
-        //    let iter = iter.get_next();
-        //}
-
         do A.push_front(element);
 
         return;
@@ -50,7 +20,14 @@ class PQueue
 
     method int dequeue ()
     {
-        return A.pop_head();
+        if (empty())
+        {
+            return -10;
+        }
+        else
+        {
+            return A.pop_head();
+        }
     }
 
     method void dispose ()
@@ -84,5 +61,10 @@ class PQueue
         do A.print();
 
         return;
+    }
+
+    method bool empty()
+    {
+        return A.get_size() = 0;
     }
 }

@@ -346,24 +346,20 @@ class Collision
 
     function bool IsCharacterCollidedWithEnemySides(int cx, int cy, int cw, int ch, int ex, int ey, int ew, int eh)
     {
-        var bool is_collided_left;
-        var bool is_collided_right;
+        var bool is_collided;
 
-        let is_collided_left = (ex < (cx + cw)) & ((cx + cw) < (ex + ew)) & ((ey - 16) < cy) & (cy < (ey + eh));
-        let is_collided_right = ((ex - 1) < cx) & (cx < (ex + ew)) & ((ey - 16) < cy) & (cy < (ey + eh));
+        let is_collided = (ex < (cx + cw)) & (cx < (ex + ew)) & ((ey - 16) < cy) & (cy < (ey + eh));
 
-        return is_collided_left | is_collided_right;
+        return is_collided;
     }
 
     function bool IsCharacterCollidedWithEnemyTop(int cx, int cy, int cw, int ch, int ex, int ey, int ew, int eh)
     {
-        var bool is_collided_left;
-        var bool is_collided_right;
+        var bool is_collided;
 
-        let is_collided_left = (ex < (cx + cw)) & ((cx + cw) < (ex + ew)) & ((ey - eh) < (cy + 16)) & ((cy + 16) < (ey - eh + 8));
-        let is_collided_right = ((ex - 1) < cx) & (cx < (ex + ew)) & ((ey - eh) < (cy + 16)) & ((cy + 16) < (ey - eh + 8));
+        let is_collided = (ex < (cx + cw)) & (cx < (ex + ew)) & ((ey - eh - 24) < (cy)) & ((cy) < (ey - eh));
 
-        return is_collided_left | is_collided_right;
+        return is_collided;
     }
 
     function bool IsBulletCollidedWithMap(Array map, int mapWidth, int mapHeight, int x, int y, bool drawLeft, int worldOffset)
@@ -390,6 +386,6 @@ class Collision
 
     function bool IsBulletCollidedWithEntity(int ex, int ey, int ewidth, int eheight, int bx, int by)
     {
-        return Collision.IsCharacterCollidedWithEnemySides(bx, by + 8, 1, 16, ex, ey, ewidth, eheight);
+        return Collision.IsCharacterCollidedWithEnemySides(bx, by + 16, 1, 16, ex, ey, ewidth, eheight);
     }
 }

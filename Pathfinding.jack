@@ -1,22 +1,20 @@
 class Pathfinding
 {
-    static Map map;
-    static Array mapArray;
+    field Array map;
 
-    static int rows;
-    static int cols;
+    field int rows;
+    field int cols;
 
+    field Array rowsDir; 
+    field Array colsDir;
 
-
-
-    // direction vectors
-    static Array rowsDir; 
-    static Array colsDir;
-
-    function void init()
+    constructor Pathfinding new(Array map2, int width, int height)
     {
+        
         let rowsDir = Array.new(4);
         let colsDir = Array.new(4);
+
+        
 
         let rowsDir[0] = -1;
         let rowsDir[1] = 1;
@@ -28,55 +26,54 @@ class Pathfinding
         let colsDir[2] = 1;
         let colsDir[3] = -1;
 
-
         
-        return;
+
+        let map = map2; 
+        let cols = width;
+        let rows = height;
+
+        return this;
     }
 
-    function void setMap(Map m) 
-    { 
-        let map = m; 
-        let cols = Map.getWidth();
-        let rows = Map.getHeight();
-        let mapArray = Map.getMap();
-        return; 
-    }
+    //function void setMap(Map m) 
+    //{ 
+    //    let map = m; 
+    //    let cols = Map.getWidth();
+    //    let rows = Map.getHeight();
+    //    let mapArray = Map.getMap();
+    //    return; 
+    //}
 
 
 
-    function int exploreNeighbours(int r, int c, PQueue rowsQ, PQueue colsQ, Array visited)
+    method int exploreNeighbours(int r, int c, PQueue rowsQ, PQueue colsQ, Array visited)
     {
         var int i;
         var int rr;
         var int cc;
         var int nodesInNextLayer;
 
-
-        //do Output.printInt(visited[17]);
-
         
-
+        
         while (i < 4)
         {
             let rr = r + rowsDir[i];
             let cc = c + colsDir[i];
 
-            if ((rr > -1) & (cc > -1) & (rr < rows) & (cc < cols) & ~(visited[Matrix.getIndex(cc, rr, cols, rows)]) & (Matrix.getValue(cc, rr, mapArray, rows, cols) = 0))
+            //do Output.printInt(rr);
+            //do Output.printString(", ");
+            //do Output.printInt(cc);
+            //do Output.println();
+
+            if ((rr > -1) & (cc > -1) & (rr < rows) & (cc < cols))
             {
-                //do Output.printInt(rr);
-                //do Output.printString(", ");
-                //do Output.printInt(cc);
-                //do Output.printString(", ");
-                //do Output.printInt(visited[Matrix.getIndex(cc, rr, cols, rows)]);
-                //do Output.printString(", ");
-                //do Output.printInt(Matrix.getValue(cc, rr, mapArray, rows, cols));
-                //do Output.println();
-                
-                
-                do rowsQ.enqueue(rr);
-                do colsQ.enqueue(cc);
-                let visited[Matrix.getIndex(cc, rr, cols, rows)] = true;
-                let nodesInNextLayer = nodesInNextLayer + 1;
+                if (~(visited[Matrix.getIndex(cc, rr, cols, rows)]) & (Matrix.getValue(cc, rr, map, cols, rows) = 0))
+                {
+                    do rowsQ.enqueue(rr);
+                    do colsQ.enqueue(cc);
+                    let visited[Matrix.getIndex(cc, rr, cols, rows)] = true;
+                    let nodesInNextLayer = nodesInNextLayer + 1;
+                }
             }
 
             let i = i + 1;
@@ -85,7 +82,7 @@ class Pathfinding
         return nodesInNextLayer;
     }
 
-    function void search(int rowS, int colS, int rowE, int colE)
+    method void search(int rowS, int colS, int rowE, int colE)
     {
         var PQueue rowsQ;
         var PQueue colsQ;
@@ -102,51 +99,51 @@ class Pathfinding
         let rowsQ = PQueue.new();
         let colsQ = PQueue.new();
 
-        do Output.printInt(nodesLeftInLayer);///////////////////////
-
         let nodesLeftInLayer = 1;
 
         let visited = Array.new(cols * rows);
+
+        while (i < (cols * rows))
+        {
+            let visited[i] = 0;
+            let i = i + 1;
+        }
 
         do rowsQ.enqueue(rowS);
         do colsQ.enqueue(colS);
 
         let visited[Matrix.getIndex(colS, rowS, cols, rows)] = true;
 
-        
+
 
         
         
         let i = rowsQ.get_size();
+        
         while (i > 0)
         {
+            //do Output.printInt(i);
             
 
             //do rowsQ.print();
             //do Output.printString(", ");
             //do colsQ.print();
-            ////do Output.println();
+            //do Output.println();
             //do Output.printString(" : ");
 
             let r = rowsQ.dequeue();
             let c = colsQ.dequeue();
 
-            
-
-            
-            
-
-            
-
-           //do Output.printInt(r);
-           //do Output.printString(", ");
-           //do Output.printInt(c);
-           //do Output.println();
-
-           //do Output.printInt(r);
 
 
-            
+
+
+            //do Output.printInt(r);
+            //do Output.printString(", ");
+            //do Output.printInt(c);
+            //do Output.println();
+
+
 
 
             if ((r = rowE) & (c = colE))
@@ -156,7 +153,7 @@ class Pathfinding
             }
             else
             {
-                let temp = Pathfinding.exploreNeighbours(r, c, rowsQ, colsQ, visited);
+                let temp = exploreNeighbours(r, c, rowsQ, colsQ, visited);
                 let nodesInNextLayer = nodesInNextLayer + temp;
                 let nodesLeftInLayer = nodesLeftInLayer - 1;
                 if (nodesLeftInLayer = 0)
@@ -169,7 +166,10 @@ class Pathfinding
                 let i = rowsQ.get_size();
             }
 
+            
+
            
+
 
             
         }
@@ -179,9 +179,8 @@ class Pathfinding
         if (reachedEnd)
         {
             //do Output.printInt(moveCount);
+            //do Output.printString("aaa");
         }
-
-
 
 
 

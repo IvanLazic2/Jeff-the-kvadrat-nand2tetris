@@ -170,7 +170,7 @@ class List
         while (~(iter = tail))
         {
             do Output.printInt(iter.get_element());
-            do Output.printString(" ");
+            do Output.printChar(32);
             let iter = iter.get_next();
         }
 
