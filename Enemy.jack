@@ -50,6 +50,7 @@ class Enemy
     field bool IsFlying;
     field bool IsGravityAffected;
     field bool IsMelee;
+	field bool IsRanged;
     field bool IsShooting;
     field bool IsDamageOnSquish;
 	field bool IsFollowing;
@@ -102,17 +103,16 @@ class Enemy
 		{
 			let width = 3;
 			let height = 2;
-			//let animationFrameCount = EvilJeffMelee.GetAnimationFrameCount();
 			
-			//let animationDelay = 3;
 			let movementDelay = 2;
 
 
 
-			//let IsGravityAffected = true;
-			//let IsMelee = true;
+			let IsGravityAffected = true;
+			let IsMelee = true;
+			let IsDamageOnSquish = true;
 			//let IsFollowing = true;
-			let IsStacionary = true;
+			//let IsStacionary = true;
 			//let IsShooting = true;
 			//let IsRoaming = true; // TEMP
 		}
@@ -128,6 +128,7 @@ class Enemy
 
 			let IsGravityAffected = true;
 			let IsShooting = true;
+			let IsRanged = true;
 		}
 		// BAT
 		else { if (type = 3)
@@ -139,6 +140,7 @@ class Enemy
 
 			//let IsStacionary = true;
 			let IsFollowing = true;
+			let IsFlying = true;
 			let IsDamageOnSquish = true;
 		}}}}
 
@@ -153,10 +155,6 @@ class Enemy
         	}
         	let currBullet = Bullets[currBulletIndex];
 		}
-
-		//let currFrame = 0;
-
-		//let animationTimer = animationDelay;
 
 		let HeightInPixels = height * 16;
 
@@ -227,7 +225,7 @@ class Enemy
         }
 		
 
-		// CHECK TIMERS ZA SVE VRSTRE ENEMYJA - ZASAD NE
+		// CHECK TIMERS ZA SVE VRSTRE ENEMYJA - ZASAD NE (za animacije)
 
 
 		return;
@@ -261,20 +259,24 @@ class Enemy
 			}
 			if (IsMelee)
 			{
-				do Jump();
+				do Melee(worldOffset, cx, cy);
 			}
-			if (IsShooting)
+			if (IsRanged)
 			{
-				do Shoot(worldOffset);
+				do Ranged(worldOffset, cx, cy);
 			}
+			//if (IsShooting)
+			//{
+			//	do Shoot(worldOffset);
+			//}
 			if (IsStacionary)
 			{
 				//do Clear();
 				do Draw(memAddress, true, false);
 			}
-			if (IsFollowing)
+			if (IsFollowing & IsFlying)
 			{
-				do Follow(map, mapWidth, mapHeight, worldOffset, cx, cy);
+				do FollowFlying(worldOffset, cx, cy);
 			}
 
 		}
@@ -355,16 +357,91 @@ class Enemy
 
 
 	//// MOVEMENT
-	method void Follow(Array map, int mapWidth, int mapHeight, int worldOffset, int cx, int cy)
+	method void FollowGravity(int worldOffset, int cx, int cy)
+	{
+		if (Collision.HasPlatformAbove(x, y, width, worldOffset, movingLeft))
+		{
+			if (((x - cx) > 0))
+			{
+				do MoveLeft(worldOffset);
+			}
+			if (((x - cx) < 0))
+			{
+				do MoveRight(worldOffset);
+			}
+			do Jump();	
+		}
+		else
+		{
+			if (~Collision.HasObstacleBelow(x, y, width, worldOffset, true))
+			{
+				if (((x - cx) > 0))
+				{
+					do MoveLeft(worldOffset);
+				}
+			}
+			if (~Collision.HasObstacleBelow(x, y, width, worldOffset, false))
+			{
+				if (((x - cx) < 0))
+				{
+					do MoveRight(worldOffset);
+				}
+			}
+		}
+
+		return;
+	}
+
+	method void Melee(int worldOffset, int cx, int cy)
+	{
+		if (Constants.IsInScreenX(x))
+		{
+			do FollowGravity(worldOffset, cx, cy);
+		}
+
+		return;
+	}
+
+	method void Ranged(int worldOffset, int cx, int cy)
+	{
+		if (Constants.IsInScreenX(x))
+		{
+			if (Math.abs(x - cx) > 10)
+			{
+				do FollowGravity(worldOffset, cx, cy);
+			}
+			else
+			{
+				if (IsShooting)
+				{
+					if ((x - cx) < 0)
+					{
+						let movingLeft = false;
+					}
+					else
+					{
+						let movingLeft = true;
+					}
+
+					do Shoot(worldOffset);
+				}
+			}
+		}
+
+		return;
+	}
+
+
+	method void FollowFlying(int worldOffset, int cx, int cy)
 	{
 
 		if (((x - cx) > 0) & (Map.getValue(x - 1 + worldOffset, y/16) = 0))
 		{
-			do MoveLeft();
+			do MoveLeft(worldOffset);
 		}
 		if (((x - cx) < 0) & (Map.getValue(x + width + worldOffset, y/16) = 0))
 		{
-			do MoveRight();
+			do MoveRight(worldOffset);
 		}
 		if (((y - cy) > 0) & (Map.getValue(x + worldOffset, (y/16) - height) = 0))
 		{
@@ -387,11 +464,11 @@ class Enemy
 
 		if (movingLeft)
 		{
-			do MoveLeft();
+			do MoveLeft(worldOffset);
 		}
 		else 
 		{
-			do MoveRight();
+			do MoveRight(worldOffset);
 		}
 
 		if (Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY) | 
@@ -450,10 +527,11 @@ class Enemy
 		return;
     }
 
-    method void MoveLeft()
+    method void MoveLeft(int worldOffset)
     {
 		let movingLeft = true;
-		if (canMoveLeftRight)
+
+		if (canMoveLeftRight & (Map.getValue(x - 1 + worldOffset, y/16) = 0))
 		{
 			let lastLocation = location;
 
@@ -471,11 +549,11 @@ class Enemy
 		
     }
 
-    method void MoveRight()
+    method void MoveRight(int worldOffset)
     {
 		let movingLeft = false;
 
-		if (canMoveLeftRight)
+		if (canMoveLeftRight & (Map.getValue(x + width + worldOffset, y/16) = 0))
 		{
 			let lastLocation = location;
 
@@ -573,6 +651,9 @@ class Enemy
 			
 
             let y = Collision.getPlatformY() - 16; // blockHeight = 16
+
+			
+
             let forceY = 0;
             let location = (y * 32) + x;
 			let memAddress = 16384 + location;
@@ -580,7 +661,7 @@ class Enemy
             //do Clear();
             //do Draw();
 			
-			do Draw(memAddress, true, false);
+			do Draw(memAddress, true, movingLeft);
         }
         // padanje
         else
@@ -597,10 +678,14 @@ class Enemy
 		do Clear();
 
         let y = y + forceY;
+
+		//do Output.printInt(y);
+		//do Output.println();
+
         let location = (y * 32) + x;
 		let memAddress = 16384 + location;
 		
-		do Draw(memAddress, true, false);
+		do Draw(memAddress, true, movingLeft);
 
         return;
     }
@@ -742,7 +827,7 @@ class Enemy
 			}
 			else { if (type = 1)
 			{
-				do EvilJeffMelee.DrawFrame(memAddress, display, mirrored, x, y);
+				do EvilJeffMelee.DrawFrame(memAddress, display, movingLeft, x, y);
 			}
 			else { if (type = 2)
 			{

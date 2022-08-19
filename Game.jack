@@ -66,22 +66,14 @@ class Game
 
     field int GameDelay;
 
-    field int timer3;
-    field int timer6;
-    field int timer100;
+    field int redrawAllObstaclesTimer;
+    field int redrawAllObstaclesDelay;
 
     field Array map;
     field int mapWidth;
     field int mapHeight;
 
     field int WorldOffset;
-
-
-
-    field Pathfinding pathfinding;
-
-    field int pathFindingTimer;
-    field int pathFindingDelay;
 
 
     
@@ -110,10 +102,6 @@ class Game
         do Map.setHeight(mapHeight);
         do Map.setMap(map);
 
-        //do Pathfinding.setMap(map);
-
-        //do Output.printInt(Map.getValue(0, 15));
-
         let Character = Level.getCharacter();
 
         let PlatformsCount = Level.getPlatformsCount();
@@ -140,9 +128,8 @@ class Game
 
         let GameDelay = 20;
 
-        let timer3 = 3;
-        let timer6 = 6;
-        let timer100 = 100;
+        let redrawAllObstaclesDelay = 7;
+        let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
 
         let WorldOffset = 0;
 
@@ -150,19 +137,8 @@ class Game
         let Bullets = Array.new(BulletsCount);
         do GetBullets();
 
-
         do DrawAllPlatforms();
         do DrawAllCollectables();
-
-        
-        let pathfinding = Pathfinding.new(map, mapWidth, mapHeight);
-
-        //do pathfinding.search(1, 1, 6, 6);
-        
-        
-        let pathFindingDelay = 100;
-
- 
 
         return this;
     }
@@ -256,26 +232,10 @@ class Game
     // GAME TIMERS
     method void CheckTimers()
     {
-        if (timer6 < 1)
+        if (redrawAllObstaclesTimer < 1)
         {
-            //do RedrawLastSection();
             do RedrawAllObstacles();
-
-            let timer6 = 6;
-        }
-
-        if (timer100 < 1)
-        {
-            //do Screen.drawLine(0, 255-80, 511, 255-80);
-
-            let timer100 = 100;
-        }
-
-        if (pathFindingTimer < 1)
-        {
-            //do pathfinding.search(0, 0, 6, 6);
-            //do Output.printString("nig");
-            let pathFindingTimer = pathFindingDelay;
+            let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
         }
 
         do Character.CheckTimers();
@@ -287,11 +247,7 @@ class Game
     
     method void DecrementTimers()
     {
-        let timer3 = timer3 - 1;
-        let timer6 = timer6 - 1;
-        let timer100 = timer100 - 1;
-
-        let pathFindingTimer = pathFindingTimer - 1;
+        let redrawAllObstaclesTimer = redrawAllObstaclesTimer - 1;
 
         do Character.DecrementTimers();
         do DecrementAllEnemyTimers();
@@ -542,6 +498,7 @@ class Game
             if (Collision.IsBulletCollidedWithEntity(Character.get_x(), Character.get_y(), Character.getWidth(), Character.getHeight(), bullet.getX(), bullet.getY()))
             {
                 do bullet.setCollided(true);
+                do bullet.Reset();
                 do Character.Respawn();
                 do Character.TakeDamage();
             }
@@ -555,6 +512,7 @@ class Game
                     if (Collision.IsBulletCollidedWithEntity(enemy.get_x(), enemy.get_y(), enemy.getWidth(), enemy.getHeight(), bullet.getX(), bullet.getY()))
                     {
                         do bullet.setCollided(true);
+                        do bullet.Reset();
                         do enemy.Die();
                     }
                 }
