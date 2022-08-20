@@ -106,11 +106,15 @@ class Enemy
 			
 			let movementDelay = 2;
 
-			let IsGravityAffected = true;
-			let IsMelee = true;
+
+
+			//let IsGravityAffected = true;
+			//let IsMelee = true;
+
+
 
 			//let IsFollowing = true;
-			//let IsStacionary = true;
+			let IsStacionary = true;
 			//let IsShooting = true;
 			//let IsRoaming = true; // TEMP
 		}
@@ -266,9 +270,12 @@ class Enemy
 
 	method void CheckCollisionWithBullet(Bullet bullet)
     {
-		if (IsAlive & bullet.CheckCollisionWithEntity(x, y, width, heightInPixels))
+		if (IsAlive)
 		{
-			do Die();
+			if (bullet.CheckCollisionWithEntity(x, y, width, heightInPixels))
+			{
+				do Die();
+			}
 		}
 
 		return;
@@ -391,7 +398,6 @@ class Enemy
 	//// MOVEMENT
 	method void FollowGravity(int worldOffset, int cx, int cy)
 	{
-		//do Output.printInt(Collision.HasPlatformAbove(x, y, width, worldOffset, movingLeft));
 		if (hasPlatformAboveTimer < 0)
 		{
 			let hasPlatformAbove = Collision.HasPlatformAbove(x, y, width, worldOffset, movingLeft);
@@ -401,10 +407,6 @@ class Enemy
 		{
 			let hasPlatformAboveTimer = hasPlatformAboveTimer - 1;
 		}
-
-		//do Output.printInt(hasPlatformAbove);
-		//do Output.printInt(Collision.HasPlatformAbove(x, y, width, worldOffset, movingLeft));
-
 
 		if (hasPlatformAbove)
 		{
@@ -420,11 +422,6 @@ class Enemy
 		}
 		else
 		{
-			do Output.printInt(Collision.GetPlatformBelowY(x, y, width, worldOffset, false));
-			do Output.printString(", ");
-			do Output.printInt(Collision.GetObstacleBelowY(x, y, width, worldOffset, false));
-			do Output.println();
-
 			if (Collision.GetPlatformBelowY(x, y, width, worldOffset, true) < Collision.GetObstacleBelowY(x, y, width, worldOffset, true))
 			{
 				if (((x - cx) > 0))

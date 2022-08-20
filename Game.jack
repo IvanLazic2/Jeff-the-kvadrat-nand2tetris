@@ -411,6 +411,7 @@ class Game
             let enemy = Enemies[i];
             let bullets = enemy.getBullets();
 
+            let j = 0;
             while (j < enemy.getBulletsCount())
             {
                 let Bullets[arrSize + j] = bullets[j];
@@ -439,6 +440,7 @@ class Game
 
             do Character.CheckCollisionWithBullet(bullet);
 
+            let j = 0;
             while (j < EnemiesCount)
             {
                 let enemy = Enemies[j];
@@ -628,7 +630,6 @@ class Game
 
             if (~Character.check_left_collision_platforms2(map, mapWidth, mapHeight, WorldOffset))
             {
-                // nesto s apsolutnom vrijednosti izmedju x i pocetka mape?
                 if (abs_x - ScreenMiddle + MoveAreaWidth > 0)
                 {
                     if (x > LeftBorder)
