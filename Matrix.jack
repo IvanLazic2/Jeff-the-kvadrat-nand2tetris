@@ -10,7 +10,9 @@ class Matrix
         }
         else
         {
-            do Output.printString("indeksi izasli iz matrice");
+            //do Output.printString("indeksi izasli iz matrice");
+            //do Output.printInt(row);
+            //do Output.printChar(32);
         }
 
         return result;

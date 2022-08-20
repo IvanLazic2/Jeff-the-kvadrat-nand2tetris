@@ -53,6 +53,27 @@ class Bullet
 		return;
 	}
 
+
+
+    method bool CheckCollisionWithEntity(int ex, int ey, int ew, int eh)
+    {
+        if (Collision.IsBulletCollidedWithEntity(ex, ey, ew, eh, X, Y))
+        {
+            let isCollided = true;
+            do Reset();
+            
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+
+
+
+
     method bool IsAvailable()
     {
         return memAddress = resetMemAddress;

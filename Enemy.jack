@@ -52,7 +52,7 @@ class Enemy
     field bool IsMelee;
 	field bool IsRanged;
     field bool IsShooting;
-    field bool IsDamageOnSquish;
+    field bool DiesOnSquish;
 	field bool IsFollowing;
 	field bool IsStacionary;
 
@@ -91,8 +91,6 @@ class Enemy
 		{
 			let width = 2;
 			let height = 1;
-			//let animationFrameCount = Spider.GetFrameCount();
-			//let animationDelay = 3;
 			let movementDelay = 2;
 
 			let IsRoaming = true;
@@ -108,11 +106,12 @@ class Enemy
 
 
 
-			let IsGravityAffected = true;
-			let IsMelee = true;
-			let IsDamageOnSquish = true;
+			//let IsGravityAffected = true;
+			//let IsMelee = true;
+			//let DiesOnSquish = true;
+
 			//let IsFollowing = true;
-			//let IsStacionary = true;
+			let IsStacionary = true;
 			//let IsShooting = true;
 			//let IsRoaming = true; // TEMP
 		}
@@ -126,9 +125,12 @@ class Enemy
 
 
 
-			let IsGravityAffected = true;
-			let IsShooting = true;
-			let IsRanged = true;
+			//let IsGravityAffected = true;
+			//let IsShooting = true;
+			//let IsRanged = true;
+
+			let IsStacionary = true;
+			let DiesOnSquish = true;
 		}
 		// BAT
 		else { if (type = 3)
@@ -138,10 +140,10 @@ class Enemy
 
 			let movementDelay = 5;
 
-			//let IsStacionary = true;
-			let IsFollowing = true;
-			let IsFlying = true;
-			let IsDamageOnSquish = true;
+			let IsStacionary = true;
+			//let IsFollowing = true;
+			//let IsFlying = true;
+			let DiesOnSquish = true;
 		}}}}
 
 		if (IsShooting)
@@ -189,7 +191,7 @@ class Enemy
     method bool getIsGravityAffected() { return IsGravityAffected; }
     method bool getIsMelee() { return IsMelee; }
     method bool getIsShooting() { return IsShooting; }
-    method bool getIsDamageOnSquish() { return IsDamageOnSquish; }
+    //method bool getDiesOnSquish() { return DiesOnSquish; }
 	method bool getIsFollowing() { return IsFollowing; }
 	method bool getIsStacionary() { return IsStacionary; }
 
@@ -241,6 +243,36 @@ class Enemy
 	}
 
 
+
+
+	
+	method bool CheckCollisionWithCharacter(int cx, int cy, int cw, int ch)
+	{
+		if (IsAlive)
+		{
+			if (DiesOnSquish & Collision.IsEntityCollidedWithEntityTop(cx, cy, cw, ch, x, y, width, height))
+			{
+				do Die();
+				return false;
+			}
+			else { if (Collision.IsEntityCollidedWithEntitySides(cx, cy, cw, ch, x, y, width, height))
+			{
+				return true;
+			}}
+		}
+		
+		return false;
+	}
+
+	method void CheckCollisionWithBullet(Bullet bullet)
+    {
+		if (IsAlive & bullet.CheckCollisionWithEntity(x, y, width, height))
+		{
+			do enemy.Die();
+		}
+
+		return;
+    }
 
 
 

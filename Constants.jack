@@ -3,16 +3,33 @@ class Constants
     static int screenStart;
     static int blockHeight;
 
+    static Array div16lookup;
+    static int mh;
+
     function void init()
     {
+        var int i;
+
         let screenStart = 16384;
         let blockHeight = 16;
+
+        //let mh = 256; //TEMPPPPPP!!!!!!!
+        //let div16lookup = Array.new(mh);
+        //let i = 0;
+        //while (i < (mh))
+        //{
+        //    let div16lookup[i] = i / 16;
+        //    let i = i + 1;
+        //}
 
         return;
     }
 
     function int getScreenStart() { return screenStart; }
     function int getBlockHeight() { return blockHeight; }
+
+    //function int getYDiv16(int y) { return div16lookup[y]; }
+
 
     function int getLeftBlock(int memAddress) { return memAddress - 1; }
     function int getRightBlock(int memAddress) { return memAddress + 1; }

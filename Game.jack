@@ -13,19 +13,10 @@
 
 
 
-
-// IDEJA: sortirat platforme po x koordinati
-// IDEJA2: brojac koji broji kolko ih je izaslo iz ekrana. kolko ih je izaslo tolko mogu stvorit novih tako da starima promijenim koordinate.
-//         ako nijedna nije izasla iz ekrana, a treba se pokazat novi, sam stvorim novu platformu
-
-
-
-
 class Game
 {
     field int Direction;
     field Character Character;
-    field int ScreenWidth;
     field int MoveAreaWidth;
     field int ScreenMiddle;
     field int LeftBorder;
@@ -36,33 +27,16 @@ class Game
     field int EnemiesCount;
     field int CollectablesCount;
     field int BulletsCount;
-    //field int sections_num;
-    //field int section_width;
 
     field Array Platforms;
     field Array Obstacles;
     field Array Enemies;
     field Array Collectables;
     field Array Bullets;
-    //field Array sections;
-
-    //field Section curr_section;
-    //field Section last_section;
-    //field int curr_section_index;
-    //field int last_section_index;
-    //field Array curr_Platforms;
-    //field int curr_PlatformsCount;
 
     field Array div4lookup;
 
     field Level3 Level;
-
-
-    //field Array curr_Obstacles;
-    //field int curr_ObstaclesCount;
-
-
-
 
     field int GameDelay;
 
@@ -88,7 +62,6 @@ class Game
 
         let Direction = 0;
 
-        let ScreenWidth = 32;
         let MoveAreaWidth = 5; // 5
         let ScreenMiddle = 16;
         let LeftBorder = ScreenMiddle - MoveAreaWidth;
@@ -126,7 +99,7 @@ class Game
 
 
 
-        let GameDelay = 20;
+        let GameDelay = 40; //20
 
         let redrawAllObstaclesDelay = 7;
         let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
@@ -199,6 +172,7 @@ class Game
 
 
             do Character.RedrawPlatforms(map, mapWidth, mapHeight, WorldOffset);
+            
 
             do DoAllEnemyActions();
 
@@ -295,8 +269,6 @@ class Game
         var Platform platform;
         var int i;
 
-        
-
         while (i < PlatformsCount)
         {
             let platform = Platforms[i];
@@ -327,14 +299,11 @@ class Game
         var Obstacle obstacle;
         var int i;
 
-        
-
         if (Character.get_should_draw_last_obstacle())
         {
             while (i < ObstaclesCount)
             {
                 let obstacle = Obstacles[i];
-
                 do obstacle.Draw();
 
                 let i = i + 1;
@@ -345,9 +314,6 @@ class Game
         return;
     }
 
-
-
-
     method void DoAllEnemyActions()
     {
         var Enemy enemy;
@@ -356,7 +322,8 @@ class Game
         while (i < EnemiesCount)
         {
             let enemy = Enemies[i];
-            do enemy.DoActions(map, mapWidth, mapHeight, WorldOffset, Character.get_x(), Character.get_y());
+            //do enemy.DoActions(map, mapWidth, mapHeight, WorldOffset, Character.get_x(), Character.get_y());
+            do Character.DoEnemyAction(enemy, map, mapWidth, mapHeight, WorldOffset);
             let i = i + 1;
         }
 
@@ -374,32 +341,7 @@ class Game
         {
             let enemy = Enemies[i];
 
-            if (enemy.getIsAlive())
-            {
-                let collided_sides = Collision.IsCharacterCollidedWithEnemySides(Character.get_x(), Character.get_y(), Character.getWidth(), Character.getHeight(), enemy.get_x(), enemy.get_y(), enemy.getWidth(), enemy.getHeight());
-                let collided_top = Collision.IsCharacterCollidedWithEnemyTop(Character.get_x(), Character.get_y(), Character.getWidth(), Character.getHeight(), enemy.get_x(), enemy.get_y(), enemy.getWidth(), enemy.getHeight());
-
-                if (collided_top)
-                {
-                    if (enemy.getIsDamageOnSquish())
-                    {
-                        do Character.Respawn();
-                        do Character.TakeDamage();
-                    }   
-                    else
-                    {
-                        do enemy.Die();
-                    }
-                }
-                else { if (collided_sides)
-                {
-                    do Character.Respawn();
-                    do Character.TakeDamage();
-                }}
-            }
-
-            
-        
+            do Character.CheckCollisionWithEnemy(enemy);
 
             let i = i + 1;
         }
@@ -495,27 +437,13 @@ class Game
         {
             let bullet = Bullets[i];
 
-            if (Collision.IsBulletCollidedWithEntity(Character.get_x(), Character.get_y(), Character.getWidth(), Character.getHeight(), bullet.getX(), bullet.getY()))
-            {
-                do bullet.setCollided(true);
-                do bullet.Reset();
-                do Character.Respawn();
-                do Character.TakeDamage();
-            }
+            do Character.CheckCollisionWithBullet(bullet);
 
             while (j < EnemiesCount)
             {
                 let enemy = Enemies[j];
 
-                if (enemy.getIsAlive())
-                {
-                    if (Collision.IsBulletCollidedWithEntity(enemy.get_x(), enemy.get_y(), enemy.getWidth(), enemy.getHeight(), bullet.getX(), bullet.getY()))
-                    {
-                        do bullet.setCollided(true);
-                        do bullet.Reset();
-                        do enemy.Die();
-                    }
-                }
+                do enemy.CheckCollisionWithBullet(bullet);
 
                 let j = j + 1;
             }
@@ -526,12 +454,6 @@ class Game
         return;
     }
 
-    // ideja: na pocetku skenirat cijeli ekran i iscrtat sve, onda svaki puta zapamtit x, x + width i y koordinate od objekta koji se treba scrollat
-    //        i gledat samo granice ekrana (prvi i zadnji stupac, sve zavisi kako se scrolla)
-
-    // ideja2: spremat te objekte (klase GameObject koja ima x, y, w i h) u array velicine 512 i spremat je li na nekom indeksu pojle zauzeto
-    //         u drugo polje koje sadrzi 512 bool-ova koji govore jeli mjesto zauzeto ili ne
-
     method void CheckCollectableAndCharacterCollision()
     {
         var int i;
@@ -541,50 +463,13 @@ class Game
         {
             let collectable = Collectables[i];
 
-            if ((-1 < collectable.getX()) & (collectable.getX() < 32) & collectable.getIsAvailable())
-            {
-                if (Collision.IsBulletCollidedWithEntity(Character.get_x(), Character.get_y(), Character.getWidth(), Character.getHeight(), collectable.getX(), collectable.getY()))
-                {
-                    do Output.printString("bling");
-
-                    if (collectable.getType() = 0)
-                    {
-                        do Character.addCoin();
-                    }   
-                    else
-                    {
-                        do Character.addLife();
-                    }
-
-                    do collectable.setIsAvailable(false);
-                }
-            }   
-
-            
+            do Character.CheckCollisionWithCollectable(collectable);
 
             let i = i + 1;
         }
 
         return;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -29,6 +29,17 @@ class Collectable
     
     method void setIsAvailable(int b) { let IsAvailable = b; return; }
 
+    method int CheckCollisionWithCharacter(int cx, int cy, int cw, int ch)
+    {
+        if (IsAvailable & Collision.IsBulletCollidedWithEntity(cx, cy, cw, ch, X, Y))
+        {
+            let IsAvailable = false;
+            return Type;
+        }
+
+        return -1;
+    }
+
     method void Collect()
     {
         let IsAvailable = false;

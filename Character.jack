@@ -8,18 +8,13 @@ class Character
     field int location;
     field int width;
     field int height;
-    field int direction;
     field int forceY;
     field int gravity;
     field int jump_height;
-    field int jump_height_const;
-    field int jump_compensation_const;
     field bool can_jump;
 
     field int lastlocation;
     field int memAddress;
-
-    field int widthdiv16;
 
     field int health;
 
@@ -46,13 +41,7 @@ class Character
     field int animationDelay;
 	field int animationTimer;
 
-
-
     field int HeightInPixels;
-
-
-
-
 
     field Array Bullets;
     field int BulletsCount;
@@ -80,20 +69,12 @@ class Character
         let width = 3; // 3
         let height = 2; // 32
 
-        //let widthdiv16 = width / 16;
-
-        //let forceY = 0;
         let gravity = 6; // 6
         let can_jump = false;
         let jump_height = 35; // 35
-        let jump_height_const = 5; //20
-        let jump_compensation_const = 4;
 
         let health = 3;
         let damage_cooldown = 20; // 20 game ticks
-
-
-        let animationTimer = animationDelay;
 
         let HeightInPixels = height * 16;
 
@@ -185,14 +166,6 @@ class Character
     
     method void CheckTimers()
 	{
-		//if (animationTimer < 1)
-		//{
-		//	do ChangeFrame();
-		//	let animationTimer = animationDelay;
-		//}
-
-        
-
         if (bulletTimer < 1)
         {
             let canShoot = true;
@@ -204,28 +177,60 @@ class Character
 
 	method void DecrementTimers()
 	{
-		//let animationTimer = animationTimer - 1;
         let bulletTimer = bulletTimer - 1;
-
 
 		return;
 	}
     
 
 
-	//method void ChangeFrame()
-	//{
-	//	if (currFrame < (animationFrameCount - 1))
-	//	{
-	//		let currFrame = currFrame + 1;
-	//	}
-	//	else
-	//	{
-	//		let currFrame = 0;
-	//	}
-//
-	//	return;
-	//}
+
+    method void DoEnemyAction(Enemy enemy, Array map, int mapWidth, int mapHeight, int worldOffset)
+    {
+        do enemy.DoActions(map, mapWidth, mapHeight, worldOffset, x, y);
+
+        return;
+    }
+
+    method void CheckCollisionWithEnemy(Enemy enemy)
+    {
+        if (enemy.CheckCollisionWithCharacter(x, y, width, height))
+        {
+            do Respawn();
+            do TakeDamage();
+        }
+
+        return;
+    }
+
+    method void CheckCollisionWithBullet(Bullet bullet)
+    {
+        if (bullet.CheckCollisionWithEntity(x, y, width, height))
+        {
+            do Respawn();
+            do TakeDamage();
+        }
+
+        return;
+    }
+
+    method void CheckCollisionWithCollectable(Collectable collectable)
+    {
+        var int result;
+        let result = collectable.CheckCollisionWithCharacter(x, y, width, height);
+
+        if (result = 0)
+        {
+            do addCoin();
+        }
+        else { if (result = 1)
+        {
+            do addLife();
+        }}
+
+        return;
+    }
+
 
 
 
@@ -237,162 +242,11 @@ class Character
         return;
     }
 
-    //method void RedrawObstacles(Array map, int mapWidth, int mapHeight, int worldOffset)
-    //{
-    //    var int i;
-    //    var int j;
-    //    var int px;
-    //    var int py;
-    //    var int location;
-    //    var int memAddress;
-    //    var Array x_map;
-//
-    //    let i = absolute_x - 1;
-    //    while (i < (absolute_x + width + 1))
-    //    {
-    //        let x_map = map[i];
-//
-    //        let j = (y / 16) - 2;
-    //        while (j < (((y + height) / 16) + 1))
-    //        //let j = 0; // TEMP
-    //        //while (j < 16) // TEMP
-    //        {
-    //            if ((0 < x_map[j]) & (x_map[j] < 11))
-    //            {
-    //                let location = (j * 16 * 32) + i - worldOffset;
-	//	            let memAddress = 16384 + location;
-//
-    //                do Platform.DrawBlock(0, x_map[j] - 1, memAddress);
-    //            }
-//
-    //            let j = j + 1;
-    //        }
-//
-    //        let i = i + 1;
-    //    }
-//
-    //    return;
-    //}
-
-
-
-    //method void RedrawPlatform2(Array platforms, int platforms_num, Array map, int mapWidth, int mapHeight)
-    //{
-    //    var int i;
-    //    var int j;
-    //    var int px;
-    //    var int py;
-    //    var int location;
-    //    var int memAddress;
-    //    var Array x_map;
-//
-    //    let i = absolute_x - 1;
-    //    while (i < (absolute_x + width + 1))
-    //    {
-    //        let x_map = map[i];
-//
-    //        let j = y - 16;
-    //        while (j < (y + height + 16))
-    //        {
-    //            if ((1 < x_map[j / 16]) & (x_map[j / 16] < 10))
-    //            {
-    //                //do Output.printString("a");
-    //            }
-//
-    //            let j = j + 16;
-    //        }
-//
-    //        let i = i + 1;
-    //    }
-//
-    //    let i = absolute_x - 1;
-    //    while (i < (absolute_x + width + 1))
-    //    {
-    //        let x_map = map[i];
-//
-    //        let j = 0;
-    //        while (j < 16)
-    //        {
-    //            if ((1 < x_map[j]) & (x_map[j] < 10))
-    //            {
-    //                if((i < 32) & (i > -1))
-    //                {
-    //                    let location = (j * 16 * 32) + i;
-	//	                let memAddress = 16384 + location;
-    //                    do Memory.poke(memAddress + 0, -1);
-	//                    do Memory.poke(memAddress + 32, -32767);
-	//                    do Memory.poke(memAddress + 64, -32767);
-	//                    do Memory.poke(memAddress + 96, -32767);
-	//                    do Memory.poke(memAddress + 128, -32767);
-	//                    do Memory.poke(memAddress + 160, -32767);
-	//                    do Memory.poke(memAddress + 192, -32767);
-	//                    do Memory.poke(memAddress + 224, -32767);
-	//                    do Memory.poke(memAddress + 256, -32767);
-	//                    do Memory.poke(memAddress + 288, -32767);
-	//                    do Memory.poke(memAddress + 320, -32767);
-	//                    do Memory.poke(memAddress + 352, -32767);
-	//                    do Memory.poke(memAddress + 384, -32767);
-	//                    do Memory.poke(memAddress + 416, -32767);
-	//                    do Memory.poke(memAddress + 448, -32767);
-    //	                do Memory.poke(memAddress + 480, -1);
-    //                }
-    //                
-    //            }
-//
-    //            let j = j + 1;
-    //        }
-//
-    //        let i = i + 1;
-    //    }
-
-
-
-
-        //let location = (py * 32) + px;
-		//let memAddress = 16384 + location;
-        //do Memory.poke(memAddress + 0, -1);
-	    //do Memory.poke(memAddress + 32, -32767);
-	    //do Memory.poke(memAddress + 64, -32767);
-	    //do Memory.poke(memAddress + 96, -32767);
-	    //do Memory.poke(memAddress + 128, -32767);
-	    //do Memory.poke(memAddress + 160, -32767);
-	    //do Memory.poke(memAddress + 192, -32767);
-	    //do Memory.poke(memAddress + 224, -32767);
-	    //do Memory.poke(memAddress + 256, -32767);
-	    //do Memory.poke(memAddress + 288, -32767);
-	    //do Memory.poke(memAddress + 320, -32767);
-	    //do Memory.poke(memAddress + 352, -32767);
-	    //do Memory.poke(memAddress + 384, -32767);
-	    //do Memory.poke(memAddress + 416, -32767);
-	    //do Memory.poke(memAddress + 448, -32767);
-    	//do Memory.poke(memAddress + 480, -1);
-        
-
-       // return;
-    //}
-
-
     //// PLATFORM COLLISION
-    //method bool check_right_collision_platforms(Array platforms, int platforms_num)
-    //{
-    //    return Collision.CheckPlatformCollisionRight(platforms, platforms_num, x, y, width, height);
-    //}
-
     method bool check_right_collision_platforms2(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
-        //do Output.printInt(x);
-        //do Output.printString(", ");
-        //do Output.printInt(absolute_x);
-        //do Output.println();
-        
-
         return Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY);
     }
-
-    //method bool check_left_collision_platforms(Array platforms, int platforms_num)
-    //{
-    //    return Collision.CheckPlatformCollisionLeft(platforms, platforms_num, x, y, width, height);
-    //}
 
     method bool check_left_collision_platforms2(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
@@ -400,11 +254,9 @@ class Character
     }
 
     //// OBSTACLE COLLISION
-
     method void check_collision_obstacles2(Array map, int mapWidth, int mapHeight)
     {
         var int i;
-        //var Obstacle obstacle;
         var bool result;
 
 
@@ -412,7 +264,6 @@ class Character
 
         if (result)
         {
-            //let last_obstacle = obstacle;
             let should_draw_last_obstacle = true;
             let last_abs_x = absolute_x;
 
@@ -519,16 +370,6 @@ class Character
         return;
     }
 
-    //method bool at_canvas_boundary()
-    //{
-    //    return ((y + height + forceY) > 254); //254
-    //}
-
-    //// GRAVITY
-
-
-
-
     method void check_gravity2(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
         var int i;
@@ -542,34 +383,25 @@ class Character
 
         let can_jump = Collision.IsOnAnyPlatform(x, y, width, height, forceY, map, mapWidth, mapHeight, worldOffset);
 
-        //do Output.printInt(y);
-        //do Output.println();
+        // can_jump je false kad udjem dijagonalno u platformu
+
+
 
         if (can_jump)
         {
-            
-            
-            let y = Collision.getPlatformY() - 16; // -> blockHeight
-            //do Output.printInt(y);
-            //do Output.println();
-            
-            
+            let y = Collision.getPlatformY() - 16;
 
             let forceY = 0;
             let location = (y * 32) + x;
 
-            //do Output.printInt(y);
-            //do Output.println();
             do Clear();
-            //do Output.printInt(y);
-            //do Output.println();
             do Draw();
-            //do Output.printInt(y);
-            //do Output.println();
         }
         // padanje
         else
         {
+            
+
             if (y > 219)
             {
                 //do Respawn();
@@ -591,78 +423,11 @@ class Character
 
         
         do Clear();
-        
         do Draw();
         
 
         return;
     }
-
-
-
-
-
-
-    //method void check_gravity(Array platforms, int platforms_num)
-    //{
-    //    var int i;
-    //    var Platform platform;
-    //    var Section section;
-    //    var bool is_on_platform;
-//
-    //    let lastlocation = location;
-//
-    //    while (i < platforms_num)
-    //    {
-    //        let platform = platforms[i];
-//
-    //        //if (Math.abs(y - platform.get_y()) < 50)
-    //        //{
-    //            let is_on_platform = Collision.IsOnPlatform(platform, x, y, width, height, forceY);
-    //            //let lastlocation = location;
-    //            let can_jump = is_on_platform;
-//
-    //            if (is_on_platform)
-    //            {
-    //                let i = platforms_num - 1;
-    //            }
-    //        //}
-//
-    //        let i = i + 1;
-    //    }
-//
-    //    if (can_jump)
-    //    {
-    //        let y = platform.get_y() - height;
-    //       
-    //        let forceY = 0;
-    //        let location = (y * 32) + x;
-//
-    //        do Clear();
-    //        do Draw();
-    //    }
-    //    // padanje
-    //    else
-    //    {
-    //        if (y > 219)
-    //        {
-    //            do Respawn();
-//
-    //            // take damage
-    //        }
-//
-    //        let forceY = forceY + gravity;            
-    //    }
-//
-//
-    //    let y = y + forceY;
-    //    let location = (y * 32) + x;
-    //    
-    //    do Clear();
-    //    do Draw();
-//
-    //    return;
-    //}
 
 
     method void Respawn()
@@ -671,9 +436,6 @@ class Character
 
         if (x - 10 < 1)
         {
-            //let x = 2;
-            //let absolute_x = 2;
-            //temp
             let x = x + 5;
             let absolute_x = absolute_x + 5;
         }
