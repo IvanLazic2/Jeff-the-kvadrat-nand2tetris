@@ -57,11 +57,11 @@ class Bullet
 
     method bool CheckCollisionWithEntity(int ex, int ey, int ew, int eh)
     {
-        if (Collision.IsBulletCollidedWithEntity(ex, ey, ew, eh, X, Y))
+        if (~IsAvailable() & Collision.IsBulletCollidedWithEntity(ex, ey, ew, eh, X, Y))
         {
             let isCollided = true;
             do Reset();
-            
+
             return true;
         }
 
@@ -76,7 +76,7 @@ class Bullet
 
     method bool IsAvailable()
     {
-        return memAddress = resetMemAddress;
+        return (memAddress = resetMemAddress);
     }
 
     method void Shoot(int x, int y, bool drawLeft2, int worldOffset)

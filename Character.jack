@@ -8,6 +8,7 @@ class Character
     field int location;
     field int width;
     field int height;
+    field int heightInPixels;
     field int forceY;
     field int gravity;
     field int jump_height;
@@ -41,8 +42,6 @@ class Character
     field int animationDelay;
 	field int animationTimer;
 
-    field int HeightInPixels;
-
     field Array Bullets;
     field int BulletsCount;
     field int currBulletIndex;
@@ -68,6 +67,7 @@ class Character
 
         let width = 3; // 3
         let height = 2; // 32
+        let heightInPixels = height * 16;
 
         let gravity = 6; // 6
         let can_jump = false;
@@ -76,7 +76,7 @@ class Character
         let health = 3;
         let damage_cooldown = 20; // 20 game ticks
 
-        let HeightInPixels = height * 16;
+        
 
 
         let BulletsCount = 5;
@@ -105,7 +105,7 @@ class Character
     method int get_y() { return y; }
 
     method int getWidth() { return width; }
-    method int getHeight() { return HeightInPixels; }
+    method int getHeight() { return height; }
 
     method int get_absolute_x() { return absolute_x; }
 
@@ -194,7 +194,7 @@ class Character
 
     method void CheckCollisionWithEnemy(Enemy enemy)
     {
-        if (enemy.CheckCollisionWithCharacter(x, y, width, height))
+        if (enemy.CheckCollisionWithCharacter(x, y, width, heightInPixels))
         {
             do Respawn();
             do TakeDamage();
@@ -205,7 +205,7 @@ class Character
 
     method void CheckCollisionWithBullet(Bullet bullet)
     {
-        if (bullet.CheckCollisionWithEntity(x, y, width, height))
+        if (bullet.CheckCollisionWithEntity(x, y, width, heightInPixels))
         {
             do Respawn();
             do TakeDamage();
@@ -217,7 +217,7 @@ class Character
     method void CheckCollisionWithCollectable(Collectable collectable)
     {
         var int result;
-        let result = collectable.CheckCollisionWithCharacter(x, y, width, height);
+        let result = collectable.CheckCollisionWithCharacter(x, y, width, heightInPixels);
 
         if (result = 0)
         {
@@ -237,7 +237,7 @@ class Character
 
     method void RedrawPlatforms(Array map, int mapWidth, int mapHeight, int worldOffset)
     {
-        do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, height, worldOffset);
+        do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, heightInPixels, worldOffset);
 
         return;
     }

@@ -99,7 +99,7 @@ class Game
 
 
 
-        let GameDelay = 40; //20
+        let GameDelay = 20; //20
 
         let redrawAllObstaclesDelay = 7;
         let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
@@ -194,7 +194,7 @@ class Game
             do DecrementTimers();
 
             
-
+            
 
 
         }

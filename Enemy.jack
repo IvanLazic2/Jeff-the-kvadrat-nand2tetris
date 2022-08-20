@@ -10,8 +10,9 @@ class Enemy
 	field int y;
 	field int type;
 
-	field int width; // spider - 1
-	field int height; // spider - 16
+	field int width; 
+	field int height;
+	field int heightInPixels;
 
 	field int location;
 	field int lastLocation;
@@ -59,9 +60,6 @@ class Enemy
 	field bool IsAlive;
 
 
-	field int HeightInPixels;
-
-
 	field Array Bullets;
     field int BulletsCount;
     field int currBulletIndex;
@@ -71,6 +69,10 @@ class Enemy
     field int bulletDelay;
 
     field bool canShoot;
+
+	field bool hasPlatformAbove;
+	field int hasPlatformAboveTimer;
+	field int hasPlatformAboveDelay;
 
 
 
@@ -104,14 +106,11 @@ class Enemy
 			
 			let movementDelay = 2;
 
-
-
-			//let IsGravityAffected = true;
-			//let IsMelee = true;
-			//let DiesOnSquish = true;
+			let IsGravityAffected = true;
+			let IsMelee = true;
 
 			//let IsFollowing = true;
-			let IsStacionary = true;
+			//let IsStacionary = true;
 			//let IsShooting = true;
 			//let IsRoaming = true; // TEMP
 		}
@@ -121,15 +120,13 @@ class Enemy
 			let width = 3;
 			let height = 2;
 
-			let movementDelay = 2;
+			let movementDelay = 3;
 
+			let IsGravityAffected = true;
+			let IsShooting = true;
+			let IsRanged = true;
 
-
-			//let IsGravityAffected = true;
-			//let IsShooting = true;
-			//let IsRanged = true;
-
-			let IsStacionary = true;
+			//let IsStacionary = true;
 			let DiesOnSquish = true;
 		}
 		// BAT
@@ -158,7 +155,7 @@ class Enemy
         	let currBullet = Bullets[currBulletIndex];
 		}
 
-		let HeightInPixels = height * 16;
+		let heightInPixels = height * 16;
 
 		let movementTimer = movementDelay;
 
@@ -174,6 +171,9 @@ class Enemy
 		let bulletDelay = 10;
         let bulletTimer = bulletDelay;
 
+		let hasPlatformAboveDelay = 5;
+		let hasPlatformAboveTimer = hasPlatformAboveDelay;
+
 		let lastLocation = location;
 
 
@@ -183,7 +183,7 @@ class Enemy
 	method int get_x() { return x; }
 	method int get_y() { return y; }
 	method int getWidth() { return width; }
-	method int getHeight() { return HeightInPixels; }
+	method int getHeight() { return height; }
 	method int get_type() { return type; }
 
 	method bool getIsRoaming() { return IsRoaming; }
@@ -250,12 +250,12 @@ class Enemy
 	{
 		if (IsAlive)
 		{
-			if (DiesOnSquish & Collision.IsEntityCollidedWithEntityTop(cx, cy, cw, ch, x, y, width, height))
+			if (DiesOnSquish & Collision.IsEntityCollidedWithEntityTop(cx, cy, cw, ch, x, y, width, heightInPixels))
 			{
 				do Die();
 				return false;
 			}
-			else { if (Collision.IsEntityCollidedWithEntitySides(cx, cy, cw, ch, x, y, width, height))
+			else { if (Collision.IsEntityCollidedWithEntitySides(cx, cy, cw, ch, x, y, width, heightInPixels))
 			{
 				return true;
 			}}
@@ -266,9 +266,9 @@ class Enemy
 
 	method void CheckCollisionWithBullet(Bullet bullet)
     {
-		if (IsAlive & bullet.CheckCollisionWithEntity(x, y, width, height))
+		if (IsAlive & bullet.CheckCollisionWithEntity(x, y, width, heightInPixels))
 		{
-			do enemy.Die();
+			do Die();
 		}
 
 		return;
@@ -283,7 +283,7 @@ class Enemy
 			if (IsGravityAffected)
 			{
 				do check_gravity2(map, mapWidth, mapHeight, worldOffset);
-				do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, height, worldOffset);
+				do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, heightInPixels, worldOffset);
 			}
 			if (IsRoaming)
 			{
@@ -391,7 +391,22 @@ class Enemy
 	//// MOVEMENT
 	method void FollowGravity(int worldOffset, int cx, int cy)
 	{
-		if (Collision.HasPlatformAbove(x, y, width, worldOffset, movingLeft))
+		//do Output.printInt(Collision.HasPlatformAbove(x, y, width, worldOffset, movingLeft));
+		if (hasPlatformAboveTimer < 0)
+		{
+			let hasPlatformAbove = Collision.HasPlatformAbove(x, y, width, worldOffset, movingLeft);
+			let hasPlatformAboveTimer = hasPlatformAboveDelay;
+		}
+		else
+		{
+			let hasPlatformAboveTimer = hasPlatformAboveTimer - 1;
+		}
+
+		//do Output.printInt(hasPlatformAbove);
+		//do Output.printInt(Collision.HasPlatformAbove(x, y, width, worldOffset, movingLeft));
+
+
+		if (hasPlatformAbove)
 		{
 			if (((x - cx) > 0))
 			{
@@ -405,14 +420,19 @@ class Enemy
 		}
 		else
 		{
-			if (~Collision.HasObstacleBelow(x, y, width, worldOffset, true))
+			do Output.printInt(Collision.GetPlatformBelowY(x, y, width, worldOffset, false));
+			do Output.printString(", ");
+			do Output.printInt(Collision.GetObstacleBelowY(x, y, width, worldOffset, false));
+			do Output.println();
+
+			if (Collision.GetPlatformBelowY(x, y, width, worldOffset, true) < Collision.GetObstacleBelowY(x, y, width, worldOffset, true))
 			{
 				if (((x - cx) > 0))
 				{
 					do MoveLeft(worldOffset);
 				}
 			}
-			if (~Collision.HasObstacleBelow(x, y, width, worldOffset, false))
+			if (Collision.GetPlatformBelowY(x, y, width, worldOffset, false) < Collision.GetObstacleBelowY(x, y, width, worldOffset, false))
 			{
 				if (((x - cx) < 0))
 				{

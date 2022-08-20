@@ -222,7 +222,7 @@ class Collision
             let i = x - 1;
             while (i < (x + width + 1))
             {
-                let j = (y / 16) - height - 2;
+                let j = ((y - height) / 16) - 2;
                 while (j < (((y + Constants.getBlockHeight()) / 16) + 2))
                 {
                     if (((i + worldOffset) < mapWidth) & (j < mapHeight))
@@ -288,9 +288,22 @@ class Collision
         return ~result;
     }
 
-    function bool IsBulletCollidedWithEntity(int ex, int ey, int ewidth, int eheight, int bx, int by)
+    function bool IsBulletCollidedWithEntity(int ex, int ey, int ew, int eh, int bx, int by)
     {
-        return Collision.IsEntityCollidedWithEntitySides(bx, by + 1, 1, 16, ex, ey, ewidth, eheight);
+        var bool colx;
+        var bool coly;
+
+        
+        let colx = (bx < (ex + ew)) & ((bx + 1) > ex);
+
+        //do Output.printInt(colx);
+
+
+
+        let coly = (by > (ey - eh + 15)) & (by < (ey + 16));
+
+        //return Collision.IsEntityCollidedWithEntitySides(bx, by, 1, 16, ex, ey, ew, eh);
+        return colx & coly ;
     }
 
 
@@ -304,13 +317,13 @@ class Collision
 
         if (movingLeft)
         {
-            let i = x - 1; // 1
+            let i = x - 3; // 1
             let limit = x;
         }
         else
         {
             let i = x + width - 1;
-            let limit = x + width;
+            let limit = x + width + 2; //x + width
         }
 
         while (i < limit)
@@ -364,4 +377,90 @@ class Collision
 
         return result;
     }
+
+    function int GetObstacleBelowY(int x, int y, int width, int worldOffset, bool movingLeft)
+    {
+        var int i;
+        var int j;
+        var int limit;
+        var int result;
+
+        if (movingLeft)
+        {
+            let i = x;
+            let limit = x + 1;
+        }
+        else
+        {
+            let i = x + width - 1;
+            let limit = x + width;
+        }
+
+        let result = 16;
+        while (i < limit)
+        {
+            let j = y/16;
+            while (j < 16)
+            {
+                if (Collision.IsObstacle(Map.getValue(i + worldOffset, j)))
+                {
+                    if (j < result)
+                    {
+                        let result = j;
+                    }
+                }
+                let j = j + 1;
+            }
+            let i = i + 1;
+        }
+
+        //do Output.printInt(result);
+        //do Output.printChar(32);
+
+        return result;
+    }
+
+    function bool GetPlatformBelowY(int x, int y, int width, int worldOffset, bool movingLeft)
+    {
+        var int i;
+        var int j;
+        var int limit;
+        var int result;
+
+        if (movingLeft)
+        {
+            let i = x - 2;
+            let limit = x + 1;
+        }
+        else
+        {
+            let i = x + width - 1;
+            let limit = x + width + 2; // + 2 s movement delayom 3
+        }
+
+        let result = 16;
+        while (i < limit)
+        {
+            let j = y/16;
+            while (j < 16)
+            {
+                if (Collision.IsPlatform(Map.getValue(i + worldOffset, j)))
+                {
+                    if (j < result)
+                    {
+                        let result = j;
+                    }
+                }
+                let j = j + 1;
+            }
+
+            let i = i + 1;
+        }
+
+        
+
+        return result;
+    }
+
+    
 }
