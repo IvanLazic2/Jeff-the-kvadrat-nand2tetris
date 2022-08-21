@@ -14,23 +14,23 @@ class Collision
     function int getLastY() { return lastY; }
     function int getPlatformY() { return platformY; }
 
-    function int getNearestPlatformY(int col, int y, int height, int mapHeight)
+    function int getNearestPlatformY(int col, int y, int height)
     {
         var int currIndex;
         var int nearestPlatformY;
 
-        let currIndex = (y/16) + 1;
+        let currIndex = Constants.getYDiv16(y) + 1;
 
         
 
-        while (currIndex < mapHeight)
+        while (currIndex < Map.getHeight())
         {
             if (Constants.IsInScreenY(y + 16))
             {
                 if (Collision.IsPlatform(Map.getValue(col, currIndex)))
                 { 
                     let nearestPlatformY = currIndex * 16;
-                    let currIndex = mapHeight;
+                    let currIndex = Map.getHeight();
                 }
             }
             
@@ -41,7 +41,7 @@ class Collision
         return nearestPlatformY;
     }
 
-    function bool IsOnAnyPlatform(int x, int y, int width, int height, int forceY, Array map, int mapWidth, int mapHeight, int worldOffset)
+    function bool IsOnAnyPlatform(int x, int y, int width, int height, int forceY, int worldOffset)
     {
         var bool is_stable_x;
         var bool is_stable_y;
@@ -53,10 +53,10 @@ class Collision
         var int minNearestPlatformY;
         var int py;
 
-        let minNearestPlatformY = (mapHeight - 1) * 16;
+        let minNearestPlatformY = (Map.getHeight() - 1) * 16;
         while (i < width)
         {
-            let py = Collision.getNearestPlatformY(x + i + worldOffset, y, height, mapHeight);
+            let py = Collision.getNearestPlatformY(x + i + worldOffset, y, height);
             if (~(py = 0) & (py < minNearestPlatformY))
             {
                 let minNearestPlatformY = py;
@@ -78,13 +78,13 @@ class Collision
         return is_stable_y;
     }
 
-    function bool CheckAnyPlatformCollisionRight(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight, int worldOffset, int forceY)
+    function bool CheckAnyPlatformCollisionRight(int x, int y, int width, int height, int worldOffset)
     {
         var int i;
         var bool result;
 
         let i = ((y + 8)/16);
-        while (i > ((y/16) - height))
+        while (i > ((Constants.getYDiv16(y)) - height))
         {
             let result = result | (Collision.IsPlatform(Map.getValue(x + width + worldOffset, i)));
 
@@ -94,13 +94,13 @@ class Collision
         return result;
     }
 
-    function bool CheckAnyPlatformCollisionLeft(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight, int worldOffset, int forceY)
+    function bool CheckAnyPlatformCollisionLeft(int x, int y, int width, int height, int worldOffset)
     {
         var int i;
         var bool result;
 
         let i = ((y + 8)/16);
-        while (i > ((y/16) - height))
+        while (i > ((Constants.getYDiv16(y)) - height))
         {
             let result = result | (Collision.IsPlatform(Map.getValue(x - 1 + worldOffset, i)));
             let i = i - 1;
@@ -140,21 +140,21 @@ class Collision
     //}
 
 
-    function bool IsAtPlatformBoundaryLeft(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight, int worldOffset)
+    function bool IsAtPlatformBoundaryLeft(int x, int y, int width, int height, int worldOffset)
     {
         var bool result;
 
-        let result = ~Collision.IsPlatform(Map.getValue(x - 1 + worldOffset, (y/16) + 1));
+        let result = ~Collision.IsPlatform(Map.getValue(x - 1 + worldOffset, (Constants.getYDiv16(y)) + 1));
 
         return result;
     }
 
-    function bool IsAtPlatformBoundaryRight(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight, int worldOffset)
+    function bool IsAtPlatformBoundaryRight(int x, int y, int width, int height, int worldOffset)
     {
         var Array x_map;
         var bool result;
 
-        let result = ~Collision.IsPlatform(Map.getValue(x + width + worldOffset, (y/16) + 1));
+        let result = ~Collision.IsPlatform(Map.getValue(x + width + worldOffset, (Constants.getYDiv16(y)) + 1));
 
         return result;
     }
@@ -164,10 +164,8 @@ class Collision
 
 
     //// OBSTACLES
-
-    function bool IsCollidedAnyObstacle(int x, int y, int width, int height, Array map, int mapWidth, int mapHeight)
+    function bool IsCollidedAnyObstacle(int x, int y, int width, int height)
     {
-        //var Array x_map;
         var bool result;
         var int i;
         var int j;
@@ -175,11 +173,9 @@ class Collision
 
         while (i < width)
         {
-            //let x_map = map[x + i];
+            let j = (Constants.getYDiv16(y)) - (height - 1);
 
-            let j = (y/16) - (height - 1); // TEMP -> Jeff height is 16
-
-            while (j < ((y/16) + 1)) // y + blockHeight
+            while (j < ((Constants.getYDiv16(y)) + 1))
             {
                 let result = result | (Collision.IsObstacle(Map.getValue(x + i, j)));
 
@@ -197,18 +193,7 @@ class Collision
         return result;
     }
 
-    function bool IsCollidedObstacle(Obstacle obstacle, int x, int y, int width, int height)
-    {
-        var bool is_collided_y;
-        var bool is_collided_x;
-
-        let is_collided_x = (((x + width) > (obstacle.get_x()) & (x < (obstacle.get_x() + obstacle.get_size()))));
-        let is_collided_y = (obstacle.get_y() - obstacle.get_height() < (y + height)) & (y < (obstacle.get_y() + 1));
-        
-        return is_collided_x & is_collided_y;
-    }
-
-    function void RedrawPlatforms(Array map, int mapWidth, int mapHeight, int x, int y, int width, int height, int worldOffset)
+    function void RedrawPlatforms(int x, int y, int width, int height, int worldOffset)
     {
         var int i;
         var int j;
@@ -225,7 +210,7 @@ class Collision
                 let j = ((y - height) / 16) - 2;
                 while (j < (((y + Constants.getBlockHeight()) / 16) + 2))
                 {
-                    if (((i + worldOffset) < mapWidth) & (j < mapHeight))
+                    if (((i + worldOffset) < Map.getWidth()) & (j < Map.getHeight()))
                     {
                         if (Collision.IsPlatform(Map.getValue(i + worldOffset, j)))
                         {
@@ -236,7 +221,6 @@ class Collision
                         }
                     }
                     
-
                     let j = j + 1;
                 }
 
@@ -266,7 +250,7 @@ class Collision
         return is_collided;
     }
 
-    function bool IsBulletCollidedWithMap(Array map, int mapWidth, int mapHeight, int x, int y, bool drawLeft, int worldOffset)
+    function bool IsBulletCollidedWithMap(int x, int y, bool drawLeft, int worldOffset)
     {
         var bool result;
         var int col;
@@ -282,7 +266,7 @@ class Collision
                 let col = x + 2 + worldOffset;
             }
 
-            let result = (Map.getValue(col, y/16) = 0) & (Map.getValue(col, (y/16) + 1) = 0) & (Map.getValue(col, (y/16) - 1) = 0);
+            let result = (Map.getValue(col, Constants.getYDiv16(y)) = 0) & (Map.getValue(col, (y + 15)/16) = 0) & (Map.getValue(col, (y - 15)/16) = 0);
         }
 
         return ~result;
@@ -331,9 +315,9 @@ class Collision
             let j = 0;
             while (j < 4)
             {
-                if ((y/16) - j > -1)
+                if ((Constants.getYDiv16(y)) - j > -1)
                 {
-                    let result = result | (Collision.IsPlatform(Map.getValue(i + worldOffset, (y/16) - j)));
+                    let result = result | (Collision.IsPlatform(Map.getValue(i + worldOffset, (Constants.getYDiv16(y)) - j)));
                 }
                 
                 let j = j + 1;
@@ -365,7 +349,7 @@ class Collision
 
         while (i < limit)
         {
-            let j = y/16;
+            let j = Constants.getYDiv16(y);
             while (j < 16)
             {
                 let result = result | (Collision.IsObstacle(Map.getValue(i + worldOffset, j)));
@@ -399,7 +383,7 @@ class Collision
         let result = 16;
         while (i < limit)
         {
-            let j = y/16;
+            let j = Constants.getYDiv16(y);
             while (j < 16)
             {
                 if (Collision.IsObstacle(Map.getValue(i + worldOffset, j)))
@@ -438,7 +422,7 @@ class Collision
         let result = 16;
         while (i < limit)
         {
-            let j = y/16;
+            let j = Constants.getYDiv16(y);
             while (j < 16)
             {
                 if (Collision.IsPlatform(Map.getValue(i + worldOffset, j)))

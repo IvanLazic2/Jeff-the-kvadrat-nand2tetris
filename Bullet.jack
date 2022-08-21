@@ -114,13 +114,13 @@ class Bullet
         return;
     }
 
-    method void CheckBullet(Array map, int mapWidth, int mapHeight, int worldOffset)
+    method void CheckBullet(int worldOffset)
     {
         do CheckTimers();
 
         if (~(memAddress = resetMemAddress)) // podsjetnik svaki enemy dobije jedan bullet i svaki bullet daje damage svakome
         {
-            let isCollided = Collision.IsBulletCollidedWithMap(map, mapWidth, mapHeight, X, Y, drawLeft, worldOffset);
+            let isCollided = Collision.IsBulletCollidedWithMap(X, Y, drawLeft, worldOffset);
             if (isCollided)
             {
                 do Reset();

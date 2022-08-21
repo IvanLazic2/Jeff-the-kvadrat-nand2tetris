@@ -27,7 +27,7 @@ class Coin
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
-		let animationDelay = 3;
+		let animationDelay = 5;
 //////////////////////////////////////////
 		let Width = 1;
 		let Height = 1;

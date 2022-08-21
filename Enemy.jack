@@ -108,13 +108,13 @@ class Enemy
 
 
 
-			//let IsGravityAffected = true;
-			//let IsMelee = true;
+			let IsGravityAffected = true;
+			let IsMelee = true;
 
 
 
 			//let IsFollowing = true;
-			let IsStacionary = true;
+			//let IsStacionary = true;
 			//let IsShooting = true;
 			//let IsRoaming = true; // TEMP
 		}
@@ -283,18 +283,18 @@ class Enemy
 
 
 
-	method void DoActions(Array map, int mapWidth, int mapHeight, int worldOffset, int cx, int cy)
+	method void DoActions(int worldOffset, int cx, int cy)
 	{
 		if (IsAlive)
 		{
 			if (IsGravityAffected)
 			{
-				do check_gravity2(map, mapWidth, mapHeight, worldOffset);
-				do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, heightInPixels, worldOffset);
+				do CheckGravity(worldOffset);
+				do Collision.RedrawPlatforms(x, y, width, heightInPixels, worldOffset);
 			}
 			if (IsRoaming)
 			{
-				do Roam(map, mapWidth, mapHeight, worldOffset);
+				do Roam(worldOffset);
 			}
 			if (IsMelee)
 			{
@@ -367,7 +367,7 @@ class Enemy
         return;
     }
 
-    method void CheckBullets(Array map, int mapWidth, int mapHeight, int worldOffset)
+    method void CheckBullets(int worldOffset)
     {
         var int i;
         var Bullet bullet;
@@ -377,7 +377,7 @@ class Enemy
 			while (i < BulletsCount)
         	{
         	    let bullet = Bullets[i];
-        	    do bullet.CheckBullet(map, mapWidth, mapHeight, worldOffset);
+        	    do bullet.CheckBullet(worldOffset);
         	    let i = i + 1;
         	}
 		}
@@ -507,7 +507,7 @@ class Enemy
 
 
 
-	method void Roam(Array map, int mapWidth, int mapHeight, int worldOffset)
+	method void Roam(int worldOffset)
 	{
 		
 
@@ -520,13 +520,13 @@ class Enemy
 			do MoveRight(worldOffset);
 		}
 
-		if (Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY) | 
-		    Collision.IsAtPlatformBoundaryLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset))
+		if (Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, worldOffset) | 
+		    Collision.IsAtPlatformBoundaryLeft(x, y, width, height, worldOffset))
 		{
 			let movingLeft = false;
 		}
-		else { if (Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY) | 
-		           Collision.IsAtPlatformBoundaryRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset))
+		else { if (Collision.CheckAnyPlatformCollisionRight(x, y, width, height, worldOffset) | 
+		           Collision.IsAtPlatformBoundaryRight(x, y, width, height, worldOffset))
 		{
 			let movingLeft = true;
 		}}
@@ -540,14 +540,16 @@ class Enemy
 	{
 		if (IsAlive)
 		{
+			//let lastLocation = location;
+
+			
+
 			let lastLocation = location;
-
-			do Clear();
-
 			let location = location + 1;
 			let memAddress = 16384 + location;
         	let x = x + 1;
 
+			do Clear();
 			do Draw(memAddress, true, movingLeft);
 
 			
@@ -560,14 +562,14 @@ class Enemy
     {
 		if (IsAlive)
 		{
+			//let lastLocation = location;
+
 			let lastLocation = location;
-
-			do Clear();
-
 			let location = location - 1;
 			let memAddress = 16384 + location;
 			let x = x - 1;
 
+			do Clear();
 			do Draw(memAddress, true, movingLeft);
 
 			
@@ -583,13 +585,11 @@ class Enemy
 		if (canMoveLeftRight & (Map.getValue(x - 1 + worldOffset, y/16) = 0))
 		{
 			let lastLocation = location;
-
-			do Clear();
-
 			let location = location - 1;
 			let memAddress = 16384 + location;
        		let x = x - 1;
 
+			do Clear();
 			do Draw(memAddress, true, true);
 
 			let canMoveLeftRight = false;
@@ -604,14 +604,13 @@ class Enemy
 
 		if (canMoveLeftRight & (Map.getValue(x + width + worldOffset, y/16) = 0))
 		{
+
 			let lastLocation = location;
-
-			do Clear();
-
 			let location = location + 1;
 			let memAddress = 16384 + location;
 			let x = x + 1;
 
+			do Clear();
 			do Draw(memAddress, true, false);
 
 			let canMoveLeftRight = false;
@@ -627,14 +626,11 @@ class Enemy
 		if (canMoveUpDown)
 		{
 			let lastLocation = location;
-
-			do Clear();
-
 			let location = location - 512;
 			let memAddress = 16384 + location;
-			//let x = x + 1;
 			let y = y - 16;
 
+			do Clear();
 			do Draw(memAddress, true, false);
 
 			let canMoveUpDown = false;
@@ -650,14 +646,11 @@ class Enemy
 		if (canMoveUpDown)
 		{
 			let lastLocation = location;
-
-			do Clear();
-
 			let location = location + 512;
 			let memAddress = 16384 + location;
-			//let x = x + 1;
 			let y = y + 16;
 
+			do Clear();
 			do Draw(memAddress, true, false);
 
 			let canMoveUpDown = false;
@@ -668,7 +661,7 @@ class Enemy
 
     method void Jump()
     {
-        let lastLocation = location;
+        //let lastLocation = location;
 
         if (canJump)
         {
@@ -680,36 +673,28 @@ class Enemy
 
 	//// GRAVITY
 
-	method void check_gravity2(Array map, int mapWidth, int mapHeight, int worldOffset)
+	method void CheckGravity(int worldOffset)
     {
         var int i;
         var Platform platform;
         var Section section;
         var bool is_on_platform;
 
-        let lastLocation = location;
+        
 
-        let canJump = Collision.IsOnAnyPlatform(x, y, width, height, forceY, map, mapWidth, mapHeight, worldOffset);
+        let canJump = Collision.IsOnAnyPlatform(x, y, width, height, forceY, worldOffset);
 
 
         if (canJump)
         {
-			
-			do Clear();
-
-			
-
-            let y = Collision.getPlatformY() - 16; // blockHeight = 16
-
-			
+            let y = Collision.getPlatformY() - 16;
 
             let forceY = 0;
+			let lastLocation = location;
             let location = (y * 32) + x;
 			let memAddress = 16384 + location;
-
-            //do Clear();
-            //do Draw();
 			
+			do Clear();
 			do Draw(memAddress, true, movingLeft);
         }
         // padanje
@@ -723,90 +708,17 @@ class Enemy
             let forceY = forceY + gravity;            
         }
 
-		
-		do Clear();
-
         let y = y + forceY;
 
-		//do Output.printInt(y);
-		//do Output.println();
-
+		let lastLocation = location;
         let location = (y * 32) + x;
 		let memAddress = 16384 + location;
 		
+		do Clear();
 		do Draw(memAddress, true, movingLeft);
 
         return;
     }
-
-    //method void check_gravity(Array platforms, int platforms_num)
-    //{
-    //    var int i;
-    //    var Platform platform;
-    //    var Section section;
-    //    var bool isOnPlatform;
-//
-    //    let lastLocation = location;
-//
-    //    while (i < platforms_num)
-    //    {
-    //        let platform = platforms[i];
-//
-    //        //if (Math.abs(y - platform.get_y()) < 50)
-    //        //{
-    //            let isOnPlatform = Collision.IsOnPlatform(platform, x, y, width, height, forceY);
-//
-    //            let canJump = isOnPlatform;
-//
-    //            if (isOnPlatform)
-    //            {
-    //                let i = platforms_num - 1;
-    //            }
-    //        //}
-//
-    //        let i = i + 1;
-    //    }
-//
-    //    if (canJump)
-    //    {
-	//		
-//
-    //        let y = platform.get_y() - height;
-    //        let forceY = 0;
-    //        let location = (y * 32) + x;
-	//		//let memAddress = 16384 + location;
-//
-    //        //do Clear();
-    //        //do Draw();
-	//		do Clear();
-	//		do Draw(16384 + location, true, false);
-    //    }
-    //    // padanje
-    //    else
-    //    {
-    //        if (y > 219)
-    //        {
-    //            //do Respawn();
-//
-    //            // take damage
-    //        }
-//
-    //        let forceY = forceY + gravity;            
-    //    }
-//
-	//	
-//
-    //    let y = y + forceY;
-    //    let location = (y * 32) + x;
-    //    
-    //    //do Clear();
-    //    //do Draw();
-	//	do Clear();
-	//	do Draw(16384 + location, true, false);
-//
-    //    return;
-    //}
-
 
 	method void Die()
 	{
@@ -816,7 +728,7 @@ class Enemy
 		do Output.printString("dead");
 		do Output.println();
 
-		do Clear();
+		do Draw2(16384 + lastLocation, false, movingLeft);
 		let IsAlive = false;
 
 		let x = -10;
@@ -829,11 +741,6 @@ class Enemy
 		return;
 	}
 
-	//method bool IsInScreen()
-	//{
-	//	return ((-1 < x) & ((x + width) < 32));
-	//}
-
 	method void Clear()
 	{
 		//if (~(lastLocation = location))
@@ -841,56 +748,56 @@ class Enemy
 		//	do Draw(16384 + lastLocation, false, movingLeft);
 		//}
 
-		do Draw(16384 + location, false, movingLeft);
+		do Draw(16384 + lastLocation, false, movingLeft);
 
 		return;
 	}
-
-	//ethod void Draw(int memAddress, bool display, bool mirrored)
-	//
-	//	if (display)
-	//	{
-	//		if (IsInScreen())
-	//		{
-	//			do DrawEnemyTypes(memAddress, display, mirrored);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		if ((0 < (x + width)) & ((x + width) < 32))
-	//		{
-	//			do DrawEnemyTypes(memAddress, display, mirrored);
-	//		}
-	//	}
-
-	//	return;
-	//
 
     method void Draw(int memAddress, bool display, bool mirrored)
     {
 		if (IsAlive)
 		{
-			if (type = 0)
+			if (~(location = lastLocation))
 			{
-				do Spider.DrawFrame(memAddress, display, mirrored, x, y);
-			}
-			else { if (type = 1)
-			{
-				do EvilJeffMelee.DrawFrame(memAddress, display, movingLeft, x, y);
-			}
-			else { if (type = 2)
-			{
-				do EvilJeffRanged.DrawFrame(memAddress, display, mirrored, x, y);
-			}
-			else { if (type = 3)
-			{
-				do Bat.DrawFrame(memAddress, display, mirrored, x, y);
-			}}}}
+				do DrawTypes(memAddress, display, mirrored);
+			}	
 		}
 		
-
 		return;
     }
+	method void Draw2(int memAddress, bool display, bool mirrored)
+    {
+		if (IsAlive)
+		{
+			do DrawTypes(memAddress, display, mirrored);
+		}
+		
+		return;
+    }
+
+	method void DrawTypes(int memAddress, bool display, bool mirrored)
+    {
+		if (type = 0)
+		{
+			do Spider.DrawFrame(memAddress, display, mirrored, x, y);
+		}
+		else { if (type = 1)
+		{
+			do EvilJeffMelee.DrawFrame(memAddress, display, movingLeft, x, y);
+		}
+		else { if (type = 2)
+		{
+			do EvilJeffRanged.DrawFrame(memAddress, display, mirrored, x, y);
+		}
+		else { if (type = 3)
+		{
+			do Bat.DrawFrame(memAddress, display, mirrored, x, y);
+		}}}}
+		
+		return;
+    }
+
+
 
 }
 

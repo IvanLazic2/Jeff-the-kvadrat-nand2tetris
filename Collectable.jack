@@ -29,12 +29,39 @@ class Collectable
     
     method void setIsAvailable(int b) { let IsAvailable = b; return; }
 
+    method void CheckTimers()
+	{ 
+        do Heart.CheckTimers();
+        do Coin.CheckTimers();
+
+
+
+        if (IsAvailable & Constants.IsInScreen(X, Y))
+        {
+            do Draw(true);
+        }
+       
+
+		return;
+	}
+
+	method void DecrementTimers()
+	{
+        do Heart.DecrementTimers();
+        do Coin.DecrementTimers();
+
+		return;
+	}
+
     method int CheckCollisionWithCharacter(int cx, int cy, int cw, int ch)
     {
-        if (IsAvailable & Collision.IsBulletCollidedWithEntity(cx, cy, cw, ch, X, Y))
+        if (IsAvailable)
         {
-            let IsAvailable = false;
-            return Type;
+            if (Collision.IsBulletCollidedWithEntity(cx, cy, cw, ch, X, Y))
+            {
+                do Collect();
+                return Type;
+            }
         }
 
         return -1;
@@ -42,6 +69,7 @@ class Collectable
 
     method void Collect()
     {
+        do Clear();
         let IsAvailable = false;
         return;
     }
@@ -52,6 +80,7 @@ class Collectable
         {
             do Clear();
             let memAddress = memAddress + 1;
+            let X = X + 1;
             do Draw(true);
         }
 
@@ -64,6 +93,7 @@ class Collectable
         {
             do Clear();
             let memAddress = memAddress - 1;
+            let X = X - 1;
             do Draw(true);
         }
 

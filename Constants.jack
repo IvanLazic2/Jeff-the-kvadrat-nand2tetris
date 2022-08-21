@@ -13,14 +13,14 @@ class Constants
         let screenStart = 16384;
         let blockHeight = 16;
 
-        //let mh = 256; //TEMPPPPPP!!!!!!!
-        //let div16lookup = Array.new(mh);
-        //let i = 0;
-        //while (i < (mh))
-        //{
-        //    let div16lookup[i] = i / 16;
-        //    let i = i + 1;
-        //}
+        let mh = 256; //TEMPPPPPP!!!!!!!
+        let div16lookup = Array.new(mh);
+        let i = 0;
+        while (i < (mh))
+        {
+            let div16lookup[i] = i / 16;
+            let i = i + 1;
+        }
 
         return;
     }
@@ -28,7 +28,17 @@ class Constants
     function int getScreenStart() { return screenStart; }
     function int getBlockHeight() { return blockHeight; }
 
-    //function int getYDiv16(int y) { return div16lookup[y]; }
+    function int getYDiv16(int y) 
+    {
+        var int result;
+
+        if (Constants.IsInScreenY(y))
+        {
+            let result = div16lookup[y];
+        }
+        
+        return result; 
+    }
 
 
     function int getLeftBlock(int memAddress) { return memAddress - 1; }

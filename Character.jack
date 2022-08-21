@@ -5,7 +5,8 @@ class Character
     field int x;
     field int y;
     field int absolute_x;
-    field int location;
+    field int memAddress;
+    field int lastMemAddress;
     field int width;
     field int height;
     field int heightInPixels;
@@ -14,8 +15,7 @@ class Character
     field int jump_height;
     field bool can_jump;
 
-    field int lastlocation;
-    field int memAddress;
+    
 
     field int health;
 
@@ -27,7 +27,7 @@ class Character
 
     field int last_abs_x;
 
-    field bool draw_character_left;
+    field bool movingLeft;
 
 
 
@@ -62,7 +62,7 @@ class Character
 
         let x = x2;
         let y = y2;
-        let location = (y * 32) + x;
+        let memAddress = Constants.getMemAddress(x, y);
         let absolute_x = x2;
 
         let width = 3; // 3
@@ -75,9 +75,6 @@ class Character
 
         let health = 3;
         let damage_cooldown = 20; // 20 game ticks
-
-        
-
 
         let BulletsCount = 5;
         let Bullets = Array.new(BulletsCount);
@@ -93,9 +90,9 @@ class Character
 
         let canShoot = true;
 
-        let lastlocation = location;
+        let lastMemAddress = memAddress;
 
-        do Draw();
+        do Draw(memAddress, true);
 
         return this;
     }
@@ -157,7 +154,7 @@ class Character
 
     method void set_draw_character_left(bool b)
     {
-        let draw_character_left = b;
+        let movingLeft = b;
         return;
     }
 
@@ -187,7 +184,7 @@ class Character
 
     method void DoEnemyAction(Enemy enemy, Array map, int mapWidth, int mapHeight, int worldOffset)
     {
-        do enemy.DoActions(map, mapWidth, mapHeight, worldOffset, x, y);
+        do enemy.DoActions(worldOffset, x, y);
 
         return;
     }
@@ -222,10 +219,12 @@ class Character
         if (result = 0)
         {
             do addCoin();
+            do Draw(memAddress, true);
         }
         else { if (result = 1)
         {
             do addLife();
+            do Draw(memAddress, true);
         }}
 
         return;
@@ -235,32 +234,31 @@ class Character
 
 
 
-    method void RedrawPlatforms(Array map, int mapWidth, int mapHeight, int worldOffset)
+    method void RedrawPlatforms(int worldOffset)
     {
-        do Collision.RedrawPlatforms(map, mapWidth, mapHeight, x, y, width, heightInPixels, worldOffset);
+        do Collision.RedrawPlatforms(x, y, width, heightInPixels, worldOffset);
 
         return;
     }
 
     //// PLATFORM COLLISION
-    method bool check_right_collision_platforms2(Array map, int mapWidth, int mapHeight, int worldOffset)
+    method bool CheckCollisionWithPlatformRight(int worldOffset)
     {
-        return Collision.CheckAnyPlatformCollisionRight(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY);
+        return Collision.CheckAnyPlatformCollisionRight(x, y, width, height, worldOffset);
     }
 
-    method bool check_left_collision_platforms2(Array map, int mapWidth, int mapHeight, int worldOffset)
+    method bool CheckCollisionWithPlatformLeft(int worldOffset)
     {
-        return Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, map, mapWidth, mapHeight, worldOffset, forceY);
+        return Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, worldOffset);
     }
 
     //// OBSTACLE COLLISION
-    method void check_collision_obstacles2(Array map, int mapWidth, int mapHeight)
+    method void CheckCollisionWithObstacles()
     {
         var int i;
         var bool result;
 
-
-        let result = Collision.IsCollidedAnyObstacle(absolute_x, y, width, height, map, mapWidth, mapHeight);
+        let result = Collision.IsCollidedAnyObstacle(absolute_x, y, width, height);
 
         if (result)
         {
@@ -278,62 +276,20 @@ class Character
 
         return;
     }
-
-
-
-    method void check_collision_obstacles(Array obstacles, int obstacles_num)
-    {
-        var int i;
-        var Obstacle obstacle;
-        var bool result;
-
-        while (i < obstacles_num)
-        {
-            let obstacle = obstacles[i];
-
-            let result = Collision.IsCollidedObstacle(obstacle, x, y, width, height);
-
-            if (result)
-            {
-                let i = obstacles_num - 1;
-            }
-
-            let i = i + 1;
-        }
-
-        if (result)
-        {
-            let last_obstacle = obstacle;
-            let should_draw_last_obstacle = true;
-            let last_abs_x = absolute_x;
-
-            do TakeDamage();
-            do Respawn();
-        }
-
-        if (damage_timer > 0)
-        {
-            let damage_timer = damage_timer - 1;
-        }
-
-        return;
-    }
-
-
     
     //// MOVEMENT
     method void MoveLeft()
     {
         if (x > 0)
         {
-            let lastlocation = location;
+            let lastMemAddress = memAddress;
 
             let x = x - 1;
             let absolute_x = absolute_x - 1;
-            let location = location - 1;
+            let memAddress = memAddress - 1;
 
             do Clear();
-            do Draw(); 
+            do Draw(memAddress, true); 
         }
 
         return;
@@ -343,14 +299,14 @@ class Character
     {
         if((x + width) < 32)
         {
-            let lastlocation = location;
+            let lastMemAddress = memAddress;
 
             let x = x + 1;
             let absolute_x = absolute_x + 1;
-            let location = location + 1;
+            let memAddress = memAddress + 1;
 
             do Clear();
-            do Draw(); 
+            do Draw(memAddress, true); 
         }
 
 
@@ -360,8 +316,6 @@ class Character
 
     method void Jump()
     {
-        let lastlocation = location;
-
         if (can_jump)
         {
             let forceY = forceY - jump_height;
@@ -370,38 +324,30 @@ class Character
         return;
     }
 
-    method void check_gravity2(Array map, int mapWidth, int mapHeight, int worldOffset)
+    method void CheckGravity(int worldOffset)
     {
         var int i;
         var Platform platform;
         var Section section;
         var bool is_on_platform;
 
-        
+        let lastMemAddress = memAddress;
 
-        let lastlocation = location;
-
-        let can_jump = Collision.IsOnAnyPlatform(x, y, width, height, forceY, map, mapWidth, mapHeight, worldOffset);
-
-        // can_jump je false kad udjem dijagonalno u platformu
-
-
+        let can_jump = Collision.IsOnAnyPlatform(x, y, width, height, forceY, worldOffset);
 
         if (can_jump)
         {
             let y = Collision.getPlatformY() - 16;
 
             let forceY = 0;
-            let location = (y * 32) + x;
+            let memAddress = Constants.getMemAddress(x, y);
 
             do Clear();
-            do Draw();
+            do Draw(memAddress, true);
         }
         // padanje
         else
         {
-            
-
             if (y > 219)
             {
                 //do Respawn();
@@ -416,14 +362,10 @@ class Character
 
 
         let y = y + forceY;
-        let location = (y * 32) + x;
+        let memAddress = Constants.getMemAddress(x, y);
 
-        
-
-
-        
         do Clear();
-        do Draw();
+        do Draw(memAddress, true);
         
 
         return;
@@ -468,7 +410,7 @@ class Character
         var int bulletX;
         var int bulletY;
 
-        if (draw_character_left)
+        if (movingLeft)
         {
             let bulletX = x - 1;
         }
@@ -482,7 +424,7 @@ class Character
         {
             if (currBullet.IsAvailable())
             {
-                do currBullet.Shoot(bulletX, bulletY, draw_character_left, worldOffset);
+                do currBullet.Shoot(bulletX, bulletY, movingLeft, worldOffset);
 
                 let currBulletIndex = currBulletIndex + 1;
 
@@ -500,7 +442,7 @@ class Character
         return;
     }
 
-    method void CheckBullets(Array map, int mapWidth, int mapHeight, int worldOffset)
+    method void CheckBullets(int worldOffset)
     {
         var int i;
         var Bullet bullet;
@@ -508,7 +450,7 @@ class Character
         while (i < BulletsCount)
         {
             let bullet = Bullets[i];
-            do bullet.CheckBullet(map, mapWidth, mapHeight, worldOffset);
+            do bullet.CheckBullet(worldOffset);
             let i = i + 1;
         }
 
@@ -517,415 +459,19 @@ class Character
 
     //// DRAW/CLEAR
     method void Clear()
+	{
+		do Draw(lastMemAddress, false);
+
+		return;
+	}
+
+    method void Draw(int m, bool display)
     {
-        var bool color;
-        var int i;
-        var Array curr_memaddr;
-
-        let color = false;
-
-        if (~(lastlocation = location) & (lastlocation < 7199))
-        // (~(lastlocation = location) & (lastlocation < 7650)  & (16384+513+480+lastlocation < 24576))
-        // 16384+513+480 = 17377
-        // 24576 - 17377 = 7199
-        {
-            //let memAddress = 16897 + lastlocation; // 513
-            let memAddress = 16384 + lastlocation + 1;
-
-            let i = 0;
-            while (i < 481)
-            {
-                let curr_memaddr = memAddress + i;
-                let curr_memaddr[0] = color;
-                let i = i + 32;                
-            }
-
-            //let memAddress = 16898 + lastlocation; // 514
-            let memAddress = 16384 + lastlocation + 2;
-
-            let i = 0;
-            while (i < 481)
-            {
-                let curr_memaddr = memAddress + i;
-                let curr_memaddr[0] = color;
-                let i = i + 32;
-            }
-
-            //let memAddress = 16896 + lastlocation; // 512
-            let memAddress = 16384 + lastlocation;
-
-            let i = 0;
-
-            while (i < 481)
-            {
-                let curr_memaddr = memAddress + i;
-                let curr_memaddr[0] = color;
-                let i = i + 32;
-            }
-
-            //let memAddress = 16386 + lastlocation; // 2
-            let memAddress = 16384 + lastlocation - 510;
-
-            let i = 0;
-            while (i < 481)
-            {
-                let curr_memaddr = memAddress + i;
-                let curr_memaddr[0] = color;
-                let i = i + 32;
-            }
-
-            //let memAddress = 16384 + lastlocation; // 0
-            let memAddress = 16384 + lastlocation - 512;
-
-            let i = 0;
-            while (i < 481)
-            {
-                let curr_memaddr = memAddress + i;
-                let curr_memaddr[0] = color;
-                let i = i + 32;
-            }
-        }
-
-
-        return;
+		if (~(memAddress = lastMemAddress))
+		{
+			do Jeff.DrawFrame(m, display, movingLeft, x, y);
+		}
+		
+		return;
     }
-
-    method void Draw()
-    {
-        if (draw_character_left)
-        {
-            do DrawLeft();
-        }
-        else
-        {
-            do DrawRight();
-        }
-
-        return;
-    }
-
-    method void DrawRight()
-    {
-        if (~(lastlocation = location) & (location < 7199))
-        // (~(lastlocation = location) & (16384+513+480+location < 24575))
-        {
-            let memAddress = 16384 + location;
-
-            // faca
-            //let memAddress = 16384 + location + 512;
-            //let memAddress = memAddress + 512;
-            //let memAddress = 16384 + location + 513;
-            let memAddress = 16384 + location + 1;
-
-	        do Memory.poke(memAddress + 0, -1);
-	        do Memory.poke(memAddress + 32, -32767);
-	        do Memory.poke(memAddress + 64, -32767);
-	        do Memory.poke(memAddress + 96, -30703);
-	        do Memory.poke(memAddress + 128, -31711);
-	        do Memory.poke(memAddress + 160, -32191);
-	        do Memory.poke(memAddress + 192, -30687);
-	        do Memory.poke(memAddress + 224, -32767);
-	        do Memory.poke(memAddress + 256, -32767);
-	        do Memory.poke(memAddress + 288, -32767);
-	        do Memory.poke(memAddress + 320, -31807);
-	        do Memory.poke(memAddress + 352, -31711);
-	        do Memory.poke(memAddress + 384, -31711);
-	        do Memory.poke(memAddress + 416, -32767);
-	        do Memory.poke(memAddress + 448, -32767);
-	        do Memory.poke(memAddress + 480, -1);
-
-
-            // desna ruka donji dio
-            //let memAddress = 16384 + location + 513;
-            //let memAddress = memAddress + 1; // memAddres - 512 + 513
-            //let memAddress = 16384 + location + 514;
-            let memAddress = 16384 + location + 2;
-
-	        do Memory.poke(memAddress + 0, 4128);
-	        do Memory.poke(memAddress + 32, 8256);
-            do Memory.poke(memAddress + 64, 8320);
-	        do Memory.poke(memAddress + 96, 16647);
-	        do Memory.poke(memAddress + 128, 18136);
-	        do Memory.poke(memAddress + 160, -30688);
-	        do Memory.poke(memAddress + 192, ~32767); // -32766
-	        do Memory.poke(memAddress + 224, ~32767); //
-	        do Memory.poke(memAddress + 256, 16384);
-	        do Memory.poke(memAddress + 288, 16384);
-	        do Memory.poke(memAddress + 320, 8192);
-	        do Memory.poke(memAddress + 352, 7168);
-	        do Memory.poke(memAddress + 384, 992);
-	        do Memory.poke(memAddress + 416, 31);
-	        do Memory.poke(memAddress + 448, 0);
-	        do Memory.poke(memAddress + 480, 0);
-
-            // lijeva ruka donji dio
-            //let memAddress = 16384 + location + 511;
-            //let memAddress = memAddress - 2; // memAddress - 1 + 511
-            //let memAddress = 16384 + location + 512;
-            let memAddress = 16384 + location;
-
-	        do Memory.poke(memAddress + 0, 520);
-	        do Memory.poke(memAddress + 32, 516);
-	        do Memory.poke(memAddress + 64, 260);
-	        do Memory.poke(memAddress + 96, -8062);
-	        do Memory.poke(memAddress + 128, 7010);
-	        do Memory.poke(memAddress + 160, 1041);
-	        do Memory.poke(memAddress + 192, 1);
-	        do Memory.poke(memAddress + 224, 1);
-	        do Memory.poke(memAddress + 256, 2);
-	        do Memory.poke(memAddress + 288, 2);
-	        do Memory.poke(memAddress + 320, 4);
-	        do Memory.poke(memAddress + 352, 56);
-	        do Memory.poke(memAddress + 384, 1984);
-	        do Memory.poke(memAddress + 416, -2048);
-	        do Memory.poke(memAddress + 448, 0);
-	        do Memory.poke(memAddress + 480, 0);
-
-            // desna ruka gornji dio
-            //let memAddress = 16384 + location + 1;
-            //let memAddress = memAddress - 510; // memAddres - 511 + 1
-            //let memAddress = 16384 + location + 2;
-            let memAddress = 16384 + location - 510;
-
-	        do Memory.poke(memAddress + 0, 0);
-	        do Memory.poke(memAddress + 32, 0);
-	        do Memory.poke(memAddress + 64, 0);
-	        do Memory.poke(memAddress + 96, 8184);
-	        do Memory.poke(memAddress + 128, 8184);
-	        do Memory.poke(memAddress + 160, 8184);
-	        do Memory.poke(memAddress + 192, 252);
-	        do Memory.poke(memAddress + 224, 306);
-	        do Memory.poke(memAddress + 256, 250);
-	        do Memory.poke(memAddress + 288, 154);
-	        do Memory.poke(memAddress + 320, 68);
-	        do Memory.poke(memAddress + 352, 136);
-	        do Memory.poke(memAddress + 384, 272);
-	        do Memory.poke(memAddress + 416, 528);
-	        do Memory.poke(memAddress + 448, 1040);
-	        do Memory.poke(memAddress + 480, 2080);
-
-
-            // lijeva ruka gornji dio
-            //let memAddress = 16384 + location - 1;
-            //let memAddress = memAddress - 2; // memAddress + 1 - 2
-            //let memAddress = 16384 + location;
-            let memAddress = 16384 + location - 512;
-
-	        do Memory.poke(memAddress + 0, 0);
-	        do Memory.poke(memAddress + 32, 0);
-	        do Memory.poke(memAddress + 64, 0);
-	        do Memory.poke(memAddress + 96, -64);
-	        do Memory.poke(memAddress + 128, -64);
-	        do Memory.poke(memAddress + 160, -32);
-	        do Memory.poke(memAddress + 192, 4064);
-	        do Memory.poke(memAddress + 224, 4128);
-	        do Memory.poke(memAddress + 256, 2080);
-	        do Memory.poke(memAddress + 288, 1088);
-	        do Memory.poke(memAddress + 320, 1088);
-	        do Memory.poke(memAddress + 352, 544);
-	        do Memory.poke(memAddress + 384, 544);
-	        do Memory.poke(memAddress + 416, 528);
-	        do Memory.poke(memAddress + 448, 528);
-	        do Memory.poke(memAddress + 480, 520);
-        }
-        return;
-    }
-
-    method void DrawLeft()
-    {
-        if (~(lastlocation = location) & (location < 7199))
-        // (~(lastlocation = location) & (16384+513+480+location < 24575))
-        {
-            let memAddress = 16384 + location;
-
-            // faca
-            //let memAddress = 16384 + location + 512;
-            //let memAddress = memAddress + 512;
-            let memAddress = 16384 + location + 1;
-
-            do Memory.poke(memAddress + 0, -1);
-	        do Memory.poke(memAddress + 32, -32767);
-	        do Memory.poke(memAddress + 64, -32767);
-	        do Memory.poke(memAddress + 96, -30703);
-	        do Memory.poke(memAddress + 128, -31711);
-	        do Memory.poke(memAddress + 160, -32191);
-	        do Memory.poke(memAddress + 192, -31727);
-	        do Memory.poke(memAddress + 224, -32767);
-	        do Memory.poke(memAddress + 256, -32767);
-	        do Memory.poke(memAddress + 288, -32767);
-	        do Memory.poke(memAddress + 320, -31807);
-	        do Memory.poke(memAddress + 352, -31711);
-	        do Memory.poke(memAddress + 384, -31711);
-	        do Memory.poke(memAddress + 416, -32767);
-	        do Memory.poke(memAddress + 448, -32767);
-	        do Memory.poke(memAddress + 480, -1);
-
-            // desna ruka donji dio
-            //let memAddress = 16384 + location + 511;
-            //let memAddress = memAddress - 1; // memAdress - 512 + 511
-            let memAddress = 16384 + location;
-
-            do Memory.poke(memAddress + 0, 1032);
-	        do Memory.poke(memAddress + 32, 516);
-	        do Memory.poke(memAddress + 64, 260);
-	        do Memory.poke(memAddress + 96, -8062);
-	        do Memory.poke(memAddress + 128, 7010);
-	        do Memory.poke(memAddress + 160, 1041);
-	        do Memory.poke(memAddress + 192, 1);
-	        do Memory.poke(memAddress + 224, 1);
-	        do Memory.poke(memAddress + 256, 2);
-	        do Memory.poke(memAddress + 288, 2);
-	        do Memory.poke(memAddress + 320, 4);
-	        do Memory.poke(memAddress + 352, 56);
-	        do Memory.poke(memAddress + 384, 1984);
-	        do Memory.poke(memAddress + 416, -2048);
-	        do Memory.poke(memAddress + 448, 0);
-	        do Memory.poke(memAddress + 480, 0);
-
-            // lijeva ruka donji dio
-            //let memAddress = 16384 + location + 513;
-            //let memAddress = memAddress + 2; // memAddress - 511 + 513
-            let memAddress = 16384 + location + 2;
-
-            do Memory.poke(memAddress + 0, 4160);
-	        do Memory.poke(memAddress + 32, 8256);
-	        do Memory.poke(memAddress + 64, 8320);
-	        do Memory.poke(memAddress + 96, 16647);
-	        do Memory.poke(memAddress + 128, 18136);
-	        do Memory.poke(memAddress + 160, -30688);
-	        do Memory.poke(memAddress + 192, ~32767);
-	        do Memory.poke(memAddress + 224, ~32767);
-	        do Memory.poke(memAddress + 256, 16384);
-	        do Memory.poke(memAddress + 288, 16384);
-	        do Memory.poke(memAddress + 320, 8192);
-	        do Memory.poke(memAddress + 352, 7168);
-	        do Memory.poke(memAddress + 384, 992);
-	        do Memory.poke(memAddress + 416, 31);
-	        do Memory.poke(memAddress + 448, 0);
-	        do Memory.poke(memAddress + 480, 0);
-
-            // desna ruka gornji dio
-            //let memAddress = 16384 + location - 1;
-            //let memAddress = memAddress - 514; //memAddress - 513 - 1
-            let memAddress = 16384 + location - 512;
-
-            do Memory.poke(memAddress + 0, 0);
-	        do Memory.poke(memAddress + 32, 0);
-	        do Memory.poke(memAddress + 64, 0);
-	        do Memory.poke(memAddress + 96, 8184);
-	        do Memory.poke(memAddress + 128, 8184);
-	        do Memory.poke(memAddress + 160, 8184);
-	        do Memory.poke(memAddress + 192, 16128);
-	        do Memory.poke(memAddress + 224, 19584);
-	        do Memory.poke(memAddress + 256, 24320);
-	        do Memory.poke(memAddress + 288, 22784);
-	        do Memory.poke(memAddress + 320, 8704);
-	        do Memory.poke(memAddress + 352, 4352);
-	        do Memory.poke(memAddress + 384, 2176);
-	        do Memory.poke(memAddress + 416, 2112);
-	        do Memory.poke(memAddress + 448, 2080);
-	        do Memory.poke(memAddress + 480, 1040);
-
-            // lijeva ruka gornji dio
-            //let memAddress = 16384 + location + 1;
-            //let memAddress = memAddress + 2; // + 1 + 1
-            let memAddress = 16384 + location - 510;
-
-            do Memory.poke(memAddress + 0, 0);
-	        do Memory.poke(memAddress + 32, 0);
-	        do Memory.poke(memAddress + 64, 0);
-	        do Memory.poke(memAddress + 96, 1023);
-	        do Memory.poke(memAddress + 128, 1023);
-	        do Memory.poke(memAddress + 160, 2047);
-	        do Memory.poke(memAddress + 192, 2032);
-	        do Memory.poke(memAddress + 224, 1032);
-	        do Memory.poke(memAddress + 256, 1040);
-	        do Memory.poke(memAddress + 288, 544);
-	        do Memory.poke(memAddress + 320, 544);
-	        do Memory.poke(memAddress + 352, 1088);
-	        do Memory.poke(memAddress + 384, 1088);
-	        do Memory.poke(memAddress + 416, 2112);
-	        do Memory.poke(memAddress + 448, 2112);
-	        do Memory.poke(memAddress + 480, 4160);
-        }
-
-        return;
-    }    
-
-
-
-
-
-
-
-
-    method void DrawLeft1(int location)
-    {
-        let memAddress = 16384 + location;
-	    do Memory.poke(memAddress + 0, -4096);
-	    do Memory.poke(memAddress + 32, 4096);
-	    do Memory.poke(memAddress + 64, 4096);
-	    do Memory.poke(memAddress + 96, 4096);
-	    do Memory.poke(memAddress + 128, 4096);
-	    do Memory.poke(memAddress + 160, 4096);
-	    do Memory.poke(memAddress + 192, 4096);
-	    do Memory.poke(memAddress + 224, 4096);
-	    do Memory.poke(memAddress + 256, 4096);
-	    do Memory.poke(memAddress + 288, 4096);
-	    do Memory.poke(memAddress + 320, 4096);
-	    do Memory.poke(memAddress + 352, 4096);
-	    do Memory.poke(memAddress + 384, 4096);
-	    do Memory.poke(memAddress + 416, 4096);
-	    do Memory.poke(memAddress + 448, 4096);
-	    do Memory.poke(memAddress + 480, -4096);
-
-        return;
-    }
-
-    method void DrawLeft2(int location)
-    {
-        let memAddress = 16384 + location;
-	    do Memory.poke(memAddress + 0, -256);
-	    do Memory.poke(memAddress + 32, 256);
-	    do Memory.poke(memAddress + 64, 256);
-	    do Memory.poke(memAddress + 96, 4352);
-	    do Memory.poke(memAddress + 128, 8448);
-	    do Memory.poke(memAddress + 160, 16640);
-	    do Memory.poke(memAddress + 192, 8448);
-	    do Memory.poke(memAddress + 224, 256);
-	    do Memory.poke(memAddress + 256, 256);
-	    do Memory.poke(memAddress + 288, 256);
-	    do Memory.poke(memAddress + 320, -16128);
-	    do Memory.poke(memAddress + 352, 8448);
-	    do Memory.poke(memAddress + 384, 8448);
-	    do Memory.poke(memAddress + 416, 256);
-	    do Memory.poke(memAddress + 448, 256);
-	    do Memory.poke(memAddress + 480, -256);
-
-        return;
-    }
-
-    method void DrawLeft3(int location)
-    {
-        let memAddress = 16384 + location;
-	    do Memory.poke(memAddress + 0, -256);
-	    do Memory.poke(memAddress + 32, 256);
-	    do Memory.poke(memAddress + 64, 256);
-	    do Memory.poke(memAddress + 96, 4352);
-	    do Memory.poke(memAddress + 128, 8448);
-	    do Memory.poke(memAddress + 160, 16640);
-	    do Memory.poke(memAddress + 192, 8448);
-	    do Memory.poke(memAddress + 224, 256);
-	    do Memory.poke(memAddress + 256, 256);
-	    do Memory.poke(memAddress + 288, 256);
-	    do Memory.poke(memAddress + 320, -16128);
-	    do Memory.poke(memAddress + 352, 8448);
-	    do Memory.poke(memAddress + 384, 8448);
-	    do Memory.poke(memAddress + 416, 256);
-	    do Memory.poke(memAddress + 448, 256);
-	    do Memory.poke(memAddress + 480, -256);
-
-        return;
-    }
-
 }

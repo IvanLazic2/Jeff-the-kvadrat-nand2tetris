@@ -27,7 +27,7 @@ class Heart
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
-		let animationDelay = 3;
+		let animationDelay = 15;
 //////////////////////////////////////////
 		let Width = 1;
 		let Height = 1;
@@ -43,11 +43,11 @@ class Heart
 		let Frame1Part00 = Array.new(16);
 		let Frame1Part00Mirrored = Array.new(16);
 		let Frame1Part00[2] = 15420;
-		let Frame1Part00[3] = 32374;
-		let Frame1Part00[4] = -5;
-		let Frame1Part00[5] = -3;
-		let Frame1Part00[6] = -3;
-		let Frame1Part00[7] = -3;
+		let Frame1Part00[3] = 32382;
+		let Frame1Part00[4] = -8193;
+		let Frame1Part00[5] = -16385;
+		let Frame1Part00[6] = -16385;
+		let Frame1Part00[7] = -16385;
 		let Frame1Part00[8] = -1;
 		let Frame1Part00[9] = 32766;
 		let Frame1Part00[10] = 16380;
@@ -57,11 +57,11 @@ class Heart
 		let Frame1Part00[14] = 960;
 		let Frame1Part00[15] = 384;
 		let Frame1Part00Mirrored[2] = 15420;
-		let Frame1Part00Mirrored[3] = 28286;
-		let Frame1Part00Mirrored[4] = -8193;
-		let Frame1Part00Mirrored[5] = -16385;
-		let Frame1Part00Mirrored[6] = -16385;
-		let Frame1Part00Mirrored[7] = -16385;
+		let Frame1Part00Mirrored[3] = 32382;
+		let Frame1Part00Mirrored[4] = -5;
+		let Frame1Part00Mirrored[5] = -3;
+		let Frame1Part00Mirrored[6] = -3;
+		let Frame1Part00Mirrored[7] = -3;
 		let Frame1Part00Mirrored[8] = -1;
 		let Frame1Part00Mirrored[9] = 32766;
 		let Frame1Part00Mirrored[10] = 16380;
@@ -83,9 +83,9 @@ class Heart
 		let Frame2Part00 = Array.new(16);
 		let Frame2Part00Mirrored = Array.new(16);
 		let Frame2Part00[4] = 7224;
-		let Frame2Part00[5] = 15980;
-		let Frame2Part00[6] = 16372;
-		let Frame2Part00[7] = 16372;
+		let Frame2Part00[5] = 13948;
+		let Frame2Part00[6] = 12284;
+		let Frame2Part00[7] = 12284;
 		let Frame2Part00[8] = 16380;
 		let Frame2Part00[9] = 8184;
 		let Frame2Part00[10] = 4080;
@@ -93,9 +93,9 @@ class Heart
 		let Frame2Part00[12] = 960;
 		let Frame2Part00[13] = 384;
 		let Frame2Part00Mirrored[4] = 7224;
-		let Frame2Part00Mirrored[5] = 13948;
-		let Frame2Part00Mirrored[6] = 12284;
-		let Frame2Part00Mirrored[7] = 12284;
+		let Frame2Part00Mirrored[5] = 15980;
+		let Frame2Part00Mirrored[6] = 16372;
+		let Frame2Part00Mirrored[7] = 16372;
 		let Frame2Part00Mirrored[8] = 16380;
 		let Frame2Part00Mirrored[9] = 8184;
 		let Frame2Part00Mirrored[10] = 4080;

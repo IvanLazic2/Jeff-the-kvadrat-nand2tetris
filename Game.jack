@@ -99,7 +99,7 @@ class Game
 
 
 
-        let GameDelay = 20; //20
+        let GameDelay = 10; //20
 
         let redrawAllObstaclesDelay = 7;
         let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
@@ -171,7 +171,7 @@ class Game
             
 
 
-            do Character.RedrawPlatforms(map, mapWidth, mapHeight, WorldOffset);
+            do Character.RedrawPlatforms(WorldOffset);
             
 
             do DoAllEnemyActions();
@@ -214,6 +214,7 @@ class Game
 
         do Character.CheckTimers();
         do CheckAllEnemyTimers();
+        do CheckAllCollectableTimers();
 
         return;
     }
@@ -225,6 +226,7 @@ class Game
 
         do Character.DecrementTimers();
         do DecrementAllEnemyTimers();
+        do DecrementAllCollectableTimers();
 
         return;
     }
@@ -254,6 +256,37 @@ class Game
         {
             let enemy = Enemies[i];
             do enemy.DecrementTimers();
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    //// COLLECRTABLE TIMERS
+    method void CheckAllCollectableTimers()
+    {
+        var Collectable collectable;
+        var int i;
+
+        while (i < CollectablesCount)
+        {
+            let collectable = Collectables[i];
+            do collectable.CheckTimers();
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void DecrementAllCollectableTimers()
+    {
+        var Collectable collectable;
+        var int i;
+
+        while (i < CollectablesCount)
+        {
+            let collectable = Collectables[i];
+            do collectable.DecrementTimers();
             let i = i + 1;
         }
 
@@ -355,12 +388,12 @@ class Game
         var int i;
         var Enemy enemy;
 
-        do Character.CheckBullets(map, mapWidth, mapHeight, WorldOffset);
+        do Character.CheckBullets(WorldOffset);
 
         while (i < EnemiesCount)
         {
             let enemy = Enemies[i];
-            do enemy.CheckBullets(map, mapWidth, mapHeight, WorldOffset);
+            do enemy.CheckBullets(WorldOffset);
             let i = i + 1;
         }
 
@@ -621,14 +654,14 @@ class Game
         let x = Character.get_x();
         let abs_x = Character.get_absolute_x();
 
-        do Character.check_gravity2(map, mapWidth, mapHeight, WorldOffset);
-        do Character.check_collision_obstacles2(map, mapWidth, mapHeight);
+        do Character.CheckGravity(WorldOffset);
+        do Character.CheckCollisionWithObstacles();
 
         if (Direction = 1) 
         {
             do Character.set_draw_character_left(true);
 
-            if (~Character.check_left_collision_platforms2(map, mapWidth, mapHeight, WorldOffset))
+            if (~Character.CheckCollisionWithPlatformLeft(WorldOffset))
             {
                 if (abs_x - ScreenMiddle + MoveAreaWidth > 0)
                 {
@@ -651,7 +684,7 @@ class Game
         {
             do Character.set_draw_character_left(false);
 
-            if (~Character.check_right_collision_platforms2(map, mapWidth, mapHeight, WorldOffset))
+            if (~Character.CheckCollisionWithPlatformRight(WorldOffset))
             {
                 if (abs_x + ScreenMiddle - MoveAreaWidth < mapWidth)
                 {

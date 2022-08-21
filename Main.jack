@@ -24,7 +24,6 @@ class Main
         //do Pathfinding.init();
 
         let game = Game.new();
-
         do game.start();
 
         return;
