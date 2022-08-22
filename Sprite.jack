@@ -1,105 +1,49 @@
 class Sprite
 {
-	static Array Empty;
+	//static Array Empty;
 
-	function bool IsInScreen(int x)
-	{
-		return ((-1 < x) & (x < 32));
-	}
+	//function bool IsInScreen(int x)
+	//{
+	//	return ((-1 < x) & (x < 32));
+	//}
 
-	function void Draw(int memAddress, Array frame, int width, int height, bool display, int x, int y)
+	//function int getValue(int col, int row, int i, Array frame, int width, int height)
+	//{
+	//	return frame[(row * width * 16) + (col * 16) + i];
+	//}
+
+	function void Draw(int memAddress, Array frame, int frameSize, int width, int height, bool display, int x, int y)
 	{
 		var int i;
-		var int j;
-		var Array frameRow;
-		var int tempMemAddress;
+		var int row;
+		var int col;
 
-		let tempMemAddress = memAddress;
+		let memAddress = memAddress + 480; // + 512 - 32
 
-		//do Output.printInt(height);
-
-		while (j < height)
+		while (i < frameSize)
 		{
-			let frameRow = frame[j];
-
-			let tempMemAddress = memAddress - (j * 512);
-
-			
-
-			
-			let i = 0;
-			while (i < width)
+			if (col > (width - 1))
 			{
-				if (Sprite.IsInScreen(x + i))
+				let col = 0;
+				let row = row - 32;
+			}
+
+			if (Constants.IsInScreenX(x + col))
+			{
+				if (display)
 				{
-					
-					if (display)
-					{
-						do Sprite.drawBlock(tempMemAddress, frameRow[i], x, y);
-					}
-					else
-					{
-						do Sprite.clearBlock(tempMemAddress, x, y);
-					}
+					do Memory.poke(memAddress + col + row, frame[i]);
 				}
-				
-				let tempMemAddress = tempMemAddress + 1;
-				let i = i + 1;
+				else
+				{
+					do Memory.poke(memAddress + col + row, 0);
+				}
 			}
-
-			let j = j + 1;
+			
+			let col = col + 1;
+			let i = i + 1;
 		}
 
 		return;
 	}
-
-    function void drawBlock(int memAddress, Array spritePart, int x, int y)
-	{
-		var int i;
-		var int j;
-
-		if (~(spritePart = Empty))
-		{
-			while (i < 481)
-			{
-				
-				
-				do Memory.poke(memAddress + i, spritePart[j]);
-				
-				let j = j + 1;
-				let i = i + 32;
-			}
-		}
-
-		return;
-	}
-
-	function void clearBlock(int memAddress, int x, int y)
-	{
-		var int i;
-
-        while (i < 481)
-		{
-			do Memory.poke(memAddress + i, 0);
-            let i = i + 32;
-		}
-
-		return;
-	}
-
-	function void init()
-	{
-		var int i;
-
-		let Empty = Array.new(16);
-        while (i < 16)
-        {
-            let Empty[i] = 0;
-            let i = i + 1;
-        }
-
-		return;
-	}
-
-	function Array getEmpty() { return Empty; }
 }

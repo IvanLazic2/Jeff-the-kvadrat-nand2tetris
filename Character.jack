@@ -2,48 +2,33 @@
 
 class Character
 {
-    field int x;
-    field int y;
-    field int absolute_x;
+    field int X;
+    field int Y;
+    field int Width;
+    field int Height;
+
+    field int absoluteX;
+    field int heightInPixels;
     field int memAddress;
     field int lastMemAddress;
-    field int width;
-    field int height;
-    field int heightInPixels;
     field int forceY;
     field int gravity;
-    field int jump_height;
-    field bool can_jump;
-
-    
+    field int jumpHeight;
+    field bool canJump;
 
     field int health;
+    field int coins;
 
-    field Obstacle last_obstacle;
-    field bool should_draw_last_obstacle;
+    field bool shouldRedrawObstacles;
 
-    field int damage_timer;
-    field int damage_cooldown;
-
-    field int last_abs_x;
+    field int damageTimer;
+    field int damageDelay;
 
     field bool movingLeft;
 
-
-
-
-
-    field int animationFrameCount;
-	field int currFrame;
-
-    field bool playSpecificFrame;
-    field int idleFrame; // = 2
-
-    field int animationDelay;
-	field int animationTimer;
-
     field Array Bullets;
     field int BulletsCount;
+    field int AvailableBulletsCount;
     field int currBulletIndex;
     field Bullet currBullet;
 
@@ -52,38 +37,35 @@ class Character
 
     field bool canShoot;
 
-    field int Coins;
-
-    
+    field bool shoudlRefreshGameBullets;
 
     constructor Character new(int x2, int y2)
     {
         var int i;
 
-        let x = x2;
-        let y = y2;
-        let memAddress = Constants.getMemAddress(x, y);
-        let absolute_x = x2;
+        let X = x2;
+        let Y = y2;
+        let Width = Jeff.getWidth();
+        let Height = Jeff.getHeight();
 
-        let width = 3; // 3
-        let height = 2; // 32
-        let heightInPixels = height * 16;
+        let memAddress = Constants.getMemAddress(X, Y);
+        let absoluteX = x2;
+        
+        let heightInPixels = Height * 16;
 
         let gravity = 6; // 6
-        let can_jump = false;
-        let jump_height = 35; // 35
+        let canJump = false;
+        let jumpHeight = Difficulty.getCharacterJumpHeight(); // 35
 
-        let health = 3;
-        let damage_cooldown = 20; // 20 game ticks
+        let health = Difficulty.getCharacterHealth();
+        let damageDelay = Difficulty.getCharacterDamageDelay(); // 20
 
-        let BulletsCount = 5;
-        let Bullets = Array.new(BulletsCount);
-        while (i < BulletsCount)
-        {
-            let Bullets[i] = Bullet.new();
-            let i = i + 1;
-        }
-        let currBullet = Bullets[currBulletIndex];
+        let BulletsCount = Difficulty.getCharacterBulletsCount(); // 5
+        let AvailableBulletsCount = BulletsCount;
+        
+        do RefreshBullets();
+        
+        
 
         let bulletDelay = 10;
         let bulletTimer = bulletDelay;
@@ -97,58 +79,58 @@ class Character
         return this;
     }
 
-    method int get_x() { return x; }
+    method int get_x() { return X; }
 
-    method int get_y() { return y; }
+    method int get_y() { return Y; }
 
-    method int getWidth() { return width; }
-    method int getHeight() { return height; }
+    method int getWidth() { return Width; }
+    method int getHeight() { return Height; }
 
-    method int get_absolute_x() { return absolute_x; }
+    method int get_absolute_x() { return absoluteX; }
 
-    method Obstacle get_last_obstacle() { return last_obstacle; }
-
-    method bool get_should_draw_last_obstacle(){ return should_draw_last_obstacle; }
-
-    method int get_last_abs_x() { return last_abs_x; }
+    method bool getShouldRedrawObstacles(){ return shouldRedrawObstacles; }
 
     method Array getBullets() { return Bullets; }
 
     method int getBulletsCount() { return BulletsCount; }
+    method int getAvailableBulletsCount() { return AvailableBulletsCount; }
 
     method int getHealth() { return health; }
-    method int getCoins() { return Coins; }
+    method int getCoins() { return coins; }
 
-    method void addCoin() { let Coins = Coins + 1; return; }
+    method bool getShoudlRefreshGameBullets() { return shoudlRefreshGameBullets;}
+    method void setShoudlRefreshGameBullets(int b) { let shoudlRefreshGameBullets = b; return;}
+
+    method void addCoin() { let coins = coins + 1; return; }
     method void addLife() { let health = health + 1; return; }
 
     method void set_x(int x2)
     {
-        let x = x2;
+        let X = x2;
         return;
     }
 
     method void set_y(int y2)
     {
-        let y = y2;
+        let Y = y2;
         return;
     }
 
     method void set_absolute_x(int abs_x)
     {
-        let absolute_x = abs_x;
+        let absoluteX = abs_x;
         return;
     }
 
-    method void set_should_draw_last_obstacle(bool s)
+    method void setShouldRedrawObstacles(bool s)
     {
-        let should_draw_last_obstacle = s;
+        let shouldRedrawObstacles = s;
         return;
     }
 
     method void increment_absolute_x(int inc)
     {
-        let absolute_x = absolute_x + inc;
+        let absoluteX = absoluteX + inc;
         return;
     }
 
@@ -184,14 +166,14 @@ class Character
 
     method void DoEnemyAction(Enemy enemy, Array map, int mapWidth, int mapHeight, int worldOffset)
     {
-        do enemy.DoActions(worldOffset, x, y);
+        do enemy.DoActions(worldOffset, X, Y);
 
         return;
     }
 
     method void CheckCollisionWithEnemy(Enemy enemy)
     {
-        if (enemy.CheckCollisionWithCharacter(x, y, width, heightInPixels))
+        if (enemy.CheckCollisionWithCharacter(X, Y, Width, heightInPixels))
         {
             do Respawn();
             do TakeDamage();
@@ -202,7 +184,7 @@ class Character
 
     method void CheckCollisionWithBullet(Bullet bullet)
     {
-        if (bullet.CheckCollisionWithEntity(x, y, width, heightInPixels))
+        if (bullet.CheckCollisionWithEntity(X, Y, Width, heightInPixels))
         {
             do Respawn();
             do TakeDamage();
@@ -214,7 +196,9 @@ class Character
     method void CheckCollisionWithCollectable(Collectable collectable)
     {
         var int result;
-        let result = collectable.CheckCollisionWithCharacter(x, y, width, heightInPixels);
+        var int bCount;
+
+        let result = collectable.CheckCollisionWithCharacter(X, Y, Width, heightInPixels);
 
         if (result = 0)
         {
@@ -225,18 +209,67 @@ class Character
         {
             do addLife();
             do Draw(memAddress, true);
-        }}
+        }
+        else { if (result = 2)
+        {
+            if (Difficulty.getCanPickUpAmmo())
+            {
+                let bCount = BulletsCount;
+                do ClearAllBullets();
+                let AvailableBulletsCount = AvailableBulletsCount + Difficulty.getAmmoCount();
+                let BulletsCount = AvailableBulletsCount;
+                if (~(bCount = 0))
+                {
+                    do Bullets.dispose();
+                }
+                do RefreshBullets();
+            }
+        }}}
+
+        return;
+    }
+
+    method void ClearAllBullets()
+    {
+        var int i;
+        var Bullet bullet;
+
+        while (i < BulletsCount)
+        {
+            let bullet = Bullets[i];
+            do bullet.Clear();
+            do bullet.Reset();
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void RefreshBullets()
+    {
+        var int i;
+
+        let shoudlRefreshGameBullets = true;
+
+        if (~(BulletsCount = 0))
+        {
+            let Bullets = Array.new(BulletsCount);
+            while (i < BulletsCount)
+            {
+                let Bullets[i] = Bullet.new();
+                let i = i + 1;
+            }
+            let currBullet = Bullets[currBulletIndex];
+        }
 
         return;
     }
 
 
 
-
-
     method void RedrawPlatforms(int worldOffset)
     {
-        do Collision.RedrawPlatforms(x, y, width, heightInPixels, worldOffset);
+        do Collision.RedrawPlatforms(X, Y, Width, heightInPixels, worldOffset);
 
         return;
     }
@@ -244,12 +277,12 @@ class Character
     //// PLATFORM COLLISION
     method bool CheckCollisionWithPlatformRight(int worldOffset)
     {
-        return Collision.CheckAnyPlatformCollisionRight(x, y, width, height, worldOffset);
+        return Collision.CheckAnyPlatformCollisionRight(X, Y, Width, Height, worldOffset);
     }
 
     method bool CheckCollisionWithPlatformLeft(int worldOffset)
     {
-        return Collision.CheckAnyPlatformCollisionLeft(x, y, width, height, worldOffset);
+        return Collision.CheckAnyPlatformCollisionLeft(X, Y, Width, Height, worldOffset);
     }
 
     //// OBSTACLE COLLISION
@@ -258,20 +291,19 @@ class Character
         var int i;
         var bool result;
 
-        let result = Collision.IsCollidedAnyObstacle(absolute_x, y, width, height);
+        let result = Collision.IsCollidedAnyObstacle(absoluteX, Y, Width, Height);
 
         if (result)
         {
-            let should_draw_last_obstacle = true;
-            let last_abs_x = absolute_x;
+            let shouldRedrawObstacles = true;
 
             do TakeDamage();
             do Respawn();
         }
 
-        if (damage_timer > 0)
+        if (damageTimer > 0)
         {
-            let damage_timer = damage_timer - 1;
+            let damageTimer = damageTimer - 1;
         }
 
         return;
@@ -280,12 +312,12 @@ class Character
     //// MOVEMENT
     method void MoveLeft()
     {
-        if (x > 0)
+        if (X > 0)
         {
             let lastMemAddress = memAddress;
 
-            let x = x - 1;
-            let absolute_x = absolute_x - 1;
+            let X = X - 1;
+            let absoluteX = absoluteX - 1;
             let memAddress = memAddress - 1;
 
             do Clear();
@@ -297,12 +329,12 @@ class Character
 
     method void MoveRight()
     {
-        if((x + width) < 32)
+        if((X + Width) < 32)
         {
             let lastMemAddress = memAddress;
 
-            let x = x + 1;
-            let absolute_x = absolute_x + 1;
+            let X = X + 1;
+            let absoluteX = absoluteX + 1;
             let memAddress = memAddress + 1;
 
             do Clear();
@@ -316,9 +348,9 @@ class Character
 
     method void Jump()
     {
-        if (can_jump)
+        if (canJump)
         {
-            let forceY = forceY - jump_height;
+            let forceY = forceY - jumpHeight;
         }
 
         return;
@@ -333,14 +365,14 @@ class Character
 
         let lastMemAddress = memAddress;
 
-        let can_jump = Collision.IsOnAnyPlatform(x, y, width, height, forceY, worldOffset);
+        let canJump = Collision.IsOnAnyPlatform(X, Y, Width, Height, forceY, worldOffset);
 
-        if (can_jump)
+        if (canJump)
         {
-            let y = Collision.getPlatformY() - 16;
+            let Y = Collision.getPlatformY() - 16;
 
             let forceY = 0;
-            let memAddress = Constants.getMemAddress(x, y);
+            let memAddress = Constants.getMemAddress(X, Y);
 
             do Clear();
             do Draw(memAddress, true);
@@ -348,7 +380,7 @@ class Character
         // padanje
         else
         {
-            if (y > 219)
+            if (Y > 219)
             {
                 //do Respawn();
 
@@ -361,8 +393,8 @@ class Character
         }
 
 
-        let y = y + forceY;
-        let memAddress = Constants.getMemAddress(x, y);
+        let Y = Y + forceY;
+        let memAddress = Constants.getMemAddress(X, Y);
 
         do Clear();
         do Draw(memAddress, true);
@@ -374,17 +406,17 @@ class Character
 
     method void Respawn()
     {
-        let y = 100;
+        let Y = 100;
 
-        if (x - 10 < 1)
+        if (X - 10 < 1)
         {
-            let x = x + 5;
-            let absolute_x = absolute_x + 5;
+            let X = X + 5;
+            let absoluteX = absoluteX + 5;
         }
         else
         {
-            let x = x - 10;
-            let absolute_x = absolute_x - 10;
+            let X = X - 10;
+            let absoluteX = absoluteX - 10;
         }
         
         return;
@@ -393,13 +425,13 @@ class Character
     method void TakeDamage()
     {
         // dont take damage if already taken
-        if (damage_timer < 1)
+        if (damageTimer < 1)
         {
             do Output.printString("oof");
             do Output.println();
 
             let health = health - 1;
-            let damage_timer = damage_cooldown;
+            let damageTimer = damageDelay;
         }
 
         return;
@@ -410,34 +442,44 @@ class Character
         var int bulletX;
         var int bulletY;
 
-        if (movingLeft)
+        if (~(AvailableBulletsCount = 0))
         {
-            let bulletX = x - 1;
-        }
-        else
-        {
-            let bulletX = x + width;
-        }
-        let bulletY = y - Constants.getBlockHeight();
-
-        if (canShoot)
-        {
-            if (currBullet.IsAvailable())
+            if (movingLeft)
             {
-                do currBullet.Shoot(bulletX, bulletY, movingLeft, worldOffset);
-
-                let currBulletIndex = currBulletIndex + 1;
-
-                if (currBulletIndex > (BulletsCount - 1))
-                {
-                    let currBulletIndex = 0;
-                }
-                
-                let currBullet = Bullets[currBulletIndex];
+                let bulletX = X - 1;
             }
+            else
+            {
+                let bulletX = X + Width;
+            }
+            let bulletY = Y - Constants.getBlockHeight();
 
-            let canShoot = false;
+            if (canShoot)
+            {
+                if (currBullet.IsAvailable())
+                {
+                    do currBullet.Shoot(bulletX, bulletY, movingLeft, worldOffset);
+
+                    let currBulletIndex = currBulletIndex + 1;
+
+                    if (currBulletIndex > (BulletsCount - 1))
+                    {
+                        let currBulletIndex = 0;
+                    }
+
+                    let currBullet = Bullets[currBulletIndex];
+
+                    if (~Difficulty.getCharacterHasInfiniteBullets())
+                    {
+                        let AvailableBulletsCount = AvailableBulletsCount - 1;
+                    }
+                }
+
+                let canShoot = false;
+            }
         }
+
+        //do Output.printInt(AvailableBulletsCount);
 
         return;
     }
@@ -469,7 +511,7 @@ class Character
     {
 		if (~(memAddress = lastMemAddress))
 		{
-			do Jeff.DrawFrame(m, display, movingLeft, x, y);
+			do Jeff.DrawFrame(m, display, movingLeft, X, Y);
 		}
 		
 		return;

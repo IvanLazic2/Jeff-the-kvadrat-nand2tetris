@@ -121,7 +121,7 @@ class Collision
 
     function bool IsCollectable(int value)
     {
-        return ((15 < value) & (value < 18));
+        return ((15 < value) & (value < 19));
     }
 
     function bool GetPlatformType(int value)
@@ -266,7 +266,7 @@ class Collision
                 let col = x + 2 + worldOffset;
             }
 
-            let result = (Map.getValue(col, Constants.getYDiv16(y)) = 0) & (Map.getValue(col, (y + 15)/16) = 0) & (Map.getValue(col, (y - 15)/16) = 0);
+            let result = (Map.getValue(col, Constants.getYDiv16(y)) = 0) & (Map.getValue(col, (y + 15)/16) = 0); //& (Map.getValue(col, (y - 15)/16) = 0);
         }
 
         return ~result;

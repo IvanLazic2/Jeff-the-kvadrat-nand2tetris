@@ -1,14 +1,15 @@
 // 0 - coin
 // 1 - life
+// 2 - ammo
 
 class Collectable
 {
     field int X;
     field int Y;
     field int Type;
-    field int memAddress;
-
     field bool IsAvailable;
+
+    field int memAddress;
 
     constructor Collectable new(int x, int y, int type)
     {
@@ -31,24 +32,24 @@ class Collectable
 
     method void CheckTimers()
 	{ 
-        do Heart.CheckTimers();
-        do Coin.CheckTimers();
+        //do Heart.CheckTimers();
+        //do Coin.CheckTimers();
 
-
-
-        if (IsAvailable & Constants.IsInScreen(X, Y))
+        if (IsAvailable)
         {
-            do Draw(true);
+            if (Constants.IsInScreen(X, Y))
+            {
+                do Draw(true);
+            }
         }
-       
 
 		return;
 	}
 
 	method void DecrementTimers()
 	{
-        do Heart.DecrementTimers();
-        do Coin.DecrementTimers();
+        //do Heart.DecrementTimers();
+        //do Coin.DecrementTimers();
 
 		return;
 	}
@@ -111,13 +112,21 @@ class Collectable
         // COIN
 		if (Type = 0)
 		{
-			do Coin.DrawFrame(memAddress, display, false, X, Y);
+			do Coin.DrawFrame(memAddress, display, X, Y);
 		}
         // LIFE
 		else { if (Type = 1)
 		{
-			do Heart.DrawFrame(memAddress, display, false, X, Y);
-		}}
+			do Heart.DrawFrame(memAddress, display, X, Y);
+		}
+        // AMMO
+        else { if (Type = 2)
+        {
+            if (Difficulty.getCanPickUpAmmo())
+            {
+                do Ammo.DrawFrame(memAddress, display, X, Y);
+            }
+        }}}
 		
 
 		return;

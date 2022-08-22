@@ -1,6 +1,10 @@
 class Level3
 {
 	field Character character;
+	field int finishX;
+	field int finishY;
+	field int finishW;
+	field int finishH;
 	field int PlatformsCount;
 	field int ObstaclesCount;
 	field int EnemiesCount;
@@ -14,13 +18,25 @@ class Level3
 	field int MapHeight;
 	constructor Level3 new()
 	{
-		let character = Character.new(5, 200);
-		let PlatformsCount = 1;
+		let character = Character.new(3, 200);
+	let finishX = 255;
+	let finishY = 14;
+	let finishW = 1;
+	let finishH = 3;
+		let PlatformsCount = 3;
 		let ObstaclesCount = 0;
-		let EnemiesCount = 0;
-		let CollectablesCount = 0;
-		let Platforms = Array.new(1);
-		let Platforms[0] = Platform.new(0, 240, 0, 27);
+		let EnemiesCount = 1;
+		let CollectablesCount = 3;
+		let Platforms = Array.new(3);
+		let Platforms[0] = Platform.new(9, 176, 0, 6);
+		let Platforms[1] = Platform.new(15, 208, 0, 6);
+		let Platforms[2] = Platform.new(0, 240, 0, 29);
+		let Enemies = Array.new(1);
+		let Enemies[0] = Enemy.new(23, 224, 2);
+		let Collectables = Array.new(3);
+		let Collectables[0] = Collectable.new(8, 224, 2);
+		let Collectables[1] = Collectable.new(10, 224, 2);
+		let Collectables[2] = Collectable.new(12, 224, 2);
 		let Map = Array.new(4096);
 		let Map[15] = 1;
 		let Map[31] = 1;
@@ -30,18 +46,33 @@ class Level3
 		let Map[95] = 1;
 		let Map[111] = 1;
 		let Map[127] = 1;
+		let Map[142] = 18;
 		let Map[143] = 1;
+		let Map[155] = 1;
 		let Map[159] = 1;
+		let Map[171] = 1;
+		let Map[174] = 18;
 		let Map[175] = 1;
+		let Map[187] = 1;
 		let Map[191] = 1;
+		let Map[203] = 1;
+		let Map[206] = 18;
 		let Map[207] = 1;
+		let Map[219] = 1;
 		let Map[223] = 1;
+		let Map[235] = 1;
 		let Map[239] = 1;
+		let Map[253] = 1;
 		let Map[255] = 1;
+		let Map[269] = 1;
 		let Map[271] = 1;
+		let Map[285] = 1;
 		let Map[287] = 1;
+		let Map[301] = 1;
 		let Map[303] = 1;
+		let Map[317] = 1;
 		let Map[319] = 1;
+		let Map[333] = 1;
 		let Map[335] = 1;
 		let Map[351] = 1;
 		let Map[367] = 1;
@@ -49,6 +80,8 @@ class Level3
 		let Map[399] = 1;
 		let Map[415] = 1;
 		let Map[431] = 1;
+		let Map[447] = 1;
+		let Map[463] = 1;
 		let MapWidth = 256;
 		let MapHeight = 16;
 		return this;

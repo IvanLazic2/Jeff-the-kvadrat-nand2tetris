@@ -72,12 +72,6 @@ class Bullet
         return false;
     }
 
-
-
-
-
-
-
     method bool IsAvailable()
     {
         return (memAddress = resetMemAddress);

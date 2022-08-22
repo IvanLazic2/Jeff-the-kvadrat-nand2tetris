@@ -1,0 +1,71 @@
+class Difficulty
+{
+    static int difficulty;
+
+    static int characterJumpHeight;
+    static int characterHealth;
+    static int characterDamageDelay;
+    static int characterBulletsCount;
+    static bool characterHasInfiniteBullets;
+
+    static bool canPickUpAmmo;
+    static int ammoCount;
+
+
+    function void init()
+    {
+        
+        if (difficulty = 1)
+        {
+            let characterJumpHeight = 35;
+            let characterHealth = 5;
+            let characterDamageDelay = 30;
+            let characterBulletsCount = 5;
+            let characterHasInfiniteBullets = true;
+        }
+        else { if (difficulty = 2)
+        {
+            let characterJumpHeight = 32;
+            let characterHealth = 3;
+            let characterDamageDelay = 20;
+            let characterBulletsCount = 3;
+            let canPickUpAmmo = true;
+            let ammoCount = 3;
+        }
+        else { if (difficulty = 3)
+        {
+            let characterJumpHeight = 32;
+            let characterHealth = 2;
+            let characterDamageDelay = 20;
+            let characterBulletsCount = 0;
+            let canPickUpAmmo = true;
+            let ammoCount = 1;
+        }
+        else { if (difficulty = 4)
+        {
+            let characterJumpHeight = 30;
+            let characterHealth = 1;
+            let characterDamageDelay = 0;
+            let characterBulletsCount = 0;
+        }}}}
+
+        
+        return;
+    }
+
+    function void setDifficulty(int d) 
+    { 
+        let difficulty = d; 
+        do Difficulty.init(); 
+        return; 
+    }
+
+    function int getCharacterJumpHeight() { return characterJumpHeight; }
+    function int getCharacterHealth() { return characterHealth; }
+    function int getCharacterDamageDelay() { return characterDamageDelay; }
+    function int getCharacterBulletsCount() { return characterBulletsCount; }
+    function bool getCharacterHasInfiniteBullets() { return characterHasInfiniteBullets; }
+
+    function bool getCanPickUpAmmo() { return canPickUpAmmo; }
+    function int getAmmoCount() { return ammoCount; }
+}

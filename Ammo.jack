@@ -1,4 +1,4 @@
-class SimpleBullet
+class Ammo
 {
 	static int Width;
 	static int Height;
@@ -12,9 +12,7 @@ class SimpleBullet
 	static int specialFrameTimer;
 	static Array Frames;
 	static int FrameSize;
-	static Array FramesMirrored;
 	static Array Frame1;
-	static Array Frame1Mirrored;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
@@ -26,17 +24,18 @@ class SimpleBullet
 		let TotalFramesCount = 1;
 		let FrameSize = Width * Height * 16;
 		let Frames = Array.new(TotalFramesCount);
-		let FramesMirrored = Array.new(TotalFramesCount);
 		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1Mirrored = Array.new(Width * Height * 16);
-		let Frame1[7] = -8192;
-		let Frame1[8] = -8192;
-		let Frame1[9] = -8192;
-		let Frame1Mirrored[7] = 7;
-		let Frame1Mirrored[8] = 7;
-		let Frame1Mirrored[9] = 7;
+		let Frame1[2] = 7644;
+		let Frame1[3] = 5460;
+		let Frame1[4] = 16382;
+		let Frame1[5] = 5460;
+		let Frame1[6] = 5460;
+		let Frame1[7] = 5460;
+		let Frame1[8] = 5460;
+		let Frame1[9] = 16382;
+		let Frame1[10] = 5460;
+		let Frame1[11] = 2184;
 		let Frames[0] = Frame1;
-		let FramesMirrored[0] = Frame1Mirrored;
 		return;
 	}
 	function int getWidth() { return Width; }
@@ -45,7 +44,7 @@ class SimpleBullet
 	{
 		if (animationTimer < 1)
 		{
-			do SimpleBullet.ChangeFrame();
+			do Ammo.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
 		if (specialFrameTimer < 1)
@@ -76,16 +75,9 @@ class SimpleBullet
 		}
 		return;
 	}
-	function void DrawFrame(int memAddress, bool display, bool mirrored, int x, int y)
+	function void DrawFrame(int memAddress, bool display, int x, int y)
 	{
-		if (mirrored)
-		{
-			do Sprite.Draw(memAddress, FramesMirrored[currFrame], FrameSize, Width, Height, display, x, y);
-		}
-		else
-		{
-			do Sprite.Draw(memAddress, Frames[currFrame], FrameSize, Width, Height, display, x, y);
-		}
+		do Sprite.Draw(memAddress, Frames[currFrame], FrameSize, Width, Height, display, x, y);
 		return;
 	}
 }

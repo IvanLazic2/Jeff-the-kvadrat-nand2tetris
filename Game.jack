@@ -34,8 +34,6 @@ class Game
     field Array Collectables;
     field Array Bullets;
 
-    field Array div4lookup;
-
     field Level3 Level;
 
     field int GameDelay;
@@ -56,62 +54,12 @@ class Game
 
     constructor Game new()
     {
-        var int i;
-        var int j;
-        var int value;
-
-        let Direction = 0;
-
         let MoveAreaWidth = 5; // 5
         let ScreenMiddle = 16;
         let LeftBorder = ScreenMiddle - MoveAreaWidth;
         let RightBorder = ScreenMiddle + MoveAreaWidth;
 
-        let Level = Level3.new();
-        let map = Level.getMap();
-        let mapWidth = Level.getMapWidth();
-        let mapHeight = Level.getMapHeight();
-        do Map.setWidth(mapWidth);
-        do Map.setHeight(mapHeight);
-        do Map.setMap(map);
-
-        let Character = Level.getCharacter();
-
-        let PlatformsCount = Level.getPlatformsCount();
-        let ObstaclesCount = Level.getObstaclesCount();
-        let EnemiesCount = Level.getEnemiesCount();
-        let CollectablesCount = Level.getCollectablesCount();
-
-        let Platforms = Level.getPlatforms();
-        let Obstacles = Level.getObstacles();
-        let Enemies = Level.getEnemies();
-        let Collectables = Level.getCollectables();
-
-        let div4lookup = Array.new(mapWidth);
-        let i = 0;
-        while (i < mapWidth)
-        {
-            let div4lookup[i] = i / 4;
-            let i = i + 1;
-        }
-
-        //let last_section = sections[get_curr_section_index()];
-
-
-
-        let GameDelay = 10; //20
-
-        let redrawAllObstaclesDelay = 7;
-        let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
-
-        let WorldOffset = 0;
-
-        do GetBulletsCount();
-        let Bullets = Array.new(BulletsCount);
-        do GetBullets();
-
-        do DrawAllPlatforms();
-        do DrawAllCollectables();
+        
 
         return this;
     }
@@ -127,10 +75,47 @@ class Game
         var Platform platform;
         var int value;
 
+        do Difficulty.setDifficulty(3);
+
+        let Level = Level3.new();
+        let map = Level.getMap();
+        let mapWidth = Level.getMapWidth();
+        let mapHeight = Level.getMapHeight();
+        do Map.setWidth(mapWidth);
+        do Map.setHeight(mapHeight);
+        do Map.setMap(map);
+
+        let Direction = 0;
+        let Character = Level.getCharacter();
+
+        let PlatformsCount = Level.getPlatformsCount();
+        let ObstaclesCount = Level.getObstaclesCount();
+        let EnemiesCount = Level.getEnemiesCount();
+        let CollectablesCount = Level.getCollectablesCount();
+
+        let Platforms = Level.getPlatforms();
+        let Obstacles = Level.getObstacles();
+        let Enemies = Level.getEnemies();
+        let Collectables = Level.getCollectables();
+
+        let GameDelay = 10; //20
+
+        let redrawAllObstaclesDelay = 7;
+        let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
+
+        let WorldOffset = 0;
+
+        do GetBulletsCount();
+        if (~(BulletsCount = 0))
+        {
+            let Bullets = Array.new(BulletsCount);
+            do GetBullets();
+        }
+
+        do DrawAllPlatforms();
+        do DrawAllCollectables();
 
         let exit = false;
-
-        //do Screen.drawLine(0, 255-80, 511, 255-80);
 
         while (~exit)
         {
@@ -172,7 +157,6 @@ class Game
 
 
             do Character.RedrawPlatforms(WorldOffset);
-            
 
             do DoAllEnemyActions();
 
@@ -180,23 +164,16 @@ class Game
 
             do CheckAllBullets();
 
-            do CheckAllBulletCollisions();
+            if (~(BulletsCount = 0))
+            {
+                do CheckAllBulletCollisions();
+            }
 
             do CheckCollectableAndCharacterCollision();
 
-
-            
-
             do CheckTimers();
 
-
-
             do DecrementTimers();
-
-            
-            
-
-
         }
 
         return;
@@ -332,7 +309,7 @@ class Game
         var Obstacle obstacle;
         var int i;
 
-        if (Character.get_should_draw_last_obstacle())
+        if (Character.getShouldRedrawObstacles())
         {
             while (i < ObstaclesCount)
             {
@@ -341,7 +318,7 @@ class Game
 
                 let i = i + 1;
             }
-            do Character.set_should_draw_last_obstacle(false);
+            do Character.setShouldRedrawObstacles(false);
         }
 
         return;
@@ -406,7 +383,7 @@ class Game
         var int count;
         var Enemy enemy;
 
-        let count = Character.getBulletsCount();
+        let count = Character.getAvailableBulletsCount();
 
         while (i < EnemiesCount)
         {
@@ -416,6 +393,21 @@ class Game
         }
 
         let BulletsCount = count;
+
+        return;
+    }
+
+    method void RefreshBullets()
+    {
+        if (Character.getShoudlRefreshGameBullets())
+        {
+            do GetBulletsCount();
+            if (~(BulletsCount = 0))
+            {
+                do GetBullets();
+            }
+            do Character.setShoudlRefreshGameBullets(false);
+        }
 
         return;
     }
