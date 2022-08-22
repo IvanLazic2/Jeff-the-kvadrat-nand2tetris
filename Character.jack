@@ -98,7 +98,12 @@ class Character
     method void setMovingLeft(bool b) { let movingLeft = b; return; }
 
     method void incrementAbsoluteX(int inc) { let absoluteX = absoluteX + inc; return; }
-    method void addCoin() { let coins = coins + 1; return; }
+    method void addCoin() 
+    {
+        let coins = coins + 1; 
+        do printCoins();
+        return; 
+    }
     method void addLife() 
     {
         if ((health + 1) < Difficulty.getCharacterHealthLimit())
@@ -132,10 +137,6 @@ class Character
     
 
     //// CHECKS
-
-
-    
-
     method void printHealth()
     {
         do Output.moveCursor(0, 18);
@@ -565,5 +566,28 @@ class Character
         }
 		
 		return;
+    }
+
+    method void dispose()
+    {
+        var int i;
+        var Bullet bullet;
+
+        while (i < BulletsCount)
+        {   
+            let bullet = Bullets[i];
+            do bullet.dispose();
+            let i = i + 1;
+        }
+
+        if (~(BulletsCount = 0))
+		{
+            //do currBullet.dispose();
+			do Bullets.dispose();
+		}
+
+        do Memory.deAlloc(this);
+
+        return;
     }
 }

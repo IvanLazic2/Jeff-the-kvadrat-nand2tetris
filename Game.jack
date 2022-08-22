@@ -35,7 +35,7 @@ class Game
     field Array Collectables;
     field Array Bullets;
 
-    field Level3 Level;
+    field Level1 Level;
 
     field int GameDelay;
 
@@ -48,8 +48,8 @@ class Game
 
     field int WorldOffset;
 
-    field int currLevel;
-    field String text;
+    static int currLevel;
+    static String text;
 
     static int Kills;
 
@@ -58,6 +58,7 @@ class Game
     function void init()
     {
         let Kills = 0;
+        let currLevel = 1;
         return;
     }
 
@@ -68,9 +69,10 @@ class Game
         let LeftBorder = ScreenMiddle - MoveAreaWidth;
         let RightBorder = ScreenMiddle + MoveAreaWidth;
 
-        //do Screen.drawLine(0, 15, 511, 15);
-        do Screen.drawLine(125, 0, 125, 15);
-        
+        let GameDelay = 20; //20
+
+        let redrawAllObstaclesDelay = 7;
+        let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
 
         return this;
     }
@@ -190,8 +192,13 @@ class Game
     }
 
 
-    function void addKill() { let Kills = Kills + 1; return; }
-    method void printKills()
+    function void addKill() 
+    { 
+        let Kills = Kills + 1; 
+        do Game.printKills();
+        return;
+    }
+    function void printKills()
     {   
         do Output.moveCursor(0, 58);
         let text = ": ";
@@ -202,23 +209,35 @@ class Game
     }
 
     
-    
-
-    method void start()
+    method void getLevel()
     {
-        var char key;
-        var bool exit;
-        var int i;
-        var int j;
-        var int temp;
-        var Platform platform;
-        var int value;
+        if (currLevel = 1)
+        {
+            let Level = Level1.new();
+        }
+        else { if (currLevel = 2)
+        {
+            let Level = Level2.new();
+        }
+        else {if (currLevel = 3)
+        {
+            let Level = Level3.new();
+        }}}
 
-        do Difficulty.setDifficulty(4);
+        return;
+    }
 
-        let Level = Level3.new();
-        
-        let currLevel = 3;
+    method void setupGame()
+    {
+        //do Screen.drawLine(0, 15, 511, 15);
+        do Screen.drawLine(125, 0, 125, 15);
+
+        //// CHOOSE LEVEL
+        //let currLevel = 1;
+        //// CHOOSE DIFFICULTY
+        do Difficulty.setDifficulty(2);
+
+        do getLevel();
 
         let map = Level.getMap();
         let mapWidth = Level.getMapWidth();
@@ -227,8 +246,6 @@ class Game
         do Map.setHeight(mapHeight);
         do Map.setMap(map);
 
-        let Direction = 0;
-
         let Character = Level.getCharacter();
 
         do printLevel();
@@ -236,11 +253,10 @@ class Game
         do drawCoin();
         do drawAmmo();
         do drawSkull();
-
         do Character.printHealth();
         do Character.printCoins();
         do Character.printAmmo();
-        do printKills();
+        do Game.printKills();
 
         let Finish = Level.getFinish();
 
@@ -254,13 +270,6 @@ class Game
         let Enemies = Level.getEnemies();
         let Collectables = Level.getCollectables();
 
-        let GameDelay = 20; //20
-
-        let redrawAllObstaclesDelay = 7;
-        let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
-
-        let WorldOffset = 0;
-
         do GetBulletsCount();
         if (~(BulletsCount = 0))
         {
@@ -268,15 +277,28 @@ class Game
             do GetBullets();
         }
 
+        let WorldOffset = 0;
+
         do DrawAllPlatforms();
         do DrawAllCollectables();
+
+        return;
+    }
+
+    method void start()
+    {
+        var char key;
+        var bool exit;
+        var int i;
+        var int j;
+        var int temp;
+        var Platform platform;
+        var int value;
 
         let exit = false;
 
         while (~exit)
         {
-            
-
             let key = Keyboard.keyPressed();
 
             if (key = 0)
@@ -307,7 +329,18 @@ class Game
 
             if (Character.IsCollidedWithFinish(Finish))
             {
-                do Output.printString("finish");
+                let exit = true;
+                
+                //do Output.printString("finish");
+
+                if (currLevel < 3)
+                {
+                    do Screen.clearScreen();
+                    let currLevel = currLevel + 1;
+                    do Level.dispose();
+                    do setupGame();
+                    do start();
+                }
             }
 
             

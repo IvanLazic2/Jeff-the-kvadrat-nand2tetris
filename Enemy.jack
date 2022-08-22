@@ -447,29 +447,30 @@ class Enemy
 
 	method void Ranged(int worldOffset, int cx, int cy)
 	{
-		if (Constants.IsInScreenX(X))
-		{
-			if (Math.abs(X - cx) > 15)
-			{
-				do FollowGravity(worldOffset, cx, cy);
-			}
-			else
-			{
-				if (IsShooting)
-				{
-					if ((X - cx) < 0)
-					{
-						let movingLeft = false;
-						do ForceDraw();
-					}
-					else
-					{
-						let movingLeft = true;
-						do ForceDraw();
-					}
+		var int distance;
 
-					do Shoot(worldOffset);
+		let distance = Math.abs(X - cx);
+
+		if ((distance > 12) & (distance < 32))
+		{
+			do FollowGravity(worldOffset, cx, cy);
+		}
+		else
+		{
+			if (IsShooting)
+			{
+				if ((X - cx) < 0)
+				{
+					let movingLeft = false;
+					do ForceDraw();
 				}
+				else
+				{
+					let movingLeft = true;
+					do ForceDraw();
+				}
+
+				do Shoot(worldOffset);
 			}
 		}
 
@@ -744,7 +745,28 @@ class Enemy
 		return;
     }
 
+	method void dispose()
+    {
+        var int i;
+        var Bullet bullet;
 
+        while (i < BulletsCount)
+        {   
+            let bullet = Bullets[i];
+            do bullet.dispose();
+			let i = i + 1;
+        }
+
+        if (~(BulletsCount = 0))
+		{
+			do Bullets.dispose();
+		}
+
+
+        do Memory.deAlloc(this);
+
+        return;
+    }
 
 }
 

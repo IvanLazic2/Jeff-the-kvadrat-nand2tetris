@@ -10,7 +10,11 @@ class Map
 
     function void setWidth(int w) { let width = w; return; }
     function void setHeight(int h) { let height = h; return; }
-    function void setMap(Array m) { let map = m; return; }
+    function void setMap(Array m) 
+    {
+        let map = m;
+        return; 
+    }
 
     function int getValue(int col, int row)
     {

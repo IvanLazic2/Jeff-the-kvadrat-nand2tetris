@@ -28,6 +28,7 @@ class Main
         
         do Game.init();
         let game = Game.new();
+        do game.setupGame();
         do game.start();
 
         return;
