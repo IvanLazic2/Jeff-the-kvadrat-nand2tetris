@@ -1,5 +1,5 @@
 // 0 - coin
-// 1 - life
+// 1 - heart
 // 2 - ammo
 
 class Collectable
@@ -31,25 +31,27 @@ class Collectable
     method void setIsAvailable(int b) { let IsAvailable = b; return; }
 
     method void CheckTimers()
-	{ 
-        //do Heart.CheckTimers();
-        //do Coin.CheckTimers();
+	{
+       
 
-        if (IsAvailable)
-        {
-            if (Constants.IsInScreen(X, Y))
-            {
-                do Draw(true);
-            }
-        }
+        //if (Difficulty.getCanPickUpHealth())
+        //{
+        //    if (IsAvailable)
+        //    {
+        //        if (Constants.IsInScreen(X, Y))
+        //        {
+        //            do Draw(true);
+        //        }
+        //    }
+        //}
+        
 
 		return;
 	}
 
 	method void DecrementTimers()
 	{
-        //do Heart.DecrementTimers();
-        //do Coin.DecrementTimers();
+        
 
 		return;
 	}
@@ -109,24 +111,31 @@ class Collectable
 
     method void Draw(bool display)
     {
-        // COIN
-		if (Type = 0)
-		{
-			do Coin.DrawFrame(memAddress, display, X, Y);
-		}
-        // LIFE
-		else { if (Type = 1)
-		{
-			do Heart.DrawFrame(memAddress, display, X, Y);
-		}
-        // AMMO
-        else { if (Type = 2)
+        if (IsAvailable)
         {
-            if (Difficulty.getCanPickUpAmmo())
+            // COIN
+		    if (Type = 0)
+		    {
+		    	do Coin.DrawFrame(memAddress, display, X, Y);
+		    }
+            // HEART
+		    else { if (Type = 1)
+		    {
+                if (Difficulty.getCanPickUpHealth())
+                {
+                    do Heart.DrawFrame(memAddress, display, X, Y);
+                }
+		    }
+            // AMMO
+            else { if (Type = 2)
             {
-                do Ammo.DrawFrame(memAddress, display, X, Y);
-            }
-        }}}
+                if (Difficulty.getCanPickUpAmmo())
+                {
+                    do Ammo.DrawFrame(memAddress, display, X, Y);
+                }
+            }}}
+        }
+        
 		
 
 		return;

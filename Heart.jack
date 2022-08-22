@@ -1,4 +1,4 @@
-class Ammo
+class Heart
 {
 	static int Width;
 	static int Height;
@@ -13,33 +13,47 @@ class Ammo
 	static Array Frames;
 	static int FrameSize;
 	static Array Frame1;
+	static Array Frame2;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
+		let animationDelay = 11;
 //////////////////////////////////////////
 		let Width = 1;
 		let Height = 1;
-		let AnimationFramesCount = 1;
+		let AnimationFramesCount = 2;
 		let SpecialFramesCount = 0;
-		let TotalFramesCount = 1;
+		let TotalFramesCount = 2;
 		let FrameSize = Width * Height * 16;
 		let Frames = Array.new(TotalFramesCount);
 		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1[0] = 8;
-		let Frame1[1] = 28;
-		let Frame1[2] = 62;
-		let Frame1[3] = 127;
-		let Frame1[4] = 254;
-		let Frame1[5] = 508;
-		let Frame1[6] = 1016;
-		let Frame1[7] = 2032;
-		let Frame1[8] = 2016;
-		let Frame1[9] = 3008;
-		let Frame1[10] = 5504;
-		let Frame1[11] = 4608;
-		let Frame1[12] = 11264;
-		let Frame1[13] = 12288;
+		let Frame1[0] = 384;
+		let Frame1[1] = 960;
+		let Frame1[2] = 2016;
+		let Frame1[3] = 4080;
+		let Frame1[4] = 8184;
+		let Frame1[5] = 16380;
+		let Frame1[6] = 32766;
+		let Frame1[7] = -1;
+		let Frame1[8] = -16385;
+		let Frame1[9] = -16385;
+		let Frame1[10] = -16385;
+		let Frame1[11] = -8193;
+		let Frame1[12] = 28286;
+		let Frame1[13] = 15420;
 		let Frames[0] = Frame1;
+		let Frame2 = Array.new(Width * Height * 16);
+		let Frame2[2] = 384;
+		let Frame2[3] = 960;
+		let Frame2[4] = 2016;
+		let Frame2[5] = 4080;
+		let Frame2[6] = 8184;
+		let Frame2[7] = 16380;
+		let Frame2[8] = 12284;
+		let Frame2[9] = 12284;
+		let Frame2[10] = 13948;
+		let Frame2[11] = 7224;
+		let Frames[1] = Frame2;
 		return;
 	}
 	function int getWidth() { return Width; }
@@ -48,7 +62,7 @@ class Ammo
 	{
 		if (animationTimer < 1)
 		{
-			do Ammo.ChangeFrame();
+			do Heart.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
 		if (specialFrameTimer < 1)

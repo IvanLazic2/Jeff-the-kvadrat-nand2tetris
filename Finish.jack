@@ -1,0 +1,78 @@
+class Finish
+{
+    field int X;
+    field int Y;
+    field int Width;
+    field int Height;
+
+    field int memAddress;
+    field int lastMemAddress;
+
+    constructor Finish new(int x, int y)
+    {
+        let X = x;
+        let Y = y;
+        let Width = FinishFlag.getWidth();
+        let Height = FinishFlag.getHeight();
+
+        let memAddress = Constants.getMemAddress(X, Y);
+
+        do Draw(memAddress, true);
+
+        let lastMemAddress = memAddress;
+
+        return this;
+    }
+
+    method int IsCollidedWithCharacter(int x, int y, int w, int h)
+    {
+        if (Constants.IsInScreen(x, y))
+        {   
+            return Collision.IsEntityCollidedWithEntitySides(x, y, w, h, X, Y, Width, Height);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    method void ScrollRight()
+    {
+        do Clear();
+        let X = X + 1;
+        let lastMemAddress = memAddress;
+        let memAddress = memAddress + 1;
+        do Draw(memAddress, true);
+
+        return;
+    }
+
+    method void ScrollLeft()
+    {
+        do Clear();
+        let X = X - 1;
+        let lastMemAddress = memAddress;
+        let memAddress = memAddress - 1;
+        do Draw(memAddress, true);
+
+        return;
+    }
+
+    
+
+    method void Clear()
+    {
+        do Draw(memAddress, false);
+        return;
+    }
+
+    method void Draw(int m, bool display)
+    {
+        if (~(memAddress = lastMemAddress))
+        {
+            do FinishFlag.DrawFrame(memAddress, display, X, Y);
+        }
+
+        return;
+    }
+}

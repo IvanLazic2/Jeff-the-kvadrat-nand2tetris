@@ -1,4 +1,4 @@
-class Ammo
+class Coin
 {
 	static int Width;
 	static int Height;
@@ -13,33 +13,51 @@ class Ammo
 	static Array Frames;
 	static int FrameSize;
 	static Array Frame1;
+	static Array Frame2;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
+		let animationDelay = 7;
 //////////////////////////////////////////
 		let Width = 1;
 		let Height = 1;
-		let AnimationFramesCount = 1;
+		let AnimationFramesCount = 2;
 		let SpecialFramesCount = 0;
-		let TotalFramesCount = 1;
+		let TotalFramesCount = 2;
 		let FrameSize = Width * Height * 16;
 		let Frames = Array.new(TotalFramesCount);
 		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1[0] = 8;
-		let Frame1[1] = 28;
-		let Frame1[2] = 62;
-		let Frame1[3] = 127;
-		let Frame1[4] = 254;
-		let Frame1[5] = 508;
-		let Frame1[6] = 1016;
-		let Frame1[7] = 2032;
-		let Frame1[8] = 2016;
-		let Frame1[9] = 3008;
-		let Frame1[10] = 5504;
-		let Frame1[11] = 4608;
-		let Frame1[12] = 11264;
-		let Frame1[13] = 12288;
+		let Frame1[1] = 2016;
+		let Frame1[2] = 6168;
+		let Frame1[3] = 9156;
+		let Frame1[4] = 11316;
+		let Frame1[5] = 18834;
+		let Frame1[6] = 21066;
+		let Frame1[7] = 21002;
+		let Frame1[8] = 21002;
+		let Frame1[9] = 21002;
+		let Frame1[10] = 18450;
+		let Frame1[11] = 11316;
+		let Frame1[12] = 9156;
+		let Frame1[13] = 6168;
+		let Frame1[14] = 2016;
 		let Frames[0] = Frame1;
+		let Frame2 = Array.new(Width * Height * 16);
+		let Frame2[1] = 384;
+		let Frame2[2] = 576;
+		let Frame2[3] = 576;
+		let Frame2[4] = 576;
+		let Frame2[5] = 576;
+		let Frame2[6] = 576;
+		let Frame2[7] = 576;
+		let Frame2[8] = 576;
+		let Frame2[9] = 576;
+		let Frame2[10] = 576;
+		let Frame2[11] = 576;
+		let Frame2[12] = 576;
+		let Frame2[13] = 576;
+		let Frame2[14] = 384;
+		let Frames[1] = Frame2;
 		return;
 	}
 	function int getWidth() { return Width; }
@@ -48,7 +66,7 @@ class Ammo
 	{
 		if (animationTimer < 1)
 		{
-			do Ammo.ChangeFrame();
+			do Coin.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
 		if (specialFrameTimer < 1)

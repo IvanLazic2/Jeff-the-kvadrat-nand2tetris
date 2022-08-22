@@ -7,9 +7,18 @@ class Difficulty
     static int characterDamageDelay;
     static int characterBulletsCount;
     static bool characterHasInfiniteBullets;
+    static int characterBulletDelay;
+    static int characterBulletLimit;
 
     static bool canPickUpAmmo;
+    static bool canPickUpHealth;
     static int ammoCount;
+
+    static int spiderMovementDelay;
+    static int batMovementDelay;
+    static int enemyBulletDelay;
+    static int enemyFollowDelay;
+
 
 
     function void init()
@@ -22,6 +31,15 @@ class Difficulty
             let characterDamageDelay = 30;
             let characterBulletsCount = 5;
             let characterHasInfiniteBullets = true;
+            let characterBulletDelay = 7;
+            let characterBulletLimit = 10;
+
+            let canPickUpHealth = true;
+
+            let spiderMovementDelay = 4;
+            let batMovementDelay = 5;
+            let enemyBulletDelay = 20;
+            let enemyFollowDelay = 20;
         }
         else { if (difficulty = 2)
         {
@@ -29,8 +47,17 @@ class Difficulty
             let characterHealth = 3;
             let characterDamageDelay = 20;
             let characterBulletsCount = 3;
+            let characterBulletDelay = 10;
+            let characterBulletLimit = 7;
+
             let canPickUpAmmo = true;
+            let canPickUpHealth = true;
             let ammoCount = 3;
+
+            let spiderMovementDelay = 3;
+            let batMovementDelay = 4;
+            let enemyBulletDelay = 15;
+            let enemyFollowDelay = 15;
         }
         else { if (difficulty = 3)
         {
@@ -38,8 +65,17 @@ class Difficulty
             let characterHealth = 2;
             let characterDamageDelay = 20;
             let characterBulletsCount = 0;
+            let characterBulletDelay = 20;
+            let characterBulletLimit = 5;
+
             let canPickUpAmmo = true;
+            let canPickUpHealth = true;
             let ammoCount = 1;
+            
+            let spiderMovementDelay = 2;
+            let batMovementDelay = 3;
+            let enemyBulletDelay = 10;
+            let enemyFollowDelay = 10;
         }
         else { if (difficulty = 4)
         {
@@ -47,6 +83,11 @@ class Difficulty
             let characterHealth = 1;
             let characterDamageDelay = 0;
             let characterBulletsCount = 0;
+
+            let spiderMovementDelay = 1;
+            let batMovementDelay = 2;
+            let enemyBulletDelay = 7;
+            let enemyFollowDelay = 7;
         }}}}
 
         
@@ -65,7 +106,15 @@ class Difficulty
     function int getCharacterDamageDelay() { return characterDamageDelay; }
     function int getCharacterBulletsCount() { return characterBulletsCount; }
     function bool getCharacterHasInfiniteBullets() { return characterHasInfiniteBullets; }
+    function int getCharacterBulletDelay() { return characterBulletDelay; }
+    function int getCharacterBulletLimit() { return characterBulletLimit; }
 
     function bool getCanPickUpAmmo() { return canPickUpAmmo; }
+    function bool getCanPickUpHealth() { return canPickUpHealth; }
     function int getAmmoCount() { return ammoCount; }
+
+    function int getSpiderMovementDelay() { return spiderMovementDelay; }
+    function int getBatMovementDelay() { return batMovementDelay; }
+    function int getEnemyBulletDelay() { return enemyBulletDelay; }
+    function int getEnemyFollowDelay() { return enemyFollowDelay; }
 }

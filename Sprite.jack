@@ -1,17 +1,5 @@
 class Sprite
 {
-	//static Array Empty;
-
-	//function bool IsInScreen(int x)
-	//{
-	//	return ((-1 < x) & (x < 32));
-	//}
-
-	//function int getValue(int col, int row, int i, Array frame, int width, int height)
-	//{
-	//	return frame[(row * width * 16) + (col * 16) + i];
-	//}
-
 	function void Draw(int memAddress, Array frame, int frameSize, int width, int height, bool display, int x, int y)
 	{
 		var int i;

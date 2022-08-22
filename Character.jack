@@ -67,14 +67,14 @@ class Character
         
         
 
-        let bulletDelay = 10;
+        let bulletDelay = Difficulty.getCharacterBulletDelay();
         let bulletTimer = bulletDelay;
 
         let canShoot = true;
 
         let lastMemAddress = memAddress;
 
-        do Draw(memAddress, true);
+        do Draw();
 
         return this;
     }
@@ -122,6 +122,11 @@ class Character
     
 
     //// CHECKS
+    method bool IsCollidedWithFinish(Finish finish)
+    {
+        return finish.IsCollidedWithCharacter(X, Y, Width, Height);
+    }
+
     method void DoEnemyAction(Enemy enemy, Array map, int mapWidth, int mapHeight, int worldOffset)
     {
         do enemy.DoActions(worldOffset, X, Y);
@@ -161,12 +166,15 @@ class Character
         if (result = 0)
         {
             do addCoin();
-            do Draw(memAddress, true);
+            do ForceDraw();
         }
         else { if (result = 1)
         {
-            do addLife();
-            do Draw(memAddress, true);
+            if (Difficulty.getCanPickUpHealth())
+            {
+                do addLife();
+                do ForceDraw();
+            }
         }
         else { if (result = 2)
         {
@@ -174,13 +182,23 @@ class Character
             {
                 let bCount = BulletsCount;
                 do ClearAllBullets();
-                let AvailableBulletsCount = AvailableBulletsCount + Difficulty.getAmmoCount();
+
+                if ((AvailableBulletsCount + Difficulty.getAmmoCount()) > Difficulty.getCharacterBulletLimit())
+                {
+                    let AvailableBulletsCount = Difficulty.getCharacterBulletLimit();
+                }
+                else
+                {
+                    let AvailableBulletsCount = AvailableBulletsCount + Difficulty.getAmmoCount();
+                }
+                
                 let BulletsCount = AvailableBulletsCount;
                 if (~(bCount = 0))
                 {
                     do Bullets.dispose();
                 }
                 do RefreshBullets();
+                do ForceDraw();
             }
         }}}
 
@@ -271,13 +289,11 @@ class Character
         if (X > 0)
         {
             let lastMemAddress = memAddress;
-
+            let memAddress = memAddress - 1;
+            do Clear();
             let X = X - 1;
             let absoluteX = absoluteX - 1;
-            let memAddress = memAddress - 1;
-
-            do Clear();
-            do Draw(memAddress, true); 
+            do Draw(); 
         }
 
         return;
@@ -288,13 +304,11 @@ class Character
         if((X + Width) < 32)
         {
             let lastMemAddress = memAddress;
-
+            let memAddress = memAddress + 1;
+            do Clear();
             let X = X + 1;
             let absoluteX = absoluteX + 1;
-            let memAddress = memAddress + 1;
-
-            do Clear();
-            do Draw(memAddress, true); 
+            do Draw(); 
         }
 
 
@@ -319,8 +333,6 @@ class Character
         var Section section;
         var bool is_on_platform;
 
-        let lastMemAddress = memAddress;
-
         let canJump = Collision.IsOnAnyPlatform(X, Y, Width, Height, forceY, worldOffset);
 
         if (canJump)
@@ -328,10 +340,11 @@ class Character
             let Y = Collision.getPlatformY() - 16;
 
             let forceY = 0;
-            let memAddress = Constants.getMemAddress(X, Y);
 
+            let lastMemAddress = memAddress;
+            let memAddress = Constants.getMemAddress(X, Y);
             do Clear();
-            do Draw(memAddress, true);
+            do Draw();
         }
         // padanje
         else
@@ -348,14 +361,14 @@ class Character
                
         }
 
-
         let Y = Y + forceY;
-        let memAddress = Constants.getMemAddress(X, Y);
 
-        do Clear();
-        do Draw(memAddress, true);
         
-
+        let lastMemAddress = memAddress;
+        let memAddress = Constants.getMemAddress(X, Y);
+        do Clear();
+        do Draw();
+        
         return;
     }
 
@@ -458,18 +471,27 @@ class Character
     //// DRAW/CLEAR
     method void Clear()
 	{
-		do Draw(lastMemAddress, false);
+		if (~(memAddress = lastMemAddress))
+		{
+			do Jeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
+		}
 
 		return;
 	}
 
-    method void Draw(int m, bool display)
+    method void Draw()
     {
 		if (~(memAddress = lastMemAddress))
 		{
-			do Jeff.DrawFrame(m, display, movingLeft, X, Y);
+			do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
 		}
 		
+		return;
+    }
+
+    method void ForceDraw()
+    {
+		do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
 		return;
     }
 }

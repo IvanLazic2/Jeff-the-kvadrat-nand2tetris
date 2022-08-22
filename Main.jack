@@ -8,7 +8,7 @@ class Main
         do Collision.init();
         
         do Jeff.init();
-
+        do FinishFlag.init();
         
         //do Spider.init();
         do EvilJeffMelee.init();
@@ -18,11 +18,9 @@ class Main
 
         do SimpleBullet.init();
 
-        //do Heart.init();
-        //do Coin.init();
+        do Heart.init();
+        do Coin.init();
         do Ammo.init();
-
-        //do Pathfinding.init();
         
         let game = Game.new();
         do game.start();

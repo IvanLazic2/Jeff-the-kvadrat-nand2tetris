@@ -1,10 +1,7 @@
 class Level3
 {
 	field Character character;
-	field int finishX;
-	field int finishY;
-	field int finishW;
-	field int finishH;
+	field Finish finish;
 	field int PlatformsCount;
 	field int ObstaclesCount;
 	field int EnemiesCount;
@@ -18,74 +15,89 @@ class Level3
 	field int MapHeight;
 	constructor Level3 new()
 	{
-		let character = Character.new(3, 200);
-	let finishX = 255;
-	let finishY = 14;
-	let finishW = 1;
-	let finishH = 3;
-		let PlatformsCount = 3;
-		let ObstaclesCount = 1;
-		let EnemiesCount = 1;
-		let CollectablesCount = 4;
-		let Platforms = Array.new(3);
-		let Platforms[0] = Platform.new(12, 176, 0, 5);
-		let Platforms[1] = Platform.new(18, 208, 0, 6);
-		let Platforms[2] = Platform.new(0, 240, 0, 29);
-		let Obstacles = Array.new(1);
-		let Obstacles[0] = Obstacle.new(11, 224, 0, 0, 1);
-		let Enemies = Array.new(1);
-		let Enemies[0] = Enemy.new(27, 224, 2);
-		let Collectables = Array.new(4);
-		let Collectables[0] = Collectable.new(5, 224, 2);
-		let Collectables[1] = Collectable.new(6, 224, 2);
-		let Collectables[2] = Collectable.new(7, 224, 2);
-		let Collectables[3] = Collectable.new(8, 224, 2);
+		let character = Character.new(2, 200);
+		let finish = Finish.new(255, 224);
+		let PlatformsCount = 1;
+		let ObstaclesCount = 0;
+		let EnemiesCount = 0;
+		let CollectablesCount = 9;
+		let Platforms = Array.new(1);
+		let Platforms[0] = Platform.new(0, 240, 0, 55);
+		let Collectables = Array.new(9);
+		let Collectables[0] = Collectable.new(11, 224, 2);
+		let Collectables[1] = Collectable.new(12, 224, 2);
+		let Collectables[2] = Collectable.new(13, 224, 2);
+		let Collectables[3] = Collectable.new(16, 224, 1);
+		let Collectables[4] = Collectable.new(19, 224, 2);
+		let Collectables[5] = Collectable.new(22, 224, 0);
+		let Collectables[6] = Collectable.new(24, 224, 2);
+		let Collectables[7] = Collectable.new(27, 224, 0);
+		let Collectables[8] = Collectable.new(28, 224, 0);
 		let Map = Array.new(4096);
 		let Map[15] = 1;
 		let Map[31] = 1;
 		let Map[47] = 1;
 		let Map[63] = 1;
 		let Map[79] = 1;
-		let Map[94] = 18;
 		let Map[95] = 1;
-		let Map[110] = 18;
 		let Map[111] = 1;
-		let Map[126] = 18;
 		let Map[127] = 1;
-		let Map[142] = 18;
 		let Map[143] = 1;
 		let Map[159] = 1;
 		let Map[175] = 1;
-		let Map[190] = 11;
+		let Map[190] = 18;
 		let Map[191] = 1;
-		let Map[203] = 1;
+		let Map[206] = 18;
 		let Map[207] = 1;
-		let Map[219] = 1;
+		let Map[222] = 18;
 		let Map[223] = 1;
-		let Map[235] = 1;
 		let Map[239] = 1;
-		let Map[251] = 1;
 		let Map[255] = 1;
-		let Map[267] = 1;
+		let Map[270] = 17;
 		let Map[271] = 1;
 		let Map[287] = 1;
-		let Map[301] = 1;
 		let Map[303] = 1;
-		let Map[317] = 1;
+		let Map[318] = 18;
 		let Map[319] = 1;
-		let Map[333] = 1;
 		let Map[335] = 1;
-		let Map[349] = 1;
 		let Map[351] = 1;
-		let Map[365] = 1;
+		let Map[366] = 16;
 		let Map[367] = 1;
-		let Map[381] = 1;
 		let Map[383] = 1;
+		let Map[398] = 18;
 		let Map[399] = 1;
 		let Map[415] = 1;
 		let Map[431] = 1;
+		let Map[446] = 16;
 		let Map[447] = 1;
+		let Map[462] = 16;
 		let Map[463] = 1;
+		let Map[479] = 1;
+		let Map[495] = 1;
+		let Map[511] = 1;
+		let Map[527] = 1;
+		let Map[543] = 1;
+		let Map[559] = 1;
+		let Map[575] = 1;
+		let Map[591] = 1;
+		let Map[607] = 1;
+		let Map[623] = 1;
+		let Map[639] = 1;
+		let Map[655] = 1;
+		let Map[671] = 1;
+		let Map[687] = 1;
+		let Map[703] = 1;
+		let Map[719] = 1;
+		let Map[735] = 1;
+		let Map[751] = 1;
+		let Map[767] = 1;
+		let Map[783] = 1;
+		let Map[799] = 1;
+		let Map[815] = 1;
+		let Map[831] = 1;
+		let Map[847] = 1;
+		let Map[863] = 1;
+		let Map[879] = 1;
 		let MapWidth = 256;
 		let MapHeight = 16;
 		return this;
@@ -99,6 +111,7 @@ class Level3
 	method Array getEnemies() { return Enemies; }
 	method Array getCollectables() { return Collectables; }
 	method Character getCharacter() { return character; }
+	method int getFinish() { return finish; }
 	method Array getMap() { return Map; }
 	method int getMapWidth() { return MapWidth; }
 	method int getMapHeight() { return MapHeight; }

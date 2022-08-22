@@ -1,4 +1,4 @@
-class Ammo
+class FinishFlag
 {
 	static int Width;
 	static int Height;
@@ -18,27 +18,61 @@ class Ammo
 ///////////////// CONFIG /////////////////
 //////////////////////////////////////////
 		let Width = 1;
-		let Height = 1;
+		let Height = 3;
 		let AnimationFramesCount = 1;
 		let SpecialFramesCount = 0;
 		let TotalFramesCount = 1;
 		let FrameSize = Width * Height * 16;
 		let Frames = Array.new(TotalFramesCount);
 		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1[0] = 8;
-		let Frame1[1] = 28;
-		let Frame1[2] = 62;
-		let Frame1[3] = 127;
-		let Frame1[4] = 254;
-		let Frame1[5] = 508;
-		let Frame1[6] = 1016;
-		let Frame1[7] = 2032;
-		let Frame1[8] = 2016;
-		let Frame1[9] = 3008;
-		let Frame1[10] = 5504;
-		let Frame1[11] = 4608;
-		let Frame1[12] = 11264;
-		let Frame1[13] = 12288;
+		let Frame1[0] = -32767;
+		let Frame1[1] = -32767;
+		let Frame1[2] = 16386;
+		let Frame1[3] = 16386;
+		let Frame1[4] = 8196;
+		let Frame1[5] = 8196;
+		let Frame1[6] = 4104;
+		let Frame1[7] = 4104;
+		let Frame1[8] = 2064;
+		let Frame1[9] = 2064;
+		let Frame1[10] = 1056;
+		let Frame1[11] = 1056;
+		let Frame1[12] = 576;
+		let Frame1[13] = 576;
+		let Frame1[14] = 384;
+		let Frame1[15] = 256;
+		let Frame1[16] = 256;
+		let Frame1[17] = 256;
+		let Frame1[18] = 256;
+		let Frame1[19] = 256;
+		let Frame1[20] = 256;
+		let Frame1[21] = 256;
+		let Frame1[22] = 256;
+		let Frame1[23] = 256;
+		let Frame1[24] = 256;
+		let Frame1[25] = 256;
+		let Frame1[26] = 256;
+		let Frame1[27] = 256;
+		let Frame1[28] = 256;
+		let Frame1[29] = 256;
+		let Frame1[30] = 256;
+		let Frame1[31] = 256;
+		let Frame1[32] = 384;
+		let Frame1[33] = 320;
+		let Frame1[34] = 288;
+		let Frame1[35] = 272;
+		let Frame1[36] = 264;
+		let Frame1[37] = 260;
+		let Frame1[38] = 258;
+		let Frame1[39] = 257;
+		let Frame1[40] = 258;
+		let Frame1[41] = 260;
+		let Frame1[42] = 264;
+		let Frame1[43] = 272;
+		let Frame1[44] = 288;
+		let Frame1[45] = 320;
+		let Frame1[46] = 384;
+		let Frame1[47] = 256;
 		let Frames[0] = Frame1;
 		return;
 	}
@@ -48,7 +82,7 @@ class Ammo
 	{
 		if (animationTimer < 1)
 		{
-			do Ammo.ChangeFrame();
+			do FinishFlag.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
 		if (specialFrameTimer < 1)

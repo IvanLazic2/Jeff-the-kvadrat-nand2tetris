@@ -17,6 +17,7 @@ class Game
 {
     field int Direction;
     field Character Character;
+    field Finish Finish;
     field int MoveAreaWidth;
     field int ScreenMiddle;
     field int LeftBorder;
@@ -48,6 +49,7 @@ class Game
     field int WorldOffset;
 
 
+
     
     
 
@@ -75,7 +77,7 @@ class Game
         var Platform platform;
         var int value;
 
-        do Difficulty.setDifficulty(3);
+        do Difficulty.setDifficulty(2);
 
         let Level = Level3.new();
         let map = Level.getMap();
@@ -87,6 +89,7 @@ class Game
 
         let Direction = 0;
         let Character = Level.getCharacter();
+        let Finish = Level.getFinish();
 
         let PlatformsCount = Level.getPlatformsCount();
         let ObstaclesCount = Level.getObstaclesCount();
@@ -149,6 +152,10 @@ class Game
             }}}}}}
             
 
+            if (Character.IsCollidedWithFinish(Finish))
+            {
+                do Output.printString("finish");
+            }
 
             
             do Move();
@@ -163,7 +170,6 @@ class Game
             do CheckEnemyAndCharacterCollision();
 
             do RefreshBullets();
-            
             if (~(BulletsCount = 0))
             {
                 do CheckAllBullets();
@@ -193,6 +199,8 @@ class Game
         do Character.CheckTimers();
         do CheckAllEnemyTimers();
         do CheckAllCollectableTimers();
+        
+        
 
         return;
     }
@@ -205,6 +213,8 @@ class Game
         do Character.DecrementTimers();
         do DecrementAllEnemyTimers();
         do DecrementAllCollectableTimers();
+
+        
 
         return;
     }
@@ -246,10 +256,13 @@ class Game
         var Collectable collectable;
         var int i;
 
+        do Heart.CheckTimers();
+        do Coin.CheckTimers();
+
         while (i < CollectablesCount)
         {
             let collectable = Collectables[i];
-            do collectable.CheckTimers();
+            do collectable.Draw(true);
             let i = i + 1;
         }
 
@@ -260,6 +273,9 @@ class Game
     {
         var Collectable collectable;
         var int i;
+
+        do Heart.DecrementTimers();
+        do Coin.DecrementTimers();
 
         while (i < CollectablesCount)
         {
@@ -578,6 +594,8 @@ class Game
             let i = i + 1;
         }
 
+        do Finish.ScrollLeft();
+
 
         return;
     }
@@ -645,6 +663,8 @@ class Game
 
             let i = i + 1;
         }
+
+        do Finish.ScrollRight();
 
         return;
     }
