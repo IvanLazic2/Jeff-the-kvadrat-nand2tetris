@@ -48,24 +48,161 @@ class Game
 
     field int WorldOffset;
 
+    field int currLevel;
+    field String text;
 
+    static int Kills;
 
     
     
-
+    function void init()
+    {
+        let Kills = 0;
+        return;
+    }
 
     constructor Game new()
     {
-        let MoveAreaWidth = 5; // 5
+        let MoveAreaWidth = 3; // 5
         let ScreenMiddle = 16;
         let LeftBorder = ScreenMiddle - MoveAreaWidth;
         let RightBorder = ScreenMiddle + MoveAreaWidth;
 
+        //do Screen.drawLine(0, 15, 511, 15);
+        do Screen.drawLine(125, 0, 125, 15);
         
 
         return this;
     }
 
+    method void drawHeart()
+    {
+        var int memAddress;
+        let memAddress = Constants.getScreenStart() + 8;
+
+	    do Memory.poke(memAddress + 96, 3696);
+	    do Memory.poke(memAddress + 128, 8184);
+	    do Memory.poke(memAddress + 160, 8184);
+	    do Memory.poke(memAddress + 192, 4080);
+	    do Memory.poke(memAddress + 224, 2016);
+	    do Memory.poke(memAddress + 256, 960);
+	    do Memory.poke(memAddress + 288, 384);
+
+        return;
+    }
+
+    method void drawCoin()
+    {
+        var int memAddress;
+        let memAddress = Constants.getScreenStart() + 12;
+
+        do Memory.poke(memAddress + 32, 2016);
+	    do Memory.poke(memAddress + 64, 2064);
+	    do Memory.poke(memAddress + 96, 5064);
+	    do Memory.poke(memAddress + 128, 5160);
+	    do Memory.poke(memAddress + 160, 5160);
+	    do Memory.poke(memAddress + 192, 5160);
+	    do Memory.poke(memAddress + 224, 5160);
+	    do Memory.poke(memAddress + 256, 5064);
+	    do Memory.poke(memAddress + 288, 2064);
+	    do Memory.poke(memAddress + 320, 2016);
+
+        return;
+    }
+
+    method void drawAmmo()
+    {
+        var int memAddress;
+        let memAddress = Constants.getScreenStart() + 16;
+
+        do Memory.poke(memAddress + 32, 12684);
+	    do Memory.poke(memAddress + 64, 12684);
+	    do Memory.poke(memAddress + 96, 31710);
+	    do Memory.poke(memAddress + 128, 31710);
+	    do Memory.poke(memAddress + 160, 19026);
+	    do Memory.poke(memAddress + 192, 19026);
+	    do Memory.poke(memAddress + 224, 19026);
+	    do Memory.poke(memAddress + 256, 19026);
+	    do Memory.poke(memAddress + 288, 19026);
+	    do Memory.poke(memAddress + 320, 12684);
+        return;
+    }
+
+    method void drawSkull()
+    {
+        var int memAddress;
+        let memAddress = Constants.getScreenStart() + 28;
+
+        //do Memory.poke(memAddress + 32, 1016);
+	    //do Memory.poke(memAddress + 64, 1548);
+	    //do Memory.poke(memAddress + 96, 3078);
+	    //do Memory.poke(memAddress + 128, 2050);
+	    //do Memory.poke(memAddress + 160, 2446);
+	    //do Memory.poke(memAddress + 192, 2478);
+	    //do Memory.poke(memAddress + 224, 3074);
+	    //do Memory.poke(memAddress + 256, 3590);
+	    //do Memory.poke(memAddress + 288, 1620);
+	    //do Memory.poke(memAddress + 320, 1020);
+
+        do Memory.poke(memAddress + 32, 4064);
+	    do Memory.poke(memAddress + 64, 8176);
+	    do Memory.poke(memAddress + 96, 8176);
+	    do Memory.poke(memAddress + 128, 7088);
+	    do Memory.poke(memAddress + 160, 12568);
+	    do Memory.poke(memAddress + 192, 13208);
+	    do Memory.poke(memAddress + 224, 16376);
+	    do Memory.poke(memAddress + 256, 7920);
+	    do Memory.poke(memAddress + 288, 8176);
+	    do Memory.poke(memAddress + 320, 1984);
+	    do Memory.poke(memAddress + 352, 1344);
+
+        return;
+    }
+
+
+    method void printLevel()
+    {
+        do Output.moveCursor(0, 1);
+        let text = "Level ";
+        do Output.printString(text);
+        do Output.printInt(currLevel);
+        
+        if (Difficulty.getDifficulty() = 1)
+        {
+            let text = " Easy";
+        }
+        else { if (Difficulty.getDifficulty() = 2)
+        {
+            let text = " Medium";
+        }
+        else { if (Difficulty.getDifficulty() = 3)
+        {
+            let text = " Hard";
+        }
+        else { if (Difficulty.getDifficulty() = 4)
+        {
+            let text = " Insane";
+        }}}}
+
+        do Output.printString(text);
+
+        return;
+    }
+
+
+    function void addKill() { let Kills = Kills + 1; return; }
+    method void printKills()
+    {   
+        do Output.moveCursor(0, 58);
+        let text = ": ";
+        do Output.printString(text);
+        do Output.printInt(Kills);
+
+        return;
+    }
+
+    
+    
 
     method void start()
     {
@@ -77,9 +214,12 @@ class Game
         var Platform platform;
         var int value;
 
-        do Difficulty.setDifficulty(2);
+        do Difficulty.setDifficulty(4);
 
         let Level = Level3.new();
+        
+        let currLevel = 3;
+
         let map = Level.getMap();
         let mapWidth = Level.getMapWidth();
         let mapHeight = Level.getMapHeight();
@@ -88,7 +228,20 @@ class Game
         do Map.setMap(map);
 
         let Direction = 0;
+
         let Character = Level.getCharacter();
+
+        do printLevel();
+        do drawHeart();
+        do drawCoin();
+        do drawAmmo();
+        do drawSkull();
+
+        do Character.printHealth();
+        do Character.printCoins();
+        do Character.printAmmo();
+        do printKills();
+
         let Finish = Level.getFinish();
 
         let PlatformsCount = Level.getPlatformsCount();
@@ -101,7 +254,7 @@ class Game
         let Enemies = Level.getEnemies();
         let Collectables = Level.getCollectables();
 
-        let GameDelay = 10; //20
+        let GameDelay = 20; //20
 
         let redrawAllObstaclesDelay = 7;
         let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
@@ -186,6 +339,7 @@ class Game
         return;
     }
 
+    
 
     // GAME TIMERS
     method void CheckTimers()
@@ -259,12 +413,7 @@ class Game
         do Heart.CheckTimers();
         do Coin.CheckTimers();
 
-        while (i < CollectablesCount)
-        {
-            let collectable = Collectables[i];
-            do collectable.Draw(true);
-            let i = i + 1;
-        }
+        do DrawAllCollectables();
 
         return;
     }
@@ -277,19 +426,8 @@ class Game
         do Heart.DecrementTimers();
         do Coin.DecrementTimers();
 
-        while (i < CollectablesCount)
-        {
-            let collectable = Collectables[i];
-            do collectable.DecrementTimers();
-            let i = i + 1;
-        }
-
         return;
     }
-
-
-
-
 
     method void DrawAllPlatforms()
     {
@@ -559,6 +697,7 @@ class Game
             let i = i + 1;
         }
 
+        let i = 0;
         while (i < ObstaclesCount)
         {
             let obstacle = Obstacles[i];
@@ -629,6 +768,7 @@ class Game
             let i = i + 1;
         }
 
+        let i = 0;
         while (i < ObstaclesCount)
         {
             let obstacle = Obstacles[i];
@@ -673,9 +813,11 @@ class Game
     {
         var int x;
         var int absX;
+        var int cWidth;
         
         let x = Character.getX();
         let absX = Character.getAbsoluteX();
+        let cWidth = Character.getWidth();
 
         do Character.CheckGravity(WorldOffset);
         do Character.CheckCollisionWithObstacles();
@@ -686,21 +828,18 @@ class Game
 
             if (~Character.CheckCollisionWithPlatformLeft(WorldOffset))
             {
-                if (absX - ScreenMiddle + MoveAreaWidth > 0)
-                {
-                    if (x > LeftBorder)
-                    {
-                        do Character.MoveLeft();
-                    }
-                    else
-                    {
-                        do ScrollRight();
-                    }
-                }
-                else
+                if (absX < LeftBorder)
                 {
                     do Character.MoveLeft();
                 }
+                else { if (x < LeftBorder)
+                {
+                    do ScrollRight();
+                }
+                else 
+                {
+                    do Character.MoveLeft();
+                }}
             }
         }
         if (Direction = 2)
@@ -709,21 +848,18 @@ class Game
 
             if (~Character.CheckCollisionWithPlatformRight(WorldOffset))
             {
-                if (absX + ScreenMiddle - MoveAreaWidth < mapWidth)
-                {
-                    if (x < RightBorder)
-                    {   
-                        do Character.MoveRight();
-                    }
-                    else
-                    {
-                        do ScrollLeft();
-                    }
-                }
-                else
+                if (absX > (mapWidth - RightBorder))
                 {
                     do Character.MoveRight();
                 }
+                else { if (x > (RightBorder - cWidth))
+                {
+                    do ScrollLeft();
+                }
+                else 
+                {
+                    do Character.MoveRight();
+                }}
             }
         }
         

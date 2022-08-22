@@ -74,19 +74,20 @@ class Enemy
 		// SPIDER
 		if (Type = 0)
 		{
-			let Width = 2;
-			let Height = 1;
+			let Width = Spider.getWidth();
+			let Height = Spider.getHeight();
 
 			let movementDelay = Difficulty.getSpiderMovementDelay();
 
 			let IsRoaming = true;
+			let DiesOnSquish = true;
 			//let IsStationary = true;
 		}
 		// EVIL JEFF MELEE
 		else { if (Type = 1)
 		{
-			let Width = 3;
-			let Height = 2;
+			let Width = EvilJeffMelee.getWidth();
+			let Height = EvilJeffMelee.getHeight();
 			
 			let movementDelay = 2;
 
@@ -101,8 +102,8 @@ class Enemy
 		// EVIL JEFF RANGED
 		else { if (Type = 2)
 		{
-			let Width = 3;
-			let Height = 2;
+			let Width = EvilJeffRanged.getWidth();
+			let Height = EvilJeffRanged.getHeight();
 
 			let movementDelay = 3;
 
@@ -116,14 +117,14 @@ class Enemy
 		// BAT
 		else { if (Type = 3)
 		{
-			let Width = 2;
-			let Height = 1;
+			let Width = Bat.getWidth();
+			let Height = Bat.getHeight();
 
 			let movementDelay = Difficulty.getBatMovementDelay();
 
 			//let IsStationary = true;
-			//let IsFollowing = true;
-			//let IsFlying = true;
+			let IsFollowing = true;
+			let IsFlying = true;
 			let DiesOnSquish = true;
 		}}}}
 
@@ -238,6 +239,7 @@ class Enemy
 			if (DiesOnSquish & Collision.IsEntityCollidedWithEntityTop(cx, cy, cw, ch, X, Y, Width, heightInPixels))
 			{
 				do Die();
+				do Game.addKill();
 				return false;
 			}
 			else { if (Collision.IsEntityCollidedWithEntitySides(cx, cy, cw, ch, X, Y, Width, heightInPixels))
@@ -256,6 +258,7 @@ class Enemy
 			if (bullet.CheckCollisionWithEntity(X, Y, Width, heightInPixels))
 			{
 				do Die();
+				do Game.addKill();
 			}
 		}
 
@@ -476,23 +479,26 @@ class Enemy
 
 	method void FollowFlying(int worldOffset, int characterX, int characterY)
 	{
-		do CheckFollowTimer(characterX, characterY);
+		if (Constants.IsInScreenX(X))
+		{
+			do CheckFollowTimer(characterX, characterY);
 
-		if (((X - lastCX) > 0) & (Map.getValue(X - 1 + worldOffset, Y/16) = 0))
-		{
-			do MoveLeft(worldOffset);
-		}
-		if (((X - lastCX) < 0) & (Map.getValue(X + Width + worldOffset, Y/16) = 0))
-		{
-			do MoveRight(worldOffset);
-		}
-		if (((Y - lastCY) > 0) & (Map.getValue(X + worldOffset, (Y/16) - Height) = 0))
-		{
-			do MoveUp();
-		}
-		if (((Y - lastCY) < 0) & (Map.getValue(X + worldOffset, (Y/16) + 1) = 0))
-		{
-			do MoveDown();
+			if (((X - lastCX) > 0) & (Map.getValue(X - 1 + worldOffset, Y/16) = 0))
+			{
+				do MoveLeft(worldOffset);
+			}
+			if (((X - lastCX) < 0) & (Map.getValue(X + Width + worldOffset, Y/16) = 0))
+			{
+				do MoveRight(worldOffset);
+			}
+			if (((Y - lastCY) > 0) & (Map.getValue(X + worldOffset, (Y/16) - Height) = 0))
+			{
+				do MoveUp();
+			}
+			if (((Y - lastCY) < 0) & (Map.getValue(X + worldOffset, (Y/16) + 1) = 0))
+			{
+				do MoveDown();
+			}
 		}
 
 		return;
@@ -674,8 +680,8 @@ class Enemy
 		var int i;
 		var Bullet bullet;
 
-		do Output.printString("dead");
-		do Output.println();
+		//do Output.printString("dead");
+		//do Output.println();
 
 		let lastMemAddress = memAddress;
 		let memAddress = Constants.getMemAddress(-10, -10);

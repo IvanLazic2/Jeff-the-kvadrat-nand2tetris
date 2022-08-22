@@ -36,8 +36,9 @@ class Character
     field int bulletDelay;
 
     field bool canShoot;
-
     field bool shoudlRefreshGameBullets;
+
+    static String text;
 
     constructor Character new(int x2, int y2)
     {
@@ -98,7 +99,16 @@ class Character
 
     method void incrementAbsoluteX(int inc) { let absoluteX = absoluteX + inc; return; }
     method void addCoin() { let coins = coins + 1; return; }
-    method void addLife() { let health = health + 1; return; }
+    method void addLife() 
+    {
+        if ((health + 1) < Difficulty.getCharacterHealthLimit())
+        {
+            let health = health + 1;
+            do printHealth();
+        }
+        
+        return;
+    }
 
 
     //// TIMERS
@@ -122,6 +132,40 @@ class Character
     
 
     //// CHECKS
+
+
+    
+
+    method void printHealth()
+    {
+        do Output.moveCursor(0, 18);
+        let text = ": ";
+        do Output.printString(text);
+        do Output.printInt(health);
+
+        return;
+    }
+
+    method void printCoins()
+    {
+        do Output.moveCursor(0, 26);
+        let text = ": ";
+        do Output.printString(text);
+        do Output.printInt(coins);
+
+        return;
+    }
+
+    method void printAmmo()
+    {
+        do Output.moveCursor(0, 34);
+        let text = ": ";
+        do Output.printString(text);
+        do Output.printInt(AvailableBulletsCount);
+
+        return;
+    }
+
     method bool IsCollidedWithFinish(Finish finish)
     {
         return finish.IsCollidedWithCharacter(X, Y, Width, Height);
@@ -236,6 +280,8 @@ class Character
                 let i = i + 1;
             }
             let currBullet = Bullets[currBulletIndex];
+
+            do printAmmo();
         }
 
         return;
@@ -396,11 +442,13 @@ class Character
         // dont take damage if already taken
         if (damageTimer < 1)
         {
-            do Output.printString("oof");
-            do Output.println();
+            //do Output.printString("oof");
+            //do Output.println();
 
             let health = health - 1;
             let damageTimer = damageDelay;
+
+            do printHealth();
         }
 
         return;
@@ -446,6 +494,8 @@ class Character
 
                 let canShoot = false;
             }
+
+            do printAmmo();
         }
 
         //do Output.printInt(AvailableBulletsCount);
@@ -473,7 +523,14 @@ class Character
 	{
 		if (~(memAddress = lastMemAddress))
 		{
-			do Jeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
+			if (Difficulty.getDifficulty() = 4)
+            {
+                do InsaneJeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
+            }
+            else
+            {
+                do Jeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
+            }
 		}
 
 		return;
@@ -483,7 +540,14 @@ class Character
     {
 		if (~(memAddress = lastMemAddress))
 		{
-			do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+            if (Difficulty.getDifficulty() = 4)
+            {
+                do InsaneJeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+            }
+            else
+            {
+                do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+            }
 		}
 		
 		return;
@@ -491,7 +555,15 @@ class Character
 
     method void ForceDraw()
     {
-		do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+        if (Difficulty.getDifficulty() = 4)
+        {
+            do InsaneJeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+        }
+        else
+        {
+            do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+        }
+		
 		return;
     }
 }

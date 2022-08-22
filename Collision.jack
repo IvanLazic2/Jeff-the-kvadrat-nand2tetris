@@ -83,6 +83,11 @@ class Collision
         var int i;
         var bool result;
 
+        if (~Constants.IsInScreenY(y))
+        {
+            return false;
+        }
+
         let i = ((y + 8)/16);
         while (i > ((Constants.getYDiv16(y)) - height))
         {
@@ -98,6 +103,11 @@ class Collision
     {
         var int i;
         var bool result;
+
+        if (~Constants.IsInScreenY(y))
+        {
+            return false;
+        }
 
         let i = ((y + 8)/16);
         while (i > ((Constants.getYDiv16(y)) - height))
@@ -217,7 +227,7 @@ class Collision
                             let location = (j * 512) + i; // 16 * 32 = 512
 		                    let memAddress = 16384 + location;
 
-                            do Platform.DrawBlock(0, Map.getValue(i + worldOffset, j) - 1, memAddress);
+                            do Platform.DrawBlock(Map.getValue(i + worldOffset, j) - 1, memAddress, i, j);
                         }
                     }
                     
@@ -307,7 +317,7 @@ class Collision
         while (i < limit)
         {
             let j = 0;
-            while (j < 4)
+            while (j < 3)
             {
                 if ((Constants.getYDiv16(y)) - j > -1)
                 {

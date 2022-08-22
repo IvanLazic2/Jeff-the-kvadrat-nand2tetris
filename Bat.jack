@@ -1,0 +1,121 @@
+class Bat
+{
+	static int Width;
+	static int Height;
+	static int AnimationFramesCount;
+	static int SpecialFramesCount;
+	static int TotalFramesCount;
+	static bool stopAnimation;
+	static int currFrame;
+	static int animationTimer;
+	static int animationDelay;
+	static int specialFrameTimer;
+	static Array Frames;
+	static int FrameSize;
+	static Array FramesMirrored;
+	static Array Frame1;
+	static Array Frame1Mirrored;
+	function void init()
+	{
+///////////////// CONFIG /////////////////
+//////////////////////////////////////////
+		let Width = 2;
+		let Height = 1;
+		let AnimationFramesCount = 1;
+		let SpecialFramesCount = 0;
+		let TotalFramesCount = 1;
+		let FrameSize = Width * Height * 16;
+		let Frames = Array.new(TotalFramesCount);
+		let FramesMirrored = Array.new(TotalFramesCount);
+		let Frame1 = Array.new(Width * Height * 16);
+		let Frame1Mirrored = Array.new(Width * Height * 16);
+		let Frame1[6] = 504;
+		let Frame1[8] = 1806;
+		let Frame1[9] = 768;
+		let Frame1[10] = -2045;
+		let Frame1[11] = 32767;
+		let Frame1[12] = 14337;
+		let Frame1[13] = -16380;
+		let Frame1[14] = 2049;
+		let Frame1[15] = -32764;
+		let Frame1[16] = 2051;
+		let Frame1[17] = -32764;
+		let Frame1[18] = -18430;
+		let Frame1[19] = -32753;
+		let Frame1[20] = -498;
+		let Frame1[21] = -32744;
+		let Frame1[22] = 1016;
+		let Frame1[23] = -16272;
+		let Frame1[25] = 32704;
+		let Frame1Mirrored[7] = 8064;
+		let Frame1Mirrored[8] = 192;
+		let Frame1Mirrored[9] = 28896;
+		let Frame1Mirrored[10] = -2;
+		let Frame1Mirrored[11] = -16353;
+		let Frame1Mirrored[12] = 8195;
+		let Frame1Mirrored[13] = -32740;
+		let Frame1Mirrored[14] = 8193;
+		let Frame1Mirrored[15] = -32752;
+		let Frame1Mirrored[16] = 8193;
+		let Frame1Mirrored[17] = -16368;
+		let Frame1Mirrored[18] = -4095;
+		let Frame1Mirrored[19] = 16413;
+		let Frame1Mirrored[20] = 6145;
+		let Frame1Mirrored[21] = 28799;
+		let Frame1Mirrored[22] = 3587;
+		let Frame1Mirrored[23] = 8128;
+		let Frame1Mirrored[24] = 1022;
+		let Frames[0] = Frame1;
+		let FramesMirrored[0] = Frame1Mirrored;
+		return;
+	}
+	function int getWidth() { return Width; }
+	function int getHeight() { return Height; }
+	function void CheckTimers()
+	{
+		if (animationTimer < 1)
+		{
+			do Bat.ChangeFrame();
+			let animationTimer = animationDelay;
+		}
+		if (specialFrameTimer < 1)
+		{
+			let stopAnimation = false;
+			let specialFrameTimer = 0;
+		}
+		return;
+	}
+	function void DecrementTimers()
+	{
+		let animationTimer = animationTimer - 1;
+		let specialFrameTimer = specialFrameTimer - 1;
+		return;
+	}
+	function void ChangeFrame()
+	{
+		if (~(stopAnimation | (AnimationFramesCount = 0)))
+		{
+			if (currFrame < (AnimationFramesCount - 1))
+			{
+				let currFrame = currFrame + 1;
+			}
+			else
+			{
+				let currFrame = 0;
+			}
+		}
+		return;
+	}
+	function void DrawFrame(int memAddress, bool display, bool mirrored, int x, int y)
+	{
+		if (mirrored)
+		{
+			do Sprite.Draw(memAddress, FramesMirrored[currFrame], FrameSize, Width, Height, display, x, y);
+		}
+		else
+		{
+			do Sprite.Draw(memAddress, Frames[currFrame], FrameSize, Width, Height, display, x, y);
+		}
+		return;
+	}
+}

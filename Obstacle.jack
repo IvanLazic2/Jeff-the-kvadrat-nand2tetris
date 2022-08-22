@@ -2,681 +2,849 @@
 // 1 - medium spikes
 // 2 - weird spikes
 // 3 - large spikes
-// 4 - spiked area - kao platforma samo spikeovi
+// 4 - spiked area
 
 class Obstacle
 {
-	field int x;
-	field int y;
-	field int type;
-	field int height;
-	field int height_in_blocks;
-	field int size;
+	field int X;
+	field int Y;
+	field int Type;
+	field int Height;
+	field int heightInBlocks;
+	field int Size;
+
+	field int memAddress;
+
+	static Array smallSpikes;
+	static Array mediumSpikes;
+	static Array weirdSpikes;
+	static Array largeSpikes;
+	static Array spikedArea;
 
     constructor Obstacle new(int x2, int y2, int type2, int height2, int size2)
     {
-		let x = x2;
-		let y = y2;
-		let type = type2;
-		let height = height2;
-		let height_in_blocks = height / 16;
-		let size = size2;
+		let X = x2;
+		let Y = y2;
+		let Type = type2;
+		let Height = height2;
+		let heightInBlocks = Height / 16;
+		let Size = size2;
+
+		let memAddress = Constants.getMemAddress(X, Y);
 
 		do Draw();
 
         return this;
     }
 
-	method int get_x() { return x; }
-	method int get_y() { return y; }
-	method int get_type() { return type; }
-	method int get_height() { return height; }
-	method int get_size() { return size; }
+	method int getX() { return X; }
+	method int getY() { return Y; }
+	method int getType() { return Type; }
+	method int getHeight() { return Height; }
+	method int getSize() { return Size; }
 
 	
 
 	method void ClearScrollLeft()
 	{
-		var int i;
-		var int location;
-		var int memAddress;
-
-		let x = x - 1;
-		let location = (y * 32) + x;
-		let memAddress = 16384 + location + size;
-
-		if ((x + size < 32) & (x + size > -1))
-        {
-			while (i < height_in_blocks)
-			{
-        	    do ClearBlock(memAddress);
-
-				let memAddress = memAddress - 512;
-
-				let i = i + 1;
-        	}
-
-			do ClearBlock(memAddress);
-		}
+		let X = X - 1;
+		let memAddress = memAddress - 1;
+		do Clear(memAddress + Size, X + Size);
 
 		return;
 	}
 
 	method void DrawScrollLeft()
 	{
-		var int location;
-		var int memAddress;
-
-		let location = (y * 32) + x;
-        let memAddress = 16384 + location;
-
-		if ((x < 32) & (x > -1))
-		{
-			do Obstacle.DrawBlock(type, memAddress);
-		}
-
+		do Obstacle.DrawBlock(Type, memAddress, X, Y);
 		return;
 	}
 
 
 	method void ClearScrollRight()
 	{
-		var int location;
-		var int memAddress;
-		var int i;
-
-		let location = (y * 32) + x;
-		let memAddress = 16384 + location;
-
-		if ((x < 32) & (x > -1))
-        {
-			while (i < height_in_blocks)
-			{
-        	    do ClearBlock(memAddress);
-
-				let memAddress = memAddress - 512;
-
-				let i = i + 1;
-        	}
-
-			do ClearBlock(memAddress);
-		}
-
-		let x = x + 1;
+		do Clear(memAddress, X);
 
 		return;
 	}
 
 	method void DrawScrollRight()
 	{
-		var int location;
-		var int memAddress;
-
-		if ((x + size < 33) & (x + size > 0)) // (x + size - 1 < 32) & (x + size - 1 > -1)
-        {
-            let location = (y * 32) + x;
-            let memAddress = 16383 + location + size; // 16384 + location + size - 1
-
-            do Obstacle.DrawBlock(type, memAddress);
-        }
+		do Obstacle.DrawBlock(Type, memAddress + Size, X + Size, Y);
+		let X = X + 1;
+		let memAddress = memAddress + 1;
 
 		return;
 	}
 
 
-	method void ClearBlock(int memAddress)
+	method void Clear(int memAddress, int X)
 	{
-		do Memory.poke(memAddress + 0, 0);
-	    do Memory.poke(memAddress + 32, 0);
-	    do Memory.poke(memAddress + 64, 0);
-	    do Memory.poke(memAddress + 96, 0);
-	    do Memory.poke(memAddress + 128, 0);
-	    do Memory.poke(memAddress + 160, 0);
-	    do Memory.poke(memAddress + 192, 0);
-	    do Memory.poke(memAddress + 224, 0);
-	    do Memory.poke(memAddress + 256, 0);
-	    do Memory.poke(memAddress + 288, 0);
-	    do Memory.poke(memAddress + 320, 0);
-	    do Memory.poke(memAddress + 352, 0);
-	    do Memory.poke(memAddress + 384, 0);
-	    do Memory.poke(memAddress + 416, 0);
-	    do Memory.poke(memAddress + 448, 0);
-    	do Memory.poke(memAddress + 480, 0);
+		do Sprite.Draw(memAddress, smallSpikes, Height + 16, 1, heightInBlocks + 1, false, X, Y);
 		return;
 	}
 
 	////////////////
 
-	method void Clear()
-	{
-		var int location;
-
-		if ((x < 32) & (x > -1))
-        {
-			let location = (y * 32) + x;
-
-			if (type = 0)
-			{
-				do ClearSmallSpikes(location);
-			}
-			else { if (type = 1)
-			{
-				do ClearMediumSpikes(location);
-			} 
-			else { if (type = 2)
-			{
-				do ClearWeirdSpikes(location);
-			} 
-			else { if (type = 3)
-			{
-				do ClearLargeSpikes(location);
-			}}}}
-		}
-
-		return;
-	}
-
-	method void ClearSmallSpikes(int location)
-	{
-		var int i;
-        var Array curr_memaddr;
-		var bool color;
-		var int memAddress;
-
-		let color = false;
-
-		let memAddress = 16384 + location;
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		return;
-	}
-
-	method void ClearMediumSpikes(int location)
-	{
-		var int i;
-        var Array curr_memaddr;
-		var bool color;
-		var int memAddress;
-
-		let color = false;
-
-		let memAddress = 16384 + location;
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		let memAddress = 15872 + location; //16384 - (16 * 32)
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		return;
-	}
-
-	method void ClearWeirdSpikes(int location)
-	{
-		var int i;
-        var Array curr_memaddr;
-		var bool color;
-		var int memAddress;
-
-		let color = false;
-
-		let memAddress = 16384 + location;
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		let memAddress = 15872 + location; // 16384 - (16 * 32)
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		let memAddress = 15360 + location; // 16384 - (2 * 16 * 32)
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		let memAddress = 14848 + location; // 16384 - (3 * 16 * 32)
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		return;
-	}
-
-	method void ClearLargeSpikes(int location)
-	{
-		var int i;
-        var Array curr_memaddr;
-		var bool color;
-		var int memAddress;
-
-		let color = false;
-
-		let memAddress = 16384 + location;
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		let memAddress = 15872 + location; // 16384 - (16 * 32)
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		let memAddress = 15360 + location; // 16384 - (2 * 16 * 32)
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		let memAddress = 14848 + location; // 16384 - (3 * 16 * 32)
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		let memAddress = 14336 + location; // 16384 - (4 * 16 * 32)
-
-        let i = 0;
-        while (i < 481)
-        {
-            let curr_memaddr = memAddress + i;
-            let curr_memaddr[0] = color;
-            let i = i + 32;                
-        }
-
-		return;
-	}
+	//method void Clear()
+	//{
+	//	var int location;
+//
+	//	if ((X < 32) & (X > -1))
+    //    {
+	//		let location = (Y * 32) + X;
+//
+	//		if (Type = 0)
+	//		{
+	//			do ClearSmallSpikes(location);
+	//		}
+	//		else { if (Type = 1)
+	//		{
+	//			do ClearMediumSpikes(location);
+	//		} 
+	//		else { if (Type = 2)
+	//		{
+	//			do ClearWeirdSpikes(location);
+	//		} 
+	//		else { if (Type = 3)
+	//		{
+	//			do ClearLargeSpikes(location);
+	//		}}}}
+	//	}
+//
+	//	return;
+	//}
+//
+	//method void ClearSmallSpikes(int location)
+	//{
+	//	var int i;
+    //    var Array curr_memaddr;
+	//	var bool color;
+	//	var int memAddress;
+//
+	//	let color = false;
+//
+	//	let memAddress = 16384 + location;
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	return;
+	//}
+//
+	//method void ClearMediumSpikes(int location)
+	//{
+	//	var int i;
+    //    var Array curr_memaddr;
+	//	var bool color;
+	//	var int memAddress;
+//
+	//	let color = false;
+//
+	//	let memAddress = 16384 + location;
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	let memAddress = 15872 + location; //16384 - (16 * 32)
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	return;
+	//}
+//
+	//method void ClearWeirdSpikes(int location)
+	//{
+	//	var int i;
+    //    var Array curr_memaddr;
+	//	var bool color;
+	//	var int memAddress;
+//
+	//	let color = false;
+//
+	//	let memAddress = 16384 + location;
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	let memAddress = 15872 + location; // 16384 - (16 * 32)
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	let memAddress = 15360 + location; // 16384 - (2 * 16 * 32)
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	let memAddress = 14848 + location; // 16384 - (3 * 16 * 32)
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	return;
+	//}
+//
+	//method void ClearLargeSpikes(int location)
+	//{
+	//	var int i;
+    //    var Array curr_memaddr;
+	//	var bool color;
+	//	var int memAddress;
+//
+	//	let color = false;
+//
+	//	let memAddress = 16384 + location;
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	let memAddress = 15872 + location; // 16384 - (16 * 32)
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	let memAddress = 15360 + location; // 16384 - (2 * 16 * 32)
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	let memAddress = 14848 + location; // 16384 - (3 * 16 * 32)
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	let memAddress = 14336 + location; // 16384 - (4 * 16 * 32)
+//
+    //    let i = 0;
+    //    while (i < 481)
+    //    {
+    //        let curr_memaddr = memAddress + i;
+    //        let curr_memaddr[0] = color;
+    //        let i = i + 32;                
+    //    }
+//
+	//	return;
+	//}
 
 	method void Draw()
 	{
 		var int i;
-		var int location;
-		var int memAddress;
+		var int tempMemAddress;
 
-		let location = (y * 32) + x;
-		let memAddress = 16384 + location;
+		let tempMemAddress = memAddress;
 
-        while (i < size)
+        while (i < Size)
         {
-            if (((x + i) < 32) & ((x + i) > -1))
-            {
-				do Obstacle.DrawBlock(type, memAddress);
-            }
-
+			do Obstacle.DrawBlock(Type, tempMemAddress, X + i, Y);
             let i = i + 1;
-			let memAddress = memAddress + 1;
+			let tempMemAddress = tempMemAddress + 1;
         }
 
         return;
 	}
 
-	function void DrawBlock(int type, int memAddress)
+	function void DrawBlock(int Type, int memAddress, int X, int Y)
 	{
-		if (type = 0)
+		if (Type = 0)
 		{
-			do Obstacle.DrawSmallSpikesBlock(memAddress);
+			//do Obstacle.DrawSmallSpikesBlock(memAddress);
+			do Sprite.Draw(memAddress, smallSpikes, 16, 1, 1, true, X, Y);
 		}
-		else { if (type = 1)
+		else { if (Type = 1)
 		{
-			do Obstacle.DrawMediumSpikesBlock(memAddress);
+			//do Obstacle.DrawMediumSpikesBlock(memAddress);
+			do Sprite.Draw(memAddress, mediumSpikes, 32, 1, 2, true, X, Y);
 		} 
-		else { if (type = 2)
+		else { if (Type = 2)
 		{
-			do Obstacle.DrawWeirdSpikesBlock(memAddress);
+			//do Obstacle.DrawWeirdSpikesBlock(memAddress);
+			do Sprite.Draw(memAddress, weirdSpikes, 64, 1, 4, true, X, Y);
 		} 
-		else { if (type = 3)
+		else { if (Type = 3)
 		{
-			do Obstacle.DrawLargeSpikesBlock(memAddress);
+			//do Obstacle.DrawLargeSpikesBlock(memAddress);
+			do Sprite.Draw(memAddress, largeSpikes, 80, 1, 5, true, X, Y);
 		}
-		else { if (type = 4)
+		else { if (Type = 4)
 		{
-			do Obstacle.DrawSpikedAreaBlockAlt(memAddress);
+			//do Obstacle.DrawSpikedAreaBlockAlt(memAddress);
+			do Sprite.Draw(memAddress, spikedArea, 16, 1, 1, true, X, Y);
 		}}}}}
 
 		return;
 	}
 
-    function void DrawSmallSpikesBlock(int memAddress)
-    {
-	    do Memory.poke(memAddress + 0, 0);
-	    do Memory.poke(memAddress + 32, 0);
-	    do Memory.poke(memAddress + 64, 0);
-	    do Memory.poke(memAddress + 96, 0);
-	    do Memory.poke(memAddress + 128, 384);
-	    do Memory.poke(memAddress + 160, 384);
-	    do Memory.poke(memAddress + 192, 960);
-	    do Memory.poke(memAddress + 224, 960);
-	    do Memory.poke(memAddress + 256, 2016);
-	    do Memory.poke(memAddress + 288, 1504);
-	    do Memory.poke(memAddress + 320, 3568);
-	    do Memory.poke(memAddress + 352, 2544);
-	    do Memory.poke(memAddress + 384, 4600);
-	    do Memory.poke(memAddress + 416, 5112);
-	    do Memory.poke(memAddress + 448, 10236);
-	    do Memory.poke(memAddress + 480, 16380);
-	    return;
-    }
-
-	function void DrawMediumSpikesBlock(int memAddress)
-    {
-	    do Memory.poke(memAddress + 0, 15356);
-		do Memory.poke(memAddress + 32, 15356);
-		do Memory.poke(memAddress + 64, 13308);
-		do Memory.poke(memAddress + 96, 14332);
-		do Memory.poke(memAddress + 128, 14332);
-		do Memory.poke(memAddress + 160, 30718);
-		do Memory.poke(memAddress + 192, 26622);
-		do Memory.poke(memAddress + 224, 26622);
-		do Memory.poke(memAddress + 256, 28670);
-		do Memory.poke(memAddress + 288, 28670);
-		do Memory.poke(memAddress + 320, 20478);
-		do Memory.poke(memAddress + 352, 20478);
-		do Memory.poke(memAddress + 384, 24574);
-		do Memory.poke(memAddress + 416, -8193);
-		do Memory.poke(memAddress + 448, -1);
-		do Memory.poke(memAddress + 480, -1);
-
-		let memAddress = memAddress - 512;
-
-		do Memory.poke(memAddress + 0, 384);
-		do Memory.poke(memAddress + 32, 384);
-		do Memory.poke(memAddress + 64, 384);
-		do Memory.poke(memAddress + 96, 960);
-		do Memory.poke(memAddress + 128, 960);
-		do Memory.poke(memAddress + 160, 960);
-		do Memory.poke(memAddress + 192, 2016);
-		do Memory.poke(memAddress + 224, 2016);
-		do Memory.poke(memAddress + 256, 2016);
-		do Memory.poke(memAddress + 288, 3568);
-		do Memory.poke(memAddress + 320, 3568);
-		do Memory.poke(memAddress + 352, 3568);
-		do Memory.poke(memAddress + 384, 7672);
-		do Memory.poke(memAddress + 416, 7160);
-		do Memory.poke(memAddress + 448, 7160);
-		do Memory.poke(memAddress + 480, 15356);
-
-	    return;
-    }
-
-	function void DrawWeirdSpikesBlock(int memAddress)
+	function void init()
 	{
-		do Memory.poke(memAddress + 0, -8225);
-		do Memory.poke(memAddress + 32, -8241);
-		do Memory.poke(memAddress + 64, -8241);
-		do Memory.poke(memAddress + 96, -12313);
-		do Memory.poke(memAddress + 128, -4121);
-		do Memory.poke(memAddress + 160, -4121);
-		do Memory.poke(memAddress + 192, -4105);
-		do Memory.poke(memAddress + 224, -2057);
-		do Memory.poke(memAddress + 256, -2057);
-		do Memory.poke(memAddress + 288, -3077);
-		do Memory.poke(memAddress + 320, -1029);
-		do Memory.poke(memAddress + 352, -1029);
-		do Memory.poke(memAddress + 384, -517);
-		do Memory.poke(memAddress + 416, -517);
-		do Memory.poke(memAddress + 448, -517);
-		do Memory.poke(memAddress + 480, -519);
+		let smallSpikes = Array.new(16);
+		let mediumSpikes = Array.new(32);
+		let weirdSpikes = Array.new(64);
+		let largeSpikes = Array.new(80);
+		let spikedArea = Array.new(16);
 
-		let memAddress = memAddress - 512;
+		// SMALL SPIKES
+		let smallSpikes[11] = 384;
+		let smallSpikes[10] = 384;
+		let smallSpikes[9] = 960;
+		let smallSpikes[8] = 960;
+		let smallSpikes[7] = 2016;
+		let smallSpikes[6] = 1504;
+		let smallSpikes[5] = 3568;
+		let smallSpikes[4] = 2544;
+		let smallSpikes[3] = 4600;
+		let smallSpikes[2] = 5112;
+		let smallSpikes[1] = 10236;
+		let smallSpikes[0] = 16380;
 
-		do Memory.poke(memAddress + 0, -8464);
-		do Memory.poke(memAddress + 32, -8464);
-		do Memory.poke(memAddress + 64, -8336);
-		do Memory.poke(memAddress + 96, -8352);
-		do Memory.poke(memAddress + 128, -8384);
-		do Memory.poke(memAddress + 160, -128);
-		do Memory.poke(memAddress + 192, -4224);
-		do Memory.poke(memAddress + 224, -6208);
-		do Memory.poke(memAddress + 256, -5184);
-		do Memory.poke(memAddress + 288, -4640);
-		do Memory.poke(memAddress + 320, -4368);
-		do Memory.poke(memAddress + 352, -4232);
-		do Memory.poke(memAddress + 384, -4228);
-		do Memory.poke(memAddress + 416, -4292);
-		do Memory.poke(memAddress + 448, -8418);
-		do Memory.poke(memAddress + 480, -8289);
+		// MEDIUM SPIKES
+		let mediumSpikes[15] = 15356;
+		let mediumSpikes[14] = 15356;
+		let mediumSpikes[13] = 13308;
+		let mediumSpikes[12] = 14332;
+		let mediumSpikes[11] = 14332;
+		let mediumSpikes[10] = 30718;
+		let mediumSpikes[9] = 26622;
+		let mediumSpikes[8] = 26622;
+		let mediumSpikes[7] = 28670;
+		let mediumSpikes[6] = 28670;
+		let mediumSpikes[5] = 20478;
+		let mediumSpikes[4] = 20478;
+		let mediumSpikes[3] = 24574;
+		let mediumSpikes[2] = -8193;
+		let mediumSpikes[1] = -1;
+		let mediumSpikes[0] = -1;
 
-		let memAddress = memAddress - 512;
+		let mediumSpikes[31] = 384;
+		let mediumSpikes[30] = 384;
+		let mediumSpikes[29] = 384;
+		let mediumSpikes[28] = 960;
+		let mediumSpikes[27] = 960;
+		let mediumSpikes[26] = 960;
+		let mediumSpikes[25] = 2016;
+		let mediumSpikes[24] = 2016;
+		let mediumSpikes[23] = 2016;
+		let mediumSpikes[22] = 3568;
+		let mediumSpikes[21] = 3568;
+		let mediumSpikes[20] = 3568;
+		let mediumSpikes[19] = 7672;
+		let mediumSpikes[18] = 7160;
+		let mediumSpikes[17] = 7160;
+		let mediumSpikes[16] = 15356;
 
-		do Memory.poke(memAddress + 0, 8688);
-		do Memory.poke(memAddress + 32, 25072);
-		do Memory.poke(memAddress + 64, 29664);
-		do Memory.poke(memAddress + 96, 29632);
-		do Memory.poke(memAddress + 128, 26560);
-		do Memory.poke(memAddress + 160, 28546);
-		do Memory.poke(memAddress + 192, 28418);
-		do Memory.poke(memAddress + 224, 12034);
-		do Memory.poke(memAddress + 256, -18942);
-		do Memory.poke(memAddress + 288, -19450);
-		do Memory.poke(memAddress + 320, -18418);
-		do Memory.poke(memAddress + 352, -18402);
-		do Memory.poke(memAddress + 384, -18372);
-		do Memory.poke(memAddress + 416, -18308);
-		do Memory.poke(memAddress + 448, -18312);
-		do Memory.poke(memAddress + 480, -18184);
+		// WEIRD SPIKES
+		let weirdSpikes[15] = -8225;
+		let weirdSpikes[14] = -8241;
+		let weirdSpikes[13] = -8241;
+		let weirdSpikes[12] = -12313;
+		let weirdSpikes[11] = -4121;
+		let weirdSpikes[10] = -4121;
+		let weirdSpikes[9] = -4105;
+		let weirdSpikes[8] = -2057;
+		let weirdSpikes[7] = -2057;
+		let weirdSpikes[6] = -3077;
+		let weirdSpikes[5] = -1029;
+		let weirdSpikes[4] = -1029;
+		let weirdSpikes[3] = -517;
+		let weirdSpikes[2] = -517;
+		let weirdSpikes[1] = -517;
+		let weirdSpikes[0] = -519;
 
-		let memAddress = memAddress - 512;
+		let weirdSpikes[31] = -8464;
+		let weirdSpikes[30] = -8464;
+		let weirdSpikes[29] = -8336;
+		let weirdSpikes[28] = -8352;
+		let weirdSpikes[27] = -8384;
+		let weirdSpikes[26] = -128;
+		let weirdSpikes[25] = -4224;
+		let weirdSpikes[24] = -6208;
+		let weirdSpikes[23] = -5184;
+		let weirdSpikes[22] = -4640;
+		let weirdSpikes[21] = -4368;
+		let weirdSpikes[20] = -4232;
+		let weirdSpikes[19] = -4228;
+		let weirdSpikes[18] = -4292;
+		let weirdSpikes[17] = -8418;
+		let weirdSpikes[16] = -8289;
 
-		do Memory.poke(memAddress + 0, 0);
-		do Memory.poke(memAddress + 32, 0);
-		do Memory.poke(memAddress + 64, 0);
-		do Memory.poke(memAddress + 96, 16);
-		do Memory.poke(memAddress + 128, 16);
-		do Memory.poke(memAddress + 160, 16);
-		do Memory.poke(memAddress + 192, 16);
-		do Memory.poke(memAddress + 224, 56);
-		do Memory.poke(memAddress + 256, 56);
-		do Memory.poke(memAddress + 288, 56);
-		do Memory.poke(memAddress + 320, 124);
-		do Memory.poke(memAddress + 352, 124);
-		do Memory.poke(memAddress + 384, 124);
-		do Memory.poke(memAddress + 416, 120);
-		do Memory.poke(memAddress + 448, 8440);
-		do Memory.poke(memAddress + 480, 8440);
+		let weirdSpikes[47] = 8688;
+		let weirdSpikes[46] = 25072;
+		let weirdSpikes[45] = 29664;
+		let weirdSpikes[44] = 29632;
+		let weirdSpikes[43] = 26560;
+		let weirdSpikes[42] = 28546;
+		let weirdSpikes[41] = 28418;
+		let weirdSpikes[40] = 12034;
+		let weirdSpikes[39] = -18942;
+		let weirdSpikes[38] = -19450;
+		let weirdSpikes[37] = -18418;
+		let weirdSpikes[36] = -18402;
+		let weirdSpikes[35] = -18372;
+		let weirdSpikes[34] = -18308;
+		let weirdSpikes[33] = -18312;
+		let weirdSpikes[32] = -18184;
+
+		let weirdSpikes[60] = 16;
+		let weirdSpikes[59] = 16;
+		let weirdSpikes[58] = 16;
+		let weirdSpikes[57] = 16;
+		let weirdSpikes[56] = 56;
+		let weirdSpikes[55] = 56;
+		let weirdSpikes[54] = 56;
+		let weirdSpikes[53] = 124;
+		let weirdSpikes[52] = 124;
+		let weirdSpikes[51] = 124;
+		let weirdSpikes[50] = 120;
+		let weirdSpikes[49] = 8440;
+		let weirdSpikes[48] = 8440;
+
+		// LARGE SPIKES
+		let largeSpikes[15] = 7160;
+		let largeSpikes[14] = 6136;
+		let largeSpikes[13] = 6136;
+		let largeSpikes[12] = 6136;
+		let largeSpikes[11] = 6136;
+		let largeSpikes[10] = 6136;
+		let largeSpikes[9] = 6136;
+		let largeSpikes[8] = 6136;
+		let largeSpikes[7] = 6136;
+		let largeSpikes[6] = 6136;
+		let largeSpikes[5] = 6136;
+		let largeSpikes[4] = 6136;
+		let largeSpikes[3] = 6136;
+		let largeSpikes[2] = 6136;
+		let largeSpikes[1] = 6136;
+		let largeSpikes[0] = 8184;
+
+		let largeSpikes[31] = 3568;
+		let largeSpikes[30] = 3056;
+		let largeSpikes[29] = 3056;
+		let largeSpikes[28] = 3056;
+		let largeSpikes[27] = 3056;
+		let largeSpikes[26] = 3056;
+		let largeSpikes[25] = 3056;
+		let largeSpikes[24] = 3056;
+		let largeSpikes[23] = 3056;
+		let largeSpikes[22] = 3056;
+		let largeSpikes[21] = 3056;
+		let largeSpikes[20] = 3056;
+		let largeSpikes[19] = 3056;
+		let largeSpikes[18] = 3056;
+		let largeSpikes[17] = 3056;
+		let largeSpikes[16] = 3056;
+
+		let largeSpikes[47] = 1760;
+		let largeSpikes[46] = 1504;
+		let largeSpikes[45] = 1504;
+		let largeSpikes[44] = 1504;
+		let largeSpikes[43] = 1504;
+		let largeSpikes[42] = 1504;
+		let largeSpikes[41] = 1504;
+		let largeSpikes[40] = 1504;
+		let largeSpikes[39] = 1504;
+		let largeSpikes[38] = 1504;
+		let largeSpikes[37] = 1504;
+		let largeSpikes[36] = 1504;
+		let largeSpikes[35] = 1504;
+		let largeSpikes[34] = 1504;
+		let largeSpikes[33] = 1504;
+		let largeSpikes[32] = 1504;
+
+		let largeSpikes[63] = 960;
+		let largeSpikes[62] = 704;
+		let largeSpikes[61] = 704;
+		let largeSpikes[60] = 704;
+		let largeSpikes[59] = 704;
+		let largeSpikes[58] = 704;
+		let largeSpikes[57] = 704;
+		let largeSpikes[56] = 704;
+		let largeSpikes[55] = 704;
+		let largeSpikes[54] = 704;
+		let largeSpikes[53] = 704;
+		let largeSpikes[52] = 704;
+		let largeSpikes[51] = 704;
+		let largeSpikes[50] = 704;
+		let largeSpikes[49] = 704;
+		let largeSpikes[48] = 704;
+
+		let largeSpikes[79] = 384;
+		let largeSpikes[78] = 384;
+		let largeSpikes[77] = 384;
+		let largeSpikes[76] = 384;
+		let largeSpikes[75] = 384;
+		let largeSpikes[74] = 384;
+		let largeSpikes[73] = 384;
+		let largeSpikes[72] = 384;
+		let largeSpikes[71] = 384;
+		let largeSpikes[70] = 384;
+		let largeSpikes[69] = 384;
+		let largeSpikes[68] = 384;
+		let largeSpikes[67] = 384;
+		let largeSpikes[66] = 384;
+		let largeSpikes[65] = 384;
+		let largeSpikes[64] = 384;
+
+		// SPIKED AREA
+		let spikedArea[15] = 2320;
+		let spikedArea[14] = 2320;
+		let spikedArea[13] = 2320;
+		let spikedArea[12] = 2728;
+		let spikedArea[11] = 5800;
+		let spikedArea[10] = 15212;
+		let spikedArea[9] = 14172;
+		let spikedArea[8] = 14172;
+		let spikedArea[7] = 30580;
+		let spikedArea[6] = 32746;
+		let spikedArea[5] = 24042;
+		let spikedArea[4] = 24042;
+		let spikedArea[3] = -9515;
+		let spikedArea[2] = -17674;
+		let spikedArea[1] = -18578;
+		let spikedArea[0] = -2193;
 
 		return;
 	}
 
-	function void DrawLargeSpikesBlock(int memAddress)
-	{
-		do Memory.poke(memAddress + 0, 7160);
-		do Memory.poke(memAddress + 32, 6136);
-		do Memory.poke(memAddress + 64, 6136);
-		do Memory.poke(memAddress + 96, 6136);
-		do Memory.poke(memAddress + 128, 6136);
-		do Memory.poke(memAddress + 160, 6136);
-		do Memory.poke(memAddress + 192, 6136);
-		do Memory.poke(memAddress + 224, 6136);
-		do Memory.poke(memAddress + 256, 6136);
-		do Memory.poke(memAddress + 288, 6136);
-		do Memory.poke(memAddress + 320, 6136);
-		do Memory.poke(memAddress + 352, 6136);
-		do Memory.poke(memAddress + 384, 6136);
-		do Memory.poke(memAddress + 416, 6136);
-		do Memory.poke(memAddress + 448, 6136);
-		do Memory.poke(memAddress + 480, 8184);
-
-		let memAddress = memAddress - 512;
-
-		do Memory.poke(memAddress + 0, 3568);
-		do Memory.poke(memAddress + 32, 3056);
-		do Memory.poke(memAddress + 64, 3056);
-		do Memory.poke(memAddress + 96, 3056);
-		do Memory.poke(memAddress + 128, 3056);
-		do Memory.poke(memAddress + 160, 3056);
-		do Memory.poke(memAddress + 192, 3056);
-		do Memory.poke(memAddress + 224, 3056);
-		do Memory.poke(memAddress + 256, 3056);
-		do Memory.poke(memAddress + 288, 3056);
-		do Memory.poke(memAddress + 320, 3056);
-		do Memory.poke(memAddress + 352, 3056);
-		do Memory.poke(memAddress + 384, 3056);
-		do Memory.poke(memAddress + 416, 3056);
-		do Memory.poke(memAddress + 448, 3056);
-		do Memory.poke(memAddress + 480, 3056);
-
-		let memAddress = memAddress - 512;
-		
-		do Memory.poke(memAddress + 0, 1760);
-		do Memory.poke(memAddress + 32, 1504);
-		do Memory.poke(memAddress + 64, 1504);
-		do Memory.poke(memAddress + 96, 1504);
-		do Memory.poke(memAddress + 128, 1504);
-		do Memory.poke(memAddress + 160, 1504);
-		do Memory.poke(memAddress + 192, 1504);
-		do Memory.poke(memAddress + 224, 1504);
-		do Memory.poke(memAddress + 256, 1504);
-		do Memory.poke(memAddress + 288, 1504);
-		do Memory.poke(memAddress + 320, 1504);
-		do Memory.poke(memAddress + 352, 1504);
-		do Memory.poke(memAddress + 384, 1504);
-		do Memory.poke(memAddress + 416, 1504);
-		do Memory.poke(memAddress + 448, 1504);
-		do Memory.poke(memAddress + 480, 1504);
-
-		let memAddress = memAddress - 512;
-
-		do Memory.poke(memAddress + 0, 960);
-		do Memory.poke(memAddress + 32, 704);
-		do Memory.poke(memAddress + 64, 704);
-		do Memory.poke(memAddress + 96, 704);
-		do Memory.poke(memAddress + 128, 704);
-		do Memory.poke(memAddress + 160, 704);
-		do Memory.poke(memAddress + 192, 704);
-		do Memory.poke(memAddress + 224, 704);
-		do Memory.poke(memAddress + 256, 704);
-		do Memory.poke(memAddress + 288, 704);
-		do Memory.poke(memAddress + 320, 704);
-		do Memory.poke(memAddress + 352, 704);
-		do Memory.poke(memAddress + 384, 704);
-		do Memory.poke(memAddress + 416, 704);
-		do Memory.poke(memAddress + 448, 704);
-		do Memory.poke(memAddress + 480, 704);
-
-		let memAddress = memAddress - 512;
-
-		do Memory.poke(memAddress + 0, 384);
-		do Memory.poke(memAddress + 32, 384);
-		do Memory.poke(memAddress + 64, 384);
-		do Memory.poke(memAddress + 96, 384);
-		do Memory.poke(memAddress + 128, 384);
-		do Memory.poke(memAddress + 160, 384);
-		do Memory.poke(memAddress + 192, 384);
-		do Memory.poke(memAddress + 224, 384);
-		do Memory.poke(memAddress + 256, 384);
-		do Memory.poke(memAddress + 288, 384);
-		do Memory.poke(memAddress + 320, 384);
-		do Memory.poke(memAddress + 352, 384);
-		do Memory.poke(memAddress + 384, 384);
-		do Memory.poke(memAddress + 416, 384);
-		do Memory.poke(memAddress + 448, 384);
-		do Memory.poke(memAddress + 480, 384);
-
-		return;
-	}
-
-	
-
-	function void DrawSpikedAreaBlock(int memAddress)
-	{
-		do Memory.poke(memAddress + 0, 2320);
-		do Memory.poke(memAddress + 32, 2320);
-		do Memory.poke(memAddress + 64, 2728);
-		do Memory.poke(memAddress + 96, 5288);
-		do Memory.poke(memAddress + 128, 5288);
-		do Memory.poke(memAddress + 160, 8772);
-		do Memory.poke(memAddress + 192, 9540);
-		do Memory.poke(memAddress + 224, 9540);
-		do Memory.poke(memAddress + 256, 21828);
-		do Memory.poke(memAddress + 288, 18562);
-		do Memory.poke(memAddress + 320, 18570);
-		do Memory.poke(memAddress + 352, 18581);
-		do Memory.poke(memAddress + 384, -28587);
-		do Memory.poke(memAddress + 416, -28126);
-		do Memory.poke(memAddress + 448, -28126);
-		do Memory.poke(memAddress + 480, -27327);
-
-		return;
-	}
-
-	function void DrawSpikedAreaBlockAlt(int memAddress)
-	{
-		do Memory.poke(memAddress + 0, 2320);
-		do Memory.poke(memAddress + 32, 2320);
-		do Memory.poke(memAddress + 64, 2320);
-		do Memory.poke(memAddress + 96, 2728);
-		do Memory.poke(memAddress + 128, 5800);
-		do Memory.poke(memAddress + 160, 15212);
-		do Memory.poke(memAddress + 192, 14172);
-		do Memory.poke(memAddress + 224, 14172);
-		do Memory.poke(memAddress + 256, 30580);
-		do Memory.poke(memAddress + 288, 32746);
-		do Memory.poke(memAddress + 320, 24042);
-		do Memory.poke(memAddress + 352, 24029);
-		do Memory.poke(memAddress + 384, -9515);
-		do Memory.poke(memAddress + 416, -17674);
-		do Memory.poke(memAddress + 448, -18578);
-		do Memory.poke(memAddress + 480, -2193);
-
-		return;
-	}
+    //function void DrawSmallSpikesBlock(int memAddress)
+    //{
+	//    do Memory.poke(memAddress + 0, 0);
+	//    do Memory.poke(memAddress + 32, 0);
+	//    do Memory.poke(memAddress + 64, 0);
+	//    do Memory.poke(memAddress + 96, 0);
+	//    do Memory.poke(memAddress + 128, 384);
+	//    do Memory.poke(memAddress + 160, 384);
+	//    do Memory.poke(memAddress + 192, 960);
+	//    do Memory.poke(memAddress + 224, 960);
+	//    do Memory.poke(memAddress + 256, 2016);
+	//    do Memory.poke(memAddress + 288, 1504);
+	//    do Memory.poke(memAddress + 320, 3568);
+	//    do Memory.poke(memAddress + 352, 2544);
+	//    do Memory.poke(memAddress + 384, 4600);
+	//    do Memory.poke(memAddress + 416, 5112);
+	//    do Memory.poke(memAddress + 448, 10236);
+	//    do Memory.poke(memAddress + 480, 16380);
+	//    return;
+    //}
+//
+	//function void DrawMediumSpikesBlock(int memAddress)
+    //{
+	//    do Memory.poke(memAddress + 0, 15356);
+	//	do Memory.poke(memAddress + 32, 15356);
+	//	do Memory.poke(memAddress + 64, 13308);
+	//	do Memory.poke(memAddress + 96, 14332);
+	//	do Memory.poke(memAddress + 128, 14332);
+	//	do Memory.poke(memAddress + 160, 30718);
+	//	do Memory.poke(memAddress + 192, 26622);
+	//	do Memory.poke(memAddress + 224, 26622);
+	//	do Memory.poke(memAddress + 256, 28670);
+	//	do Memory.poke(memAddress + 288, 28670);
+	//	do Memory.poke(memAddress + 320, 20478);
+	//	do Memory.poke(memAddress + 352, 20478);
+	//	do Memory.poke(memAddress + 384, 24574);
+	//	do Memory.poke(memAddress + 416, -8193);
+	//	do Memory.poke(memAddress + 448, -1);
+	//	do Memory.poke(memAddress + 480, -1);
+//
+	//	let memAddress = memAddress - 512;
+//
+	//	do Memory.poke(memAddress + 0, 384);
+	//	do Memory.poke(memAddress + 32, 384);
+	//	do Memory.poke(memAddress + 64, 384);
+	//	do Memory.poke(memAddress + 96, 960);
+	//	do Memory.poke(memAddress + 128, 960);
+	//	do Memory.poke(memAddress + 160, 960);
+	//	do Memory.poke(memAddress + 192, 2016);
+	//	do Memory.poke(memAddress + 224, 2016);
+	//	do Memory.poke(memAddress + 256, 2016);
+	//	do Memory.poke(memAddress + 288, 3568);
+	//	do Memory.poke(memAddress + 320, 3568);
+	//	do Memory.poke(memAddress + 352, 3568);
+	//	do Memory.poke(memAddress + 384, 7672);
+	//	do Memory.poke(memAddress + 416, 7160);
+	//	do Memory.poke(memAddress + 448, 7160);
+	//	do Memory.poke(memAddress + 480, 15356);
+//
+	//    return;
+    //}
+//
+	//function void DrawWeirdSpikesBlock(int memAddress)
+	//{
+	//	do Memory.poke(memAddress + 0, -8225);
+	//	do Memory.poke(memAddress + 32, -8241);
+	//	do Memory.poke(memAddress + 64, -8241);
+	//	do Memory.poke(memAddress + 96, -12313);
+	//	do Memory.poke(memAddress + 128, -4121);
+	//	do Memory.poke(memAddress + 160, -4121);
+	//	do Memory.poke(memAddress + 192, -4105);
+	//	do Memory.poke(memAddress + 224, -2057);
+	//	do Memory.poke(memAddress + 256, -2057);
+	//	do Memory.poke(memAddress + 288, -3077);
+	//	do Memory.poke(memAddress + 320, -1029);
+	//	do Memory.poke(memAddress + 352, -1029);
+	//	do Memory.poke(memAddress + 384, -517);
+	//	do Memory.poke(memAddress + 416, -517);
+	//	do Memory.poke(memAddress + 448, -517);
+	//	do Memory.poke(memAddress + 480, -519);
+//
+	//	let memAddress = memAddress - 512;
+//
+	//	do Memory.poke(memAddress + 0, -8464);
+	//	do Memory.poke(memAddress + 32, -8464);
+	//	do Memory.poke(memAddress + 64, -8336);
+	//	do Memory.poke(memAddress + 96, -8352);
+	//	do Memory.poke(memAddress + 128, -8384);
+	//	do Memory.poke(memAddress + 160, -128);
+	//	do Memory.poke(memAddress + 192, -4224);
+	//	do Memory.poke(memAddress + 224, -6208);
+	//	do Memory.poke(memAddress + 256, -5184);
+	//	do Memory.poke(memAddress + 288, -4640);
+	//	do Memory.poke(memAddress + 320, -4368);
+	//	do Memory.poke(memAddress + 352, -4232);
+	//	do Memory.poke(memAddress + 384, -4228);
+	//	do Memory.poke(memAddress + 416, -4292);
+	//	do Memory.poke(memAddress + 448, -8418);
+	//	do Memory.poke(memAddress + 480, -8289);
+//
+	//	let memAddress = memAddress - 512;
+//
+	//	do Memory.poke(memAddress + 0, 8688);
+	//	do Memory.poke(memAddress + 32, 25072);
+	//	do Memory.poke(memAddress + 64, 29664);
+	//	do Memory.poke(memAddress + 96, 29632);
+	//	do Memory.poke(memAddress + 128, 26560);
+	//	do Memory.poke(memAddress + 160, 28546);
+	//	do Memory.poke(memAddress + 192, 28418);
+	//	do Memory.poke(memAddress + 224, 12034);
+	//	do Memory.poke(memAddress + 256, -18942);
+	//	do Memory.poke(memAddress + 288, -19450);
+	//	do Memory.poke(memAddress + 320, -18418);
+	//	do Memory.poke(memAddress + 352, -18402);
+	//	do Memory.poke(memAddress + 384, -18372);
+	//	do Memory.poke(memAddress + 416, -18308);
+	//	do Memory.poke(memAddress + 448, -18312);
+	//	do Memory.poke(memAddress + 480, -18184);
+//
+	//	let memAddress = memAddress - 512;
+//
+	//	do Memory.poke(memAddress + 0, 0);
+	//	do Memory.poke(memAddress + 32, 0);
+	//	do Memory.poke(memAddress + 64, 0);
+	//	do Memory.poke(memAddress + 96, 16);
+	//	do Memory.poke(memAddress + 128, 16);
+	//	do Memory.poke(memAddress + 160, 16);
+	//	do Memory.poke(memAddress + 192, 16);
+	//	do Memory.poke(memAddress + 224, 56);
+	//	do Memory.poke(memAddress + 256, 56);
+	//	do Memory.poke(memAddress + 288, 56);
+	//	do Memory.poke(memAddress + 320, 124);
+	//	do Memory.poke(memAddress + 352, 124);
+	//	do Memory.poke(memAddress + 384, 124);
+	//	do Memory.poke(memAddress + 416, 120);
+	//	do Memory.poke(memAddress + 448, 8440);
+	//	do Memory.poke(memAddress + 480, 8440);
+//
+	//	return;
+	//}
+//
+	//function void DrawLargeSpikesBlock(int memAddress)
+	//{
+	//	do Memory.poke(memAddress + 0, 7160);
+	//	do Memory.poke(memAddress + 32, 6136);
+	//	do Memory.poke(memAddress + 64, 6136);
+	//	do Memory.poke(memAddress + 96, 6136);
+	//	do Memory.poke(memAddress + 128, 6136);
+	//	do Memory.poke(memAddress + 160, 6136);
+	//	do Memory.poke(memAddress + 192, 6136);
+	//	do Memory.poke(memAddress + 224, 6136);
+	//	do Memory.poke(memAddress + 256, 6136);
+	//	do Memory.poke(memAddress + 288, 6136);
+	//	do Memory.poke(memAddress + 320, 6136);
+	//	do Memory.poke(memAddress + 352, 6136);
+	//	do Memory.poke(memAddress + 384, 6136);
+	//	do Memory.poke(memAddress + 416, 6136);
+	//	do Memory.poke(memAddress + 448, 6136);
+	//	do Memory.poke(memAddress + 480, 8184);
+//
+	//	let memAddress = memAddress - 512;
+//
+	//	do Memory.poke(memAddress + 0, 3568);
+	//	do Memory.poke(memAddress + 32, 3056);
+	//	do Memory.poke(memAddress + 64, 3056);
+	//	do Memory.poke(memAddress + 96, 3056);
+	//	do Memory.poke(memAddress + 128, 3056);
+	//	do Memory.poke(memAddress + 160, 3056);
+	//	do Memory.poke(memAddress + 192, 3056);
+	//	do Memory.poke(memAddress + 224, 3056);
+	//	do Memory.poke(memAddress + 256, 3056);
+	//	do Memory.poke(memAddress + 288, 3056);
+	//	do Memory.poke(memAddress + 320, 3056);
+	//	do Memory.poke(memAddress + 352, 3056);
+	//	do Memory.poke(memAddress + 384, 3056);
+	//	do Memory.poke(memAddress + 416, 3056);
+	//	do Memory.poke(memAddress + 448, 3056);
+	//	do Memory.poke(memAddress + 480, 3056);
+//
+	//	let memAddress = memAddress - 512;
+	//	
+	//	do Memory.poke(memAddress + 0, 1760);
+	//	do Memory.poke(memAddress + 32, 1504);
+	//	do Memory.poke(memAddress + 64, 1504);
+	//	do Memory.poke(memAddress + 96, 1504);
+	//	do Memory.poke(memAddress + 128, 1504);
+	//	do Memory.poke(memAddress + 160, 1504);
+	//	do Memory.poke(memAddress + 192, 1504);
+	//	do Memory.poke(memAddress + 224, 1504);
+	//	do Memory.poke(memAddress + 256, 1504);
+	//	do Memory.poke(memAddress + 288, 1504);
+	//	do Memory.poke(memAddress + 320, 1504);
+	//	do Memory.poke(memAddress + 352, 1504);
+	//	do Memory.poke(memAddress + 384, 1504);
+	//	do Memory.poke(memAddress + 416, 1504);
+	//	do Memory.poke(memAddress + 448, 1504);
+	//	do Memory.poke(memAddress + 480, 1504);
+//
+	//	let memAddress = memAddress - 512;
+//
+	//	do Memory.poke(memAddress + 0, 960);
+	//	do Memory.poke(memAddress + 32, 704);
+	//	do Memory.poke(memAddress + 64, 704);
+	//	do Memory.poke(memAddress + 96, 704);
+	//	do Memory.poke(memAddress + 128, 704);
+	//	do Memory.poke(memAddress + 160, 704);
+	//	do Memory.poke(memAddress + 192, 704);
+	//	do Memory.poke(memAddress + 224, 704);
+	//	do Memory.poke(memAddress + 256, 704);
+	//	do Memory.poke(memAddress + 288, 704);
+	//	do Memory.poke(memAddress + 320, 704);
+	//	do Memory.poke(memAddress + 352, 704);
+	//	do Memory.poke(memAddress + 384, 704);
+	//	do Memory.poke(memAddress + 416, 704);
+	//	do Memory.poke(memAddress + 448, 704);
+	//	do Memory.poke(memAddress + 480, 704);
+//
+	//	let memAddress = memAddress - 512;
+//
+	//	do Memory.poke(memAddress + 0, 384);
+	//	do Memory.poke(memAddress + 32, 384);
+	//	do Memory.poke(memAddress + 64, 384);
+	//	do Memory.poke(memAddress + 96, 384);
+	//	do Memory.poke(memAddress + 128, 384);
+	//	do Memory.poke(memAddress + 160, 384);
+	//	do Memory.poke(memAddress + 192, 384);
+	//	do Memory.poke(memAddress + 224, 384);
+	//	do Memory.poke(memAddress + 256, 384);
+	//	do Memory.poke(memAddress + 288, 384);
+	//	do Memory.poke(memAddress + 320, 384);
+	//	do Memory.poke(memAddress + 352, 384);
+	//	do Memory.poke(memAddress + 384, 384);
+	//	do Memory.poke(memAddress + 416, 384);
+	//	do Memory.poke(memAddress + 448, 384);
+	//	do Memory.poke(memAddress + 480, 384);
+//
+	//	return;
+	//}
+//
+	//
+//
+	//function void DrawSpikedAreaBlock(int memAddress)
+	//{
+	//	do Memory.poke(memAddress + 0, 2320);
+	//	do Memory.poke(memAddress + 32, 2320);
+	//	do Memory.poke(memAddress + 64, 2728);
+	//	do Memory.poke(memAddress + 96, 5288);
+	//	do Memory.poke(memAddress + 128, 5288);
+	//	do Memory.poke(memAddress + 160, 8772);
+	//	do Memory.poke(memAddress + 192, 9540);
+	//	do Memory.poke(memAddress + 224, 9540);
+	//	do Memory.poke(memAddress + 256, 21828);
+	//	do Memory.poke(memAddress + 288, 18562);
+	//	do Memory.poke(memAddress + 320, 18570);
+	//	do Memory.poke(memAddress + 352, 18581);
+	//	do Memory.poke(memAddress + 384, -28587);
+	//	do Memory.poke(memAddress + 416, -28126);
+	//	do Memory.poke(memAddress + 448, -28126);
+	//	do Memory.poke(memAddress + 480, -27327);
+//
+	//	return;
+	//}
+//
+	//function void DrawSpikedAreaBlockAlt(int memAddress)
+	//{
+	//	do Memory.poke(memAddress + 0, 2320);
+	//	do Memory.poke(memAddress + 32, 2320);
+	//	do Memory.poke(memAddress + 64, 2320);
+	//	do Memory.poke(memAddress + 96, 2728);
+	//	do Memory.poke(memAddress + 128, 5800);
+	//	do Memory.poke(memAddress + 160, 15212);
+	//	do Memory.poke(memAddress + 192, 14172);
+	//	do Memory.poke(memAddress + 224, 14172);
+	//	do Memory.poke(memAddress + 256, 30580);
+	//	do Memory.poke(memAddress + 288, 32746);
+	//	do Memory.poke(memAddress + 320, 24042);
+	//	do Memory.poke(memAddress + 352, 24029);
+	//	do Memory.poke(memAddress + 384, -9515);
+	//	do Memory.poke(memAddress + 416, -17674);
+	//	do Memory.poke(memAddress + 448, -18578);
+	//	do Memory.poke(memAddress + 480, -2193);
+//
+	//	return;
+	//}
 
 	
 }

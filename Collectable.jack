@@ -30,32 +30,6 @@ class Collectable
     
     method void setIsAvailable(int b) { let IsAvailable = b; return; }
 
-    method void CheckTimers()
-	{
-       
-
-        //if (Difficulty.getCanPickUpHealth())
-        //{
-        //    if (IsAvailable)
-        //    {
-        //        if (Constants.IsInScreen(X, Y))
-        //        {
-        //            do Draw(true);
-        //        }
-        //    }
-        //}
-        
-
-		return;
-	}
-
-	method void DecrementTimers()
-	{
-        
-
-		return;
-	}
-
     method int CheckCollisionWithCharacter(int cx, int cy, int cw, int ch)
     {
         if (IsAvailable)

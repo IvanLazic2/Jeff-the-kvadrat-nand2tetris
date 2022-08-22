@@ -34,7 +34,10 @@ class Constants
 
         if (Constants.IsInScreenY(y))
         {
-            let result = div16lookup[y];
+            if (Constants.IsInScreenY(y))
+            {
+                let result = div16lookup[y];
+            }
         }
         
         return result; 
@@ -51,6 +54,6 @@ class Constants
     function int getMemAddress(int x, int y) { return screenStart + Constants.getLocation(x, y); }
 
     function int IsInScreenX(int x) { return (-1 < x) & (x < 32); }
-    function int IsInScreenY(int y) { return (-16 < y) & (y < 256); }
+    function int IsInScreenY(int y) { return (-1 < y) & (y < 256); }
     function int IsInScreen(int x, int y) { return Constants.IsInScreenX(x) & Constants.IsInScreenY(y); }
 }

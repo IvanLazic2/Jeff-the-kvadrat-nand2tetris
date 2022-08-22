@@ -1,0 +1,100 @@
+class Shooter
+{
+	static int Width;
+	static int Height;
+	static int AnimationFramesCount;
+	static int SpecialFramesCount;
+	static int TotalFramesCount;
+	static bool stopAnimation;
+	static int currFrame;
+	static int animationTimer;
+	static int animationDelay;
+	static int specialFrameTimer;
+	static Array Frames;
+	static int FrameSize;
+	static Array Frame1;
+	function void init()
+	{
+///////////////// CONFIG /////////////////
+//////////////////////////////////////////
+		let Width = 1;
+		let Height = 2;
+		let AnimationFramesCount = 1;
+		let SpecialFramesCount = 0;
+		let TotalFramesCount = 1;
+		let FrameSize = Width * Height * 16;
+		let Frames = Array.new(TotalFramesCount);
+		let Frame1 = Array.new(Width * Height * 16);
+		let Frame1[1] = ~32767;
+		let Frame1[2] = -16360;
+		let Frame1[3] = 24624;
+		let Frame1[4] = 8288;
+		let Frame1[5] = 16192;
+		let Frame1[6] = 6592;
+		let Frame1[7] = 12384;
+		let Frame1[8] = 24608;
+		let Frame1[9] = 16432;
+		let Frame1[10] = 16400;
+		let Frame1[11] = 16400;
+		let Frame1[12] = 16400;
+		let Frame1[13] = 16432;
+		let Frame1[14] = 16416;
+		let Frame1[15] = 24608;
+		let Frame1[16] = 8288;
+		let Frame1[17] = 8256;
+		let Frame1[18] = 12528;
+		let Frame1[19] = 6288;
+		let Frame1[20] = 3472;
+		let Frame1[21] = 1820;
+		let Frame1[22] = 8079;
+		let Frame1[23] = 4303;
+		let Frame1[24] = 12352;
+		let Frame1[25] = 12352;
+		let Frame1[26] = 4224;
+		let Frame1[27] = 8064;
+		let Frames[0] = Frame1;
+		return;
+	}
+	function int getWidth() { return Width; }
+	function int getHeight() { return Height; }
+	function void CheckTimers()
+	{
+		if (animationTimer < 1)
+		{
+			do Shooter.ChangeFrame();
+			let animationTimer = animationDelay;
+		}
+		if (specialFrameTimer < 1)
+		{
+			let stopAnimation = false;
+			let specialFrameTimer = 0;
+		}
+		return;
+	}
+	function void DecrementTimers()
+	{
+		let animationTimer = animationTimer - 1;
+		let specialFrameTimer = specialFrameTimer - 1;
+		return;
+	}
+	function void ChangeFrame()
+	{
+		if (~(stopAnimation | (AnimationFramesCount = 0)))
+		{
+			if (currFrame < (AnimationFramesCount - 1))
+			{
+				let currFrame = currFrame + 1;
+			}
+			else
+			{
+				let currFrame = 0;
+			}
+		}
+		return;
+	}
+	function void DrawFrame(int memAddress, bool display, int x, int y)
+	{
+		do Sprite.Draw(memAddress, Frames[currFrame], FrameSize, Width, Height, display, x, y);
+		return;
+	}
+}

@@ -7,14 +7,18 @@ class Main
         do Constants.init();
         do Collision.init();
         
+        do Platform.init();
+        do Obstacle.init();
+
         do Jeff.init();
+        do InsaneJeff.init();
         do FinishFlag.init();
         
-        //do Spider.init();
+        do Spider.init();
         do EvilJeffMelee.init();
         do EvilJeffRanged.init();
-        //do Bat.init();
-        //do Shooter.init();
+        do Bat.init();
+        do Shooter.init();
 
         do SimpleBullet.init();
 
@@ -22,6 +26,7 @@ class Main
         do Coin.init();
         do Ammo.init();
         
+        do Game.init();
         let game = Game.new();
         do game.start();
 
