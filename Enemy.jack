@@ -178,6 +178,8 @@ class Enemy
 		let hasPlatformAboveDelay = 5;
 		let hasPlatformAboveTimer = hasPlatformAboveDelay;
 
+		do Draw(memAddress, true, false);
+
 		let lastLocation = location;
 
 

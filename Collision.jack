@@ -279,15 +279,9 @@ class Collision
 
         
         let colx = (bx < (ex + ew)) & ((bx + 1) > ex);
+        let coly = ((by + 15) > (ey - eh + 15)) & (by < (ey + 15));
 
-        //do Output.printInt(colx);
-
-
-
-        let coly = (by > (ey - eh + 15)) & (by < (ey + 16));
-
-        //return Collision.IsEntityCollidedWithEntitySides(bx, by, 1, 16, ex, ey, ew, eh);
-        return colx & coly ;
+        return colx & coly;
     }
 
 

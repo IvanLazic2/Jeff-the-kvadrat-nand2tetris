@@ -162,13 +162,14 @@ class Game
 
             do CheckEnemyAndCharacterCollision();
 
-            do CheckAllBullets();
-
+            do RefreshBullets();
+            
             if (~(BulletsCount = 0))
             {
+                do CheckAllBullets();
                 do CheckAllBulletCollisions();
             }
-
+            
             do CheckCollectableAndCharacterCollision();
 
             do CheckTimers();
@@ -383,11 +384,13 @@ class Game
         var int count;
         var Enemy enemy;
 
-        let count = Character.getAvailableBulletsCount();
+        let count = Character.getBulletsCount();
+        
 
         while (i < EnemiesCount)
         {
             let enemy = Enemies[i];
+            
             let count = count + enemy.getBulletsCount();
             let i = i + 1;
         }
@@ -401,7 +404,13 @@ class Game
     {
         if (Character.getShoudlRefreshGameBullets())
         {
+            if (~(BulletsCount = 0))
+            {
+                do Bullets.dispose();
+            }
+
             do GetBulletsCount();
+            
             if (~(BulletsCount = 0))
             {
                 do GetBullets();
@@ -419,6 +428,8 @@ class Game
         var Array bullets;
         var Enemy enemy;
         var int arrSize;
+
+        let Bullets = Array.new(BulletsCount);
 
         let bullets = Character.getBullets();
 
@@ -512,7 +523,7 @@ class Game
         
 
         let WorldOffset = WorldOffset + 1;
-        do Character.increment_absolute_x(1);
+        do Character.incrementAbsoluteX(1);
 
         let i = 0;
         while (i < EnemiesCount)
@@ -580,7 +591,7 @@ class Game
         var Collectable collectable;
 
         let WorldOffset = WorldOffset - 1;
-        do Character.increment_absolute_x(-1);
+        do Character.incrementAbsoluteX(-1);
 
         let i = 0;
         while (i < EnemiesCount)
@@ -641,21 +652,21 @@ class Game
     method void Move()
     {
         var int x;
-        var int abs_x;
+        var int absX;
         
-        let x = Character.get_x();
-        let abs_x = Character.get_absolute_x();
+        let x = Character.getX();
+        let absX = Character.getAbsoluteX();
 
         do Character.CheckGravity(WorldOffset);
         do Character.CheckCollisionWithObstacles();
 
         if (Direction = 1) 
         {
-            do Character.set_draw_character_left(true);
+            do Character.setMovingLeft(true);
 
             if (~Character.CheckCollisionWithPlatformLeft(WorldOffset))
             {
-                if (abs_x - ScreenMiddle + MoveAreaWidth > 0)
+                if (absX - ScreenMiddle + MoveAreaWidth > 0)
                 {
                     if (x > LeftBorder)
                     {
@@ -674,11 +685,11 @@ class Game
         }
         if (Direction = 2)
         {
-            do Character.set_draw_character_left(false);
+            do Character.setMovingLeft(false);
 
             if (~Character.CheckCollisionWithPlatformRight(WorldOffset))
             {
-                if (abs_x + ScreenMiddle - MoveAreaWidth < mapWidth)
+                if (absX + ScreenMiddle - MoveAreaWidth < mapWidth)
                 {
                     if (x < RightBorder)
                     {   

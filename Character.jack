@@ -79,70 +79,29 @@ class Character
         return this;
     }
 
-    method int get_x() { return X; }
-
-    method int get_y() { return Y; }
-
+    method int getX() { return X; }
+    method int getY() { return Y; }
     method int getWidth() { return Width; }
     method int getHeight() { return Height; }
-
-    method int get_absolute_x() { return absoluteX; }
-
+    method int getAbsoluteX() { return absoluteX; }
     method bool getShouldRedrawObstacles(){ return shouldRedrawObstacles; }
-
     method Array getBullets() { return Bullets; }
-
     method int getBulletsCount() { return BulletsCount; }
     method int getAvailableBulletsCount() { return AvailableBulletsCount; }
-
     method int getHealth() { return health; }
     method int getCoins() { return coins; }
-
     method bool getShoudlRefreshGameBullets() { return shoudlRefreshGameBullets;}
     method void setShoudlRefreshGameBullets(int b) { let shoudlRefreshGameBullets = b; return;}
 
+    method void setShouldRedrawObstacles(bool s) { let shouldRedrawObstacles = s; return; }
+    method void setMovingLeft(bool b) { let movingLeft = b; return; }
+
+    method void incrementAbsoluteX(int inc) { let absoluteX = absoluteX + inc; return; }
     method void addCoin() { let coins = coins + 1; return; }
     method void addLife() { let health = health + 1; return; }
 
-    method void set_x(int x2)
-    {
-        let X = x2;
-        return;
-    }
 
-    method void set_y(int y2)
-    {
-        let Y = y2;
-        return;
-    }
-
-    method void set_absolute_x(int abs_x)
-    {
-        let absoluteX = abs_x;
-        return;
-    }
-
-    method void setShouldRedrawObstacles(bool s)
-    {
-        let shouldRedrawObstacles = s;
-        return;
-    }
-
-    method void increment_absolute_x(int inc)
-    {
-        let absoluteX = absoluteX + inc;
-        return;
-    }
-
-    method void set_draw_character_left(bool b)
-    {
-        let movingLeft = b;
-        return;
-    }
-
-
-
-    
+    //// TIMERS
     method void CheckTimers()
 	{
         if (bulletTimer < 1)
@@ -162,8 +121,7 @@ class Character
 	}
     
 
-
-
+    //// CHECKS
     method void DoEnemyAction(Enemy enemy, Array map, int mapWidth, int mapHeight, int worldOffset)
     {
         do enemy.DoActions(worldOffset, X, Y);
@@ -264,8 +222,6 @@ class Character
 
         return;
     }
-
-
 
     method void RedrawPlatforms(int worldOffset)
     {
