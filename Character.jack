@@ -116,6 +116,7 @@ class Character
     method void setMovingLeft(bool b) { let movingLeft = b; return; }
 
     method void incrementAbsoluteX(int inc) { let absoluteX = absoluteX + inc; return; }
+    method void setCoins(int c) { let coins = c; return; }
     method void addCoin() 
     {
         let coins = coins + 1; 
@@ -695,8 +696,8 @@ class Character
         var int i;
         var Bullet bullet;
         
-        do Output.moveCursor(15, 0);
-        do Output.printInt(BulletsCount);
+        //do Output.moveCursor(15, 0);
+        //do Output.printInt(BulletsCount);
 
         while (i < BulletsCount)
         {   
