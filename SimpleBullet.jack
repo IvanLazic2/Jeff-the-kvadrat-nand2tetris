@@ -29,12 +29,12 @@ class SimpleBullet
 		let FramesMirrored = Array.new(TotalFramesCount);
 		let Frame1 = Array.new(Width * Height * 16);
 		let Frame1Mirrored = Array.new(Width * Height * 16);
-		let Frame1[7] = -8192;
-		let Frame1[8] = -8192;
-		let Frame1[9] = -8192;
-		let Frame1Mirrored[7] = 7;
-		let Frame1Mirrored[8] = 7;
-		let Frame1Mirrored[9] = 7;
+		let Frame1[7] = 30720;
+		let Frame1[8] = -30720;
+		let Frame1[9] = 30720;
+		let Frame1Mirrored[7] = 30;
+		let Frame1Mirrored[8] = 17;
+		let Frame1Mirrored[9] = 30;
 		let Frames[0] = Frame1;
 		let FramesMirrored[0] = Frame1Mirrored;
 		return;

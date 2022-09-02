@@ -131,7 +131,15 @@ class Enemy
 			let IsFollowing = true;
 			let IsFlying = true;
 			let DiesOnSquish = true;
-		}}}}
+		}
+		else {if (Type = 4)
+		{
+			let Width = Shooter.getWidth();
+			let Height = Shooter.getHeight();
+
+			let IsShooting = true;
+			let DiesOnSquish = true;
+		}}}}}
 
 		if (IsShooting)
 		{
@@ -163,6 +171,8 @@ class Enemy
 
 		let hasPlatformAboveDelay = 5;
 		let hasPlatformAboveTimer = hasPlatformAboveDelay;
+
+		let movingLeft = true;
 
 		do Draw();
 
@@ -216,10 +226,6 @@ class Enemy
             let canShoot = true;
             let bulletTimer = bulletDelay;
         }
-		
-
-		// CHECK TIMERS ZA SVE VRSTRE ENEMYJA - ZASAD NE (za animacije)
-
 
 		return;
 	}
@@ -293,18 +299,17 @@ class Enemy
 			{
 				do Ranged(worldOffset, characterX, characterY);
 			}
-			//if (IsShooting)
-			//{
-			//	do Shoot(worldOffset);
-			//}
 			if (IsStationary)
 			{
-				//do Clear();
 				do Draw();
 			}
 			if (IsFollowing & IsFlying)
 			{
 				do FollowFlying(worldOffset, characterX, characterY);
+			}
+			if (IsShooting & ~IsRanged)
+			{
+				do ShooterAction(worldOffset, characterX);
 			}
 
 		}
@@ -312,12 +317,32 @@ class Enemy
 		return;
 	}
 
+	method void ShooterAction(int worldOffset, int characterX)
+	{
+		if (Constants.IsInScreenX(X))
+		{
+			if ((characterX - X) < 0)
+			{
+				if (~movingLeft)
+				{
+					let movingLeft = true;
+					do ForceDraw();
+				}
+			}
+			else
+			{
+				if (movingLeft)
+				{
+					let movingLeft = false;
+					do ForceDraw();
+				}
+			}	
 
+			do Shoot(worldOffset);
+		}
 
-
-
-
-
+		return;
+	}
 
 	method void Shoot(int worldOffset)
     {
@@ -332,7 +357,15 @@ class Enemy
         {
             let bulletX = X + Width;
         }
-        let bulletY = Y - Constants.getBlockHeight();
+
+		if (Type = 4)
+		{
+			let bulletY = Y - 10;
+		}
+		else
+		{
+			let bulletY = Y - Constants.getBlockHeight();
+		}
 
         if (canShoot)
         {
@@ -551,6 +584,8 @@ class Enemy
 				do MoveDown();
 			}
 		}
+
+		do ForceDraw();
 
 		return;
 
@@ -790,7 +825,11 @@ class Enemy
 		else { if (Type = 3)
 		{
 			do Bat.DrawFrame(memAddress, display, movingLeft, X, Y);
-		}}}}
+		}
+		else { if (Type = 4)
+		{
+			do Shooter.DrawFrame(memAddress, display, movingLeft, X, Y);
+		}}}}}
 		
 		return;
     }

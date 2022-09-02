@@ -17,19 +17,17 @@ class Level1
 	{
 		var int i;
 		let character = Character.new(2, 200, false);
-		let finish = Finish.new(58, 224);
-		let PlatformsCount = 5;
+		let finish = Finish.new(127, 224);
+		let PlatformsCount = 3;
 		let ObstaclesCount = 0;
 		let EnemiesCount = 1;
 		let CollectablesCount = 0;
-		let Platforms = Array.new(5);
-		let Platforms[0] = Platform.new(17, 176, 0, 5);
-		let Platforms[1] = Platform.new(8, 192, 0, 6);
-		let Platforms[2] = Platform.new(30, 224, 0, 1);
-		let Platforms[3] = Platform.new(50, 224, 0, 1);
-		let Platforms[4] = Platform.new(0, 240, 0, 67);
+		let Platforms = Array.new(3);
+		let Platforms[0] = Platform.new(12, 224, 0, 1);
+		let Platforms[1] = Platform.new(27, 224, 0, 1);
+		let Platforms[2] = Platform.new(0, 240, 0, 46);
 		let Enemies = Array.new(1);
-		let Enemies[0] = Enemy.new(36, 224, 0);
+		let Enemies[0] = Enemy.new(16, 224, 0);
 		let MapWidth = 128;
 		let MapHeight = 16;
 		let Map = Array.new(MapWidth * MapHeight);
@@ -46,40 +44,30 @@ class Level1
 		let Map[95] = 1;
 		let Map[111] = 1;
 		let Map[127] = 1;
-		let Map[140] = 1;
 		let Map[143] = 1;
-		let Map[156] = 1;
 		let Map[159] = 1;
-		let Map[172] = 1;
 		let Map[175] = 1;
-		let Map[188] = 1;
 		let Map[191] = 1;
-		let Map[204] = 1;
+		let Map[206] = 1;
 		let Map[207] = 1;
-		let Map[220] = 1;
 		let Map[223] = 1;
 		let Map[239] = 1;
 		let Map[255] = 1;
 		let Map[271] = 1;
-		let Map[283] = 1;
 		let Map[287] = 1;
-		let Map[299] = 1;
 		let Map[303] = 1;
-		let Map[315] = 1;
 		let Map[319] = 1;
-		let Map[331] = 1;
 		let Map[335] = 1;
-		let Map[347] = 1;
 		let Map[351] = 1;
 		let Map[367] = 1;
 		let Map[383] = 1;
 		let Map[399] = 1;
 		let Map[415] = 1;
 		let Map[431] = 1;
+		let Map[446] = 1;
 		let Map[447] = 1;
 		let Map[463] = 1;
 		let Map[479] = 1;
-		let Map[494] = 1;
 		let Map[495] = 1;
 		let Map[511] = 1;
 		let Map[527] = 1;
@@ -96,28 +84,6 @@ class Level1
 		let Map[703] = 1;
 		let Map[719] = 1;
 		let Map[735] = 1;
-		let Map[751] = 1;
-		let Map[767] = 1;
-		let Map[783] = 1;
-		let Map[799] = 1;
-		let Map[814] = 1;
-		let Map[815] = 1;
-		let Map[831] = 1;
-		let Map[847] = 1;
-		let Map[863] = 1;
-		let Map[879] = 1;
-		let Map[895] = 1;
-		let Map[911] = 1;
-		let Map[927] = 1;
-		let Map[943] = 1;
-		let Map[959] = 1;
-		let Map[975] = 1;
-		let Map[991] = 1;
-		let Map[1007] = 1;
-		let Map[1023] = 1;
-		let Map[1039] = 1;
-		let Map[1055] = 1;
-		let Map[1071] = 1;
 		return this;
 	}
 	method int getPlatformsCount() { return PlatformsCount; }
@@ -199,19 +165,16 @@ class Level1
 			do Collectables.dispose();
 		}
 		let Collectables = 0;
-
 		let i = 0;
 		while (i < (MapWidth * MapHeight))
 		{
 			let Map[i] = 0;
 			let i = i + 1;
 		}
-
 		do Map.dispose();
 		let Map = 0;
 		let MapWidth = 0;
 		let MapHeight = 0;
-		
 		do Memory.deAlloc(this);
 		return;
 	}

@@ -39,7 +39,7 @@ class Difficulty
             let canPickUpHealth = true;
 
             let spiderMovementDelay = 4;
-            let batMovementDelay = 15;
+            let batMovementDelay = 10;
             let enemyBulletDelay = 20;
             let enemyFollowDelay = 25;
         }
@@ -58,7 +58,7 @@ class Difficulty
             let ammoCount = 3;
 
             let spiderMovementDelay = 3;
-            let batMovementDelay = 15;
+            let batMovementDelay = 10;
             let enemyBulletDelay = 15;
             let enemyFollowDelay = 25;
         }
@@ -77,7 +77,7 @@ class Difficulty
             let ammoCount = 1;
             
             let spiderMovementDelay = 2;
-            let batMovementDelay = 15;
+            let batMovementDelay = 5;
             let enemyBulletDelay = 10;
             let enemyFollowDelay = 10;
         }
@@ -90,7 +90,7 @@ class Difficulty
             let characterHealthLimit = 1;
 
             let spiderMovementDelay = 1;
-            let batMovementDelay = 15;
+            let batMovementDelay = 3;
             let enemyBulletDelay = 7;
             let enemyFollowDelay = 7;
         }}}}

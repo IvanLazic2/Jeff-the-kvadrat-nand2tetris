@@ -863,7 +863,7 @@ class Game
 
         do Character.CheckTimers();
         do CheckAllEnemyTimers();
-        do CheckAllCollectableTimers();
+        do CheckAllSpriteTimers();
         
         return;
     }
@@ -875,7 +875,7 @@ class Game
 
         do Character.DecrementTimers();
         do DecrementAllEnemyTimers();
-        do DecrementAllCollectableTimers();
+        do DecrementAllSpriteTimers();
 
         return;
     }
@@ -912,10 +912,9 @@ class Game
     }
 
     //// COLLECRTABLE TIMERS
-    method void CheckAllCollectableTimers()
+    method void CheckAllSpriteTimers()
     {
-        var Collectable collectable;
-        var int i;
+        do Bat.CheckTimers();
 
         do Heart.CheckTimers();
         do Coin.CheckTimers();
@@ -925,10 +924,9 @@ class Game
         return;
     }
 
-    method void DecrementAllCollectableTimers()
+    method void DecrementAllSpriteTimers()
     {
-        var Collectable collectable;
-        var int i;
+        do Bat.DecrementTimers();
 
         do Heart.DecrementTimers();
         do Coin.DecrementTimers();
