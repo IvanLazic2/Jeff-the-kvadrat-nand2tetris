@@ -16,7 +16,7 @@ class Level1
 	constructor Level1 new()
 	{
 		var int i;
-		let character = Character.new(2, 200);
+		let character = Character.new(2, 200, false);
 		let finish = Finish.new(58, 224);
 		let PlatformsCount = 5;
 		let ObstaclesCount = 0;
@@ -141,52 +141,78 @@ class Level1
 		var Enemy enemy;
 		var Collectable collectable;
 		do character.dispose();
+		let character = 0;
 		do finish.dispose();
+		let finish = 0;
 		while (i < PlatformsCount)
 		{
 			let platform = Platforms[i];
 			do platform.dispose();
+			let platform = 0;
 			let i = i + 1;
 		}
+		let PlatformsCount = 0;
 		let i = 0;
 		while (i < ObstaclesCount)
 		{
 			let obstacle = Obstacles[i];
 			do obstacle.dispose();
+			let obstacle = 0;
 			let i = i + 1;
 		}
+		let ObstaclesCount = 0;
 		let i = 0;
 		while (i < EnemiesCount)
 		{
 			let enemy = Enemies[i];
 			do enemy.dispose();
+			let enemy = 0;
 			let i = i + 1;
 		}
+		let EnemiesCount = 0;
 		let i = 0;
 		while (i < CollectablesCount)
 		{
 			let collectable = Collectables[i];
 			do collectable.dispose();
+			let collectable = 0;
 			let i = i + 1;
 		}
+		let CollectablesCount = 0;
 		if (~(PlatformsCount = 0))
 		{
 			do Platforms.dispose();
 		}
+		let Platforms = 0;
 		if (~(ObstaclesCount = 0))
 		{
 			do Obstacles.dispose();
 		}
+		let Obstacles = 0;
 		if (~(EnemiesCount = 0))
 		{
 			do Enemies.dispose();
 		}
+		let Enemies = 0;
 		if (~(CollectablesCount = 0))
 		{
 			do Collectables.dispose();
 		}
+		let Collectables = 0;
+
+		let i = 0;
+		while (i < (MapWidth * MapHeight))
+		{
+			let Map[i] = 0;
+			let i = i + 1;
+		}
+
 		do Map.dispose();
+		let Map = 0;
+		let MapWidth = 0;
+		let MapHeight = 0;
+		
 		do Memory.deAlloc(this);
-	return;
+		return;
 	}
 }

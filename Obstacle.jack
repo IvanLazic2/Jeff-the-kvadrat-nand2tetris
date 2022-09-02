@@ -23,6 +23,8 @@ class Obstacle
 
     constructor Obstacle new(int x2, int y2, int type2, int height2, int size2)
     {
+		do resetObject();
+
 		let X = x2;
 		let Y = y2;
 		let Type = type2;
@@ -561,8 +563,22 @@ class Obstacle
 		return;
 	}
 
+	method void resetObject()
+	{
+		let X = 0;
+		let Y = 0;
+		let Type = 0;
+		let Height = 0;
+		let heightInBlocks = 0;
+		let Size = 0;
+		let memAddress = 0;
+		return;
+	}
+
 	method void dispose()
     {
+		do resetObject();
+
         do Memory.deAlloc(this);
         return;
     }

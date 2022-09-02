@@ -10,6 +10,8 @@ class Finish
 
     constructor Finish new(int x, int y)
     {
+        do resetObject();
+
         let X = x;
         let Y = y;
         let Width = FinishFlag.getWidth();
@@ -17,7 +19,7 @@ class Finish
 
         let memAddress = Constants.getMemAddress(X, Y);
 
-        do Draw(memAddress, true);
+        do Draw(true);
 
         let lastMemAddress = memAddress;
 
@@ -42,7 +44,7 @@ class Finish
         let X = X + 1;
         let lastMemAddress = memAddress;
         let memAddress = memAddress + 1;
-        do Draw(memAddress, true);
+        do Draw(true);
 
         return;
     }
@@ -53,7 +55,7 @@ class Finish
         let X = X - 1;
         let lastMemAddress = memAddress;
         let memAddress = memAddress - 1;
-        do Draw(memAddress, true);
+        do Draw(true);
 
         return;
     }
@@ -62,11 +64,11 @@ class Finish
 
     method void Clear()
     {
-        do Draw(memAddress, false);
+        do Draw(false);
         return;
     }
 
-    method void Draw(int m, bool display)
+    method void Draw(bool display)
     {
         if (~(memAddress = lastMemAddress))
         {
@@ -76,8 +78,21 @@ class Finish
         return;
     }
 
-    method void dispose()
+    method void resetObject()
     {
+        let X = 0;
+        let Y = 0;
+        let Width = 0;
+        let Height = 0;
+        let memAddress = 0;
+        let lastMemAddress = 0;
+        return;
+    }
+
+    method void dispose()
+    {   
+        do resetObject();
+
         do Memory.deAlloc(this);
         return;
     }

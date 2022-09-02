@@ -32,6 +32,8 @@ class Platform
 	
     constructor Platform new(int x, int y, int type, int size)
     {
+		do resetObject();
+
         let X = x;
         let Y = y;
 
@@ -305,8 +307,20 @@ class Platform
 		return;
 	}
 
+	method void resetObject()
+	{
+		let X = 0;
+    	let Y = 0;
+    	let Size = 0;
+		let Type = 0;
+    	let memAddress = 0;
+		return;
+	}
+
 	method void dispose()
     {
+		do resetObject();
+
         do Memory.deAlloc(this);
         return;
     }

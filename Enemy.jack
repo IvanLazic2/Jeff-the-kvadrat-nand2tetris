@@ -64,6 +64,8 @@ class Enemy
     {	
 		var int i;
 
+		do resetObject();
+
 		let X = x;
 		let Y = y;
 		let Type = type;
@@ -121,6 +123,9 @@ class Enemy
 			let Height = Bat.getHeight();
 
 			let movementDelay = Difficulty.getBatMovementDelay();
+
+			let IsShooting = false;
+			let IsRanged = false;
 
 			//let IsStationary = true;
 			let IsFollowing = true;
@@ -368,6 +373,51 @@ class Enemy
 
         return;
     }
+
+	method void DrawAllBullets()
+    {
+        var int i;
+        var Bullet bullet;
+
+        while (i < BulletsCount)
+        {
+            let bullet = Bullets[i];
+            do bullet.Draw();
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+	method void ScrollBulletsLeft()
+	{
+		var int i;
+        var Bullet bullet;
+
+        while (i < BulletsCount)
+        {
+            let bullet = Bullets[i];
+            do bullet.ScrollLeft();
+            let i = i + 1;
+        }
+
+        return;
+	}
+
+	method void ScrollBulletsRight()
+	{
+		var int i;
+        var Bullet bullet;
+
+        while (i < BulletsCount)
+        {
+            let bullet = Bullets[i];
+            do bullet.ScrollRight();
+            let i = i + 1;
+        }
+
+        return;
+	}
 
 
 	//// MOVEMENT
@@ -745,6 +795,51 @@ class Enemy
 		return;
     }
 
+	method void resetObject()
+	{
+		let X = 0;
+		let Y = 0;
+		let Width = 0;
+		let Height = 0;
+		let Type = 0;
+		let heightInPixels = 0;
+		let memAddress = 0;
+		let lastMemAddress = 0;
+		let gravity = 0;
+		let canJump = 0;
+		let forceY = 0;
+		let jumpHeight = 0;
+		let movementDelay = 0;
+		let movementTimer = 0;
+		let canMoveLeftRight = 0;
+		let canMoveUpDown = 0;
+		let movingLeft = 0;
+		let IsRoaming = 0;
+    	let IsFlying = 0;
+    	let IsGravityAffected = 0;
+    	let IsMelee = 0;
+		let IsRanged = 0;
+    	let IsShooting = 0;
+    	let DiesOnSquish = 0;
+		let IsFollowing = 0;
+		let IsStationary = 0;
+		let IsAlive = 0;
+		let Bullets = 0;
+    	let BulletsCount = 0;
+    	let currBulletIndex = 0;
+    	let currBullet = 0;
+    	let bulletTimer = 0;
+    	let bulletDelay = 0;
+    	let canShoot = 0;
+		let hasPlatformAbove = 0;
+		let hasPlatformAboveTimer = 0;
+		let hasPlatformAboveDelay = 0;
+		let followTimer = 0;
+		let lastCX = 0;
+		let lastCY = 0;
+		return;
+	}
+
 	method void dispose()
     {
         var int i;
@@ -754,6 +849,7 @@ class Enemy
         {   
             let bullet = Bullets[i];
             do bullet.dispose();
+			let bullet = 0;
 			let i = i + 1;
         }
 
@@ -762,6 +858,7 @@ class Enemy
 			do Bullets.dispose();
 		}
 
+		do resetObject();
 
         do Memory.deAlloc(this);
 

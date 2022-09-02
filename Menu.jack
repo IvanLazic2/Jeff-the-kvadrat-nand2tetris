@@ -1,0 +1,278 @@
+class Menu
+{
+    field int X;
+    field int Y;
+    field int Width;
+    field int Height;
+    field int ItemsCount;
+
+    field Array Items;
+
+    field int lastItemIndex;
+
+    field int selectedItemIndex;
+
+    field int cursorX;
+    field int cursorY;
+
+    field int selectionTimer;
+    field int selectionDelay;
+
+    field bool canSelect;
+
+    field int itemSpacing;
+
+    field bool CheckMainMenuAnimation;
+
+    
+
+    constructor Menu new(int x, int y, int width, int height, int itemsCount, bool checkMainMenuAnimation)
+    {
+        let X = x;
+        let Y = y;
+        let Width = width;
+        let Height = height;
+        let ItemsCount = itemsCount;
+        let CheckMainMenuAnimation = checkMainMenuAnimation;
+
+        let lastItemIndex = 0;
+        let selectedItemIndex = 0;
+        let Items = Array.new(ItemsCount);
+
+        let selectionDelay = 10;
+        let selectionTimer = selectionDelay;
+
+        let itemSpacing = 2;
+
+        return this;
+    }
+
+    method void AddItem(String item)
+    {
+        if (lastItemIndex < ItemsCount)
+        {   
+            
+            let Items[lastItemIndex] = item;
+            let lastItemIndex = lastItemIndex + 1;
+        }
+
+        
+        
+        return;
+    }
+
+    method int Show()
+    {
+        var char key;
+        var bool exit;
+        var int result;
+
+        let exit = false;
+        let selectedItemIndex = 0;
+
+        do Draw();
+
+        while (~exit)
+        {
+            if (CheckMainMenuAnimation)
+            {
+                do Game.CheckMainMenuAnimation();
+            }
+
+            if (selectionTimer < 0)
+            {
+                let canSelect = true;
+                let selectionTimer = selectionDelay;
+            }
+            else
+            {
+                let selectionTimer = selectionTimer - 1;
+            }
+
+            let key = Keyboard.keyPressed();
+
+            if (key = 133)
+            {
+                do SelectDown();
+            }
+            else { if (key = 131)
+            {
+                do SelectUp();
+            }
+            else { if (key = 128) 
+            {
+                let result = selectedItemIndex;
+                do Clear();
+                let exit = true;
+            }}}
+        }
+            
+
+        return result;
+    }
+
+    method void SelectUp()
+    {
+        if (canSelect)
+        {
+            if (selectedItemIndex > 0)
+            {
+                let selectedItemIndex = selectedItemIndex - 1;
+                do Draw();
+            }
+
+            let canSelect = false;
+        }
+
+        return;
+    }
+
+    method void SelectDown()
+    {
+        if (canSelect)
+        {
+            if (selectedItemIndex < (lastItemIndex - 1))
+            {
+                let selectedItemIndex = selectedItemIndex + 1;
+                do Draw();
+            }
+
+            let canSelect = false;
+        }
+
+        return;
+    }
+
+    method void Clear()
+    {
+        var int i;
+        var int j;
+        var int address;
+
+        let address = ((Y + 1) * 32 * 11) + (X / 2) + 32;
+        let i = address;
+        //while (i < (((cursorY - itemSpacing) * 32 * 11) + (cursorX / 2) + (24 * 32) - 2))
+        while (i < (((Y + 1 + (ItemsCount * itemSpacing)) * 32 * 11) + (X / 2) + (8 * 32) - 2 + (5 * 32)))
+        {
+            let j = 0;
+            while (j < Width)
+            {
+                do Memory.poke(Constants.getScreenStart() + i + j, 0);
+                let j = j + 1;
+            }
+        
+            let i = i + 32;
+        }
+
+        return;
+    }
+
+    method void Draw()
+    {
+        var int i;
+        var int address;
+
+        //while (i < 8192)
+        //{
+        //    do Memory.poke(Constants.getScreenStart() + i, -1);
+        //    let i = i + 1;
+        //}
+
+        let cursorX = X + 4;
+        let cursorY = Y + 2;
+
+        do Clear();
+
+        do DrawElems();
+
+        return;
+    }
+
+    method void DrawElems()
+    {
+        var int i;
+        var int address;
+        var int heightInPixels;
+
+        let cursorX = X + 4;
+        let cursorY = Y + 2;
+        do Output.moveCursor(cursorY, cursorX);
+
+        let i = 0;
+        while (i < ItemsCount)
+        {
+            let address = (cursorY * 32 * 11) + (cursorX / 2) + 64 - 1;
+            do Output.printString(Items[i]);
+            let cursorY = cursorY + itemSpacing;
+
+            if (i < (ItemsCount - 1))
+            {
+                do Output.moveCursor(cursorY, cursorX);
+            }
+            
+            if (i = selectedItemIndex)
+            {
+                do Memory.poke(Constants.getScreenStart() + address, 4096);
+                do Memory.poke(Constants.getScreenStart() + address + 32, 12288);
+                do Memory.poke(Constants.getScreenStart() + address + 64, 28672);
+                do Memory.poke(Constants.getScreenStart() + address + 96, -1);
+                do Memory.poke(Constants.getScreenStart() + address + 128, -1);
+                do Memory.poke(Constants.getScreenStart() + address + 160, 28672);
+                do Memory.poke(Constants.getScreenStart() + address + 192, 12288);
+                do Memory.poke(Constants.getScreenStart() + address + 224, 4096);
+            }
+
+            let i = i + 1;
+        }
+
+        let address = ((Y + 1) * 32 * 11) + (X / 2) + 32;
+        let i = address;
+        while (i < (((cursorY - itemSpacing) * 32 * 11) + (cursorX / 2) + (20 * 32) - 2))
+        {
+            
+            do Memory.poke(Constants.getScreenStart() + i, 15);
+            do Memory.poke(Constants.getScreenStart() + i + Width - 1, -2048);
+
+            let i = i + 32;
+        }
+
+        let i = 0;
+        while (i < Width)
+        {
+            let address = (Y * 32 * 11) + (X / 2);
+            do Memory.poke(Constants.getScreenStart() + address + 384 + i, -1);
+            do Memory.poke(Constants.getScreenStart() + address + 416 + i, -1);
+            do Memory.poke(Constants.getScreenStart() + address + 448 + i, -1);
+            do Memory.poke(Constants.getScreenStart() + address + 480 + i, -1);
+
+            let address = ((cursorY - itemSpacing) * 32 * 11) + (cursorX / 2) + (8 * 32) - 2;
+            do Memory.poke(Constants.getScreenStart() + address + 384 + i, -1);
+            do Memory.poke(Constants.getScreenStart() + address + 416 + i, -1);
+            do Memory.poke(Constants.getScreenStart() + address + 448 + i, -1);
+            do Memory.poke(Constants.getScreenStart() + address + 480 + i, -1);
+
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void dispose()
+    {
+        var int i;
+        var String item;
+
+        while (i < ItemsCount)
+        {
+            let item = Items[i];
+            do item.dispose();
+            let i = i + 1;
+        }
+
+        do Items.dispose();
+
+        do Memory.deAlloc(this);
+
+        return;
+    }
+}

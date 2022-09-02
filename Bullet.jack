@@ -17,6 +17,8 @@ class Bullet
 
     constructor Bullet new()
     {
+        do resetObject();
+
         let resetMemAddress = Constants.getMemAddress(X, Y);
         let X = -10;
         let Y = -10;
@@ -102,7 +104,8 @@ class Bullet
 
             let memAddress = Constants.getMemAddress(x, y);
 
-            do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+            //do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+            do Draw();
         }
 
         return;
@@ -147,6 +150,34 @@ class Bullet
     }
 
     //// MOVEMENT
+    method void ScrollRight()
+    {
+        if (~IsAvailable())
+        {
+            do Clear();
+            let memAddress = memAddress + 1;
+            let X = X + 1;
+            //do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+            do Draw();
+        }
+
+        return;
+    }
+
+    method void ScrollLeft()
+    {
+        if (~IsAvailable())
+        {
+            do Clear();
+            let memAddress = memAddress - 1;
+            let X = X - 1;
+            //do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+            do Draw();
+        }
+
+		return;
+    }
+
     method void MoveLeft()
     {
 		if (canMove)
@@ -156,7 +187,8 @@ class Bullet
             let memAddress = memAddress - 1;
         	let X = X - 1;
 			
-            do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+            //do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+            do Draw();
 
 			let canMove = false;
 		}
@@ -174,7 +206,8 @@ class Bullet
             let memAddress = memAddress + 1;
         	let X = X + 1;
 
-            do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+            //do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+            do Draw();
 
 			let canMove = false;
 		}
@@ -190,8 +223,34 @@ class Bullet
         return;
     }
 
+    method void Draw()
+    {
+        if (~IsAvailable())
+        {
+            do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+        }
+
+        return;
+    }
+
+    method void resetObject()
+    {
+        let X = 0;
+        let Y = 0;
+        let memAddress = 0;
+        let resetMemAddress = 0;
+        let movementTimer = 0;
+        let movementDelay = 0;
+        let canMove = 0;
+        let drawLeft = 0;
+        let isCollided = 0;
+        return;
+    }
+
     method void dispose()
     {
+        do resetObject();
+
         do Memory.deAlloc(this);
 
         return;

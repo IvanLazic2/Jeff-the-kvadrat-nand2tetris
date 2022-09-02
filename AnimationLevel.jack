@@ -1,0 +1,150 @@
+class AnimationLevel
+{
+	field Character character;
+	field Finish finish;
+	field int PlatformsCount;
+	field int ObstaclesCount;
+	field int EnemiesCount;
+	field int CollectablesCount;
+	field Array Platforms;
+	field Array Obstacles;
+	field Array Enemies;
+	field Array Collectables;
+	field Array Map;
+	field int MapWidth;
+	field int MapHeight;
+	constructor AnimationLevel new()
+	{
+		var int i;
+		let character = Character.new(2, 80, true);
+		let finish = Finish.new(127, 224);
+		let PlatformsCount = 9;
+		let ObstaclesCount = 0;
+		let EnemiesCount = 0;
+		let CollectablesCount = 0;
+		let Platforms = Array.new(9);
+		let Platforms[0] = Platform.new(43, 16, 6, 4);
+		let Platforms[1] = Platform.new(35, 32, 6, 5);
+		let Platforms[2] = Platform.new(58, 32, 7, 4);
+		let Platforms[3] = Platform.new(49, 48, 7, 5);
+		let Platforms[4] = Platform.new(75, 16, 8, 4);
+		let Platforms[5] = Platform.new(67, 48, 8, 5);
+		let Platforms[6] = Platform.new(81, 32, 9, 3);
+		let Platforms[7] = Platform.new(88, 48, 9, 4);
+		let Platforms[8] = Platform.new(94, 48, 9, 2);
+		let MapWidth = 128;
+		let MapHeight = 7;
+		let Map = Array.new(MapWidth * MapHeight);
+		while (i < (MapWidth * MapHeight))
+		{
+			let Map[i] = 0;
+			let i = i + 1;
+		}
+		let Map[247] = 7;
+		let Map[254] = 7;
+		let Map[261] = 7;
+		let Map[268] = 7;
+		let Map[275] = 7;
+		let Map[302] = 7;
+		let Map[309] = 7;
+		let Map[316] = 7;
+		let Map[323] = 7;
+		let Map[346] = 8;
+		let Map[353] = 8;
+		let Map[360] = 8;
+		let Map[367] = 8;
+		let Map[374] = 8;
+		let Map[408] = 8;
+		let Map[415] = 8;
+		let Map[422] = 8;
+		let Map[429] = 8;
+		let Map[472] = 9;
+		let Map[479] = 9;
+		let Map[486] = 9;
+		let Map[493] = 9;
+		let Map[500] = 9;
+		let Map[526] = 9;
+		let Map[533] = 9;
+		let Map[540] = 9;
+		let Map[547] = 9;
+		let Map[569] = 10;
+		let Map[576] = 10;
+		let Map[583] = 10;
+		let Map[619] = 10;
+		let Map[626] = 10;
+		let Map[633] = 10;
+		let Map[640] = 10;
+		let Map[661] = 10;
+		let Map[668] = 10;
+		return this;
+	}
+	method int getPlatformsCount() { return PlatformsCount; }
+	method int getObstaclesCount() { return ObstaclesCount; }
+	method int getEnemiesCount() { return EnemiesCount; }
+	method int getCollectablesCount() { return CollectablesCount; }
+	method Array getPlatforms() { return Platforms; }
+	method Array getObstacles() { return Obstacles; }
+	method Array getEnemies() { return Enemies; }
+	method Array getCollectables() { return Collectables; }
+	method Character getCharacter() { return character; }
+	method int getFinish() { return finish; }
+	method Array getMap() { return Map; }
+	method int getMapWidth() { return MapWidth; }
+	method int getMapHeight() { return MapHeight; }
+	method void dispose()
+	{
+		var int i;
+		var Platform platform;
+		var Obstacle obstacle;
+		var Enemy enemy;
+		var Collectable collectable;
+		do character.dispose();
+		do finish.dispose();
+		while (i < PlatformsCount)
+		{
+			let platform = Platforms[i];
+			do platform.dispose();
+			let i = i + 1;
+		}
+		let i = 0;
+		while (i < ObstaclesCount)
+		{
+			let obstacle = Obstacles[i];
+			do obstacle.dispose();
+			let i = i + 1;
+		}
+		let i = 0;
+		while (i < EnemiesCount)
+		{
+			let enemy = Enemies[i];
+			do enemy.dispose();
+			let i = i + 1;
+		}
+		let i = 0;
+		while (i < CollectablesCount)
+		{
+			let collectable = Collectables[i];
+			do collectable.dispose();
+			let i = i + 1;
+		}
+		if (~(PlatformsCount = 0))
+		{
+			do Platforms.dispose();
+		}
+		if (~(ObstaclesCount = 0))
+		{
+			do Obstacles.dispose();
+		}
+		if (~(EnemiesCount = 0))
+		{
+			do Enemies.dispose();
+		}
+		if (~(CollectablesCount = 0))
+		{
+			do Collectables.dispose();
+		}
+		do Map.dispose();
+		do Memory.deAlloc(this);
+	return;
+	}
+}

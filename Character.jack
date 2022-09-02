@@ -34,18 +34,21 @@ class Character
 
     field int bulletTimer;
     field int bulletDelay;
-
     field bool canShoot;
-    field bool shoudlRefreshGameBullets;
+
+    field bool isAnimation;
 
     static String text;
 
-    constructor Character new(int x2, int y2)
+    constructor Character new(int x2, int y2, bool ia)
     {
         var int i;
 
+        do resetObject();
+
         let X = x2;
         let Y = y2;
+        let isAnimation = ia;
         let Width = Jeff.getWidth();
         let Height = Jeff.getHeight();
 
@@ -64,9 +67,26 @@ class Character
         let BulletsCount = Difficulty.getCharacterBulletsCount(); // 5
         let AvailableBulletsCount = BulletsCount;
         
+
+
+
         do RefreshBullets();
+        //if (~(BulletsCount = 0))
+        //{
+        //    let Bullets = Array.new(BulletsCount);
+        //    while (i < BulletsCount)
+        //    {
+        //        let Bullets[i] = Bullet.new();
+        //        let i = i + 1;
+        //    }
+        //    let currBulletIndex = 0;
+        //    let currBullet = Bullets[currBulletIndex];
+//
+        //    do printAmmo();
+        //}
         
-        
+
+
 
         let bulletDelay = Difficulty.getCharacterBulletDelay();
         let bulletTimer = bulletDelay;
@@ -87,12 +107,10 @@ class Character
     method int getAbsoluteX() { return absoluteX; }
     method bool getShouldRedrawObstacles(){ return shouldRedrawObstacles; }
     method Array getBullets() { return Bullets; }
-    method int getBulletsCount() { return BulletsCount; }
+    method int getBulletsCount() { return AvailableBulletsCount; }
     method int getAvailableBulletsCount() { return AvailableBulletsCount; }
     method int getHealth() { return health; }
     method int getCoins() { return coins; }
-    method bool getShoudlRefreshGameBullets() { return shoudlRefreshGameBullets;}
-    method void setShoudlRefreshGameBullets(int b) { let shoudlRefreshGameBullets = b; return;}
 
     method void setShouldRedrawObstacles(bool s) { let shouldRedrawObstacles = s; return; }
     method void setMovingLeft(bool b) { let movingLeft = b; return; }
@@ -139,30 +157,41 @@ class Character
     //// CHECKS
     method void printHealth()
     {
-        do Output.moveCursor(0, 18);
-        let text = ": ";
-        do Output.printString(text);
-        do Output.printInt(health);
+        if (~isAnimation)
+        {
+            do Output.moveCursor(0, 18);
+            let text = ": ";
+            do Output.printString(text);
+            do Output.printInt(health);
+        }
 
         return;
     }
 
     method void printCoins()
     {
-        do Output.moveCursor(0, 26);
-        let text = ": ";
-        do Output.printString(text);
-        do Output.printInt(coins);
+        if (~isAnimation)
+        {
+            do Output.moveCursor(0, 26);
+            let text = ": ";
+            do Output.printString(text);
+            do Output.printInt(coins);
+        }
 
         return;
     }
 
     method void printAmmo()
     {
-        do Output.moveCursor(0, 34);
-        let text = ": ";
-        do Output.printString(text);
-        do Output.printInt(AvailableBulletsCount);
+        if (~isAnimation)
+        {
+            
+
+            do Output.moveCursor(0, 34);
+            let text = ": ";
+            do Output.printString(text);
+            do Output.printInt(AvailableBulletsCount);
+        }
 
         return;
     }
@@ -205,6 +234,8 @@ class Character
     {
         var int result;
         var int bCount;
+        var Bullet bullet;
+        var int i;
 
         let result = collectable.CheckCollisionWithCharacter(X, Y, Width, heightInPixels);
 
@@ -240,6 +271,14 @@ class Character
                 let BulletsCount = AvailableBulletsCount;
                 if (~(bCount = 0))
                 {
+                    let i = 0;
+                    while (i < bCount)
+                    {
+                        let bullet = Bullets[i];
+                        do bullet.dispose();
+                        let i = i + 1;
+                    }
+
                     do Bullets.dispose();
                 }
                 do RefreshBullets();
@@ -269,8 +308,9 @@ class Character
     method void RefreshBullets()
     {
         var int i;
+        var Bullet bullet;
 
-        let shoudlRefreshGameBullets = true;
+        //let shoudlRefreshGameBullets = true;
 
         if (~(BulletsCount = 0))
         {
@@ -280,9 +320,55 @@ class Character
                 let Bullets[i] = Bullet.new();
                 let i = i + 1;
             }
+            let currBulletIndex = 0;
             let currBullet = Bullets[currBulletIndex];
 
             do printAmmo();
+        }
+
+        return;
+    }
+
+    method void DrawAllBullets()
+    {
+        var int i;
+        var Bullet bullet;
+
+        while (i < BulletsCount)
+        {
+            let bullet = Bullets[i];
+            do bullet.Draw();
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void ScrollBulletsLeft()
+    {
+        var int i;
+        var Bullet bullet;
+
+        while (i < BulletsCount)
+        {
+            let bullet = Bullets[i];
+            do bullet.ScrollLeft();
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    method void ScrollBulletsRight()
+    {
+        var int i;
+        var Bullet bullet;
+
+        while (i < BulletsCount)
+        {
+            let bullet = Bullets[i];
+            do bullet.ScrollRight();
+            let i = i + 1;
         }
 
         return;
@@ -382,6 +468,7 @@ class Character
 
         let canJump = Collision.IsOnAnyPlatform(X, Y, Width, Height, forceY, worldOffset);
 
+
         if (canJump)
         {
             let Y = Collision.getPlatformY() - 16;
@@ -407,6 +494,9 @@ class Character
 
                
         }
+        
+        
+
 
         let Y = Y + forceY;
 
@@ -568,15 +658,51 @@ class Character
 		return;
     }
 
+    method void resetObject()
+    {
+        let X = 0;
+        let Y = 0;
+        let Width = 0;
+        let Height = 0;
+        let absoluteX = 0;
+        let heightInPixels = 0;
+        let memAddress = 0;
+        let lastMemAddress = 0;
+        let forceY = 0;
+        let gravity = 0;
+        let jumpHeight = 0;
+        let canJump = 0;
+        let health = 0;
+        let coins = 0;
+        let shouldRedrawObstacles = 0;
+        let damageTimer = 0;
+        let damageDelay = 0;
+        let movingLeft = 0;
+        let Bullets = 0;
+        let BulletsCount = 0;
+        let AvailableBulletsCount = 0;
+        let currBulletIndex = 0;
+        let currBullet = 0;
+        let bulletTimer = 0;
+        let bulletDelay = 0;
+        let canShoot = 0;
+        let isAnimation = 0;
+        return;
+    }
+
     method void dispose()
     {
         var int i;
         var Bullet bullet;
+        
+        do Output.moveCursor(15, 0);
+        do Output.printInt(BulletsCount);
 
         while (i < BulletsCount)
         {   
             let bullet = Bullets[i];
             do bullet.dispose();
+            let bullet = 0;
             let i = i + 1;
         }
 
@@ -585,6 +711,8 @@ class Character
             //do currBullet.dispose();
 			do Bullets.dispose();
 		}
+
+        do resetObject();
 
         do Memory.deAlloc(this);
 

@@ -3,6 +3,7 @@ class Main
     function void main()
     {
         var Game game;
+        var Menu menu;
         
         do Constants.init();
         do Collision.init();
@@ -26,10 +27,16 @@ class Main
         do Coin.init();
         do Ammo.init();
         
+        //let menu = Menu.new(23, 5, 10, 5, 1, false); // sredina (23, 5)
+        //do menu.AddItem("Item1");
+        //do menu.Show();
+
+        //do Output.moveCursor(0, 10);
+        //do Output.printInt(menu.Show());
+
         do Game.init();
         let game = Game.new();
-        do game.setupGame();
-        do game.start();
+        
 
         return;
     }

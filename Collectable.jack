@@ -13,6 +13,8 @@ class Collectable
 
     constructor Collectable new(int x, int y, int type)
     {
+        do resetObject();
+
         let X = x;
         let Y = y;
         let memAddress = Constants.getMemAddress(x, y);
@@ -113,8 +115,20 @@ class Collectable
 		return;
     }
 
+    method void resetObject()
+    {
+        let X = 0;
+        let Y = 0;
+        let Type = 0;
+        let IsAvailable = 0;
+        let memAddress = 0;
+        return;
+    }
+
     method void dispose()
     {
+        do resetObject();
+        
         do Memory.deAlloc(this);
         return;
     }
