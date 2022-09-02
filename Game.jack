@@ -66,11 +66,13 @@ class Game
     field Menu nextMenu;
     field Menu deadMenu;
 
-    //static AnimationLevel animationLevel;
-    //static Character animationCharacter;
-    //static int animationPlatformsCount;
-    //static Array animationPlatforms;
-    //static int animationWorldOffset;
+    static AnimationLevel animationLevel;
+    static Character animationCharacter;
+    static int animationPlatformsCount;
+    static Array animationPlatforms;
+    static int animationWorldOffset;
+
+    field bool shouldDisposeAnimation;
 
     function void init()
     {
@@ -88,59 +90,66 @@ class Game
 
     function void initAnimation()
     {
-        //var int i;
-        //var Platform platform;
-        //var int memAddress;
-//
-        //let animationLevel = AnimationLevel.new();
-        //let animationCharacter = animationLevel.getCharacter();
-        //let animationPlatformsCount = animationLevel.getPlatformsCount();
-        //let animationPlatforms = animationLevel.getPlatforms();
-        //do Map.setMap(animationLevel.getMap());
-        //do Map.setWidth(animationLevel.getMapWidth());
-        //do Map.setHeight(animationLevel.getMapHeight());
-//
-        //do animationCharacter.ForceDraw();
-//
-        //let i = 0;
-        //while (i < animationPlatformsCount)
-        //{
-        //    let platform = animationPlatforms[i];
-        //    do platform.Draw();
-        //    let i = i + 1;
-        //}
-//
-        //let i = 0;
-        //while (i < 32)
-        //{
-        //    let memAddress = Constants.getMemAddress(i, (animationLevel.getMapHeight() - 1) * 16);
-//
-        //    do Memory.poke(memAddress + 0, -1);
-	    //    do Memory.poke(memAddress + 32, -12744);
-	    //    do Memory.poke(memAddress + 64, -6372);
-	    //    do Memory.poke(memAddress + 96, 29582);
-	    //    do Memory.poke(memAddress + 128, 14791);
-	    //    do Memory.poke(memAddress + 160, -25373);
-	    //    do Memory.poke(memAddress + 192, -12687);
-	    //    do Memory.poke(memAddress + 224, -6344);
-	    //    do Memory.poke(memAddress + 256, 29596);
-	    //    do Memory.poke(memAddress + 288, 14798);
-	    //    do Memory.poke(memAddress + 320, 7399);
-	    //    do Memory.poke(memAddress + 352, -29069);
-	    //    do Memory.poke(memAddress + 384, -14535);
-	    //    do Memory.poke(memAddress + 416, -7268);
-	    //    do Memory.poke(memAddress + 448, 29134);
-	    //    do Memory.poke(memAddress + 480, -1);
-//
-        //    let i = i + 1;
-        //}
+        var int i;
+        var Platform platform;
+        var int memAddress;
+
+        let animationLevel = AnimationLevel.new();
+        let animationCharacter = animationLevel.getCharacter();
+        let animationPlatformsCount = animationLevel.getPlatformsCount();
+        let animationPlatforms = animationLevel.getPlatforms();
+        do Map.setMap(animationLevel.getMap());
+        do Map.setWidth(animationLevel.getMapWidth());
+        do Map.setHeight(animationLevel.getMapHeight());
+
+        do animationCharacter.setJumpHeight(10);
+
+        do animationCharacter.ForceDraw();
+
+        let i = 0;
+        while (i < animationPlatformsCount)
+        {
+            let platform = animationPlatforms[i];
+            do platform.Draw();
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < 32)
+        {
+            let memAddress = Constants.getMemAddress(i, (animationLevel.getMapHeight() - 1) * 16);
+
+            do Memory.poke(memAddress + 0, -1);
+	        do Memory.poke(memAddress + 32, -12744);
+	        do Memory.poke(memAddress + 64, -6372);
+	        do Memory.poke(memAddress + 96, 29582);
+	        do Memory.poke(memAddress + 128, 14791);
+	        do Memory.poke(memAddress + 160, -25373);
+	        do Memory.poke(memAddress + 192, -12687);
+	        do Memory.poke(memAddress + 224, -6344);
+	        do Memory.poke(memAddress + 256, 29596);
+	        do Memory.poke(memAddress + 288, 14798);
+	        do Memory.poke(memAddress + 320, 7399);
+	        do Memory.poke(memAddress + 352, -29069);
+	        do Memory.poke(memAddress + 384, -14535);
+	        do Memory.poke(memAddress + 416, -7268);
+	        do Memory.poke(memAddress + 448, 29134);
+	        do Memory.poke(memAddress + 480, -1);
+
+            let i = i + 1;
+        }
 
         return;
     }
 
     function void disposeAnimiation()
     {
-        //do animationLevel.dispose();
+        do animationLevel.dispose();
+
+        let animationLevel = 0;
+        let animationCharacter = 0;
+        let animationPlatformsCount = 0;
+        let animationPlatforms = 0;
 
         return;
     }
@@ -186,6 +195,8 @@ class Game
         do deadMenu.AddItem("Main menu");
         do deadMenu.AddItem("Quit");
 
+        let shouldDisposeAnimation = true;
+
         do ShowMainMenu();
 
         do setupGame();
@@ -214,34 +225,39 @@ class Game
 
     function void CheckMainMenuAnimation()
     {
-        //var int i;
-        //var Platform platform;
-//
-        //if (animationCharacter.getAbsoluteX() > (animationLevel.getMapWidth() - 4))
-        //{
-        //    do Game.disposeAnimiation();
-        //    do Game.initAnimation();
-        //}
-//
-        //do Sys.wait(10);
-//
-        //let i = 0;
-        //while (i < animationPlatformsCount)
-        //{
-        //    let platform = animationPlatforms[i];
-        //    do platform.ClearScrollLeft();
-//
-        //    let i = i + 1;
-        //}
-//
-        //let i = 0;
-        //while (i < animationPlatformsCount)
-        //{
-        //    let platform = animationPlatforms[i];
-        //    do platform.DrawScrollLeft();
-//
-        //    let i = i + 1;
-        //}
+        var int i;
+        var Platform platform;
+
+        do animationCharacter.Jump();
+        do animationCharacter.CheckGravity(animationCharacter.getAbsoluteX());
+
+        if (animationCharacter.getAbsoluteX() > (animationLevel.getMapWidth() - 4))
+        {
+            do Game.disposeAnimiation();
+            do Game.initAnimation();
+        }
+
+        do Sys.wait(10);
+
+        let i = 0;
+        while (i < animationPlatformsCount)
+        {
+            let platform = animationPlatforms[i];
+            do platform.ClearScrollLeft();
+
+            let i = i + 1;
+        }
+
+        let i = 0;
+        while (i < animationPlatformsCount)
+        {
+            let platform = animationPlatforms[i];
+            do platform.DrawScrollLeft();
+
+            let i = i + 1;
+        }
+
+        do animationCharacter.incrementAbsoluteX(1);
 
         return;
     }
@@ -253,6 +269,10 @@ class Game
         do Output.moveCursor(0, 27);
         let text = "MAIN MENU";
         do Output.printString(text);
+
+
+        do DrawLogo();
+
 
         do Game.initAnimation();
 
@@ -297,6 +317,12 @@ class Game
         if (~quit)
         {
             do showDifficultyMenu();
+        }
+
+        if (shouldDisposeAnimation)
+        {
+            do Game.disposeAnimiation();
+            let shouldDisposeAnimation = false;
         }
 
         return;
@@ -389,7 +415,7 @@ class Game
 
         do Screen.clearScreen();
         
-        do Game.disposeAnimiation();
+        
 
         do getLevel();
 
@@ -1490,7 +1516,926 @@ class Game
         let Collectables = 0;
         let Enemies = 0;
 
+        let shouldDisposeAnimation = true;
+
         //do Memory.deAlloc(this);
+
+        return;
+    }
+
+    method void DrawLogo()
+    {
+        var int location;
+
+        let location = Constants.getMemAddress(2, 155);
+
+        do Memory.poke(location + 1, -194);
+        do Memory.poke(location + 2, 32767);
+        do Memory.poke(location + 3, -2);
+        do Memory.poke(location + 4, -385);
+        do Memory.poke(location + 5, -1);
+        do Memory.poke(location + 33, -194);
+        do Memory.poke(location + 34, 32767);
+        do Memory.poke(location + 35, -2);
+        do Memory.poke(location + 36, -385);
+        do Memory.poke(location + 37, -1);
+        do Memory.poke(location + 65, -194);
+        do Memory.poke(location + 66, 32767);
+        do Memory.poke(location + 67, -2);
+        do Memory.poke(location + 68, -385);
+        do Memory.poke(location + 69, 32767);
+        do Memory.poke(location + 97, -194);
+        do Memory.poke(location + 98, 32368);
+        do Memory.poke(location + 99, -32258);
+        do Memory.poke(location + 100, -481);
+        do Memory.poke(location + 101, 7937);
+        do Memory.poke(location + 129, -194);
+        do Memory.poke(location + 130, 32352);
+        do Memory.poke(location + 131, 254);
+        do Memory.poke(location + 132, -481);
+        do Memory.poke(location + 133, 7937);
+        do Memory.poke(location + 161, -194);
+        do Memory.poke(location + 162, 31840);
+        do Memory.poke(location + 163, 254);
+        do Memory.poke(location + 164, -481);
+        do Memory.poke(location + 165, 7937);
+        do Memory.poke(location + 193, 16190);
+        do Memory.poke(location + 194, 28672);
+        do Memory.poke(location + 195, 62);
+        do Memory.poke(location + 196, 15900);
+        do Memory.poke(location + 197, 7168);
+        do Memory.poke(location + 225, 7998);
+        do Memory.poke(location + 226, 28672);
+        do Memory.poke(location + 227, 62);
+        do Memory.poke(location + 228, 15900);
+        do Memory.poke(location + 229, 7168);
+        do Memory.poke(location + 257, 7998);
+        do Memory.poke(location + 258, 12288);
+        do Memory.poke(location + 259, 62);
+        do Memory.poke(location + 260, 32284);
+        do Memory.poke(location + 261, 6144);
+        do Memory.poke(location + 289, 7998);
+        do Memory.poke(location + 290, 3584);
+        do Memory.poke(location + 291, 254);
+        do Memory.poke(location + 292, -512);
+        do Memory.poke(location + 293, 1);
+        do Memory.poke(location + 321, 7998);
+        do Memory.poke(location + 322, 3584);
+        do Memory.poke(location + 323, 254);
+        do Memory.poke(location + 324, -512);
+        do Memory.poke(location + 325, 1);
+        do Memory.poke(location + 353, 16190);
+        do Memory.poke(location + 354, 3072);
+        do Memory.poke(location + 355, 254);
+        do Memory.poke(location + 356, -512);
+        do Memory.poke(location + 357, 1);
+        do Memory.poke(location + 385, -194);
+        do Memory.poke(location + 386, 31);
+        do Memory.poke(location + 387, 62);
+        do Memory.poke(location + 388, 15900);
+        do Memory.poke(location + 389, 7168);
+        do Memory.poke(location + 417, -194);
+        do Memory.poke(location + 418, 31);
+        do Memory.poke(location + 419, 62);
+        do Memory.poke(location + 420, 15900);
+        do Memory.poke(location + 421, 7168);
+        do Memory.poke(location + 449, -194);
+        do Memory.poke(location + 450, 31);
+        do Memory.poke(location + 451, 62);
+        do Memory.poke(location + 452, 32284);
+        do Memory.poke(location + 453, 7168);
+        do Memory.poke(location + 481, -194);
+        do Memory.poke(location + 482, 28);
+        do Memory.poke(location + 483, -2);
+        do Memory.poke(location + 484, -512);
+        do Memory.poke(location + 485, 255);
+        do Memory.poke(location + 513, -194);
+        do Memory.poke(location + 514, 28);
+        do Memory.poke(location + 515, -2);
+        do Memory.poke(location + 516, -512);
+        do Memory.poke(location + 517, 255);
+        do Memory.poke(location + 545, -194);
+        do Memory.poke(location + 546, 28);
+        do Memory.poke(location + 547, -2);
+        do Memory.poke(location + 548, -512);
+        do Memory.poke(location + 549, 255);
+        do Memory.poke(location + 577, 16190);
+        do Memory.poke(location + 579, 8190);
+        do Memory.poke(location + 580, -512);
+        do Memory.poke(location + 581, 63);
+        do Memory.poke(location + 609, 7998);
+        do Memory.poke(location + 611, 8190);
+        do Memory.poke(location + 612, -512);
+        do Memory.poke(location + 613, 63);
+        do Memory.poke(location + 641, 7998);
+        do Memory.poke(location + 642, 8);
+        do Memory.poke(location + 643, 8190);
+        do Memory.poke(location + 644, -512);
+        do Memory.poke(location + 645, 63);
+        do Memory.poke(location + 672, 7);
+        do Memory.poke(location + 673, 7998);
+        do Memory.poke(location + 674, 28);
+        do Memory.poke(location + 675, 1854);
+        do Memory.poke(location + 676, 15872);
+        do Memory.poke(location + 677, 6);
+        do Memory.poke(location + 704, 7);
+        do Memory.poke(location + 705, 7998);
+        do Memory.poke(location + 706, 28);
+        do Memory.poke(location + 707, 1854);
+        do Memory.poke(location + 708, 15872);
+        do Memory.poke(location + 709, 6);
+        do Memory.poke(location + 736, 7);
+        do Memory.poke(location + 737, 7998);
+        do Memory.poke(location + 738, 12);
+        do Memory.poke(location + 739, 1854);
+        do Memory.poke(location + 740, 15872);
+        do Memory.poke(location + 741, 6);
+        do Memory.poke(location + 768, 7);
+        do Memory.poke(location + 769, 7998);
+        do Memory.poke(location + 771, 62);
+        do Memory.poke(location + 772, 15872);
+        do Memory.poke(location + 800, 7);
+        do Memory.poke(location + 801, 7998);
+        do Memory.poke(location + 803, 62);
+        do Memory.poke(location + 804, 15872);
+        do Memory.poke(location + 832, 7);
+        do Memory.poke(location + 833, 16190);
+        do Memory.poke(location + 835, 62);
+        do Memory.poke(location + 836, 15872);
+        do Memory.poke(location + 864, -4);
+        do Memory.poke(location + 865, -199);
+        do Memory.poke(location + 866, 32767);
+        do Memory.poke(location + 867, 62);
+        do Memory.poke(location + 868, 15872);
+        do Memory.poke(location + 896, -4);
+        do Memory.poke(location + 897, -199);
+        do Memory.poke(location + 898, 32767);
+        do Memory.poke(location + 899, 62);
+        do Memory.poke(location + 900, 15872);
+        do Memory.poke(location + 928, -4);
+        do Memory.poke(location + 929, -199);
+        do Memory.poke(location + 930, 32767);
+        do Memory.poke(location + 931, 62);
+        do Memory.poke(location + 932, 15872);
+        do Memory.poke(location + 960, -3972);
+        do Memory.poke(location + 961, 7993);
+        do Memory.poke(location + 962, 31747);
+        do Memory.poke(location + 963, 6206);
+        do Memory.poke(location + 964, 15872);
+        do Memory.poke(location + 965, 56);
+        do Memory.poke(location + 992, -3972);
+        do Memory.poke(location + 993, 7993);
+        do Memory.poke(location + 994, 32259);
+        do Memory.poke(location + 995, 6206);
+        do Memory.poke(location + 996, 15872);
+        do Memory.poke(location + 997, 56);
+        do Memory.poke(location + 1024, -3972);
+        do Memory.poke(location + 1025, 7985);
+        do Memory.poke(location + 1026, 31842);
+        do Memory.poke(location + 1027, 6206);
+        do Memory.poke(location + 1028, 15872);
+        do Memory.poke(location + 1029, 24);
+        do Memory.poke(location + 1056, -32740);
+        do Memory.poke(location + 1057, 7937);
+        do Memory.poke(location + 1058, 28768);
+        do Memory.poke(location + 1059, 14);
+        do Memory.poke(location + 1060, 3584);
+        do Memory.poke(location + 1088, -32740);
+        do Memory.poke(location + 1089, 7937);
+        do Memory.poke(location + 1090, 28768);
+        do Memory.poke(location + 1091, 14);
+        do Memory.poke(location + 1092, 3584);
+        do Memory.poke(location + 1120, -32744);
+        do Memory.poke(location + 1121, 7937);
+        do Memory.poke(location + 1122, 8288);
+        do Memory.poke(location + 1123, 6);
+        do Memory.poke(location + 1124, 3072);
+        do Memory.poke(location + 1153, 1792);
+        do Memory.poke(location + 1154, 96);
+        do Memory.poke(location + 1185, 1792);
+        do Memory.poke(location + 1186, 96);
+        do Memory.poke(location + 1218, 12288);
+        do Memory.poke(location + 1219, 6);
+        do Memory.poke(location + 1220, 3072);
+        do Memory.poke(location + 1250, 28672);
+        do Memory.poke(location + 1251, 14);
+        do Memory.poke(location + 1252, 3584);
+        do Memory.poke(location + 1282, 28672);
+        do Memory.poke(location + 1283, 14);
+        do Memory.poke(location + 1284, 3584);
+        do Memory.poke(location + 1312, -32760);
+        do Memory.poke(location + 1313, 6145);
+        do Memory.poke(location + 1344, -32740);
+        do Memory.poke(location + 1345, 6145);
+        do Memory.poke(location + 1376, -32740);
+        do Memory.poke(location + 1377, 6145);
+        do Memory.poke(location + 1408, -32740);
+        do Memory.poke(location + 1409, 6145);
+        do Memory.poke(location + 1411, 16);
+        do Memory.poke(location + 1412, 12288);
+        do Memory.poke(location + 1440, 28);
+        do Memory.poke(location + 1443, 56);
+        do Memory.poke(location + 1444, 12288);
+        do Memory.poke(location + 1472, 28);
+        do Memory.poke(location + 1475, 56);
+        do Memory.poke(location + 1476, 12288);
+        do Memory.poke(location + 1504, 24);
+        do Memory.poke(location + 1507, 16);
+        do Memory.poke(location + 1508, 12288);
+
+        let location = Constants.getMemAddress(23, 145);
+
+        do Memory.poke(location + 1, -16384);
+        do Memory.poke(location + 2, -1);
+        do Memory.poke(location + 3, -1);
+        do Memory.poke(location + 4, -1);
+        do Memory.poke(location + 5, 3);
+        do Memory.poke(location + 33, -8192);
+        do Memory.poke(location + 34, -1);
+        do Memory.poke(location + 35, -1);
+        do Memory.poke(location + 36, -1);
+        do Memory.poke(location + 37, 7);
+        do Memory.poke(location + 65, -1024);
+        do Memory.poke(location + 66, -1);
+        do Memory.poke(location + 67, -1);
+        do Memory.poke(location + 68, -1);
+        do Memory.poke(location + 69, 15);
+        do Memory.poke(location + 97, -1024);
+        do Memory.poke(location + 98, -1);
+        do Memory.poke(location + 99, -1);
+        do Memory.poke(location + 100, -1);
+        do Memory.poke(location + 101, 31);
+        do Memory.poke(location + 129, -4096);
+        do Memory.poke(location + 130, -1);
+        do Memory.poke(location + 131, -1);
+        do Memory.poke(location + 132, -1);
+        do Memory.poke(location + 133, 63);
+        do Memory.poke(location + 161, -3840);
+        do Memory.poke(location + 162, -1);
+        do Memory.poke(location + 163, -1);
+        do Memory.poke(location + 164, -1);
+        do Memory.poke(location + 165, 127);
+        do Memory.poke(location + 193, -1600);
+        do Memory.poke(location + 194, -1);
+        do Memory.poke(location + 195, -1);
+        do Memory.poke(location + 196, -1);
+        do Memory.poke(location + 197, 255);
+        do Memory.poke(location + 225, -512);
+        do Memory.poke(location + 226, -1);
+        do Memory.poke(location + 227, -1);
+        do Memory.poke(location + 228, -1);
+        do Memory.poke(location + 229, 511);
+        do Memory.poke(location + 257, -256);
+        do Memory.poke(location + 258, -1);
+        do Memory.poke(location + 259, -1);
+        do Memory.poke(location + 260, -1);
+        do Memory.poke(location + 261, 511);
+        do Memory.poke(location + 289, -256);
+        do Memory.poke(location + 290, -1);
+        do Memory.poke(location + 291, -1);
+        do Memory.poke(location + 292, -1);
+        do Memory.poke(location + 293, 255);
+        do Memory.poke(location + 321, -256);
+        do Memory.poke(location + 322, -1);
+        do Memory.poke(location + 323, -1);
+        do Memory.poke(location + 324, -1);
+        do Memory.poke(location + 325, 1215);
+        do Memory.poke(location + 353, -128);
+        do Memory.poke(location + 354, -1);
+        do Memory.poke(location + 355, -1);
+        do Memory.poke(location + 356, -1);
+        do Memory.poke(location + 357, 319);
+        do Memory.poke(location + 385, -256);
+        do Memory.poke(location + 386, -1);
+        do Memory.poke(location + 387, -1);
+        do Memory.poke(location + 388, -1);
+        do Memory.poke(location + 389, 1599);
+        do Memory.poke(location + 417, -256);
+        do Memory.poke(location + 418, -1);
+        do Memory.poke(location + 419, -1);
+        do Memory.poke(location + 420, -1);
+        do Memory.poke(location + 421, 63);
+        do Memory.poke(location + 449, -128);
+        do Memory.poke(location + 450, -1);
+        do Memory.poke(location + 451, -1);
+        do Memory.poke(location + 452, -1);
+        do Memory.poke(location + 453, 255);
+        do Memory.poke(location + 481, -256);
+        do Memory.poke(location + 482, -1);
+        do Memory.poke(location + 483, -1);
+        do Memory.poke(location + 484, -1);
+        do Memory.poke(location + 485, 127);
+        do Memory.poke(location + 513, -30);
+        do Memory.poke(location + 514, -1);
+        do Memory.poke(location + 515, -1);
+        do Memory.poke(location + 516, -1);
+        do Memory.poke(location + 517, 127);
+        do Memory.poke(location + 545, -30);
+        do Memory.poke(location + 546, -1);
+        do Memory.poke(location + 547, -1);
+        do Memory.poke(location + 548, -1);
+        do Memory.poke(location + 549, 255);
+        do Memory.poke(location + 577, -6);
+        do Memory.poke(location + 578, -493);
+        do Memory.poke(location + 579, -1);
+        do Memory.poke(location + 580, -1);
+        do Memory.poke(location + 581, 255);
+        do Memory.poke(location + 609, -2);
+        do Memory.poke(location + 610, -1021);
+        do Memory.poke(location + 611, -1);
+        do Memory.poke(location + 612, -1);
+        do Memory.poke(location + 613, 511);
+        do Memory.poke(location + 641, -1);
+        do Memory.poke(location + 642, -2045);
+        do Memory.poke(location + 643, -1);
+        do Memory.poke(location + 644, -1);
+        do Memory.poke(location + 645, 511);
+        do Memory.poke(location + 673, -1);
+        do Memory.poke(location + 674, -1021);
+        do Memory.poke(location + 675, -1);
+        do Memory.poke(location + 676, -1);
+        do Memory.poke(location + 677, 511);
+        do Memory.poke(location + 705, -2);
+        do Memory.poke(location + 706, -2047);
+        do Memory.poke(location + 707, -1);
+        do Memory.poke(location + 708, -1);
+        do Memory.poke(location + 709, 511);
+        do Memory.poke(location + 737, -1);
+        do Memory.poke(location + 738, -2047);
+        do Memory.poke(location + 739, -1);
+        do Memory.poke(location + 740, -1);
+        do Memory.poke(location + 741, 511);
+        do Memory.poke(location + 769, -2);
+        do Memory.poke(location + 770, -1021);
+        do Memory.poke(location + 771, -1);
+        do Memory.poke(location + 772, -1);
+        do Memory.poke(location + 773, 255);
+        do Memory.poke(location + 801, -2);
+        do Memory.poke(location + 802, -113);
+        do Memory.poke(location + 803, -1);
+        do Memory.poke(location + 804, -1);
+        do Memory.poke(location + 805, 255);
+        do Memory.poke(location + 833, -4);
+        do Memory.poke(location + 834, -81);
+        do Memory.poke(location + 835, -1);
+        do Memory.poke(location + 836, -1);
+        do Memory.poke(location + 837, 255);
+        do Memory.poke(location + 865, -2);
+        do Memory.poke(location + 866, -321);
+        do Memory.poke(location + 867, -1);
+        do Memory.poke(location + 868, -1);
+        do Memory.poke(location + 869, 127);
+        do Memory.poke(location + 897, -1);
+        do Memory.poke(location + 898, -1);
+        do Memory.poke(location + 899, -1);
+        do Memory.poke(location + 900, -1);
+        do Memory.poke(location + 901, 127);
+        do Memory.poke(location + 929, -1);
+        do Memory.poke(location + 930, -17);
+        do Memory.poke(location + 931, -1);
+        do Memory.poke(location + 932, -1);
+        do Memory.poke(location + 933, 127);
+        do Memory.poke(location + 961, -2);
+        do Memory.poke(location + 962, -497);
+        do Memory.poke(location + 963, -1);
+        do Memory.poke(location + 964, -1);
+        do Memory.poke(location + 965, 127);
+        do Memory.poke(location + 992, 16384);
+        do Memory.poke(location + 993, -1);
+        do Memory.poke(location + 994, -1);
+        do Memory.poke(location + 995, -4097);
+        do Memory.poke(location + 996, -1);
+        do Memory.poke(location + 997, 127);
+        do Memory.poke(location + 1025, -1);
+        do Memory.poke(location + 1026, -1);
+        do Memory.poke(location + 1027, 4095);
+        do Memory.poke(location + 1028, -2);
+        do Memory.poke(location + 1029, 255);
+        do Memory.poke(location + 1057, -2);
+        do Memory.poke(location + 1058, -1);
+        do Memory.poke(location + 1059, 3975);
+        do Memory.poke(location + 1060, -4);
+        do Memory.poke(location + 1061, 1663);
+        do Memory.poke(location + 1089, -2);
+        do Memory.poke(location + 1090, -1);
+        do Memory.poke(location + 1091, -3897);
+        do Memory.poke(location + 1092, -1);
+        do Memory.poke(location + 1093, 8191);
+        do Memory.poke(location + 1121, -1);
+        do Memory.poke(location + 1122, -1);
+        do Memory.poke(location + 1123, -4089);
+        do Memory.poke(location + 1124, -1);
+        do Memory.poke(location + 1125, 8191);
+        do Memory.poke(location + 1153, -1);
+        do Memory.poke(location + 1154, -1);
+        do Memory.poke(location + 1155, -1024);
+        do Memory.poke(location + 1156, -1);
+        do Memory.poke(location + 1157, 16383);
+        do Memory.poke(location + 1185, -2);
+        do Memory.poke(location + 1186, 24575);
+        do Memory.poke(location + 1187, -1856);
+        do Memory.poke(location + 1188, -1);
+        do Memory.poke(location + 1189, 16383);
+        do Memory.poke(location + 1217, -1);
+        do Memory.poke(location + 1218, 1023);
+        do Memory.poke(location + 1219, -1024);
+        do Memory.poke(location + 1220, -1);
+        do Memory.poke(location + 1221, 16383);
+        do Memory.poke(location + 1248, -4096);
+        do Memory.poke(location + 1249, -1);
+        do Memory.poke(location + 1250, 95);
+        do Memory.poke(location + 1251, -2048);
+        do Memory.poke(location + 1252, -1);
+        do Memory.poke(location + 1253, 32767);
+        do Memory.poke(location + 1280, 28672);
+        do Memory.poke(location + 1281, -1);
+        do Memory.poke(location + 1282, 15);
+        do Memory.poke(location + 1283, -1919);
+        do Memory.poke(location + 1284, -1);
+        do Memory.poke(location + 1285, 32767);
+        do Memory.poke(location + 1312, 12288);
+        do Memory.poke(location + 1313, -1);
+        do Memory.poke(location + 1314, -8161);
+        do Memory.poke(location + 1315, -829);
+        do Memory.poke(location + 1316, -1);
+        do Memory.poke(location + 1317, 32767);
+        do Memory.poke(location + 1344, 2048);
+        do Memory.poke(location + 1345, -1);
+        do Memory.poke(location + 1346, -1);
+        do Memory.poke(location + 1347, -61);
+        do Memory.poke(location + 1348, -1);
+        do Memory.poke(location + 1349, 32767);
+        do Memory.poke(location + 1376, 3072);
+        do Memory.poke(location + 1377, -3313);
+        do Memory.poke(location + 1378, -1);
+        do Memory.poke(location + 1379, -1);
+        do Memory.poke(location + 1380, -1);
+        do Memory.poke(location + 1381, 32543);
+        do Memory.poke(location + 1408, 1024);
+        do Memory.poke(location + 1409, -7289);
+        do Memory.poke(location + 1410, -1);
+        do Memory.poke(location + 1411, 8167);
+        do Memory.poke(location + 1412, -64);
+        do Memory.poke(location + 1413, 32319);
+        do Memory.poke(location + 1441, -14338);
+        do Memory.poke(location + 1442, -16385);
+        do Memory.poke(location + 1443, 4037);
+        do Memory.poke(location + 1444, -64);
+        do Memory.poke(location + 1445, 16191);
+        do Memory.poke(location + 1473, 4094);
+        do Memory.poke(location + 1474, -1);
+        do Memory.poke(location + 1475, 4033);
+        do Memory.poke(location + 1476, -256);
+        do Memory.poke(location + 1477, 16383);
+        do Memory.poke(location + 1504, 64);
+        do Memory.poke(location + 1505, 8190);
+        do Memory.poke(location + 1506, -16384);
+        do Memory.poke(location + 1507, 4074);
+        do Memory.poke(location + 1508, -8192);
+        do Memory.poke(location + 1509, 16383);
+        do Memory.poke(location + 1537, 16383);
+        do Memory.poke(location + 1538, -8192);
+        do Memory.poke(location + 1540, -2048);
+        do Memory.poke(location + 1541, 16383);
+        do Memory.poke(location + 1569, 16383);
+        do Memory.poke(location + 1570, -3088);
+        do Memory.poke(location + 1571, 64);
+        do Memory.poke(location + 1572, -2048);
+        do Memory.poke(location + 1573, 16383);
+        do Memory.poke(location + 1600, -16384);
+        do Memory.poke(location + 1601, -4097);
+        do Memory.poke(location + 1602, -4);
+        do Memory.poke(location + 1604, -1536);
+        do Memory.poke(location + 1605, 8191);
+        do Memory.poke(location + 1632, -16384);
+        do Memory.poke(location + 1633, 20479);
+        do Memory.poke(location + 1634, 32767);
+        do Memory.poke(location + 1635, 2);
+        do Memory.poke(location + 1636, -256);
+        do Memory.poke(location + 1637, 8191);
+        do Memory.poke(location + 1664, -16384);
+        do Memory.poke(location + 1665, 4095);
+        do Memory.poke(location + 1666, 32767);
+        do Memory.poke(location + 1668, -1024);
+        do Memory.poke(location + 1669, 4095);
+        do Memory.poke(location + 1697, 16383);
+        do Memory.poke(location + 1698, 16383);
+        do Memory.poke(location + 1700, -2048);
+        do Memory.poke(location + 1701, 4095);
+        do Memory.poke(location + 1729, 4095);
+        do Memory.poke(location + 1730, 16383);
+        do Memory.poke(location + 1732, -8192);
+        do Memory.poke(location + 1733, 2047);
+        do Memory.poke(location + 1761, 26622);
+        do Memory.poke(location + 1762, 8190);
+        do Memory.poke(location + 1764, -7680);
+        do Memory.poke(location + 1765, 2047);
+        do Memory.poke(location + 1793, -3076);
+        do Memory.poke(location + 1794, 16383);
+        do Memory.poke(location + 1796, -6400);
+        do Memory.poke(location + 1797, 1023);
+        do Memory.poke(location + 1825, 2046);
+        do Memory.poke(location + 1826, 16382);
+        do Memory.poke(location + 1828, -1792);
+        do Memory.poke(location + 1829, 511);
+        do Memory.poke(location + 1857, 2044);
+        do Memory.poke(location + 1858, 8188);
+        do Memory.poke(location + 1860, -1792);
+        do Memory.poke(location + 1861, 127);
+        do Memory.poke(location + 1889, 1528);
+        do Memory.poke(location + 1890, 8160);
+        do Memory.poke(location + 1892, -3840);
+        do Memory.poke(location + 1893, 15);
+        do Memory.poke(location + 1921, 216);
+        do Memory.poke(location + 1922, 8064);
+        do Memory.poke(location + 1924, -2560);
+        do Memory.poke(location + 1925, 31);
+        do Memory.poke(location + 1953, 960);
+        do Memory.poke(location + 1954, 8064);
+        do Memory.poke(location + 1956, -928);
+        do Memory.poke(location + 1957, 31);
+        do Memory.poke(location + 1985, -14592);
+        do Memory.poke(location + 1986, 7967);
+        do Memory.poke(location + 1988, -928);
+        do Memory.poke(location + 1989, 63);
+        do Memory.poke(location + 2017, -256);
+        do Memory.poke(location + 2018, 7999);
+        do Memory.poke(location + 2020, -928);
+        do Memory.poke(location + 2021, 31);
+        do Memory.poke(location + 2049, -8296);
+        do Memory.poke(location + 2050, 8095);
+        do Memory.poke(location + 2052, -832);
+        do Memory.poke(location + 2053, 31);
+        do Memory.poke(location + 2081, -16488);
+        do Memory.poke(location + 2082, -8225);
+        do Memory.poke(location + 2084, -64);
+        do Memory.poke(location + 2085, 63);
+        do Memory.poke(location + 2113, -120);
+        do Memory.poke(location + 2114, -1);
+        do Memory.poke(location + 2116, -640);
+        do Memory.poke(location + 2117, 63);
+        do Memory.poke(location + 2145, -232);
+        do Memory.poke(location + 2146, -1);
+        do Memory.poke(location + 2147, 1);
+        do Memory.poke(location + 2148, -256);
+        do Memory.poke(location + 2149, 63);
+        do Memory.poke(location + 2177, -112);
+        do Memory.poke(location + 2178, -1);
+        do Memory.poke(location + 2179, 1);
+        do Memory.poke(location + 2180, -256);
+        do Memory.poke(location + 2181, 63);
+        do Memory.poke(location + 2209, -128);
+        do Memory.poke(location + 2210, -1);
+        do Memory.poke(location + 2211, 1);
+        do Memory.poke(location + 2212, -256);
+        do Memory.poke(location + 2213, 63);
+        do Memory.poke(location + 2241, -128);
+        do Memory.poke(location + 2242, -1);
+        do Memory.poke(location + 2243, 3);
+        do Memory.poke(location + 2244, -128);
+        do Memory.poke(location + 2245, 63);
+        do Memory.poke(location + 2273, -240);
+        do Memory.poke(location + 2274, -1);
+        do Memory.poke(location + 2275, 7);
+        do Memory.poke(location + 2276, -256);
+        do Memory.poke(location + 2277, 63);
+        do Memory.poke(location + 2305, -128);
+        do Memory.poke(location + 2306, -1);
+        do Memory.poke(location + 2307, 7);
+        do Memory.poke(location + 2308, -32);
+        do Memory.poke(location + 2309, 63);
+        do Memory.poke(location + 2337, -128);
+        do Memory.poke(location + 2338, -28674);
+        do Memory.poke(location + 2339, 15);
+        do Memory.poke(location + 2340, -32);
+        do Memory.poke(location + 2341, 63);
+        do Memory.poke(location + 2369, 8064);
+        do Memory.poke(location + 2370, 3072);
+        do Memory.poke(location + 2371, 7);
+        do Memory.poke(location + 2372, -32);
+        do Memory.poke(location + 2373, 63);
+        do Memory.poke(location + 2401, 800);
+        do Memory.poke(location + 2403, 3);
+        do Memory.poke(location + 2404, -32);
+        do Memory.poke(location + 2405, 63);
+        do Memory.poke(location + 2433, 12512);
+        do Memory.poke(location + 2436, -32);
+        do Memory.poke(location + 2437, 63);
+        do Memory.poke(location + 2465, -16288);
+        do Memory.poke(location + 2468, -32);
+        do Memory.poke(location + 2469, 127);
+        do Memory.poke(location + 2497, -416);
+        do Memory.poke(location + 2498, 32767);
+        do Memory.poke(location + 2500, -128);
+        do Memory.poke(location + 2501, 127);
+        do Memory.poke(location + 2529, -192);
+        do Memory.poke(location + 2530, 32767);
+        do Memory.poke(location + 2531, 64);
+        do Memory.poke(location + 2532, -3);
+        do Memory.poke(location + 2533, 127);
+        do Memory.poke(location + 2561, -64);
+        do Memory.poke(location + 2562, 32767);
+        do Memory.poke(location + 2564, -1);
+        do Memory.poke(location + 2565, 127);
+        do Memory.poke(location + 2593, -64);
+        do Memory.poke(location + 2594, 29952);
+        do Memory.poke(location + 2595, -4096);
+        do Memory.poke(location + 2596, -1);
+        do Memory.poke(location + 2597, 127);
+        do Memory.poke(location + 2625, 32640);
+        do Memory.poke(location + 2626, 24576);
+        do Memory.poke(location + 2627, -2048);
+        do Memory.poke(location + 2628, -1);
+        do Memory.poke(location + 2629, 127);
+        do Memory.poke(location + 2657, 16128);
+        do Memory.poke(location + 2659, -2048);
+        do Memory.poke(location + 2660, -1);
+        do Memory.poke(location + 2661, 255);
+        do Memory.poke(location + 2689, 3840);
+        do Memory.poke(location + 2691, -4096);
+        do Memory.poke(location + 2692, -1);
+        do Memory.poke(location + 2693, 255);
+        do Memory.poke(location + 2721, 3584);
+        do Memory.poke(location + 2723, -2048);
+        do Memory.poke(location + 2724, -1);
+        do Memory.poke(location + 2725, 511);
+        do Memory.poke(location + 2753, 3584);
+        do Memory.poke(location + 2755, -512);
+        do Memory.poke(location + 2756, -1);
+        do Memory.poke(location + 2757, 511);
+        do Memory.poke(location + 2785, 1536);
+        do Memory.poke(location + 2787, -192);
+        do Memory.poke(location + 2788, -1);
+        do Memory.poke(location + 2789, 511);
+        do Memory.poke(location + 2817, 1024);
+        do Memory.poke(location + 2819, -64);
+        do Memory.poke(location + 2820, -1);
+        do Memory.poke(location + 2821, 1023);
+        do Memory.poke(location + 2849, -10240);
+        do Memory.poke(location + 2850, 124);
+        do Memory.poke(location + 2851, -64);
+        do Memory.poke(location + 2852, -1);
+        do Memory.poke(location + 2853, 1023);
+        do Memory.poke(location + 2881, -4096);
+        do Memory.poke(location + 2882, 255);
+        do Memory.poke(location + 2883, -64);
+        do Memory.poke(location + 2884, -1);
+        do Memory.poke(location + 2885, 2047);
+        do Memory.poke(location + 2913, -4096);
+        do Memory.poke(location + 2914, 1023);
+        do Memory.poke(location + 2915, -15);
+        do Memory.poke(location + 2916, -1);
+        do Memory.poke(location + 2917, 2047);
+        do Memory.poke(location + 2945, -8192);
+        do Memory.poke(location + 2946, 4095);
+        do Memory.poke(location + 2947, -1);
+        do Memory.poke(location + 2948, -1);
+        do Memory.poke(location + 2949, -1);
+        do Memory.poke(location + 2977, -8192);
+        do Memory.poke(location + 2978, -1);
+        do Memory.poke(location + 2979, -1);
+        do Memory.poke(location + 2980, -1);
+        do Memory.poke(location + 2981, -1);
+        do Memory.poke(location + 3009, -16384);
+        do Memory.poke(location + 3010, -1);
+        do Memory.poke(location + 3011, -1);
+        do Memory.poke(location + 3012, -1);
+        do Memory.poke(location + 3013, -1);
+        do Memory.poke(location + 3042, -1);
+        do Memory.poke(location + 3043, -1);
+        do Memory.poke(location + 3044, -1);
+        do Memory.poke(location + 3045, -1);
+
+        let location = Constants.getMemAddress(7, 180);
+
+        do Memory.poke(location + 0, 14336);
+        do Memory.poke(location + 1, -72);
+        do Memory.poke(location + 32, 15359);
+        do Memory.poke(location + 33, -11336);
+        do Memory.poke(location + 64, 14963);
+        do Memory.poke(location + 65, -32336);
+        do Memory.poke(location + 96, 14897);
+        do Memory.poke(location + 97, 16824);
+        do Memory.poke(location + 128, -2000);
+        do Memory.poke(location + 129, 4031);
+        do Memory.poke(location + 160, -1679);
+        do Memory.poke(location + 161, 3007);
+        do Memory.poke(location + 192, -1679);
+        do Memory.poke(location + 193, 438);
+        do Memory.poke(location + 224, 14900);
+        do Memory.poke(location + 225, 2488);
+        do Memory.poke(location + 256, 14388);
+        do Memory.poke(location + 257, 440);
+        do Memory.poke(location + 288, -10192);
+        do Memory.poke(location + 289, -72);
+        do Memory.poke(location + 320, 6192);
+        do Memory.poke(location + 321, -14922);
+        do Memory.poke(location + 352, 2080);
+        do Memory.poke(location + 353, -28250);
+        do Memory.poke(location + 384, 16384);
+        do Memory.poke(location + 385, 4224);
+        do Memory.poke(location + 416, 2064);
+        do Memory.poke(location + 417, -32752);
+        do Memory.poke(location + 448, 16);
+        do Memory.poke(location + 449, 256);
+        do Memory.poke(location + 480, 4096);
+        do Memory.poke(location + 481, 32);
+
+        let location = Constants.getMemAddress(2, 200);
+
+        do Memory.poke(location + 0, -20473);
+        do Memory.poke(location + 1, 30723);
+        do Memory.poke(location + 3, -32641);
+        do Memory.poke(location + 4, 8191);
+        do Memory.poke(location + 32, -20473);
+        do Memory.poke(location + 33, 30723);
+        do Memory.poke(location + 35, -32641);
+        do Memory.poke(location + 36, 8191);
+        do Memory.poke(location + 64, -18425);
+        do Memory.poke(location + 65, 30723);
+        do Memory.poke(location + 66, -28676);
+        do Memory.poke(location + 67, -31761);
+        do Memory.poke(location + 68, 16111);
+        do Memory.poke(location + 69, 8184);
+        do Memory.poke(location + 70, -1);
+        do Memory.poke(location + 96, -18425);
+        do Memory.poke(location + 97, 30723);
+        do Memory.poke(location + 98, -24580);
+        do Memory.poke(location + 99, -31761);
+        do Memory.poke(location + 100, 15591);
+        do Memory.poke(location + 101, 8184);
+        do Memory.poke(location + 102, -1);
+        do Memory.poke(location + 128, -16889);
+        do Memory.poke(location + 129, 30723);
+        do Memory.poke(location + 130, -18169);
+        do Memory.poke(location + 131, -29593);
+        do Memory.poke(location + 132, 12483);
+        do Memory.poke(location + 133, 29198);
+        do Memory.poke(location + 134, -14385);
+        do Memory.poke(location + 160, -16889);
+        do Memory.poke(location + 161, 30723);
+        do Memory.poke(location + 162, -18169);
+        do Memory.poke(location + 163, -29625);
+        do Memory.poke(location + 164, 12483);
+        do Memory.poke(location + 165, 29198);
+        do Memory.poke(location + 166, -14385);
+        do Memory.poke(location + 192, -18681);
+        do Memory.poke(location + 193, 30723);
+        do Memory.poke(location + 194, -18425);
+        do Memory.poke(location + 195, -25593);
+        do Memory.poke(location + 196, 12291);
+        do Memory.poke(location + 197, 28686);
+        do Memory.poke(location + 198, -15421);
+        do Memory.poke(location + 224, -18553);
+        do Memory.poke(location + 225, 30723);
+        do Memory.poke(location + 226, -18425);
+        do Memory.poke(location + 227, -25593);
+        do Memory.poke(location + 228, 12291);
+        do Memory.poke(location + 229, 28686);
+        do Memory.poke(location + 230, -15421);
+        do Memory.poke(location + 256, -32313);
+        do Memory.poke(location + 257, 30723);
+        do Memory.poke(location + 258, -16385);
+        do Memory.poke(location + 259, -25593);
+        do Memory.poke(location + 260, 12291);
+        do Memory.poke(location + 261, 32766);
+        do Memory.poke(location + 262, 960);
+        do Memory.poke(location + 288, -32313);
+        do Memory.poke(location + 289, 30723);
+        do Memory.poke(location + 290, -16385);
+        do Memory.poke(location + 291, -25593);
+        do Memory.poke(location + 292, 12291);
+        do Memory.poke(location + 293, 32766);
+        do Memory.poke(location + 294, 960);
+        do Memory.poke(location + 320, -20225);
+        do Memory.poke(location + 321, 30723);
+        do Memory.poke(location + 322, -18425);
+        do Memory.poke(location + 323, -25545);
+        do Memory.poke(location + 324, 12291);
+        do Memory.poke(location + 325, 28686);
+        do Memory.poke(location + 326, 10179);
+        do Memory.poke(location + 352, -20225);
+        do Memory.poke(location + 353, 30727);
+        do Memory.poke(location + 354, -18425);
+        do Memory.poke(location + 355, -25545);
+        do Memory.poke(location + 356, 8195);
+        do Memory.poke(location + 357, 28686);
+        do Memory.poke(location + 358, 10179);
+        do Memory.poke(location + 384, 511);
+        do Memory.poke(location + 385, 31758);
+        do Memory.poke(location + 386, -18393);
+        do Memory.poke(location + 387, -25545);
+        do Memory.poke(location + 388, 8191);
+        do Memory.poke(location + 389, 28750);
+        do Memory.poke(location + 390, 10179);
+        do Memory.poke(location + 416, 511);
+        do Memory.poke(location + 417, 31758);
+        do Memory.poke(location + 418, -18393);
+        do Memory.poke(location + 419, -25545);
+        do Memory.poke(location + 420, 8191);
+        do Memory.poke(location + 421, 28750);
+        do Memory.poke(location + 422, 10179);
+        do Memory.poke(location + 448, 3895);
+        do Memory.poke(location + 449, 28476);
+        do Memory.poke(location + 450, -18393);
+        do Memory.poke(location + 451, -29689);
+        do Memory.poke(location + 452, 15135);
+        do Memory.poke(location + 453, 28750);
+        do Memory.poke(location + 454, -15400);
+        do Memory.poke(location + 480, 7991);
+        do Memory.poke(location + 481, 26428);
+        do Memory.poke(location + 482, -18393);
+        do Memory.poke(location + 483, -29689);
+        do Memory.poke(location + 484, 15135);
+        do Memory.poke(location + 485, 28750);
+        do Memory.poke(location + 486, -15400);
+        do Memory.poke(location + 512, -18377);
+        do Memory.poke(location + 513, 1009);
+        do Memory.poke(location + 514, -18169);
+        do Memory.poke(location + 515, -31865);
+        do Memory.poke(location + 516, -3301);
+        do Memory.poke(location + 517, 29198);
+        do Memory.poke(location + 518, 984);
+        do Memory.poke(location + 544, -18377);
+        do Memory.poke(location + 545, 1009);
+        do Memory.poke(location + 546, -18169);
+        do Memory.poke(location + 547, -31865);
+        do Memory.poke(location + 548, -3301);
+        do Memory.poke(location + 549, 29198);
+        do Memory.poke(location + 550, 984);
+        do Memory.poke(location + 576, -20425);
+        do Memory.poke(location + 577, 481);
+        do Memory.poke(location + 578, -26620);
+        do Memory.poke(location + 579, -28161);
+        do Memory.poke(location + 580, -3325);
+        do Memory.poke(location + 581, 4104);
+        do Memory.poke(location + 582, 960);
+        do Memory.poke(location + 608, -20441);
+        do Memory.poke(location + 609, 225);
+        do Memory.poke(location + 610, -30716);
+        do Memory.poke(location + 611, -28161);
+        do Memory.poke(location + 612, -7933);
+        do Memory.poke(location + 613, 4104);
+        do Memory.poke(location + 614, 960);
+        do Memory.poke(location + 640, 7);
+        do Memory.poke(location + 641, 6240);
+        do Memory.poke(location + 643, -28057);
+        do Memory.poke(location + 644, -16381);
+        do Memory.poke(location + 646, 960);
+        do Memory.poke(location + 672, 2055);
+        do Memory.poke(location + 673, 4192);
+        do Memory.poke(location + 675, -28061);
+        do Memory.poke(location + 676, -16381);
+        do Memory.poke(location + 677, 4096);
+        do Memory.poke(location + 678, 896);
+        do Memory.poke(location + 704, 2102);
+        do Memory.poke(location + 706, -26620);
+        do Memory.poke(location + 707, 97);
+        do Memory.poke(location + 708, -15589);
+        do Memory.poke(location + 709, 4104);
+        do Memory.poke(location + 710, 768);
+        do Memory.poke(location + 736, 2100);
+        do Memory.poke(location + 738, 2052);
+        do Memory.poke(location + 739, 65);
+        do Memory.poke(location + 740, 16667);
+        do Memory.poke(location + 741, 4104);
+        do Memory.poke(location + 742, 768);
+        do Memory.poke(location + 768, -30672);
+        do Memory.poke(location + 769, 24961);
+        do Memory.poke(location + 770, 4);
+        do Memory.poke(location + 772, 6168);
+        do Memory.poke(location + 773, 8);
+        do Memory.poke(location + 800, -30688);
+        do Memory.poke(location + 801, 24961);
+        do Memory.poke(location + 802, 4);
+        do Memory.poke(location + 804, 6168);
+        do Memory.poke(location + 805, 8);
+        do Memory.poke(location + 833, 24972);
+        do Memory.poke(location + 834, 2048);
+        do Memory.poke(location + 835, -28660);
+        do Memory.poke(location + 836, 6144);
+        do Memory.poke(location + 837, 4096);
+        do Memory.poke(location + 838, 192);
+        do Memory.poke(location + 865, 24972);
+        do Memory.poke(location + 866, 2048);
+        do Memory.poke(location + 867, -28664);
+        do Memory.poke(location + 868, 6144);
+        do Memory.poke(location + 869, 4096);
+        do Memory.poke(location + 870, 192);
+        do Memory.poke(location + 896, 3);
+        do Memory.poke(location + 897, 396);
+        do Memory.poke(location + 898, -26620);
+        do Memory.poke(location + 899, -32767);
+        do Memory.poke(location + 901, 4104);
+        do Memory.poke(location + 902, 192);
+        do Memory.poke(location + 928, 3);
+        do Memory.poke(location + 929, 140);
+        do Memory.poke(location + 930, 2052);
+        do Memory.poke(location + 931, -32767);
+        do Memory.poke(location + 933, 4104);
+        do Memory.poke(location + 934, 128);
+        do Memory.poke(location + 960, 3);
+        do Memory.poke(location + 992, 3);
 
         return;
     }

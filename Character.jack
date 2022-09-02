@@ -114,6 +114,7 @@ class Character
 
     method void setShouldRedrawObstacles(bool s) { let shouldRedrawObstacles = s; return; }
     method void setMovingLeft(bool b) { let movingLeft = b; return; }
+    method void setJumpHeight(int h) { let jumpHeight = h; return; }
 
     method void incrementAbsoluteX(int inc) { let absoluteX = absoluteX + inc; return; }
     method void setCoins(int c) { let coins = c; return; }
@@ -184,14 +185,32 @@ class Character
 
     method void printAmmo()
     {
+        var int address;
+
         if (~isAnimation)
         {
-            
-
             do Output.moveCursor(0, 34);
             let text = ": ";
             do Output.printString(text);
-            do Output.printInt(AvailableBulletsCount);
+            if (Difficulty.getDifficulty() = 1)
+            {
+                let address = Constants.getMemAddress(50, 0);
+                do Memory.poke(address + 0, 6200);
+	            do Memory.poke(address + 32, 15484);
+	            do Memory.poke(address + 64, 32382);
+	            do Memory.poke(address + 96, -6329);
+	            do Memory.poke(address + 128, -15485);
+	            do Memory.poke(address + 160, -15933);
+	            do Memory.poke(address + 192, -7449);
+	            do Memory.poke(address + 224, 32382);
+	            do Memory.poke(address + 256, 15420);
+	            do Memory.poke(address + 288, 6168);
+            }
+            else
+            {
+                do Output.printInt(AvailableBulletsCount);
+            }
+            
         }
 
         return;
