@@ -3,18 +3,16 @@ class SimpleBullet
 	static int Width;
 	static int Height;
 	static int AnimationFramesCount;
-	static int SpecialFramesCount;
-	static int TotalFramesCount;
-	static bool stopAnimation;
 	static int currFrame;
 	static int animationTimer;
 	static int animationDelay;
-	static int specialFrameTimer;
 	static Array Frames;
 	static int FrameSize;
 	static Array FramesMirrored;
 	static Array Frame1;
 	static Array Frame1Mirrored;
+	static Array Frame2;
+	static Array Frame2Mirrored;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
@@ -22,60 +20,23 @@ class SimpleBullet
 		let Width = 1;
 		let Height = 1;
 		let AnimationFramesCount = 1;
-		let SpecialFramesCount = 0;
-		let TotalFramesCount = 1;
-		let FrameSize = Width * Height * 16;
-		let Frames = Array.new(TotalFramesCount);
-		let FramesMirrored = Array.new(TotalFramesCount);
-		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1Mirrored = Array.new(Width * Height * 16);
-		let Frame1[7] = 30720;
-		let Frame1[8] = -30720;
-		let Frame1[9] = 30720;
-		let Frame1Mirrored[7] = 30;
-		let Frame1Mirrored[8] = 17;
-		let Frame1Mirrored[9] = 30;
-		let Frames[0] = Frame1;
-		let FramesMirrored[0] = Frame1Mirrored;
+		let FrameSize = 16;
+		let Frames = Array.new(AnimationFramesCount);
+		let FramesMirrored = Array.new(AnimationFramesCount);
+		let Frame1 = Array.new(16);
+		let Frame1Mirrored = Array.new(16);
+		do MemoryExt.poke(Frame1, 7, 30720);
+		do MemoryExt.poke(Frame1, 8, -30720);
+		do MemoryExt.poke(Frame1, 9, 30720);
+		do MemoryExt.poke(Frame1Mirrored, 7, 30);
+		do MemoryExt.poke(Frame1Mirrored, 8, 17);
+		do MemoryExt.poke(Frame1Mirrored, 9, 30);
+		do MemoryExt.poke(Frames, 0, Frame1);
+		do MemoryExt.poke(FramesMirrored, 0, Frame1Mirrored);
 		return;
 	}
 	function int getWidth() { return Width; }
 	function int getHeight() { return Height; }
-	function void CheckTimers()
-	{
-		if (animationTimer < 1)
-		{
-			do SimpleBullet.ChangeFrame();
-			let animationTimer = animationDelay;
-		}
-		if (specialFrameTimer < 1)
-		{
-			let stopAnimation = false;
-			let specialFrameTimer = 0;
-		}
-		return;
-	}
-	function void DecrementTimers()
-	{
-		let animationTimer = animationTimer - 1;
-		let specialFrameTimer = specialFrameTimer - 1;
-		return;
-	}
-	function void ChangeFrame()
-	{
-		if (~(stopAnimation | (AnimationFramesCount = 0)))
-		{
-			if (currFrame < (AnimationFramesCount - 1))
-			{
-				let currFrame = currFrame + 1;
-			}
-			else
-			{
-				let currFrame = 0;
-			}
-		}
-		return;
-	}
 	function void DrawFrame(int memAddress, bool display, bool mirrored, int x, int y)
 	{
 		if (mirrored)

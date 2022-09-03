@@ -340,7 +340,7 @@ class Enemy
 		}
 		else
 		{
-			let bulletY = Y - Constants.getBlockHeight();
+			let bulletY = Y - 20;
 		}
 
         if (canShoot)

@@ -3,16 +3,14 @@ class Ammo
 	static int Width;
 	static int Height;
 	static int AnimationFramesCount;
-	static int SpecialFramesCount;
-	static int TotalFramesCount;
-	static bool stopAnimation;
 	static int currFrame;
 	static int animationTimer;
 	static int animationDelay;
-	static int specialFrameTimer;
 	static Array Frames;
 	static int FrameSize;
+	static Array FramesMirrored;
 	static Array Frame1;
+	static Array Frame1Mirrored;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
@@ -20,65 +18,28 @@ class Ammo
 		let Width = 1;
 		let Height = 1;
 		let AnimationFramesCount = 1;
-		let SpecialFramesCount = 0;
-		let TotalFramesCount = 1;
-		let FrameSize = Width * Height * 16;
-		let Frames = Array.new(TotalFramesCount);
-		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1[0] = 8;
-		let Frame1[1] = 28;
-		let Frame1[2] = 62;
-		let Frame1[3] = 127;
-		let Frame1[4] = 254;
-		let Frame1[5] = 508;
-		let Frame1[6] = 1016;
-		let Frame1[7] = 2032;
-		let Frame1[8] = 2016;
-		let Frame1[9] = 3008;
-		let Frame1[10] = 5504;
-		let Frame1[11] = 4608;
-		let Frame1[12] = 11264;
-		let Frame1[13] = 12288;
-		let Frames[0] = Frame1;
+		let FrameSize = 16;
+		let Frames = Array.new(AnimationFramesCount);
+		let Frame1 = Array.new(16);
+		do MemoryExt.poke(Frame1, 0, 8);
+		do MemoryExt.poke(Frame1, 1, 28);
+		do MemoryExt.poke(Frame1, 2, 62);
+		do MemoryExt.poke(Frame1, 3, 127);
+		do MemoryExt.poke(Frame1, 4, 254);
+		do MemoryExt.poke(Frame1, 5, 508);
+		do MemoryExt.poke(Frame1, 6, 1016);
+		do MemoryExt.poke(Frame1, 7, 2032);
+		do MemoryExt.poke(Frame1, 8, 2016);
+		do MemoryExt.poke(Frame1, 9, 3008);
+		do MemoryExt.poke(Frame1, 10, 5504);
+		do MemoryExt.poke(Frame1, 11, 4608);
+		do MemoryExt.poke(Frame1, 12, 11264);
+		do MemoryExt.poke(Frame1, 13, 12288);
+		do MemoryExt.poke(Frames, 0, Frame1);
 		return;
 	}
 	function int getWidth() { return Width; }
 	function int getHeight() { return Height; }
-	function void CheckTimers()
-	{
-		if (animationTimer < 1)
-		{
-			do Ammo.ChangeFrame();
-			let animationTimer = animationDelay;
-		}
-		if (specialFrameTimer < 1)
-		{
-			let stopAnimation = false;
-			let specialFrameTimer = 0;
-		}
-		return;
-	}
-	function void DecrementTimers()
-	{
-		let animationTimer = animationTimer - 1;
-		let specialFrameTimer = specialFrameTimer - 1;
-		return;
-	}
-	function void ChangeFrame()
-	{
-		if (~(stopAnimation | (AnimationFramesCount = 0)))
-		{
-			if (currFrame < (AnimationFramesCount - 1))
-			{
-				let currFrame = currFrame + 1;
-			}
-			else
-			{
-				let currFrame = 0;
-			}
-		}
-		return;
-	}
 	function void DrawFrame(int memAddress, bool display, int x, int y)
 	{
 		do Sprite.Draw(memAddress, Frames[currFrame], FrameSize, Width, Height, display, x, y);

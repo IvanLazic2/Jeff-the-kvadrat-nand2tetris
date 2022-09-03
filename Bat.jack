@@ -3,13 +3,9 @@ class Bat
 	static int Width;
 	static int Height;
 	static int AnimationFramesCount;
-	static int SpecialFramesCount;
-	static int TotalFramesCount;
-	static bool stopAnimation;
 	static int currFrame;
 	static int animationTimer;
 	static int animationDelay;
-	static int specialFrameTimer;
 	static Array Frames;
 	static int FrameSize;
 	static Array FramesMirrored;
@@ -25,91 +21,89 @@ class Bat
 		let Width = 2;
 		let Height = 1;
 		let AnimationFramesCount = 2;
-		let SpecialFramesCount = 0;
-		let TotalFramesCount = 2;
-		let FrameSize = Width * Height * 16;
-		let Frames = Array.new(TotalFramesCount);
-		let FramesMirrored = Array.new(TotalFramesCount);
-		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1Mirrored = Array.new(Width * Height * 16);
-		let Frame1[0] = 12288;
-		let Frame1[1] = 12;
-		let Frame1[2] = 12288;
-		let Frame1[3] = 12;
-		let Frame1[4] = -4096;
-		let Frame1[5] = 63;
-		let Frame1[6] = -4096;
-		let Frame1[7] = 63;
-		let Frame1[8] = 15360;
-		let Frame1[9] = 79;
-		let Frame1[10] = 15360;
-		let Frame1[11] = 207;
-		let Frame1[12] = -256;
-		let Frame1[13] = 255;
-		let Frame1[14] = 16128;
-		let Frame1[15] = 1008;
-		let Frame1[16] = 16128;
-		let Frame1[17] = 1008;
-		let Frame1[18] = 3840;
-		let Frame1[19] = 960;
-		let Frame1[20] = 3840;
-		let Frame1[21] = 960;
-		let Frame1Mirrored[0] = 12288;
-		let Frame1Mirrored[1] = 12;
-		let Frame1Mirrored[2] = 12288;
-		let Frame1Mirrored[3] = 12;
-		let Frame1Mirrored[4] = -1024;
-		let Frame1Mirrored[5] = 15;
-		let Frame1Mirrored[6] = -1024;
-		let Frame1Mirrored[7] = 15;
-		let Frame1Mirrored[8] = -3584;
-		let Frame1Mirrored[9] = 60;
-		let Frame1Mirrored[10] = -3328;
-		let Frame1Mirrored[11] = 60;
-		let Frame1Mirrored[12] = -256;
-		let Frame1Mirrored[13] = 255;
-		let Frame1Mirrored[14] = 4032;
-		let Frame1Mirrored[15] = 252;
-		let Frame1Mirrored[16] = 4032;
-		let Frame1Mirrored[17] = 252;
-		let Frame1Mirrored[18] = 960;
-		let Frame1Mirrored[19] = 240;
-		let Frame1Mirrored[20] = 960;
-		let Frame1Mirrored[21] = 240;
-		let Frames[0] = Frame1;
-		let FramesMirrored[0] = Frame1Mirrored;
-		let Frame2 = Array.new(Width * Height * 16);
-		let Frame2Mirrored = Array.new(Width * Height * 16);
-		let Frame2[0] = 13184;
-		let Frame2[1] = 1932;
-		let Frame2[2] = 14208;
-		let Frame2[3] = 1932;
-		let Frame2[4] = -128;
-		let Frame2[5] = 2047;
-		let Frame2[6] = -128;
-		let Frame2[7] = 2047;
-		let Frame2[8] = 15872;
-		let Frame2[9] = 463;
-		let Frame2[10] = 12288;
-		let Frame2[11] = 79;
-		let Frame2[12] = -4096;
-		let Frame2[13] = 127;
-		let Frame2Mirrored[0] = 12768;
-		let Frame2Mirrored[1] = 460;
-		let Frame2Mirrored[2] = 12768;
-		let Frame2Mirrored[3] = 492;
-		let Frame2Mirrored[4] = -32;
-		let Frame2Mirrored[5] = 511;
-		let Frame2Mirrored[6] = -32;
-		let Frame2Mirrored[7] = 511;
-		let Frame2Mirrored[8] = -3200;
-		let Frame2Mirrored[9] = 124;
-		let Frame2Mirrored[10] = -3584;
-		let Frame2Mirrored[11] = 12;
-		let Frame2Mirrored[12] = -512;
-		let Frame2Mirrored[13] = 15;
-		let Frames[1] = Frame2;
-		let FramesMirrored[1] = Frame2Mirrored;
+		let FrameSize = 32;
+		let Frames = Array.new(AnimationFramesCount);
+		let FramesMirrored = Array.new(AnimationFramesCount);
+		let Frame1 = Array.new(32);
+		let Frame1Mirrored = Array.new(32);
+		do MemoryExt.poke(Frame1, 0, 12288);
+		do MemoryExt.poke(Frame1, 1, 12);
+		do MemoryExt.poke(Frame1, 2, 12288);
+		do MemoryExt.poke(Frame1, 3, 12);
+		do MemoryExt.poke(Frame1, 4, -4096);
+		do MemoryExt.poke(Frame1, 5, 63);
+		do MemoryExt.poke(Frame1, 6, -4096);
+		do MemoryExt.poke(Frame1, 7, 63);
+		do MemoryExt.poke(Frame1, 8, 15360);
+		do MemoryExt.poke(Frame1, 9, 79);
+		do MemoryExt.poke(Frame1, 10, 15360);
+		do MemoryExt.poke(Frame1, 11, 207);
+		do MemoryExt.poke(Frame1, 12, -256);
+		do MemoryExt.poke(Frame1, 13, 255);
+		do MemoryExt.poke(Frame1, 14, 16128);
+		do MemoryExt.poke(Frame1, 15, 1008);
+		do MemoryExt.poke(Frame1, 16, 16128);
+		do MemoryExt.poke(Frame1, 17, 1008);
+		do MemoryExt.poke(Frame1, 18, 3840);
+		do MemoryExt.poke(Frame1, 19, 960);
+		do MemoryExt.poke(Frame1, 20, 3840);
+		do MemoryExt.poke(Frame1, 21, 960);
+		do MemoryExt.poke(Frame1Mirrored, 0, 12288);
+		do MemoryExt.poke(Frame1Mirrored, 1, 12);
+		do MemoryExt.poke(Frame1Mirrored, 2, 12288);
+		do MemoryExt.poke(Frame1Mirrored, 3, 12);
+		do MemoryExt.poke(Frame1Mirrored, 4, -1024);
+		do MemoryExt.poke(Frame1Mirrored, 5, 15);
+		do MemoryExt.poke(Frame1Mirrored, 6, -1024);
+		do MemoryExt.poke(Frame1Mirrored, 7, 15);
+		do MemoryExt.poke(Frame1Mirrored, 8, -3584);
+		do MemoryExt.poke(Frame1Mirrored, 9, 60);
+		do MemoryExt.poke(Frame1Mirrored, 10, -3328);
+		do MemoryExt.poke(Frame1Mirrored, 11, 60);
+		do MemoryExt.poke(Frame1Mirrored, 12, -256);
+		do MemoryExt.poke(Frame1Mirrored, 13, 255);
+		do MemoryExt.poke(Frame1Mirrored, 14, 4032);
+		do MemoryExt.poke(Frame1Mirrored, 15, 252);
+		do MemoryExt.poke(Frame1Mirrored, 16, 4032);
+		do MemoryExt.poke(Frame1Mirrored, 17, 252);
+		do MemoryExt.poke(Frame1Mirrored, 18, 960);
+		do MemoryExt.poke(Frame1Mirrored, 19, 240);
+		do MemoryExt.poke(Frame1Mirrored, 20, 960);
+		do MemoryExt.poke(Frame1Mirrored, 21, 240);
+		do MemoryExt.poke(Frames, 0, Frame1);
+		do MemoryExt.poke(FramesMirrored, 0, Frame1Mirrored);
+		let Frame2 = Array.new(32);
+		let Frame2Mirrored = Array.new(32);
+		do MemoryExt.poke(Frame2, 0, 13184);
+		do MemoryExt.poke(Frame2, 1, 1932);
+		do MemoryExt.poke(Frame2, 2, 14208);
+		do MemoryExt.poke(Frame2, 3, 1932);
+		do MemoryExt.poke(Frame2, 4, -128);
+		do MemoryExt.poke(Frame2, 5, 2047);
+		do MemoryExt.poke(Frame2, 6, -128);
+		do MemoryExt.poke(Frame2, 7, 2047);
+		do MemoryExt.poke(Frame2, 8, 15872);
+		do MemoryExt.poke(Frame2, 9, 463);
+		do MemoryExt.poke(Frame2, 10, 12288);
+		do MemoryExt.poke(Frame2, 11, 79);
+		do MemoryExt.poke(Frame2, 12, -4096);
+		do MemoryExt.poke(Frame2, 13, 127);
+		do MemoryExt.poke(Frame2Mirrored, 0, 12768);
+		do MemoryExt.poke(Frame2Mirrored, 1, 460);
+		do MemoryExt.poke(Frame2Mirrored, 2, 12768);
+		do MemoryExt.poke(Frame2Mirrored, 3, 492);
+		do MemoryExt.poke(Frame2Mirrored, 4, -32);
+		do MemoryExt.poke(Frame2Mirrored, 5, 511);
+		do MemoryExt.poke(Frame2Mirrored, 6, -32);
+		do MemoryExt.poke(Frame2Mirrored, 7, 511);
+		do MemoryExt.poke(Frame2Mirrored, 8, -3200);
+		do MemoryExt.poke(Frame2Mirrored, 9, 124);
+		do MemoryExt.poke(Frame2Mirrored, 10, -3584);
+		do MemoryExt.poke(Frame2Mirrored, 11, 12);
+		do MemoryExt.poke(Frame2Mirrored, 12, -512);
+		do MemoryExt.poke(Frame2Mirrored, 13, 15);
+		do MemoryExt.poke(Frames, 1, Frame2);
+		do MemoryExt.poke(FramesMirrored, 1, Frame2Mirrored);
 		return;
 	}
 	function int getWidth() { return Width; }
@@ -121,31 +115,22 @@ class Bat
 			do Bat.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
-		if (specialFrameTimer < 1)
-		{
-			let stopAnimation = false;
-			let specialFrameTimer = 0;
-		}
 		return;
 	}
 	function void DecrementTimers()
 	{
 		let animationTimer = animationTimer - 1;
-		let specialFrameTimer = specialFrameTimer - 1;
 		return;
 	}
 	function void ChangeFrame()
 	{
-		if (~(stopAnimation | (AnimationFramesCount = 0)))
+		if (currFrame < (AnimationFramesCount - 1))
 		{
-			if (currFrame < (AnimationFramesCount - 1))
-			{
-				let currFrame = currFrame + 1;
-			}
-			else
-			{
-				let currFrame = 0;
-			}
+			let currFrame = currFrame + 1;
+		}
+		else
+		{
+			let currFrame = 0;
 		}
 		return;
 	}

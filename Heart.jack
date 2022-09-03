@@ -3,17 +3,16 @@ class Heart
 	static int Width;
 	static int Height;
 	static int AnimationFramesCount;
-	static int SpecialFramesCount;
-	static int TotalFramesCount;
-	static bool stopAnimation;
 	static int currFrame;
 	static int animationTimer;
 	static int animationDelay;
-	static int specialFrameTimer;
 	static Array Frames;
 	static int FrameSize;
+	static Array FramesMirrored;
 	static Array Frame1;
+	static Array Frame1Mirrored;
 	static Array Frame2;
+	static Array Frame2Mirrored;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
@@ -22,38 +21,36 @@ class Heart
 		let Width = 1;
 		let Height = 1;
 		let AnimationFramesCount = 2;
-		let SpecialFramesCount = 0;
-		let TotalFramesCount = 2;
-		let FrameSize = Width * Height * 16;
-		let Frames = Array.new(TotalFramesCount);
-		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1[0] = 384;
-		let Frame1[1] = 960;
-		let Frame1[2] = 2016;
-		let Frame1[3] = 4080;
-		let Frame1[4] = 8184;
-		let Frame1[5] = 16380;
-		let Frame1[6] = 32766;
-		let Frame1[7] = -1;
-		let Frame1[8] = -16385;
-		let Frame1[9] = -16385;
-		let Frame1[10] = -16385;
-		let Frame1[11] = -8193;
-		let Frame1[12] = 28286;
-		let Frame1[13] = 15420;
-		let Frames[0] = Frame1;
-		let Frame2 = Array.new(Width * Height * 16);
-		let Frame2[2] = 384;
-		let Frame2[3] = 960;
-		let Frame2[4] = 2016;
-		let Frame2[5] = 4080;
-		let Frame2[6] = 8184;
-		let Frame2[7] = 16380;
-		let Frame2[8] = 12284;
-		let Frame2[9] = 12284;
-		let Frame2[10] = 13948;
-		let Frame2[11] = 7224;
-		let Frames[1] = Frame2;
+		let FrameSize = 16;
+		let Frames = Array.new(AnimationFramesCount);
+		let Frame1 = Array.new(16);
+		do MemoryExt.poke(Frame1, 0, 384);
+		do MemoryExt.poke(Frame1, 1, 960);
+		do MemoryExt.poke(Frame1, 2, 2016);
+		do MemoryExt.poke(Frame1, 3, 4080);
+		do MemoryExt.poke(Frame1, 4, 8184);
+		do MemoryExt.poke(Frame1, 5, 16380);
+		do MemoryExt.poke(Frame1, 6, 32766);
+		do MemoryExt.poke(Frame1, 7, -1);
+		do MemoryExt.poke(Frame1, 8, -16385);
+		do MemoryExt.poke(Frame1, 9, -16385);
+		do MemoryExt.poke(Frame1, 10, -16385);
+		do MemoryExt.poke(Frame1, 11, -8193);
+		do MemoryExt.poke(Frame1, 12, 28286);
+		do MemoryExt.poke(Frame1, 13, 15420);
+		do MemoryExt.poke(Frames, 0, Frame1);
+		let Frame2 = Array.new(16);
+		do MemoryExt.poke(Frame2, 2, 384);
+		do MemoryExt.poke(Frame2, 3, 960);
+		do MemoryExt.poke(Frame2, 4, 2016);
+		do MemoryExt.poke(Frame2, 5, 4080);
+		do MemoryExt.poke(Frame2, 6, 8184);
+		do MemoryExt.poke(Frame2, 7, 16380);
+		do MemoryExt.poke(Frame2, 8, 12284);
+		do MemoryExt.poke(Frame2, 9, 12284);
+		do MemoryExt.poke(Frame2, 10, 13948);
+		do MemoryExt.poke(Frame2, 11, 7224);
+		do MemoryExt.poke(Frames, 1, Frame2);
 		return;
 	}
 	function int getWidth() { return Width; }
@@ -65,31 +62,22 @@ class Heart
 			do Heart.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
-		if (specialFrameTimer < 1)
-		{
-			let stopAnimation = false;
-			let specialFrameTimer = 0;
-		}
 		return;
 	}
 	function void DecrementTimers()
 	{
 		let animationTimer = animationTimer - 1;
-		let specialFrameTimer = specialFrameTimer - 1;
 		return;
 	}
 	function void ChangeFrame()
 	{
-		if (~(stopAnimation | (AnimationFramesCount = 0)))
+		if (currFrame < (AnimationFramesCount - 1))
 		{
-			if (currFrame < (AnimationFramesCount - 1))
-			{
-				let currFrame = currFrame + 1;
-			}
-			else
-			{
-				let currFrame = 0;
-			}
+			let currFrame = currFrame + 1;
+		}
+		else
+		{
+			let currFrame = 0;
 		}
 		return;
 	}

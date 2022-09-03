@@ -3,17 +3,16 @@ class Coin
 	static int Width;
 	static int Height;
 	static int AnimationFramesCount;
-	static int SpecialFramesCount;
-	static int TotalFramesCount;
-	static bool stopAnimation;
 	static int currFrame;
 	static int animationTimer;
 	static int animationDelay;
-	static int specialFrameTimer;
 	static Array Frames;
 	static int FrameSize;
+	static Array FramesMirrored;
 	static Array Frame1;
+	static Array Frame1Mirrored;
 	static Array Frame2;
+	static Array Frame2Mirrored;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
@@ -22,42 +21,40 @@ class Coin
 		let Width = 1;
 		let Height = 1;
 		let AnimationFramesCount = 2;
-		let SpecialFramesCount = 0;
-		let TotalFramesCount = 2;
-		let FrameSize = Width * Height * 16;
-		let Frames = Array.new(TotalFramesCount);
-		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1[1] = 2016;
-		let Frame1[2] = 6168;
-		let Frame1[3] = 9156;
-		let Frame1[4] = 11316;
-		let Frame1[5] = 18834;
-		let Frame1[6] = 21066;
-		let Frame1[7] = 21002;
-		let Frame1[8] = 21002;
-		let Frame1[9] = 21002;
-		let Frame1[10] = 18450;
-		let Frame1[11] = 11316;
-		let Frame1[12] = 9156;
-		let Frame1[13] = 6168;
-		let Frame1[14] = 2016;
-		let Frames[0] = Frame1;
-		let Frame2 = Array.new(Width * Height * 16);
-		let Frame2[1] = 384;
-		let Frame2[2] = 576;
-		let Frame2[3] = 576;
-		let Frame2[4] = 576;
-		let Frame2[5] = 576;
-		let Frame2[6] = 576;
-		let Frame2[7] = 576;
-		let Frame2[8] = 576;
-		let Frame2[9] = 576;
-		let Frame2[10] = 576;
-		let Frame2[11] = 576;
-		let Frame2[12] = 576;
-		let Frame2[13] = 576;
-		let Frame2[14] = 384;
-		let Frames[1] = Frame2;
+		let FrameSize = 16;
+		let Frames = Array.new(AnimationFramesCount);
+		let Frame1 = Array.new(16);
+		do MemoryExt.poke(Frame1, 1, 2016);
+		do MemoryExt.poke(Frame1, 2, 6168);
+		do MemoryExt.poke(Frame1, 3, 9156);
+		do MemoryExt.poke(Frame1, 4, 11316);
+		do MemoryExt.poke(Frame1, 5, 18834);
+		do MemoryExt.poke(Frame1, 6, 21066);
+		do MemoryExt.poke(Frame1, 7, 21002);
+		do MemoryExt.poke(Frame1, 8, 21002);
+		do MemoryExt.poke(Frame1, 9, 21002);
+		do MemoryExt.poke(Frame1, 10, 18450);
+		do MemoryExt.poke(Frame1, 11, 11316);
+		do MemoryExt.poke(Frame1, 12, 9156);
+		do MemoryExt.poke(Frame1, 13, 6168);
+		do MemoryExt.poke(Frame1, 14, 2016);
+		do MemoryExt.poke(Frames, 0, Frame1);
+		let Frame2 = Array.new(16);
+		do MemoryExt.poke(Frame2, 1, 384);
+		do MemoryExt.poke(Frame2, 2, 576);
+		do MemoryExt.poke(Frame2, 3, 576);
+		do MemoryExt.poke(Frame2, 4, 576);
+		do MemoryExt.poke(Frame2, 5, 576);
+		do MemoryExt.poke(Frame2, 6, 576);
+		do MemoryExt.poke(Frame2, 7, 576);
+		do MemoryExt.poke(Frame2, 8, 576);
+		do MemoryExt.poke(Frame2, 9, 576);
+		do MemoryExt.poke(Frame2, 10, 576);
+		do MemoryExt.poke(Frame2, 11, 576);
+		do MemoryExt.poke(Frame2, 12, 576);
+		do MemoryExt.poke(Frame2, 13, 576);
+		do MemoryExt.poke(Frame2, 14, 384);
+		do MemoryExt.poke(Frames, 1, Frame2);
 		return;
 	}
 	function int getWidth() { return Width; }
@@ -69,31 +66,22 @@ class Coin
 			do Coin.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
-		if (specialFrameTimer < 1)
-		{
-			let stopAnimation = false;
-			let specialFrameTimer = 0;
-		}
 		return;
 	}
 	function void DecrementTimers()
 	{
 		let animationTimer = animationTimer - 1;
-		let specialFrameTimer = specialFrameTimer - 1;
 		return;
 	}
 	function void ChangeFrame()
 	{
-		if (~(stopAnimation | (AnimationFramesCount = 0)))
+		if (currFrame < (AnimationFramesCount - 1))
 		{
-			if (currFrame < (AnimationFramesCount - 1))
-			{
-				let currFrame = currFrame + 1;
-			}
-			else
-			{
-				let currFrame = 0;
-			}
+			let currFrame = currFrame + 1;
+		}
+		else
+		{
+			let currFrame = 0;
 		}
 		return;
 	}

@@ -107,7 +107,7 @@ class Character
     }
     method void addLife() 
     {
-        if ((health + 1) < Difficulty.getCharacterHealthLimit())
+        if (health < Difficulty.getCharacterHealthLimit())
         {
             let health = health + 1;
             do printHealth();
@@ -209,15 +209,19 @@ class Character
         return;
     }
 
-    method void CheckCollisionWithEnemy(Enemy enemy)
+    method bool CheckCollisionWithEnemy(Enemy enemy)
     {
-        if (enemy.CheckCollisionWithCharacter(X, Y, Width, heightInPixels))
+        var bool result;
+
+        let result = enemy.CheckCollisionWithCharacter(X, Y, Width, heightInPixels);
+
+        if (result)
         {
             do Respawn();
             do TakeDamage();
         }
 
-        return;
+        return result;
     }
 
     method void CheckCollisionWithBullet(Bullet bullet)
@@ -548,7 +552,7 @@ class Character
             {
                 let bulletX = X + Width;
             }
-            let bulletY = Y - Constants.getBlockHeight();
+            let bulletY = Y - 20;
 
             if (canShoot)
             {

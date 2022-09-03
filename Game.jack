@@ -230,6 +230,8 @@ class Game
 
         do animationCharacter.Jump();
         do animationCharacter.CheckGravity(animationCharacter.getAbsoluteX());
+        do animationCharacter.Shoot(0);
+        do animationCharacter.CheckBullets(0);
 
         if (animationCharacter.getAbsoluteX() > (animationLevel.getMapWidth() - 4))
         {
@@ -994,7 +996,11 @@ class Game
         {
             let enemy = Enemies[i];
 
-            do Character.CheckCollisionWithEnemy(enemy);
+            if (Character.CheckCollisionWithEnemy(enemy))
+            {
+                do DrawAllPlatforms();
+                let i = EnemiesCount;
+            }
 
             let i = i + 1;
         }
