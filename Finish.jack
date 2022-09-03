@@ -78,6 +78,13 @@ class Finish
         return;
     }
 
+    method void ForceDraw()
+    {
+        do FinishFlag.DrawFrame(memAddress, true, X, Y);
+
+        return;
+    }
+
     method void resetObject()
     {
         let X = 0;

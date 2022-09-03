@@ -590,6 +590,8 @@ class Enemy
 			let movingLeft = true;
 		}}
 
+		do ForceDraw();
+
 		return;
 	}
 
@@ -631,7 +633,12 @@ class Enemy
 			let memAddress = memAddress - 1;
 			do Clear();
 			let X = X - 1;
-			do Draw();
+
+			if (~((Type = 0) | (Type = 3)))
+			{
+				do Draw();
+			}
+			
 			let canMoveLeftRight = false;
 		}
        	return;
@@ -648,7 +655,12 @@ class Enemy
 			let memAddress = memAddress + 1;
 			do Clear();
 			let X = X + 1;
-			do Draw();
+
+			if (~((Type = 0) | (Type = 3)))
+			{
+				do Draw();
+			}
+
 			let canMoveLeftRight = false;
 
 		}
@@ -663,7 +675,12 @@ class Enemy
 			let memAddress = memAddress - 512;
 			do Clear();
 			let Y = Y - 16;
-			do Draw();
+
+			if (~((Type = 0) | (Type = 3)))
+			{
+				do Draw();
+			}
+
 			let canMoveUpDown = false;
 
 		}
@@ -678,7 +695,12 @@ class Enemy
 			let memAddress = memAddress + 512;
 			do Clear();
 			let Y = Y + 16;
-			do Draw();
+
+			if (~((Type = 0) | (Type = 3)))
+			{
+				do Draw();
+			}
+
 			let canMoveUpDown = false;
 		}
         return;

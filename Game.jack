@@ -870,12 +870,15 @@ class Game
 
     method void CheckAllSpriteTimers()
     {
+        do FinishFlag.CheckTimers();
+
         do Bat.CheckTimers();
-        //do Spider.CheckTimers();
+        do Spider.CheckTimers();
 
         do Heart.CheckTimers();
         do Coin.CheckTimers();
 
+        do Finish.ForceDraw();
         do DrawAllCollectables();
 
         return;
@@ -883,8 +886,10 @@ class Game
 
     method void DecrementAllSpriteTimers()
     {
+        do FinishFlag.DecrementTimers();
+
         do Bat.DecrementTimers();
-        //do Spider.DecrementTimers();
+        do Spider.DecrementTimers();
 
         do Heart.DecrementTimers();
         do Coin.DecrementTimers();

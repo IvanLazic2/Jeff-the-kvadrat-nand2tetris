@@ -11,88 +11,173 @@ class Spider
 	static Array FramesMirrored;
 	static Array Frame1;
 	static Array Frame1Mirrored;
+	static Array Frame2;
+	static Array Frame2Mirrored;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
+		let animationDelay = 3;
 //////////////////////////////////////////
 		let Width = 2;
 		let Height = 1;
-		let AnimationFramesCount = 1;
+		let AnimationFramesCount = 2;
 		let FrameSize = 32;
 		let Frames = Array.new(AnimationFramesCount);
 		let FramesMirrored = Array.new(AnimationFramesCount);
 		let Frame1 = Array.new(32);
 		let Frame1Mirrored = Array.new(32);
-		do MemoryExt.poke(Frame1, 0, -1);
-		do MemoryExt.poke(Frame1, 1, -1);
-		do MemoryExt.poke(Frame1, 2, -1);
-		do MemoryExt.poke(Frame1, 3, -1);
-		do MemoryExt.poke(Frame1, 4, -1);
-		do MemoryExt.poke(Frame1, 5, -1);
-		do MemoryExt.poke(Frame1, 6, -1);
-		do MemoryExt.poke(Frame1, 7, -1);
-		do MemoryExt.poke(Frame1, 8, -1);
-		do MemoryExt.poke(Frame1, 9, -1);
-		do MemoryExt.poke(Frame1, 10, -1);
-		do MemoryExt.poke(Frame1, 11, -1);
-		do MemoryExt.poke(Frame1, 12, -1);
-		do MemoryExt.poke(Frame1, 13, -1);
-		do MemoryExt.poke(Frame1, 14, -1);
-		do MemoryExt.poke(Frame1, 15, -1);
-		do MemoryExt.poke(Frame1, 16, -1);
-		do MemoryExt.poke(Frame1, 17, -1);
-		do MemoryExt.poke(Frame1, 18, -1);
-		do MemoryExt.poke(Frame1, 19, -1);
-		do MemoryExt.poke(Frame1, 20, -1);
-		do MemoryExt.poke(Frame1, 21, -1);
-		do MemoryExt.poke(Frame1, 22, -1);
-		do MemoryExt.poke(Frame1, 23, -1);
-		do MemoryExt.poke(Frame1, 24, -1);
-		do MemoryExt.poke(Frame1, 25, -1);
-		do MemoryExt.poke(Frame1, 26, -1);
-		do MemoryExt.poke(Frame1, 27, -1);
-		do MemoryExt.poke(Frame1, 28, -1);
-		do MemoryExt.poke(Frame1, 29, -1);
-		do MemoryExt.poke(Frame1, 30, -1);
-		do MemoryExt.poke(Frame1, 31, -1);
-		do MemoryExt.poke(Frame1Mirrored, 0, -1);
-		do MemoryExt.poke(Frame1Mirrored, 1, -1);
-		do MemoryExt.poke(Frame1Mirrored, 2, -1);
-		do MemoryExt.poke(Frame1Mirrored, 3, -1);
-		do MemoryExt.poke(Frame1Mirrored, 4, -1);
-		do MemoryExt.poke(Frame1Mirrored, 5, -1);
-		do MemoryExt.poke(Frame1Mirrored, 6, -1);
-		do MemoryExt.poke(Frame1Mirrored, 7, -1);
-		do MemoryExt.poke(Frame1Mirrored, 8, -1);
-		do MemoryExt.poke(Frame1Mirrored, 9, -1);
-		do MemoryExt.poke(Frame1Mirrored, 10, -1);
-		do MemoryExt.poke(Frame1Mirrored, 11, -1);
-		do MemoryExt.poke(Frame1Mirrored, 12, -1);
-		do MemoryExt.poke(Frame1Mirrored, 13, -1);
-		do MemoryExt.poke(Frame1Mirrored, 14, -1);
-		do MemoryExt.poke(Frame1Mirrored, 15, -1);
-		do MemoryExt.poke(Frame1Mirrored, 16, -1);
-		do MemoryExt.poke(Frame1Mirrored, 17, -1);
-		do MemoryExt.poke(Frame1Mirrored, 18, -1);
-		do MemoryExt.poke(Frame1Mirrored, 19, -1);
-		do MemoryExt.poke(Frame1Mirrored, 20, -1);
-		do MemoryExt.poke(Frame1Mirrored, 21, -1);
-		do MemoryExt.poke(Frame1Mirrored, 22, -1);
-		do MemoryExt.poke(Frame1Mirrored, 23, -1);
-		do MemoryExt.poke(Frame1Mirrored, 24, -1);
-		do MemoryExt.poke(Frame1Mirrored, 25, -1);
-		do MemoryExt.poke(Frame1Mirrored, 26, -1);
-		do MemoryExt.poke(Frame1Mirrored, 27, -1);
-		do MemoryExt.poke(Frame1Mirrored, 28, -1);
-		do MemoryExt.poke(Frame1Mirrored, 29, -1);
-		do MemoryExt.poke(Frame1Mirrored, 30, -1);
-		do MemoryExt.poke(Frame1Mirrored, 31, -1);
+		do MemoryExt.poke(Frame1, 0, 8321);
+		do MemoryExt.poke(Frame1, 1, -28414);
+		do MemoryExt.poke(Frame1, 2, 17158);
+		do MemoryExt.poke(Frame1, 3, 27844);
+		do MemoryExt.poke(Frame1, 4, 31752);
+		do MemoryExt.poke(Frame1, 5, 8188);
+		do MemoryExt.poke(Frame1, 6, -1016);
+		do MemoryExt.poke(Frame1, 7, 8191);
+		do MemoryExt.poke(Frame1, 8, -16);
+		do MemoryExt.poke(Frame1, 9, 8191);
+		do MemoryExt.poke(Frame1, 10, -8);
+		do MemoryExt.poke(Frame1, 11, 4735);
+		do MemoryExt.poke(Frame1, 12, -4);
+		do MemoryExt.poke(Frame1, 13, 6015);
+		do MemoryExt.poke(Frame1, 14, -2);
+		do MemoryExt.poke(Frame1, 15, 8191);
+		do MemoryExt.poke(Frame1, 16, -2);
+		do MemoryExt.poke(Frame1, 17, 4071);
+		do MemoryExt.poke(Frame1, 18, -2);
+		do MemoryExt.poke(Frame1, 19, 7);
+		do MemoryExt.poke(Frame1, 20, -4);
+		do MemoryExt.poke(Frame1, 21, 7);
+		do MemoryExt.poke(Frame1, 22, -8);
+		do MemoryExt.poke(Frame1, 23, 3);
+		do MemoryExt.poke(Frame1, 24, -8);
+		do MemoryExt.poke(Frame1, 25, 3);
+		do MemoryExt.poke(Frame1, 26, -16);
+		do MemoryExt.poke(Frame1, 27, 1);
+		do MemoryExt.poke(Frame1, 28, 32704);
+		do MemoryExt.poke(Frame1Mirrored, 0, 16521);
+		do MemoryExt.poke(Frame1Mirrored, 1, -32508);
+		do MemoryExt.poke(Frame1Mirrored, 2, 9014);
+		do MemoryExt.poke(Frame1Mirrored, 3, 24770);
+		do MemoryExt.poke(Frame1Mirrored, 4, 16376);
+		do MemoryExt.poke(Frame1Mirrored, 5, 4158);
+		do MemoryExt.poke(Frame1Mirrored, 6, -8);
+		do MemoryExt.poke(Frame1Mirrored, 7, 4159);
+		do MemoryExt.poke(Frame1Mirrored, 8, -8);
+		do MemoryExt.poke(Frame1Mirrored, 9, 4095);
+		do MemoryExt.poke(Frame1Mirrored, 10, -440);
+		do MemoryExt.poke(Frame1Mirrored, 11, 8191);
+		do MemoryExt.poke(Frame1Mirrored, 12, -280);
+		do MemoryExt.poke(Frame1Mirrored, 13, 16383);
+		do MemoryExt.poke(Frame1Mirrored, 14, -8);
+		do MemoryExt.poke(Frame1Mirrored, 15, 32767);
+		do MemoryExt.poke(Frame1Mirrored, 16, -6160);
+		do MemoryExt.poke(Frame1Mirrored, 17, 32767);
+		do MemoryExt.poke(Frame1Mirrored, 18, -8192);
+		do MemoryExt.poke(Frame1Mirrored, 19, 32767);
+		do MemoryExt.poke(Frame1Mirrored, 20, -8192);
+		do MemoryExt.poke(Frame1Mirrored, 21, 16383);
+		do MemoryExt.poke(Frame1Mirrored, 22, -16384);
+		do MemoryExt.poke(Frame1Mirrored, 23, 8191);
+		do MemoryExt.poke(Frame1Mirrored, 24, -16384);
+		do MemoryExt.poke(Frame1Mirrored, 25, 8191);
+		do MemoryExt.poke(Frame1Mirrored, 26, ~32767);
+		do MemoryExt.poke(Frame1Mirrored, 27, 4095);
+		do MemoryExt.poke(Frame1Mirrored, 29, 1022);
 		do MemoryExt.poke(Frames, 0, Frame1);
 		do MemoryExt.poke(FramesMirrored, 0, Frame1Mirrored);
+		let Frame2 = Array.new(32);
+		let Frame2Mirrored = Array.new(32);
+		do MemoryExt.poke(Frame2, 0, -30688);
+		do MemoryExt.poke(Frame2, 1, 8738);
+		do MemoryExt.poke(Frame2, 2, 17424);
+		do MemoryExt.poke(Frame2, 3, 11460);
+		do MemoryExt.poke(Frame2, 4, 31752);
+		do MemoryExt.poke(Frame2, 5, 8188);
+		do MemoryExt.poke(Frame2, 6, -1016);
+		do MemoryExt.poke(Frame2, 7, 8191);
+		do MemoryExt.poke(Frame2, 8, -16);
+		do MemoryExt.poke(Frame2, 9, 8191);
+		do MemoryExt.poke(Frame2, 10, -8);
+		do MemoryExt.poke(Frame2, 11, 4735);
+		do MemoryExt.poke(Frame2, 12, -4);
+		do MemoryExt.poke(Frame2, 13, 6015);
+		do MemoryExt.poke(Frame2, 14, -2);
+		do MemoryExt.poke(Frame2, 15, 8191);
+		do MemoryExt.poke(Frame2, 16, -2);
+		do MemoryExt.poke(Frame2, 17, 4071);
+		do MemoryExt.poke(Frame2, 18, -2);
+		do MemoryExt.poke(Frame2, 19, 7);
+		do MemoryExt.poke(Frame2, 20, -4);
+		do MemoryExt.poke(Frame2, 21, 7);
+		do MemoryExt.poke(Frame2, 22, -8);
+		do MemoryExt.poke(Frame2, 23, 3);
+		do MemoryExt.poke(Frame2, 24, -8);
+		do MemoryExt.poke(Frame2, 25, 3);
+		do MemoryExt.poke(Frame2, 26, -16);
+		do MemoryExt.poke(Frame2, 27, 1);
+		do MemoryExt.poke(Frame2, 28, 32704);
+		do MemoryExt.poke(Frame2Mirrored, 0, 17476);
+		do MemoryExt.poke(Frame2Mirrored, 1, 1041);
+		do MemoryExt.poke(Frame2Mirrored, 2, 9012);
+		do MemoryExt.poke(Frame2Mirrored, 3, 2082);
+		do MemoryExt.poke(Frame2Mirrored, 4, 16376);
+		do MemoryExt.poke(Frame2Mirrored, 5, 4158);
+		do MemoryExt.poke(Frame2Mirrored, 6, -8);
+		do MemoryExt.poke(Frame2Mirrored, 7, 4159);
+		do MemoryExt.poke(Frame2Mirrored, 8, -8);
+		do MemoryExt.poke(Frame2Mirrored, 9, 4095);
+		do MemoryExt.poke(Frame2Mirrored, 10, -440);
+		do MemoryExt.poke(Frame2Mirrored, 11, 8191);
+		do MemoryExt.poke(Frame2Mirrored, 12, -280);
+		do MemoryExt.poke(Frame2Mirrored, 13, 16383);
+		do MemoryExt.poke(Frame2Mirrored, 14, -8);
+		do MemoryExt.poke(Frame2Mirrored, 15, 32767);
+		do MemoryExt.poke(Frame2Mirrored, 16, -6160);
+		do MemoryExt.poke(Frame2Mirrored, 17, 32767);
+		do MemoryExt.poke(Frame2Mirrored, 18, -8192);
+		do MemoryExt.poke(Frame2Mirrored, 19, 32767);
+		do MemoryExt.poke(Frame2Mirrored, 20, -8192);
+		do MemoryExt.poke(Frame2Mirrored, 21, 16383);
+		do MemoryExt.poke(Frame2Mirrored, 22, -16384);
+		do MemoryExt.poke(Frame2Mirrored, 23, 8191);
+		do MemoryExt.poke(Frame2Mirrored, 24, -16384);
+		do MemoryExt.poke(Frame2Mirrored, 25, 8191);
+		do MemoryExt.poke(Frame2Mirrored, 26, ~32767);
+		do MemoryExt.poke(Frame2Mirrored, 27, 4095);
+		do MemoryExt.poke(Frame2Mirrored, 29, 1022);
+		do MemoryExt.poke(Frames, 1, Frame2);
+		do MemoryExt.poke(FramesMirrored, 1, Frame2Mirrored);
 		return;
 	}
 	function int getWidth() { return Width; }
 	function int getHeight() { return Height; }
+	function void CheckTimers()
+	{
+		if (animationTimer < 1)
+		{
+			do Spider.ChangeFrame();
+			let animationTimer = animationDelay;
+		}
+		return;
+	}
+	function void DecrementTimers()
+	{
+		let animationTimer = animationTimer - 1;
+		return;
+	}
+	function void ChangeFrame()
+	{
+		if (currFrame < (AnimationFramesCount - 1))
+		{
+			let currFrame = currFrame + 1;
+		}
+		else
+		{
+			let currFrame = 0;
+		}
+		return;
+	}
 	function void DrawFrame(int memAddress, bool display, bool mirrored, int x, int y)
 	{
 		if (mirrored)

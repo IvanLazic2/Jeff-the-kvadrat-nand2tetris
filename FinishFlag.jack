@@ -3,77 +3,157 @@ class FinishFlag
 	static int Width;
 	static int Height;
 	static int AnimationFramesCount;
-	static int SpecialFramesCount;
-	static int TotalFramesCount;
-	static bool stopAnimation;
 	static int currFrame;
 	static int animationTimer;
 	static int animationDelay;
-	static int specialFrameTimer;
 	static Array Frames;
 	static int FrameSize;
 	static Array Frame1;
+	static Array Frame2;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
+		let animationDelay = 5;
 //////////////////////////////////////////
-		let Width = 1;
+		let Width = 2;
 		let Height = 3;
-		let AnimationFramesCount = 1;
-		let SpecialFramesCount = 0;
-		let TotalFramesCount = 1;
-		let FrameSize = Width * Height * 16;
-		let Frames = Array.new(TotalFramesCount);
-		let Frame1 = Array.new(Width * Height * 16);
-		let Frame1[0] = -32767;
-		let Frame1[1] = -32767;
-		let Frame1[2] = 16386;
-		let Frame1[3] = 16386;
-		let Frame1[4] = 8196;
-		let Frame1[5] = 8196;
-		let Frame1[6] = 4104;
-		let Frame1[7] = 4104;
-		let Frame1[8] = 2064;
-		let Frame1[9] = 2064;
-		let Frame1[10] = 1056;
-		let Frame1[11] = 1056;
-		let Frame1[12] = 576;
-		let Frame1[13] = 576;
-		let Frame1[14] = 384;
-		let Frame1[15] = 256;
-		let Frame1[16] = 256;
-		let Frame1[17] = 256;
-		let Frame1[18] = 256;
-		let Frame1[19] = 256;
-		let Frame1[20] = 256;
-		let Frame1[21] = 256;
-		let Frame1[22] = 256;
-		let Frame1[23] = 256;
-		let Frame1[24] = 256;
-		let Frame1[25] = 256;
-		let Frame1[26] = 256;
-		let Frame1[27] = 256;
-		let Frame1[28] = 256;
-		let Frame1[29] = 256;
-		let Frame1[30] = 256;
-		let Frame1[31] = 256;
-		let Frame1[32] = 384;
-		let Frame1[33] = 320;
-		let Frame1[34] = 288;
-		let Frame1[35] = 272;
-		let Frame1[36] = 264;
-		let Frame1[37] = 260;
-		let Frame1[38] = 258;
-		let Frame1[39] = 257;
-		let Frame1[40] = 258;
-		let Frame1[41] = 260;
-		let Frame1[42] = 264;
-		let Frame1[43] = 272;
-		let Frame1[44] = 288;
-		let Frame1[45] = 320;
-		let Frame1[46] = 384;
-		let Frame1[47] = 256;
-		let Frames[0] = Frame1;
+		let AnimationFramesCount = 2;
+		let FrameSize = 96;
+		let Frames = Array.new(AnimationFramesCount);
+		let Frame1 = Array.new(96);
+		do MemoryExt.poke(Frame1, 1, 5120);
+		do MemoryExt.poke(Frame1, 3, 5120);
+		do MemoryExt.poke(Frame1, 5, 5120);
+		do MemoryExt.poke(Frame1, 7, 5120);
+		do MemoryExt.poke(Frame1, 9, 5120);
+		do MemoryExt.poke(Frame1, 11, 5120);
+		do MemoryExt.poke(Frame1, 13, 5120);
+		do MemoryExt.poke(Frame1, 15, 5120);
+		do MemoryExt.poke(Frame1, 17, 5120);
+		do MemoryExt.poke(Frame1, 19, 5120);
+		do MemoryExt.poke(Frame1, 21, 5120);
+		do MemoryExt.poke(Frame1, 23, 5120);
+		do MemoryExt.poke(Frame1, 25, 5120);
+		do MemoryExt.poke(Frame1, 27, 5120);
+		do MemoryExt.poke(Frame1, 29, 5120);
+		do MemoryExt.poke(Frame1, 31, 5120);
+		do MemoryExt.poke(Frame1, 33, 5120);
+		do MemoryExt.poke(Frame1, 35, 5120);
+		do MemoryExt.poke(Frame1, 37, 5120);
+		do MemoryExt.poke(Frame1, 39, 5120);
+		do MemoryExt.poke(Frame1, 41, 5120);
+		do MemoryExt.poke(Frame1, 43, 5120);
+		do MemoryExt.poke(Frame1, 45, 5120);
+		do MemoryExt.poke(Frame1, 47, 5120);
+		do MemoryExt.poke(Frame1, 49, 5120);
+		do MemoryExt.poke(Frame1, 51, 5120);
+		do MemoryExt.poke(Frame1, 53, 5120);
+		do MemoryExt.poke(Frame1, 55, 5120);
+		do MemoryExt.poke(Frame1, 57, 5120);
+		do MemoryExt.poke(Frame1, 59, 5120);
+		do MemoryExt.poke(Frame1, 60, 8);
+		do MemoryExt.poke(Frame1, 61, 5120);
+		do MemoryExt.poke(Frame1, 62, 31768);
+		do MemoryExt.poke(Frame1, 63, 6080);
+		do MemoryExt.poke(Frame1, 64, -31768);
+		do MemoryExt.poke(Frame1, 65, 5183);
+		do MemoryExt.poke(Frame1, 66, 8);
+		do MemoryExt.poke(Frame1, 67, 5120);
+		do MemoryExt.poke(Frame1, 68, 8);
+		do MemoryExt.poke(Frame1, 69, 5120);
+		do MemoryExt.poke(Frame1, 70, 8);
+		do MemoryExt.poke(Frame1, 71, 5120);
+		do MemoryExt.poke(Frame1, 72, 8);
+		do MemoryExt.poke(Frame1, 73, 5120);
+		do MemoryExt.poke(Frame1, 74, 8);
+		do MemoryExt.poke(Frame1, 75, 5120);
+		do MemoryExt.poke(Frame1, 76, 8);
+		do MemoryExt.poke(Frame1, 77, 5120);
+		do MemoryExt.poke(Frame1, 78, 8);
+		do MemoryExt.poke(Frame1, 79, 5120);
+		do MemoryExt.poke(Frame1, 80, 8);
+		do MemoryExt.poke(Frame1, 81, 5120);
+		do MemoryExt.poke(Frame1, 82, 8);
+		do MemoryExt.poke(Frame1, 83, 5120);
+		do MemoryExt.poke(Frame1, 84, 8);
+		do MemoryExt.poke(Frame1, 85, 5120);
+		do MemoryExt.poke(Frame1, 86, 8);
+		do MemoryExt.poke(Frame1, 87, 5120);
+		do MemoryExt.poke(Frame1, 88, 8);
+		do MemoryExt.poke(Frame1, 89, 5120);
+		do MemoryExt.poke(Frame1, 90, 31760);
+		do MemoryExt.poke(Frame1, 91, 6080);
+		do MemoryExt.poke(Frame1, 92, -31776);
+		do MemoryExt.poke(Frame1, 93, 5183);
+		do MemoryExt.poke(Frame1, 95, 2048);
+		do MemoryExt.poke(Frames, 0, Frame1);
+		let Frame2 = Array.new(96);
+		do MemoryExt.poke(Frame2, 1, 5120);
+		do MemoryExt.poke(Frame2, 3, 5120);
+		do MemoryExt.poke(Frame2, 5, 5120);
+		do MemoryExt.poke(Frame2, 7, 5120);
+		do MemoryExt.poke(Frame2, 9, 5120);
+		do MemoryExt.poke(Frame2, 11, 5120);
+		do MemoryExt.poke(Frame2, 13, 5120);
+		do MemoryExt.poke(Frame2, 15, 5120);
+		do MemoryExt.poke(Frame2, 17, 5120);
+		do MemoryExt.poke(Frame2, 19, 5120);
+		do MemoryExt.poke(Frame2, 21, 5120);
+		do MemoryExt.poke(Frame2, 23, 5120);
+		do MemoryExt.poke(Frame2, 25, 5120);
+		do MemoryExt.poke(Frame2, 27, 5120);
+		do MemoryExt.poke(Frame2, 29, 5120);
+		do MemoryExt.poke(Frame2, 31, 5120);
+		do MemoryExt.poke(Frame2, 33, 5120);
+		do MemoryExt.poke(Frame2, 35, 5120);
+		do MemoryExt.poke(Frame2, 37, 5120);
+		do MemoryExt.poke(Frame2, 39, 5120);
+		do MemoryExt.poke(Frame2, 41, 5120);
+		do MemoryExt.poke(Frame2, 43, 5120);
+		do MemoryExt.poke(Frame2, 45, 5120);
+		do MemoryExt.poke(Frame2, 47, 5120);
+		do MemoryExt.poke(Frame2, 49, 5120);
+		do MemoryExt.poke(Frame2, 51, 5120);
+		do MemoryExt.poke(Frame2, 53, 5120);
+		do MemoryExt.poke(Frame2, 55, 5120);
+		do MemoryExt.poke(Frame2, 57, 5120);
+		do MemoryExt.poke(Frame2, 59, 5120);
+		do MemoryExt.poke(Frame2, 61, 5120);
+		do MemoryExt.poke(Frame2, 62, 2016);
+		do MemoryExt.poke(Frame2, 63, 5183);
+		do MemoryExt.poke(Frame2, 64, -2032);
+		do MemoryExt.poke(Frame2, 65, 6080);
+		do MemoryExt.poke(Frame2, 66, 8);
+		do MemoryExt.poke(Frame2, 67, 5120);
+		do MemoryExt.poke(Frame2, 68, 8);
+		do MemoryExt.poke(Frame2, 69, 5120);
+		do MemoryExt.poke(Frame2, 70, 8);
+		do MemoryExt.poke(Frame2, 71, 5120);
+		do MemoryExt.poke(Frame2, 72, 8);
+		do MemoryExt.poke(Frame2, 73, 5120);
+		do MemoryExt.poke(Frame2, 74, 8);
+		do MemoryExt.poke(Frame2, 75, 5120);
+		do MemoryExt.poke(Frame2, 76, 8);
+		do MemoryExt.poke(Frame2, 77, 5120);
+		do MemoryExt.poke(Frame2, 78, 8);
+		do MemoryExt.poke(Frame2, 79, 5120);
+		do MemoryExt.poke(Frame2, 80, 8);
+		do MemoryExt.poke(Frame2, 81, 5120);
+		do MemoryExt.poke(Frame2, 82, 8);
+		do MemoryExt.poke(Frame2, 83, 5120);
+		do MemoryExt.poke(Frame2, 84, 8);
+		do MemoryExt.poke(Frame2, 85, 5120);
+		do MemoryExt.poke(Frame2, 86, 8);
+		do MemoryExt.poke(Frame2, 87, 5120);
+		do MemoryExt.poke(Frame2, 88, 8);
+		do MemoryExt.poke(Frame2, 89, 5120);
+		do MemoryExt.poke(Frame2, 90, -31768);
+		do MemoryExt.poke(Frame2, 91, 5183);
+		do MemoryExt.poke(Frame2, 92, 31768);
+		do MemoryExt.poke(Frame2, 93, 6080);
+		do MemoryExt.poke(Frame2, 94, 8);
+		do MemoryExt.poke(Frame2, 95, 2048);
+		do MemoryExt.poke(Frames, 1, Frame2);
 		return;
 	}
 	function int getWidth() { return Width; }
@@ -85,31 +165,22 @@ class FinishFlag
 			do FinishFlag.ChangeFrame();
 			let animationTimer = animationDelay;
 		}
-		if (specialFrameTimer < 1)
-		{
-			let stopAnimation = false;
-			let specialFrameTimer = 0;
-		}
 		return;
 	}
 	function void DecrementTimers()
 	{
 		let animationTimer = animationTimer - 1;
-		let specialFrameTimer = specialFrameTimer - 1;
 		return;
 	}
 	function void ChangeFrame()
 	{
-		if (~(stopAnimation | (AnimationFramesCount = 0)))
+		if (currFrame < (AnimationFramesCount - 1))
 		{
-			if (currFrame < (AnimationFramesCount - 1))
-			{
-				let currFrame = currFrame + 1;
-			}
-			else
-			{
-				let currFrame = 0;
-			}
+			let currFrame = currFrame + 1;
+		}
+		else
+		{
+			let currFrame = 0;
 		}
 		return;
 	}
