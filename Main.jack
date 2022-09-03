@@ -6,7 +6,7 @@ class Main
         var Menu menu;
         
         do Constants.init();
-        do Collision.init();
+        //do Collision.init();
         
         do Platform.init();
         do Obstacle.init();

@@ -40,20 +40,20 @@ class Character
 
     static String text;
 
-    constructor Character new(int x2, int y2, bool ia)
+    constructor Character new(int x, int y, bool ia)
     {
         var int i;
 
         do resetObject();
 
-        let X = x2;
-        let Y = y2;
+        let X = x;
+        let Y = y;
         let isAnimation = ia;
         let Width = Jeff.getWidth();
         let Height = Jeff.getHeight();
 
         let memAddress = Constants.getMemAddress(X, Y);
-        let absoluteX = x2;
+        let absoluteX = x;
         
         let heightInPixels = Height * 16;
 
@@ -67,27 +67,8 @@ class Character
         let BulletsCount = Difficulty.getCharacterBulletsCount(); // 5
         let AvailableBulletsCount = BulletsCount;
         
-
-
-
         do RefreshBullets();
-        //if (~(BulletsCount = 0))
-        //{
-        //    let Bullets = Array.new(BulletsCount);
-        //    while (i < BulletsCount)
-        //    {
-        //        let Bullets[i] = Bullet.new();
-        //        let i = i + 1;
-        //    }
-        //    let currBulletIndex = 0;
-        //    let currBullet = Bullets[currBulletIndex];
-//
-        //    do printAmmo();
-        //}
         
-
-
-
         let bulletDelay = Difficulty.getCharacterBulletDelay();
         let bulletTimer = bulletDelay;
 
@@ -195,16 +176,16 @@ class Character
             if (Difficulty.getDifficulty() = 1)
             {
                 let address = Constants.getMemAddress(50, 0);
-                do Memory.poke(address + 0, 6200);
-	            do Memory.poke(address + 32, 15484);
-	            do Memory.poke(address + 64, 32382);
-	            do Memory.poke(address + 96, -6329);
-	            do Memory.poke(address + 128, -15485);
-	            do Memory.poke(address + 160, -15933);
-	            do Memory.poke(address + 192, -7449);
-	            do Memory.poke(address + 224, 32382);
-	            do Memory.poke(address + 256, 15420);
-	            do Memory.poke(address + 288, 6168);
+                do MemoryExt.poke(address, 0, 6200);
+	            do MemoryExt.poke(address, 32, 15484);
+	            do MemoryExt.poke(address, 64, 32382);
+	            do MemoryExt.poke(address, 96, -6329);
+	            do MemoryExt.poke(address, 128, -15485);
+	            do MemoryExt.poke(address, 160, -15933);
+	            do MemoryExt.poke(address, 192, -7449);
+	            do MemoryExt.poke(address, 224, 32382);
+	            do MemoryExt.poke(address, 256, 15420);
+	            do MemoryExt.poke(address, 288, 6168);
             }
             else
             {
@@ -221,7 +202,7 @@ class Character
         return finish.IsCollidedWithCharacter(X, Y, Width, Height);
     }
 
-    method void DoEnemyAction(Enemy enemy, Array map, int mapWidth, int mapHeight, int worldOffset)
+    method void DoEnemyAction(Enemy enemy, int worldOffset)
     {
         do enemy.DoActions(worldOffset, X, Y);
 
@@ -289,7 +270,7 @@ class Character
                 }
                 
                 let BulletsCount = AvailableBulletsCount;
-                if (~(bCount = 0))
+                if (bCount > 0)
                 {
                     let i = 0;
                     while (i < bCount)
@@ -330,9 +311,7 @@ class Character
         var int i;
         var Bullet bullet;
 
-        //let shoudlRefreshGameBullets = true;
-
-        if (~(BulletsCount = 0))
+        if (BulletsCount > 0)
         {
             let Bullets = Array.new(BulletsCount);
             while (i < BulletsCount)
@@ -439,7 +418,7 @@ class Character
     //// MOVEMENT
     method void MoveLeft()
     {
-        if (X > 0)
+        if (Constants.IsInScreenX(X - 1))
         {
             let lastMemAddress = memAddress;
             let memAddress = memAddress - 1;
@@ -454,7 +433,7 @@ class Character
 
     method void MoveRight()
     {
-        if((X + Width) < 32)
+        if(Constants.IsInScreenX(X + Width))
         {
             let lastMemAddress = memAddress;
             let memAddress = memAddress + 1;
@@ -488,7 +467,6 @@ class Character
 
         let canJump = Collision.IsOnAnyPlatform(X, Y, Width, Height, forceY, worldOffset);
 
-
         if (canJump)
         {
             let Y = Collision.getPlatformY() - 16;
@@ -510,16 +488,10 @@ class Character
                 // take damage
             }
 
-            let forceY = forceY + gravity;      
-
-               
+            let forceY = forceY + gravity;
         }
-        
-        
-
 
         let Y = Y + forceY;
-
         
         let lastMemAddress = memAddress;
         let memAddress = Constants.getMemAddress(X, Y);
@@ -550,12 +522,8 @@ class Character
 
     method void TakeDamage()
     {
-        // dont take damage if already taken
         if (damageTimer < 1)
         {
-            //do Output.printString("oof");
-            //do Output.println();
-
             let health = health - 1;
             let damageTimer = damageDelay;
 
@@ -570,7 +538,7 @@ class Character
         var int bulletX;
         var int bulletY;
 
-        if (~(AvailableBulletsCount = 0))
+        if (AvailableBulletsCount > 0)
         {
             if (movingLeft)
             {
@@ -608,8 +576,6 @@ class Character
 
             do printAmmo();
         }
-
-        //do Output.printInt(AvailableBulletsCount);
 
         return;
     }
@@ -715,9 +681,6 @@ class Character
         var int i;
         var Bullet bullet;
         
-        //do Output.moveCursor(15, 0);
-        //do Output.printInt(BulletsCount);
-
         while (i < BulletsCount)
         {   
             let bullet = Bullets[i];
@@ -726,9 +689,8 @@ class Character
             let i = i + 1;
         }
 
-        if (~(BulletsCount = 0))
+        if (BulletsCount > 0)
 		{
-            //do currBullet.dispose();
 			do Bullets.dispose();
 		}
 

@@ -86,205 +86,6 @@ class Obstacle
 		return;
 	}
 
-	////////////////
-
-	//method void Clear()
-	//{
-	//	var int location;
-//
-	//	if ((X < 32) & (X > -1))
-    //    {
-	//		let location = (Y * 32) + X;
-//
-	//		if (Type = 0)
-	//		{
-	//			do ClearSmallSpikes(location);
-	//		}
-	//		else { if (Type = 1)
-	//		{
-	//			do ClearMediumSpikes(location);
-	//		} 
-	//		else { if (Type = 2)
-	//		{
-	//			do ClearWeirdSpikes(location);
-	//		} 
-	//		else { if (Type = 3)
-	//		{
-	//			do ClearLargeSpikes(location);
-	//		}}}}
-	//	}
-//
-	//	return;
-	//}
-//
-	//method void ClearSmallSpikes(int location)
-	//{
-	//	var int i;
-    //    var Array curr_memaddr;
-	//	var bool color;
-	//	var int memAddress;
-//
-	//	let color = false;
-//
-	//	let memAddress = 16384 + location;
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	return;
-	//}
-//
-	//method void ClearMediumSpikes(int location)
-	//{
-	//	var int i;
-    //    var Array curr_memaddr;
-	//	var bool color;
-	//	var int memAddress;
-//
-	//	let color = false;
-//
-	//	let memAddress = 16384 + location;
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	let memAddress = 15872 + location; //16384 - (16 * 32)
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	return;
-	//}
-//
-	//method void ClearWeirdSpikes(int location)
-	//{
-	//	var int i;
-    //    var Array curr_memaddr;
-	//	var bool color;
-	//	var int memAddress;
-//
-	//	let color = false;
-//
-	//	let memAddress = 16384 + location;
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	let memAddress = 15872 + location; // 16384 - (16 * 32)
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	let memAddress = 15360 + location; // 16384 - (2 * 16 * 32)
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	let memAddress = 14848 + location; // 16384 - (3 * 16 * 32)
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	return;
-	//}
-//
-	//method void ClearLargeSpikes(int location)
-	//{
-	//	var int i;
-    //    var Array curr_memaddr;
-	//	var bool color;
-	//	var int memAddress;
-//
-	//	let color = false;
-//
-	//	let memAddress = 16384 + location;
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	let memAddress = 15872 + location; // 16384 - (16 * 32)
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	let memAddress = 15360 + location; // 16384 - (2 * 16 * 32)
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	let memAddress = 14848 + location; // 16384 - (3 * 16 * 32)
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	let memAddress = 14336 + location; // 16384 - (4 * 16 * 32)
-//
-    //    let i = 0;
-    //    while (i < 481)
-    //    {
-    //        let curr_memaddr = memAddress + i;
-    //        let curr_memaddr[0] = color;
-    //        let i = i + 32;                
-    //    }
-//
-	//	return;
-	//}
-
 	method void Draw()
 	{
 		var int i;
@@ -306,27 +107,22 @@ class Obstacle
 	{
 		if (Type = 0)
 		{
-			//do Obstacle.DrawSmallSpikesBlock(memAddress);
 			do Sprite.Draw(memAddress, smallSpikes, 16, 1, 1, true, X, Y);
 		}
 		else { if (Type = 1)
 		{
-			//do Obstacle.DrawMediumSpikesBlock(memAddress);
 			do Sprite.Draw(memAddress, mediumSpikes, 32, 1, 2, true, X, Y);
 		} 
 		else { if (Type = 2)
 		{
-			//do Obstacle.DrawWeirdSpikesBlock(memAddress);
 			do Sprite.Draw(memAddress, weirdSpikes, 64, 1, 4, true, X, Y);
 		} 
 		else { if (Type = 3)
 		{
-			//do Obstacle.DrawLargeSpikesBlock(memAddress);
 			do Sprite.Draw(memAddress, largeSpikes, 80, 1, 5, true, X, Y);
 		}
 		else { if (Type = 4)
 		{
-			//do Obstacle.DrawSpikedAreaBlockAlt(memAddress);
 			do Sprite.Draw(memAddress, spikedArea, 16, 1, 1, true, X, Y);
 		}}}}}
 
@@ -342,223 +138,223 @@ class Obstacle
 		let spikedArea = Array.new(16);
 
 		// SMALL SPIKES
-		let smallSpikes[11] = 384;
-		let smallSpikes[10] = 384;
-		let smallSpikes[9] = 960;
-		let smallSpikes[8] = 960;
-		let smallSpikes[7] = 2016;
-		let smallSpikes[6] = 1504;
-		let smallSpikes[5] = 3568;
-		let smallSpikes[4] = 2544;
-		let smallSpikes[3] = 4600;
-		let smallSpikes[2] = 5112;
-		let smallSpikes[1] = 10236;
-		let smallSpikes[0] = 16380;
+		do MemoryExt.poke(smallSpikes, 11, 384);
+		do MemoryExt.poke(smallSpikes, 10, 384);
+		do MemoryExt.poke(smallSpikes, 9, 960);
+		do MemoryExt.poke(smallSpikes, 8, 960);
+		do MemoryExt.poke(smallSpikes, 7, 2016);
+		do MemoryExt.poke(smallSpikes, 6, 1504);
+		do MemoryExt.poke(smallSpikes, 5, 3568);
+		do MemoryExt.poke(smallSpikes, 4, 2544);
+		do MemoryExt.poke(smallSpikes, 3, 4600);
+		do MemoryExt.poke(smallSpikes, 2, 5112);
+		do MemoryExt.poke(smallSpikes, 1, 10236);
+		do MemoryExt.poke(smallSpikes, 0, 16380);
 
 		// MEDIUM SPIKES
-		let mediumSpikes[15] = 15356;
-		let mediumSpikes[14] = 15356;
-		let mediumSpikes[13] = 13308;
-		let mediumSpikes[12] = 14332;
-		let mediumSpikes[11] = 14332;
-		let mediumSpikes[10] = 30718;
-		let mediumSpikes[9] = 26622;
-		let mediumSpikes[8] = 26622;
-		let mediumSpikes[7] = 28670;
-		let mediumSpikes[6] = 28670;
-		let mediumSpikes[5] = 20478;
-		let mediumSpikes[4] = 20478;
-		let mediumSpikes[3] = 24574;
-		let mediumSpikes[2] = -8193;
-		let mediumSpikes[1] = -1;
-		let mediumSpikes[0] = -1;
+		do MemoryExt.poke(mediumSpikes, 15, 15356);
+		do MemoryExt.poke(mediumSpikes, 14, 15356);
+		do MemoryExt.poke(mediumSpikes, 13, 13308);
+		do MemoryExt.poke(mediumSpikes, 12, 14332);
+		do MemoryExt.poke(mediumSpikes, 11, 14332);
+		do MemoryExt.poke(mediumSpikes, 10, 30718);
+		do MemoryExt.poke(mediumSpikes, 9, 26622);
+		do MemoryExt.poke(mediumSpikes, 8, 26622);
+		do MemoryExt.poke(mediumSpikes, 7, 28670);
+		do MemoryExt.poke(mediumSpikes, 6, 28670);
+		do MemoryExt.poke(mediumSpikes, 5, 20478);
+		do MemoryExt.poke(mediumSpikes, 4, 20478);
+		do MemoryExt.poke(mediumSpikes, 3, 24574);
+		do MemoryExt.poke(mediumSpikes, 2, -8193);
+		do MemoryExt.poke(mediumSpikes, 1, -1);
+		do MemoryExt.poke(mediumSpikes, 0, -1);
 
-		let mediumSpikes[31] = 384;
-		let mediumSpikes[30] = 384;
-		let mediumSpikes[29] = 384;
-		let mediumSpikes[28] = 960;
-		let mediumSpikes[27] = 960;
-		let mediumSpikes[26] = 960;
-		let mediumSpikes[25] = 2016;
-		let mediumSpikes[24] = 2016;
-		let mediumSpikes[23] = 2016;
-		let mediumSpikes[22] = 3568;
-		let mediumSpikes[21] = 3568;
-		let mediumSpikes[20] = 3568;
-		let mediumSpikes[19] = 7672;
-		let mediumSpikes[18] = 7160;
-		let mediumSpikes[17] = 7160;
-		let mediumSpikes[16] = 15356;
+		do MemoryExt.poke(mediumSpikes, 31, 384);
+		do MemoryExt.poke(mediumSpikes, 30, 384);
+		do MemoryExt.poke(mediumSpikes, 29, 384);
+		do MemoryExt.poke(mediumSpikes, 28, 960);
+		do MemoryExt.poke(mediumSpikes, 27, 960);
+		do MemoryExt.poke(mediumSpikes, 26, 960);
+		do MemoryExt.poke(mediumSpikes, 25, 2016);
+		do MemoryExt.poke(mediumSpikes, 24, 2016);
+		do MemoryExt.poke(mediumSpikes, 23, 2016);
+		do MemoryExt.poke(mediumSpikes, 22, 3568);
+		do MemoryExt.poke(mediumSpikes, 21, 3568);
+		do MemoryExt.poke(mediumSpikes, 20, 3568);
+		do MemoryExt.poke(mediumSpikes, 19, 7672);
+		do MemoryExt.poke(mediumSpikes, 18, 7160);
+		do MemoryExt.poke(mediumSpikes, 17, 7160);
+		do MemoryExt.poke(mediumSpikes, 16, 15356);
 
 		// WEIRD SPIKES
-		let weirdSpikes[15] = -8225;
-		let weirdSpikes[14] = -8241;
-		let weirdSpikes[13] = -8241;
-		let weirdSpikes[12] = -12313;
-		let weirdSpikes[11] = -4121;
-		let weirdSpikes[10] = -4121;
-		let weirdSpikes[9] = -4105;
-		let weirdSpikes[8] = -2057;
-		let weirdSpikes[7] = -2057;
-		let weirdSpikes[6] = -3077;
-		let weirdSpikes[5] = -1029;
-		let weirdSpikes[4] = -1029;
-		let weirdSpikes[3] = -517;
-		let weirdSpikes[2] = -517;
-		let weirdSpikes[1] = -517;
-		let weirdSpikes[0] = -519;
+		do MemoryExt.poke(weirdSpikes, 15, -8225);
+		do MemoryExt.poke(weirdSpikes, 14, -8241);
+		do MemoryExt.poke(weirdSpikes, 13, -8241);
+		do MemoryExt.poke(weirdSpikes, 12, -12313);
+		do MemoryExt.poke(weirdSpikes, 11, -4121);
+		do MemoryExt.poke(weirdSpikes, 10, -4121);
+		do MemoryExt.poke(weirdSpikes, 9, -4105);
+		do MemoryExt.poke(weirdSpikes, 8, -2057);
+		do MemoryExt.poke(weirdSpikes, 7, -2057);
+		do MemoryExt.poke(weirdSpikes, 6, -3077);
+		do MemoryExt.poke(weirdSpikes, 5, -1029);
+		do MemoryExt.poke(weirdSpikes, 4, -1029);
+		do MemoryExt.poke(weirdSpikes, 3, -517);
+		do MemoryExt.poke(weirdSpikes, 2, -517);
+		do MemoryExt.poke(weirdSpikes, 1, -517);
+		do MemoryExt.poke(weirdSpikes, 0, -519);
 
-		let weirdSpikes[31] = -8464;
-		let weirdSpikes[30] = -8464;
-		let weirdSpikes[29] = -8336;
-		let weirdSpikes[28] = -8352;
-		let weirdSpikes[27] = -8384;
-		let weirdSpikes[26] = -128;
-		let weirdSpikes[25] = -4224;
-		let weirdSpikes[24] = -6208;
-		let weirdSpikes[23] = -5184;
-		let weirdSpikes[22] = -4640;
-		let weirdSpikes[21] = -4368;
-		let weirdSpikes[20] = -4232;
-		let weirdSpikes[19] = -4228;
-		let weirdSpikes[18] = -4292;
-		let weirdSpikes[17] = -8418;
-		let weirdSpikes[16] = -8289;
+		do MemoryExt.poke(weirdSpikes, 31, -8464);
+		do MemoryExt.poke(weirdSpikes, 30, -8464);
+		do MemoryExt.poke(weirdSpikes, 29, -8336);
+		do MemoryExt.poke(weirdSpikes, 28, -8352);
+		do MemoryExt.poke(weirdSpikes, 27, -8384);
+		do MemoryExt.poke(weirdSpikes, 26, -128);
+		do MemoryExt.poke(weirdSpikes, 25, -4224);
+		do MemoryExt.poke(weirdSpikes, 24, -6208);
+		do MemoryExt.poke(weirdSpikes, 23, -5184);
+		do MemoryExt.poke(weirdSpikes, 22, -4640);
+		do MemoryExt.poke(weirdSpikes, 21, -4368);
+		do MemoryExt.poke(weirdSpikes, 20, -4232);
+		do MemoryExt.poke(weirdSpikes, 19, -4228);
+		do MemoryExt.poke(weirdSpikes, 18, -4292);
+		do MemoryExt.poke(weirdSpikes, 17, -8418);
+		do MemoryExt.poke(weirdSpikes, 16, -8289);
 
-		let weirdSpikes[47] = 8688;
-		let weirdSpikes[46] = 25072;
-		let weirdSpikes[45] = 29664;
-		let weirdSpikes[44] = 29632;
-		let weirdSpikes[43] = 26560;
-		let weirdSpikes[42] = 28546;
-		let weirdSpikes[41] = 28418;
-		let weirdSpikes[40] = 12034;
-		let weirdSpikes[39] = -18942;
-		let weirdSpikes[38] = -19450;
-		let weirdSpikes[37] = -18418;
-		let weirdSpikes[36] = -18402;
-		let weirdSpikes[35] = -18372;
-		let weirdSpikes[34] = -18308;
-		let weirdSpikes[33] = -18312;
-		let weirdSpikes[32] = -18184;
+		do MemoryExt.poke(weirdSpikes, 47, 8688);
+		do MemoryExt.poke(weirdSpikes, 46, 25072);
+		do MemoryExt.poke(weirdSpikes, 45, 29664);
+		do MemoryExt.poke(weirdSpikes, 44, 29632);
+		do MemoryExt.poke(weirdSpikes, 43, 26560);
+		do MemoryExt.poke(weirdSpikes, 42, 28546);
+		do MemoryExt.poke(weirdSpikes, 41, 28418);
+		do MemoryExt.poke(weirdSpikes, 40, 12034);
+		do MemoryExt.poke(weirdSpikes, 39, -18942);
+		do MemoryExt.poke(weirdSpikes, 38, -19450);
+		do MemoryExt.poke(weirdSpikes, 37, -18418);
+		do MemoryExt.poke(weirdSpikes, 36, -18402);
+		do MemoryExt.poke(weirdSpikes, 35, -18372);
+		do MemoryExt.poke(weirdSpikes, 34, -18308);
+		do MemoryExt.poke(weirdSpikes, 33, -18312);
+		do MemoryExt.poke(weirdSpikes, 32, -18184);
 
-		let weirdSpikes[60] = 16;
-		let weirdSpikes[59] = 16;
-		let weirdSpikes[58] = 16;
-		let weirdSpikes[57] = 16;
-		let weirdSpikes[56] = 56;
-		let weirdSpikes[55] = 56;
-		let weirdSpikes[54] = 56;
-		let weirdSpikes[53] = 124;
-		let weirdSpikes[52] = 124;
-		let weirdSpikes[51] = 124;
-		let weirdSpikes[50] = 120;
-		let weirdSpikes[49] = 8440;
-		let weirdSpikes[48] = 8440;
+		do MemoryExt.poke(weirdSpikes, 60, 16);
+		do MemoryExt.poke(weirdSpikes, 59, 16);
+		do MemoryExt.poke(weirdSpikes, 58, 16);
+		do MemoryExt.poke(weirdSpikes, 57, 16);
+		do MemoryExt.poke(weirdSpikes, 56, 56);
+		do MemoryExt.poke(weirdSpikes, 55, 56);
+		do MemoryExt.poke(weirdSpikes, 54, 56);
+		do MemoryExt.poke(weirdSpikes, 53, 124);
+		do MemoryExt.poke(weirdSpikes, 52, 124);
+		do MemoryExt.poke(weirdSpikes, 51, 124);
+		do MemoryExt.poke(weirdSpikes, 50, 120);
+		do MemoryExt.poke(weirdSpikes, 49, 8440);
+		do MemoryExt.poke(weirdSpikes, 48, 8440);
 
 		// LARGE SPIKES
-		let largeSpikes[15] = 7160;
-		let largeSpikes[14] = 6136;
-		let largeSpikes[13] = 6136;
-		let largeSpikes[12] = 6136;
-		let largeSpikes[11] = 6136;
-		let largeSpikes[10] = 6136;
-		let largeSpikes[9] = 6136;
-		let largeSpikes[8] = 6136;
-		let largeSpikes[7] = 6136;
-		let largeSpikes[6] = 6136;
-		let largeSpikes[5] = 6136;
-		let largeSpikes[4] = 6136;
-		let largeSpikes[3] = 6136;
-		let largeSpikes[2] = 6136;
-		let largeSpikes[1] = 6136;
-		let largeSpikes[0] = 8184;
+		do MemoryExt.poke(largeSpikes, 15, 7160);
+		do MemoryExt.poke(largeSpikes, 14, 6136);
+		do MemoryExt.poke(largeSpikes, 13, 6136);
+		do MemoryExt.poke(largeSpikes, 12, 6136);
+		do MemoryExt.poke(largeSpikes, 11, 6136);
+		do MemoryExt.poke(largeSpikes, 10, 6136);
+		do MemoryExt.poke(largeSpikes, 9, 6136);
+		do MemoryExt.poke(largeSpikes, 8, 6136);
+		do MemoryExt.poke(largeSpikes, 7, 6136);
+		do MemoryExt.poke(largeSpikes, 6, 6136);
+		do MemoryExt.poke(largeSpikes, 5, 6136);
+		do MemoryExt.poke(largeSpikes, 4, 6136);
+		do MemoryExt.poke(largeSpikes, 3, 6136);
+		do MemoryExt.poke(largeSpikes, 2, 6136);
+		do MemoryExt.poke(largeSpikes, 1, 6136);
+		do MemoryExt.poke(largeSpikes, 0, 8184);
 
-		let largeSpikes[31] = 3568;
-		let largeSpikes[30] = 3056;
-		let largeSpikes[29] = 3056;
-		let largeSpikes[28] = 3056;
-		let largeSpikes[27] = 3056;
-		let largeSpikes[26] = 3056;
-		let largeSpikes[25] = 3056;
-		let largeSpikes[24] = 3056;
-		let largeSpikes[23] = 3056;
-		let largeSpikes[22] = 3056;
-		let largeSpikes[21] = 3056;
-		let largeSpikes[20] = 3056;
-		let largeSpikes[19] = 3056;
-		let largeSpikes[18] = 3056;
-		let largeSpikes[17] = 3056;
-		let largeSpikes[16] = 3056;
+		do MemoryExt.poke(largeSpikes, 31, 3568);
+		do MemoryExt.poke(largeSpikes, 30, 3056);
+		do MemoryExt.poke(largeSpikes, 29, 3056);
+		do MemoryExt.poke(largeSpikes, 28, 3056);
+		do MemoryExt.poke(largeSpikes, 27, 3056);
+		do MemoryExt.poke(largeSpikes, 26, 3056);
+		do MemoryExt.poke(largeSpikes, 25, 3056);
+		do MemoryExt.poke(largeSpikes, 24, 3056);
+		do MemoryExt.poke(largeSpikes, 23, 3056);
+		do MemoryExt.poke(largeSpikes, 22, 3056);
+		do MemoryExt.poke(largeSpikes, 21, 3056);
+		do MemoryExt.poke(largeSpikes, 20, 3056);
+		do MemoryExt.poke(largeSpikes, 19, 3056);
+		do MemoryExt.poke(largeSpikes, 18, 3056);
+		do MemoryExt.poke(largeSpikes, 17, 3056);
+		do MemoryExt.poke(largeSpikes, 16, 3056);
 
-		let largeSpikes[47] = 1760;
-		let largeSpikes[46] = 1504;
-		let largeSpikes[45] = 1504;
-		let largeSpikes[44] = 1504;
-		let largeSpikes[43] = 1504;
-		let largeSpikes[42] = 1504;
-		let largeSpikes[41] = 1504;
-		let largeSpikes[40] = 1504;
-		let largeSpikes[39] = 1504;
-		let largeSpikes[38] = 1504;
-		let largeSpikes[37] = 1504;
-		let largeSpikes[36] = 1504;
-		let largeSpikes[35] = 1504;
-		let largeSpikes[34] = 1504;
-		let largeSpikes[33] = 1504;
-		let largeSpikes[32] = 1504;
+		do MemoryExt.poke(largeSpikes, 47, 1760);
+		do MemoryExt.poke(largeSpikes, 46, 1504);
+		do MemoryExt.poke(largeSpikes, 45, 1504);
+		do MemoryExt.poke(largeSpikes, 44, 1504);
+		do MemoryExt.poke(largeSpikes, 43, 1504);
+		do MemoryExt.poke(largeSpikes, 42, 1504);
+		do MemoryExt.poke(largeSpikes, 41, 1504);
+		do MemoryExt.poke(largeSpikes, 40, 1504);
+		do MemoryExt.poke(largeSpikes, 39, 1504);
+		do MemoryExt.poke(largeSpikes, 38, 1504);
+		do MemoryExt.poke(largeSpikes, 37, 1504);
+		do MemoryExt.poke(largeSpikes, 36, 1504);
+		do MemoryExt.poke(largeSpikes, 35, 1504);
+		do MemoryExt.poke(largeSpikes, 34, 1504);
+		do MemoryExt.poke(largeSpikes, 33, 1504);
+		do MemoryExt.poke(largeSpikes, 32, 1504);
 
-		let largeSpikes[63] = 960;
-		let largeSpikes[62] = 704;
-		let largeSpikes[61] = 704;
-		let largeSpikes[60] = 704;
-		let largeSpikes[59] = 704;
-		let largeSpikes[58] = 704;
-		let largeSpikes[57] = 704;
-		let largeSpikes[56] = 704;
-		let largeSpikes[55] = 704;
-		let largeSpikes[54] = 704;
-		let largeSpikes[53] = 704;
-		let largeSpikes[52] = 704;
-		let largeSpikes[51] = 704;
-		let largeSpikes[50] = 704;
-		let largeSpikes[49] = 704;
-		let largeSpikes[48] = 704;
+		do MemoryExt.poke(largeSpikes, 63, 960);
+		do MemoryExt.poke(largeSpikes, 62, 704);
+		do MemoryExt.poke(largeSpikes, 61, 704);
+		do MemoryExt.poke(largeSpikes, 60, 704);
+		do MemoryExt.poke(largeSpikes, 59, 704);
+		do MemoryExt.poke(largeSpikes, 58, 704);
+		do MemoryExt.poke(largeSpikes, 57, 704);
+		do MemoryExt.poke(largeSpikes, 56, 704);
+		do MemoryExt.poke(largeSpikes, 55, 704);
+		do MemoryExt.poke(largeSpikes, 54, 704);
+		do MemoryExt.poke(largeSpikes, 53, 704);
+		do MemoryExt.poke(largeSpikes, 52, 704);
+		do MemoryExt.poke(largeSpikes, 51, 704);
+		do MemoryExt.poke(largeSpikes, 50, 704);
+		do MemoryExt.poke(largeSpikes, 49, 704);
+		do MemoryExt.poke(largeSpikes, 48, 704);
 
-		let largeSpikes[79] = 384;
-		let largeSpikes[78] = 384;
-		let largeSpikes[77] = 384;
-		let largeSpikes[76] = 384;
-		let largeSpikes[75] = 384;
-		let largeSpikes[74] = 384;
-		let largeSpikes[73] = 384;
-		let largeSpikes[72] = 384;
-		let largeSpikes[71] = 384;
-		let largeSpikes[70] = 384;
-		let largeSpikes[69] = 384;
-		let largeSpikes[68] = 384;
-		let largeSpikes[67] = 384;
-		let largeSpikes[66] = 384;
-		let largeSpikes[65] = 384;
-		let largeSpikes[64] = 384;
+		do MemoryExt.poke(largeSpikes, 79, 384);
+		do MemoryExt.poke(largeSpikes, 78, 384);
+		do MemoryExt.poke(largeSpikes, 77, 384);
+		do MemoryExt.poke(largeSpikes, 76, 384);
+		do MemoryExt.poke(largeSpikes, 75, 384);
+		do MemoryExt.poke(largeSpikes, 74, 384);
+		do MemoryExt.poke(largeSpikes, 73, 384);
+		do MemoryExt.poke(largeSpikes, 72, 384);
+		do MemoryExt.poke(largeSpikes, 71, 384);
+		do MemoryExt.poke(largeSpikes, 70, 384);
+		do MemoryExt.poke(largeSpikes, 69, 384);
+		do MemoryExt.poke(largeSpikes, 68, 384);
+		do MemoryExt.poke(largeSpikes, 67, 384);
+		do MemoryExt.poke(largeSpikes, 66, 384);
+		do MemoryExt.poke(largeSpikes, 65, 384);
+		do MemoryExt.poke(largeSpikes, 64, 384);
 
 		// SPIKED AREA
-		let spikedArea[15] = 2320;
-		let spikedArea[14] = 2320;
-		let spikedArea[13] = 2320;
-		let spikedArea[12] = 2728;
-		let spikedArea[11] = 5800;
-		let spikedArea[10] = 15212;
-		let spikedArea[9] = 14172;
-		let spikedArea[8] = 14172;
-		let spikedArea[7] = 30580;
-		let spikedArea[6] = 32746;
-		let spikedArea[5] = 24042;
-		let spikedArea[4] = 24042;
-		let spikedArea[3] = -9515;
-		let spikedArea[2] = -17674;
-		let spikedArea[1] = -18578;
-		let spikedArea[0] = -2193;
+		do MemoryExt.poke(spikedArea, 15, 2320);
+		do MemoryExt.poke(spikedArea, 14, 2320);
+		do MemoryExt.poke(spikedArea, 13, 2320);
+		do MemoryExt.poke(spikedArea, 12, 2728);
+		do MemoryExt.poke(spikedArea, 11, 5800);
+		do MemoryExt.poke(spikedArea, 10, 15212);
+		do MemoryExt.poke(spikedArea, 9, 14172);
+		do MemoryExt.poke(spikedArea, 8, 14172);
+		do MemoryExt.poke(spikedArea, 7, 30580);
+		do MemoryExt.poke(spikedArea, 6, 32746);
+		do MemoryExt.poke(spikedArea, 5, 24042);
+		do MemoryExt.poke(spikedArea, 4, 24042);
+		do MemoryExt.poke(spikedArea, 3, -9515);
+		do MemoryExt.poke(spikedArea, 2, -17674);
+		do MemoryExt.poke(spikedArea, 1, -18578);
+		do MemoryExt.poke(spikedArea, 0, -2193);
 
 		return;
 	}

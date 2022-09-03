@@ -2,6 +2,7 @@
 // 1 - evil jeff melee
 // 2 - evil jeff ranged
 // 3 - bat
+// 4 - shooter
 
 
 class Enemy
@@ -70,7 +71,6 @@ class Enemy
 		let Y = y;
 		let Type = type;
 
-		//let location = (32 * Y) + X;
 		let memAddress = Constants.getMemAddress(X, Y);
 
 		// SPIDER
@@ -83,7 +83,6 @@ class Enemy
 
 			let IsRoaming = true;
 			let DiesOnSquish = true;
-			//let IsStationary = true;
 		}
 		// EVIL JEFF MELEE
 		else { if (Type = 1)
@@ -95,11 +94,6 @@ class Enemy
 
 			let IsGravityAffected = true;
 			let IsMelee = true;
-
-			//let IsFollowing = true;
-			//let IsStationary = true;
-			//let IsShooting = true;
-			//let IsRoaming = true; // TEMP
 		}
 		// EVIL JEFF RANGED
 		else { if (Type = 2)
@@ -113,7 +107,6 @@ class Enemy
 			let IsShooting = true;
 			let IsRanged = true;
 
-			//let IsStationary = true;
 			let DiesOnSquish = true;
 		}
 		// BAT
@@ -127,7 +120,6 @@ class Enemy
 			let IsShooting = false;
 			let IsRanged = false;
 
-			//let IsStationary = true;
 			let IsFollowing = true;
 			let IsFlying = true;
 			let DiesOnSquish = true;
@@ -200,17 +192,7 @@ class Enemy
 	method Array getBullets() { return Bullets; }
 	method int getBulletsCount() { return BulletsCount; }
 
-	method void set_x(int x2)
-    {
-        let X = x2;
-        return;
-    }
 
-    method void set_y(int y2)
-    {
-        let Y = y2;
-        return;
-    }
 
 	method void CheckTimers()
 	{
@@ -239,10 +221,6 @@ class Enemy
 		return;
 	}
 
-
-
-
-	
 	method bool CheckCollisionWithCharacter(int cx, int cy, int cw, int ch)
 	{
 		if (IsAlive)
@@ -275,8 +253,6 @@ class Enemy
 
 		return;
     }
-
-
 
 	method void DoActions(int worldOffset, int characterX, int characterY)
 	{
@@ -321,7 +297,7 @@ class Enemy
 	{
 		if (Constants.IsInScreenX(X))
 		{
-			if ((characterX - X) < 0)
+			if (characterX < X)
 			{
 				if (~movingLeft)
 				{
@@ -487,11 +463,11 @@ class Enemy
 
 		if (hasPlatformAbove)
 		{
-			if (((X - lastCX) > 0))
+			if (X > lastCX)
 			{
 				do MoveLeft(worldOffset);
 			}
-			if (((X - lastCX) < 0))
+			else
 			{
 				do MoveRight(worldOffset);
 			}
@@ -501,14 +477,14 @@ class Enemy
 		{
 			if (Collision.GetPlatformBelowY(X, Y, Width, worldOffset, true) < Collision.GetObstacleBelowY(X, Y, Width, worldOffset, true))
 			{
-				if (((X - lastCX) > 0))
+				if (X > lastCX)
 				{
 					do MoveLeft(worldOffset);
 				}
 			}
 			if (Collision.GetPlatformBelowY(X, Y, Width, worldOffset, false) < Collision.GetObstacleBelowY(X, Y, Width, worldOffset, false))
 			{
-				if (((X - lastCX) < 0))
+				if (X < lastCX)
 				{
 					do MoveRight(worldOffset);
 				}
@@ -534,7 +510,7 @@ class Enemy
 
 		let distance = Math.abs(X - cx);
 
-		if ((distance > 12) & (distance < 32))
+		if ((12 < distance) & (distance < 32))
 		{
 			do FollowGravity(worldOffset, cx, cy);
 		}
@@ -542,7 +518,7 @@ class Enemy
 		{
 			if (IsShooting)
 			{
-				if ((X - cx) < 0)
+				if (X < cx)
 				{
 					let movingLeft = false;
 					do ForceDraw();
@@ -567,19 +543,19 @@ class Enemy
 		{
 			do CheckFollowTimer(characterX, characterY);
 
-			if (((X - lastCX) > 0) & (Map.getValue(X - 1 + worldOffset, Y/16) = 0))
+			if ((X > lastCX) & (Map.getValue(X - 1 + worldOffset, Y/16) = 0))
 			{
 				do MoveLeft(worldOffset);
 			}
-			if (((X - lastCX) < 0) & (Map.getValue(X + Width + worldOffset, Y/16) = 0))
+			if ((X < lastCX) & (Map.getValue(X + Width + worldOffset, Y/16) = 0))
 			{
 				do MoveRight(worldOffset);
 			}
-			if (((Y - lastCY) > 0) & (Map.getValue(X + worldOffset, (Y/16) - Height) = 0))
+			if ((Y > lastCY) & (Map.getValue(X + worldOffset, (Y/16) - Height) = 0))
 			{
 				do MoveUp();
 			}
-			if (((Y - lastCY) < 0) & (Map.getValue(X + worldOffset, (Y/16) + 1) = 0))
+			if ((Y < lastCY) & (Map.getValue(X + worldOffset, (Y/16) + 1) = 0))
 			{
 				do MoveDown();
 			}
@@ -588,7 +564,6 @@ class Enemy
 		do ForceDraw();
 
 		return;
-
 	}
 
 
@@ -766,9 +741,6 @@ class Enemy
 		var int i;
 		var Bullet bullet;
 
-		//do Output.printString("dead");
-		//do Output.println();
-
 		let lastMemAddress = memAddress;
 		let memAddress = Constants.getMemAddress(-10, -10);
 		do Clear();
@@ -892,7 +864,7 @@ class Enemy
 			let i = i + 1;
         }
 
-        if (~(BulletsCount = 0))
+        if (BulletsCount > 0)
 		{
 			do Bullets.dispose();
 		}

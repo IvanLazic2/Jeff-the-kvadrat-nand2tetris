@@ -1,0 +1,8 @@
+class MemoryExt
+{
+    function void poke(int address, int offset, int value)
+    {
+        do Memory.poke(address + offset, value);
+        return;
+    }
+}

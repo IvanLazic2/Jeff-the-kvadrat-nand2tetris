@@ -149,10 +149,9 @@ class Menu
         var int j;
         var int address;
 
-        let address = ((Y + 1) * 32 * 11) + (X / 2) + 32;
+        let address = ((Y + 1) * 352) + (X / 2) + 32;
         let i = address;
-        //while (i < (((cursorY - itemSpacing) * 32 * 11) + (cursorX / 2) + (24 * 32) - 2))
-        while (i < (((Y + 1 + (ItemsCount * itemSpacing)) * 32 * 11) + (X / 2) + (8 * 32) - 2 + (5 * 32)))
+        while (i < (((Y + 1 + (ItemsCount * itemSpacing)) * 352) + (X / 2) + 414))
         {
             let j = 0;
             while (j < Width)
@@ -201,7 +200,7 @@ class Menu
         let i = 0;
         while (i < ItemsCount)
         {
-            let address = (cursorY * 32 * 11) + (cursorX / 2) + 64 - 1;
+            let address = Constants.getScreenStart() + (cursorY * 352) + (cursorX / 2) + 63;
             do Output.printString(Items[i]);
             let cursorY = cursorY + itemSpacing;
 
@@ -212,24 +211,23 @@ class Menu
             
             if (i = selectedItemIndex)
             {
-                do Memory.poke(Constants.getScreenStart() + address, 4096);
-                do Memory.poke(Constants.getScreenStart() + address + 32, 12288);
-                do Memory.poke(Constants.getScreenStart() + address + 64, 28672);
-                do Memory.poke(Constants.getScreenStart() + address + 96, -1);
-                do Memory.poke(Constants.getScreenStart() + address + 128, -1);
-                do Memory.poke(Constants.getScreenStart() + address + 160, 28672);
-                do Memory.poke(Constants.getScreenStart() + address + 192, 12288);
-                do Memory.poke(Constants.getScreenStart() + address + 224, 4096);
+                do MemoryExt.poke(address, 0, 4096);
+                do MemoryExt.poke(address, 32, 12288);
+                do MemoryExt.poke(address, 64, 28672);
+                do MemoryExt.poke(address, 96, -1);
+                do MemoryExt.poke(address, 128, -1);
+                do MemoryExt.poke(address, 160, 28672);
+                do MemoryExt.poke(address, 192, 12288);
+                do MemoryExt.poke(address, 224, 4096);
             }
 
             let i = i + 1;
         }
 
-        let address = ((Y + 1) * 32 * 11) + (X / 2) + 32;
+        let address = ((Y + 1) * 352) + (X / 2) + 32;
         let i = address;
-        while (i < (((cursorY - itemSpacing) * 32 * 11) + (cursorX / 2) + (20 * 32) - 2))
+        while (i < (((cursorY - itemSpacing) * 352) + (cursorX / 2) + 638))
         {
-            
             do Memory.poke(Constants.getScreenStart() + i, 15);
             do Memory.poke(Constants.getScreenStart() + i + Width - 1, -2048);
 
@@ -239,17 +237,17 @@ class Menu
         let i = 0;
         while (i < Width)
         {
-            let address = (Y * 32 * 11) + (X / 2);
-            do Memory.poke(Constants.getScreenStart() + address + 384 + i, -1);
-            do Memory.poke(Constants.getScreenStart() + address + 416 + i, -1);
-            do Memory.poke(Constants.getScreenStart() + address + 448 + i, -1);
-            do Memory.poke(Constants.getScreenStart() + address + 480 + i, -1);
+            let address = Constants.getScreenStart() + (Y * 352) + (X / 2) + i;
+            do MemoryExt.poke(address, 384, -1);
+            do MemoryExt.poke(address, 416, -1);
+            do MemoryExt.poke(address, 448, -1);
+            do MemoryExt.poke(address, 480, -1);
 
-            let address = ((cursorY - itemSpacing) * 32 * 11) + (cursorX / 2) + (8 * 32) - 2;
-            do Memory.poke(Constants.getScreenStart() + address + 384 + i, -1);
-            do Memory.poke(Constants.getScreenStart() + address + 416 + i, -1);
-            do Memory.poke(Constants.getScreenStart() + address + 448 + i, -1);
-            do Memory.poke(Constants.getScreenStart() + address + 480 + i, -1);
+            let address = Constants.getScreenStart() + ((cursorY - itemSpacing) * 352) + (cursorX / 2) + 254 + i;
+            do MemoryExt.poke(address, 384, -1);
+            do MemoryExt.poke(address, 416, -1);
+            do MemoryExt.poke(address, 448, -1);
+            do MemoryExt.poke(address, 480, -1);
 
             let i = i + 1;
         }

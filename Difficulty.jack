@@ -37,6 +37,7 @@ class Difficulty
             let characterHealthLimit = 5;
 
             let canPickUpHealth = true;
+            let canPickUpAmmo = false;
 
             let spiderMovementDelay = 4;
             let batMovementDelay = 10;
@@ -88,6 +89,8 @@ class Difficulty
             let characterDamageDelay = 0;
             let characterBulletsCount = 0;
             let characterHealthLimit = 1;
+
+            let canPickUpAmmo = false;
 
             let spiderMovementDelay = 1;
             let batMovementDelay = 3;
