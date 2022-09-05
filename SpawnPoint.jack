@@ -1,0 +1,35 @@
+class SpawnPoint
+{
+    field int X;
+    field int Y;
+
+    constructor SpawnPoint new(int x, int y)
+    {
+        do resetObject();
+
+        let X = x;
+        let Y = y;
+
+        return this;
+    }
+
+    method int getX() { return X; }
+    method int getY() { return Y; }
+
+    method void resetObject()
+    {
+        let X = 0;
+        let Y = 0;
+
+        return;
+    }
+
+    method void dispose()
+    {   
+        do resetObject();
+
+        do Memory.deAlloc(this);
+
+        return;
+    }
+}

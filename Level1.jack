@@ -6,10 +6,12 @@ class Level1
 	field int ObstaclesCount;
 	field int EnemiesCount;
 	field int CollectablesCount;
+	field int SpawnPointsCount;
 	field Array Platforms;
 	field Array Obstacles;
 	field Array Enemies;
 	field Array Collectables;
+	field Array SpawnPoints;
 	field Array Map;
 	field int MapWidth;
 	field int MapHeight;
@@ -17,17 +19,22 @@ class Level1
 	{
 		var int i;
 		let character = Character.new(2, 200, false);
-		let finish = Finish.new(35, 224);
-		let PlatformsCount = 3;
-		let ObstaclesCount = 0;
-		let EnemiesCount = 1;
+		let finish = Finish.new(127, 224);
+		let PlatformsCount = 1;
+		let ObstaclesCount = 2;
+		let EnemiesCount = 0;
 		let CollectablesCount = 0;
-		let Platforms = Array.new(3);
-		do MemoryExt.poke(Platforms, 0, Platform.new(9, 224, 0, 1));
-		do MemoryExt.poke(Platforms, 1, Platform.new(24, 224, 0, 1));
-		do MemoryExt.poke(Platforms, 2, Platform.new(0, 240, 0, 41));
-		let Enemies = Array.new(1);
-		do MemoryExt.poke(Enemies, 0, Enemy.new(15, 32, 3));
+		let SpawnPointsCount = 2;
+		let Platforms = Array.new(1);
+		do MemoryExt.poke(Platforms, 0, Platform.new(0, 240, 0, 73));
+		let Obstacles = Array.new(2);
+		do MemoryExt.poke(Obstacles, 0, Obstacle.new(14, 224, 0, 0, 1));
+		do MemoryExt.poke(Obstacles, 1, Obstacle.new(34, 224, 0, 0, 1));
+		let SpawnPoints = Array.new(2);
+		do MemoryExt.poke(SpawnPoints, 0, SpawnPoint.new(3, 224));
+		do MemoryExt.poke(SpawnPoints, 1, SpawnPoint.new(23, 224));
+		do character.setSpawnPointsCount(SpawnPointsCount);
+		do character.setSpawnPoints(SpawnPoints);
 		let MapWidth = 128;
 		let MapHeight = 16;
 		let Map = Array.new(2048);
@@ -45,12 +52,12 @@ class Level1
 		do MemoryExt.poke(Map, 111, 1);
 		do MemoryExt.poke(Map, 127, 1);
 		do MemoryExt.poke(Map, 143, 1);
-		do MemoryExt.poke(Map, 158, 1);
 		do MemoryExt.poke(Map, 159, 1);
 		do MemoryExt.poke(Map, 175, 1);
 		do MemoryExt.poke(Map, 191, 1);
 		do MemoryExt.poke(Map, 207, 1);
 		do MemoryExt.poke(Map, 223, 1);
+		do MemoryExt.poke(Map, 238, 11);
 		do MemoryExt.poke(Map, 239, 1);
 		do MemoryExt.poke(Map, 255, 1);
 		do MemoryExt.poke(Map, 271, 1);
@@ -61,7 +68,6 @@ class Level1
 		do MemoryExt.poke(Map, 351, 1);
 		do MemoryExt.poke(Map, 367, 1);
 		do MemoryExt.poke(Map, 383, 1);
-		do MemoryExt.poke(Map, 398, 1);
 		do MemoryExt.poke(Map, 399, 1);
 		do MemoryExt.poke(Map, 415, 1);
 		do MemoryExt.poke(Map, 431, 1);
@@ -72,6 +78,7 @@ class Level1
 		do MemoryExt.poke(Map, 511, 1);
 		do MemoryExt.poke(Map, 527, 1);
 		do MemoryExt.poke(Map, 543, 1);
+		do MemoryExt.poke(Map, 558, 11);
 		do MemoryExt.poke(Map, 559, 1);
 		do MemoryExt.poke(Map, 575, 1);
 		do MemoryExt.poke(Map, 591, 1);
@@ -79,6 +86,38 @@ class Level1
 		do MemoryExt.poke(Map, 623, 1);
 		do MemoryExt.poke(Map, 639, 1);
 		do MemoryExt.poke(Map, 655, 1);
+		do MemoryExt.poke(Map, 671, 1);
+		do MemoryExt.poke(Map, 687, 1);
+		do MemoryExt.poke(Map, 703, 1);
+		do MemoryExt.poke(Map, 719, 1);
+		do MemoryExt.poke(Map, 735, 1);
+		do MemoryExt.poke(Map, 751, 1);
+		do MemoryExt.poke(Map, 767, 1);
+		do MemoryExt.poke(Map, 783, 1);
+		do MemoryExt.poke(Map, 799, 1);
+		do MemoryExt.poke(Map, 815, 1);
+		do MemoryExt.poke(Map, 831, 1);
+		do MemoryExt.poke(Map, 847, 1);
+		do MemoryExt.poke(Map, 863, 1);
+		do MemoryExt.poke(Map, 879, 1);
+		do MemoryExt.poke(Map, 895, 1);
+		do MemoryExt.poke(Map, 911, 1);
+		do MemoryExt.poke(Map, 927, 1);
+		do MemoryExt.poke(Map, 943, 1);
+		do MemoryExt.poke(Map, 959, 1);
+		do MemoryExt.poke(Map, 975, 1);
+		do MemoryExt.poke(Map, 991, 1);
+		do MemoryExt.poke(Map, 1007, 1);
+		do MemoryExt.poke(Map, 1023, 1);
+		do MemoryExt.poke(Map, 1039, 1);
+		do MemoryExt.poke(Map, 1055, 1);
+		do MemoryExt.poke(Map, 1071, 1);
+		do MemoryExt.poke(Map, 1087, 1);
+		do MemoryExt.poke(Map, 1103, 1);
+		do MemoryExt.poke(Map, 1119, 1);
+		do MemoryExt.poke(Map, 1135, 1);
+		do MemoryExt.poke(Map, 1151, 1);
+		do MemoryExt.poke(Map, 1167, 1);
 		return this;
 	}
 	method int getPlatformsCount() { return PlatformsCount; }
@@ -101,6 +140,7 @@ class Level1
 		var Obstacle obstacle;
 		var Enemy enemy;
 		var Collectable collectable;
+		var SpawnPoint spawnPoint;
 		do character.dispose();
 		let character = 0;
 		do finish.dispose();
@@ -140,6 +180,15 @@ class Level1
 			let i = i + 1;
 		}
 		let CollectablesCount = 0;
+		let i = 0;
+		while (i < SpawnPointsCount)
+		{
+			let spawnPoint = SpawnPoints[i];
+			do spawnPoint.dispose();
+			let spawnPoint = 0;
+			let i = i + 1;
+		}
+		let SpawnPointsCount = 0;
 		if (PlatformsCount > 0)
 		{
 			do Platforms.dispose();
@@ -160,6 +209,11 @@ class Level1
 			do Collectables.dispose();
 		}
 		let Collectables = 0;
+		if (SpawnPointsCount > 0)
+		{
+			do SpawnPoints.dispose();
+		}
+		let SpawnPoints = 0;
 		let i = 0;
 		while (i < 2048)
 		{

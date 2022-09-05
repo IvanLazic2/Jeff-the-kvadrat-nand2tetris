@@ -24,8 +24,6 @@ class Menu
 
     field bool CheckMainMenuAnimation;
 
-    
-
     constructor Menu new(int x, int y, int width, int height, int itemsCount, bool checkMainMenuAnimation)
     {
         let X = x;
@@ -56,8 +54,6 @@ class Menu
             let lastItemIndex = lastItemIndex + 1;
         }
 
-        
-        
         return;
     }
 
@@ -211,14 +207,23 @@ class Menu
             
             if (i = selectedItemIndex)
             {
-                do MemoryExt.poke(address, 0, 4096);
-                do MemoryExt.poke(address, 32, 12288);
-                do MemoryExt.poke(address, 64, 28672);
-                do MemoryExt.poke(address, 96, -1);
-                do MemoryExt.poke(address, 128, -1);
-                do MemoryExt.poke(address, 160, 28672);
-                do MemoryExt.poke(address, 192, 12288);
-                do MemoryExt.poke(address, 224, 4096);
+                //do MemoryExt.poke(address, 0, 4096);
+                //do MemoryExt.poke(address, 32, 12288);
+                //do MemoryExt.poke(address, 64, 28672);
+                //do MemoryExt.poke(address, 96, -1);
+                //do MemoryExt.poke(address, 128, -1);
+                //do MemoryExt.poke(address, 160, 28672);
+                //do MemoryExt.poke(address, 192, 12288);
+                //do MemoryExt.poke(address, 224, 4096);
+
+                do Memory.poke(address + 0, -26);
+	            do Memory.poke(address + 32, -2);
+	            do Memory.poke(address + 64, -2);
+	            do Memory.poke(address + 96, 316);
+	            do Memory.poke(address + 128, 254);
+	            do Memory.poke(address + 160, 31);
+	            do Memory.poke(address + 192, 15);
+	            do Memory.poke(address + 224, 7);
             }
 
             let i = i + 1;

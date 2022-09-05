@@ -38,6 +38,13 @@ class Character
 
     field bool isAnimation;
 
+    field Array SpawnPoints;
+    field int SpawnPointsCount;
+    field SpawnPoint lastSpawnPoint;
+
+    field bool shouldRedrawAll;
+    field int newWorldOffset;
+
     static String text;
 
     constructor Character new(int x, int y, bool ia)
@@ -92,10 +99,25 @@ class Character
     method int getAvailableBulletsCount() { return AvailableBulletsCount; }
     method int getHealth() { return health; }
     method int getCoins() { return coins; }
+    method bool getShouldRedrawAll() { return shouldRedrawAll; }
+    method int getLastSpawnPointX() { return lastSpawnPoint.getX(); }
 
+    method void setX(int x) { let X = x; return; }
+    method void setAbsoluteX(int absX) { let absoluteX = absX; return; }
+    method void setMemAddress(int addr) { let memAddress = addr; return; }
+    method void setLastMemAddress(int addr) { let lastMemAddress = addr; return; }
     method void setShouldRedrawObstacles(bool s) { let shouldRedrawObstacles = s; return; }
     method void setMovingLeft(bool b) { let movingLeft = b; return; }
     method void setJumpHeight(int h) { let jumpHeight = h; return; }
+    method void setShouldRedrawAll(int s) { let shouldRedrawAll = s; return; }
+    method void setSpawnPointsCount(int spc) { let SpawnPointsCount = spc; return; }
+    method void setSpawnPoints(int s) 
+    { 
+        let SpawnPoints = s; 
+        let lastSpawnPoint = SpawnPoints[0]; 
+        return; 
+    }
+    
 
     method void incrementAbsoluteX(int inc) { let absoluteX = absoluteX + inc; return; }
     method void setCoins(int c) { let coins = c; return; }
@@ -197,6 +219,8 @@ class Character
         return;
     }
 
+    
+
     method bool IsCollidedWithFinish(Finish finish)
     {
         return finish.IsCollidedWithCharacter(X, Y, Width, Height);
@@ -209,7 +233,7 @@ class Character
         return;
     }
 
-    method bool CheckCollisionWithEnemy(Enemy enemy)
+    method bool CheckCollisionWithEnemy(Enemy enemy, int worldOffset)
     {
         var bool result;
 
@@ -217,18 +241,18 @@ class Character
 
         if (result)
         {
-            do Respawn();
+            do Respawn(worldOffset);
             do TakeDamage();
         }
 
         return result;
     }
 
-    method void CheckCollisionWithBullet(Bullet bullet)
+    method void CheckCollisionWithBullet(Bullet bullet, int worldOffset)
     {
         if (bullet.CheckCollisionWithEntity(X, Y, Width, heightInPixels))
         {
-            do Respawn();
+            do Respawn(worldOffset);
             do TakeDamage();
         }
 
@@ -396,7 +420,7 @@ class Character
     }
 
     //// OBSTACLE COLLISION
-    method void CheckCollisionWithObstacles()
+    method void CheckCollisionWithObstacles(int worldOffset)
     {
         var int i;
         var bool result;
@@ -408,7 +432,7 @@ class Character
             let shouldRedrawObstacles = true;
 
             do TakeDamage();
-            do Respawn();
+            do Respawn(worldOffset);
         }
 
         if (damageTimer > 0)
@@ -487,7 +511,7 @@ class Character
         {
             if (Y > 219)
             {
-                //do Respawn();
+                //do Respawn(worldOffset);
 
                 // take damage
             }
@@ -505,21 +529,34 @@ class Character
         return;
     }
 
-
-    method void Respawn()
+    method void CheckPassedSpawnPoints()
     {
-        let Y = 100;
+        var int i;
+        var SpawnPoint spawnPoint;
+        var int lastSpawnPointX;
 
-        if (X - 10 < 1)
+        while (i < SpawnPointsCount)
         {
-            let X = X + 5;
-            let absoluteX = absoluteX + 5;
+            let spawnPoint = SpawnPoints[i];
+            if ((spawnPoint.getX() < absoluteX) & (spawnPoint.getX() > lastSpawnPointX))
+            {
+                let lastSpawnPoint = spawnPoint;
+                let lastSpawnPointX = lastSpawnPoint.getX();
+            }
+            let i = i + 1;
         }
-        else
-        {
-            let X = X - 10;
-            let absoluteX = absoluteX - 10;
-        }
+
+        return;
+    }
+
+    method void Respawn(int worldOffset)
+    {
+        do CheckPassedSpawnPoints();
+
+        let Y = lastSpawnPoint.getY();
+
+        let shouldRedrawAll = true;
+
         
         return;
     }
@@ -677,6 +714,11 @@ class Character
         let bulletDelay = 0;
         let canShoot = 0;
         let isAnimation = 0;
+        let SpawnPoints = 0;
+        let SpawnPointsCount = 0;
+        let lastSpawnPoint = 0;
+        let shouldRedrawAll = 0;
+        let newWorldOffset = 0;
         return;
     }
 
@@ -684,13 +726,28 @@ class Character
     {
         var int i;
         var Bullet bullet;
+        var SpawnPoint spawnPoint;
+
+        while (i < SpawnPointsCount)
+        {
+            let spawnPoint = SpawnPoints[i];
+            do spawnPoint.dispose();
+            let spawnPoint = 0;
+            let i = i + 1;
+        }
         
+        let i = 0;
         while (i < BulletsCount)
         {   
             let bullet = Bullets[i];
             do bullet.dispose();
             let bullet = 0;
             let i = i + 1;
+        }
+
+        if (SpawnPointsCount > 0)
+        {
+            do SpawnPoints.dispose();
         }
 
         if (BulletsCount > 0)

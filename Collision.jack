@@ -149,6 +149,11 @@ class Collision
         var int j;
         var int blockValue;
 
+        if (~Constants.IsInScreenY(y - (height * 16)))
+        {
+            return false;
+        }
+
         while (i < width)
         {
             let j = (y / 16) - (height - 1);

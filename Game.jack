@@ -73,6 +73,7 @@ class Game
     static int animationWorldOffset;
 
     field bool shouldDisposeAnimation;
+    
 
     function void init()
     {
@@ -161,7 +162,7 @@ class Game
         let LeftBorder = ScreenMiddle - MoveAreaWidth;
         let RightBorder = ScreenMiddle + MoveAreaWidth;
 
-        let GameDelay = 20; //20
+        let GameDelay = 5; //20
 
         let redrawAllObstaclesDelay = 7;
         let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
@@ -450,6 +451,7 @@ class Game
         var int temp;
         var Platform platform;
         var int value;
+        var int scrollAmount;
 
         let exit = false;
 
@@ -491,7 +493,41 @@ class Game
             {
                 do showPauseMenu();
             }}}}}}}
+
+
+
+
+
+            if (Character.getShouldRedrawAll())
+            {
+                if (WorldOffset > 0)
+                {
+                    while (~(Character.getAbsoluteX() = Character.getLastSpawnPointX()))
+                    {
+                        if (WorldOffset > 0)
+                        {
+                            do ScrollRight();
+                        }
+                        else
+                        {
+                            do Character.setAbsoluteX(Character.getLastSpawnPointX());
+                            do Character.setX(Character.getAbsoluteX() - WorldOffset);
+                        }
+                    }
+                }
+
+                do Character.setAbsoluteX(Character.getLastSpawnPointX());
+                do Character.setX(Character.getAbsoluteX() - WorldOffset);
+
+                do Character.ForceDraw();
+
+                do Character.setShouldRedrawAll(false);
+                
+            }
             
+
+
+
             do Move();
             do Sys.wait(GameDelay);
             
@@ -1001,7 +1037,7 @@ class Game
         {
             let enemy = Enemies[i];
 
-            if (Character.CheckCollisionWithEnemy(enemy))
+            if (Character.CheckCollisionWithEnemy(enemy, WorldOffset))
             {
                 do DrawAllPlatforms();
                 let i = EnemiesCount;
@@ -1048,7 +1084,7 @@ class Game
         while (i < characterBulletsCount)
         {
             let bullet = characterBullets[i];
-            do Character.CheckCollisionWithBullet(bullet);
+            do Character.CheckCollisionWithBullet(bullet, WorldOffset);
 
             let j = 0;
             while (j < EnemiesCount)
@@ -1073,7 +1109,7 @@ class Game
             while (j < enemyBulletsCount)
             {
                 let bullet = enemyBullets[j];
-                do Character.CheckCollisionWithBullet(bullet);
+                do Character.CheckCollisionWithBullet(bullet, WorldOffset);
                 let j = j + 1;
             }
 
@@ -1258,7 +1294,7 @@ class Game
         let cWidth = Character.getWidth();
 
         do Character.CheckGravity(WorldOffset);
-        do Character.CheckCollisionWithObstacles();
+        do Character.CheckCollisionWithObstacles(WorldOffset);
 
         if (Direction = 1) 
         {
