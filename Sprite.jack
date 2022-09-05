@@ -16,7 +16,7 @@ class Sprite
 				let row = row - 32;
 			}
 
-			if (Constants.IsInScreenX(x + col) & ((memAddress + col + row) > 16896))
+			if (((-1 < (x + col)) & ((x + col) < 32)) & ((memAddress + col + row) > 16896))
 			{
 				if (display)
 				{

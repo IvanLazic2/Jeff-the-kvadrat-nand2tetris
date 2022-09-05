@@ -118,24 +118,14 @@ class Game
         let i = 0;
         while (i < 32)
         {
-            let memAddress = Constants.getMemAddress(i, (animationLevel.getMapHeight() - 1) * 16);
+            let memAddress = Constants.getMemAddress(i, (animationLevel.getMapHeight()) * 16);
 
             do MemoryExt.poke(memAddress, 0, -1);
 	        do MemoryExt.poke(memAddress, 32, -12744);
 	        do MemoryExt.poke(memAddress, 64, -6372);
 	        do MemoryExt.poke(memAddress, 96, 29582);
 	        do MemoryExt.poke(memAddress, 128, 14791);
-	        do MemoryExt.poke(memAddress, 160, -25373);
-	        do MemoryExt.poke(memAddress, 192, -12687);
-	        do MemoryExt.poke(memAddress, 224, -6344);
-	        do MemoryExt.poke(memAddress, 256, 29596);
-	        do MemoryExt.poke(memAddress, 288, 14798);
-	        do MemoryExt.poke(memAddress, 320, 7399);
-	        do MemoryExt.poke(memAddress, 352, -29069);
-	        do MemoryExt.poke(memAddress, 384, -14535);
-	        do MemoryExt.poke(memAddress, 416, -7268);
-	        do MemoryExt.poke(memAddress, 448, 29134);
-	        do MemoryExt.poke(memAddress, 480, -1);
+	        do MemoryExt.poke(memAddress, 160, -1);
 
             let i = i + 1;
         }
@@ -175,7 +165,7 @@ class Game
         do levelMenu.AddItem("Level 3");
         do levelMenu.AddItem("Quit");
 
-        let difficultyMenu = Menu.new(23, 10, 10, 5, 5, true); // sredina (23, 5)
+        let difficultyMenu = Menu.new(23, 10, 10, 5, 5, true);
         do difficultyMenu.AddItem("Easy");
         do difficultyMenu.AddItem("Medium");
         do difficultyMenu.AddItem("Hard");

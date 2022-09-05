@@ -499,6 +499,12 @@ class Character
         {
             let Y = Collision.getPlatformY() - 16;
 
+            if (Y > 224)
+            {
+                do Respawn(worldOffset);
+                do TakeDamage();
+            }
+
             let forceY = 0;
 
             let lastMemAddress = memAddress;
@@ -509,11 +515,10 @@ class Character
         // padanje
         else
         {
-            if (Y > 219)
+            if (Y > 224)
             {
-                //do Respawn(worldOffset);
-
-                // take damage
+                do Respawn(worldOffset);
+                do TakeDamage();
             }
 
             let forceY = forceY + gravity;
@@ -551,6 +556,8 @@ class Character
 
     method void Respawn(int worldOffset)
     {
+        do ForceClear();
+
         do CheckPassedSpawnPoints();
 
         let Y = lastSpawnPoint.getY();
@@ -653,6 +660,20 @@ class Character
 
 		return;
 	}
+
+    method void ForceClear()
+    {
+        if (Difficulty.getDifficulty() = 4)
+        {
+            do InsaneJeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
+        }
+        else
+        {
+            do Jeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
+        }
+
+        return;
+    }
 
     method void Draw()
     {

@@ -91,6 +91,8 @@ class Difficulty
             let characterHealthLimit = 1;
 
             let canPickUpAmmo = false;
+            let canPickUpHealth = false;
+            let ammoCount = 0;
 
             let spiderMovementDelay = 1;
             let batMovementDelay = 3;

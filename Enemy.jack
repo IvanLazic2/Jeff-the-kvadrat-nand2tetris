@@ -281,7 +281,7 @@ class Enemy
 			}
 			if (IsFollowing & IsFlying)
 			{
-				do FollowFlying(worldOffset, characterX, characterY);
+				do FollowFlying(worldOffset, characterX, characterY - 16);
 			}
 			if (IsShooting & ~IsRanged)
 			{
@@ -555,7 +555,7 @@ class Enemy
 			{
 				do MoveUp();
 			}
-			if ((Y < lastCY) & (Map.getValue(X + worldOffset, (Y/16) + 1) = 0))
+			if ((Y < lastCY) & (Map.getValue(X + worldOffset, (Y/16) + 1) = 0) & ((Y + 16) < characterY))
 			{
 				do MoveDown();
 			}
