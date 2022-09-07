@@ -19,6 +19,7 @@ class Main
         do Spider.init();
         do EvilJeffMelee.init();
         do EvilJeffRanged.init();
+        do EvilJeffAngry.init();
         do Bat.init();
         do Shooter.init();
 

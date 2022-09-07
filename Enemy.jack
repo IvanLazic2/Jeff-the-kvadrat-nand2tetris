@@ -63,6 +63,8 @@ class Enemy
 
 	field int health;
 
+    field int angryTimer;
+
     constructor Enemy new(int x, int y, int type)
     {	
 		var int i;
@@ -113,7 +115,7 @@ class Enemy
 			let IsShooting = true;
 			let IsRanged = true;
 
-			let DiesOnSquish = true;
+			//let DiesOnSquish = true;
 
 			let health = 5;
 		}
@@ -497,14 +499,14 @@ class Enemy
 		}
 		else
 		{
-			if (Collision.GetPlatformBelowY(X, Y, Width, worldOffset, true) < Collision.GetObstacleBelowY(X, Y, Width, worldOffset, true))
+			if (Collision.GetPlatformBelowY(X, Y, Width, worldOffset, true) < (Collision.GetObstacleBelowY(X, Y, Width, worldOffset, true) + 1))
 			{
 				if (X > lastCX)
 				{
 					do MoveLeft(worldOffset);
 				}
 			}
-			if (Collision.GetPlatformBelowY(X, Y, Width, worldOffset, false) < Collision.GetObstacleBelowY(X, Y, Width, worldOffset, false))
+			if (Collision.GetPlatformBelowY(X, Y, Width, worldOffset, false) < (Collision.GetObstacleBelowY(X, Y, Width, worldOffset, false) + 1))
 			{
 				if (X < lastCX)
 				{
@@ -762,9 +764,10 @@ class Enemy
         // padanje
         else
         {
-            if (Y > 219)
+            if (Y > 224)
             {
-                // do Die();
+				let health = 1;
+                do Die();
             }
 
             let forceY = forceY + gravity;            
@@ -796,6 +799,8 @@ class Enemy
 			let Y = -10;
 			let IsAlive = false;
 		}
+
+		let angryTimer = 10;
 
 		return;
 	}
@@ -837,11 +842,27 @@ class Enemy
 		}
 		else { if (Type = 1)
 		{
-			do EvilJeffMelee.DrawFrame(memAddress, display, movingLeft, X, Y);
+			if (angryTimer > 0)
+			{
+				do EvilJeffAngry.DrawFrame(memAddress, display, movingLeft, X, Y);
+				let angryTimer = angryTimer - 1;
+			}
+			else
+			{
+				do EvilJeffMelee.DrawFrame(memAddress, display, movingLeft, X, Y);
+			}
 		}
 		else { if (Type = 2)
 		{
-			do EvilJeffRanged.DrawFrame(memAddress, display, movingLeft, X, Y);
+			if (angryTimer > 0)
+			{
+				do EvilJeffAngry.DrawFrame(memAddress, display, movingLeft, X, Y);
+				let angryTimer = angryTimer - 1;
+			}
+			else
+			{
+				do EvilJeffRanged.DrawFrame(memAddress, display, movingLeft, X, Y);
+			}
 		}
 		else { if (Type = 3)
 		{
@@ -898,6 +919,7 @@ class Enemy
 		let lastCX = 0;
 		let lastCY = 0;
 		let health = 0;
+		let angryTimer = 0;
 		return;
 	}
 
