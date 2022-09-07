@@ -148,6 +148,11 @@ class Character
             let bulletTimer = bulletDelay;
         }
 
+        if (damageTimer < 1)
+        {
+            do ForceDraw();
+        }
+
 		return;
 	}
 
@@ -266,7 +271,7 @@ class Character
         var Bullet bullet;
         var int i;
 
-        let result = collectable.CheckCollisionWithCharacter(X, Y, Width, heightInPixels);
+        let result = collectable.CheckCollisionWithCharacter(X, Y, Width, heightInPixels - 16);
 
         if (result = 0)
         {
@@ -556,7 +561,7 @@ class Character
 
     method void Respawn(int worldOffset)
     {
-        do ForceClear();
+        //do ForceClear();
 
         do CheckPassedSpawnPoints();
 
@@ -679,6 +684,35 @@ class Character
     {
 		if (~(memAddress = lastMemAddress))
 		{
+            if (shouldRedrawAll | (damageTimer > 0))
+            {
+                do JeffDead.DrawFrame(memAddress, true, movingLeft, X, Y);
+            }
+            else
+            {
+                if (Difficulty.getDifficulty() = 4)
+                {
+                    do InsaneJeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+                }
+                else
+                {
+                    do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+                }
+            }
+            
+		}
+		
+		return;
+    }
+
+    method void ForceDraw()
+    {
+        if (shouldRedrawAll | (damageTimer > 0))
+        {
+            do JeffDead.DrawFrame(memAddress, true, movingLeft, X, Y);
+        }
+        else
+        {
             if (Difficulty.getDifficulty() = 4)
             {
                 do InsaneJeff.DrawFrame(memAddress, true, movingLeft, X, Y);
@@ -687,21 +721,8 @@ class Character
             {
                 do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
             }
-		}
-		
-		return;
-    }
-
-    method void ForceDraw()
-    {
-        if (Difficulty.getDifficulty() = 4)
-        {
-            do InsaneJeff.DrawFrame(memAddress, true, movingLeft, X, Y);
         }
-        else
-        {
-            do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
-        }
+        
 		
 		return;
     }
@@ -740,6 +761,7 @@ class Character
         let lastSpawnPoint = 0;
         let shouldRedrawAll = 0;
         let newWorldOffset = 0;
+
         return;
     }
 

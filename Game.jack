@@ -103,7 +103,7 @@ class Game
         do Map.setWidth(animationLevel.getMapWidth());
         do Map.setHeight(animationLevel.getMapHeight());
 
-        do animationCharacter.setJumpHeight(10);
+        do animationCharacter.setJumpHeight(15);
 
         do animationCharacter.ForceDraw();
 
@@ -503,6 +503,8 @@ class Game
                             do Character.setAbsoluteX(Character.getLastSpawnPointX());
                             do Character.setX(Character.getAbsoluteX() - WorldOffset);
                         }
+
+                        do Character.ForceDraw();
                     }
                 }
 

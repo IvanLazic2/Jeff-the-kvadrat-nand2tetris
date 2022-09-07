@@ -27,7 +27,7 @@ class Difficulty
         
         if (difficulty = 1)
         {
-            let characterJumpHeight = 35;
+            let characterJumpHeight = 35; //35
             let characterHealth = 5;
             let characterDamageDelay = 30;
             let characterBulletsCount = 5;

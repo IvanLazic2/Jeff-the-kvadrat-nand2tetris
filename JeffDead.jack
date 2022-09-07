@@ -1,0 +1,110 @@
+class JeffDead
+{
+	static int Width;
+	static int Height;
+	static int AnimationFramesCount;
+	static int currFrame;
+	static int animationTimer;
+	static int animationDelay;
+	static Array Frames;
+	static int FrameSize;
+	static Array FramesMirrored;
+	static Array Frame1;
+	static Array Frame1Mirrored;
+	function void init()
+	{
+///////////////// CONFIG /////////////////
+//////////////////////////////////////////
+		let Width = 3;
+		let Height = 2;
+		let AnimationFramesCount = 1;
+		let FrameSize = 96;
+		let Frames = Array.new(AnimationFramesCount);
+		let FramesMirrored = Array.new(AnimationFramesCount);
+		let Frame1 = Array.new(96);
+		let Frame1Mirrored = Array.new(96);
+		do MemoryExt.poke(Frame1, 1, -1);
+		do MemoryExt.poke(Frame1, 4, -32767);
+		do MemoryExt.poke(Frame1, 7, -32383);
+		do MemoryExt.poke(Frame1, 10, -32191);
+		do MemoryExt.poke(Frame1, 13, -32191);
+		do MemoryExt.poke(Frame1, 16, -32383);
+		do MemoryExt.poke(Frame1, 19, -32767);
+		do MemoryExt.poke(Frame1, 22, -32767);
+		do MemoryExt.poke(Frame1, 25, -32767);
+		do MemoryExt.poke(Frame1, 28, -30127);
+		do MemoryExt.poke(Frame1, 31, -31711);
+		do MemoryExt.poke(Frame1, 34, -30127);
+		do MemoryExt.poke(Frame1, 37, -32767);
+		do MemoryExt.poke(Frame1, 40, -32767);
+		do MemoryExt.poke(Frame1, 43, -32767);
+		do MemoryExt.poke(Frame1, 46, -1);
+		do MemoryExt.poke(Frame1, 58, 960);
+		do MemoryExt.poke(Frame1, 61, 3120);
+		do MemoryExt.poke(Frame1, 64, 4104);
+		do MemoryExt.poke(Frame1, 67, 3120);
+		do MemoryExt.poke(Frame1, 69, 192);
+		do MemoryExt.poke(Frame1, 70, 960);
+		do MemoryExt.poke(Frame1, 71, 12);
+		do MemoryExt.poke(Frame1, 72, 448);
+		do MemoryExt.poke(Frame1, 74, 28);
+		do MemoryExt.poke(Frame1, 75, 704);
+		do MemoryExt.poke(Frame1, 77, 44);
+		do MemoryExt.poke(Frame1, 78, -64);
+		do MemoryExt.poke(Frame1, 80, 8188);
+		do MemoryExt.poke(Frame1, 81, -64);
+		do MemoryExt.poke(Frame1, 83, 8188);
+		do MemoryExt.poke(Frame1, 84, -64);
+		do MemoryExt.poke(Frame1, 86, 8188);
+		do MemoryExt.poke(Frame1Mirrored, 1, -1);
+		do MemoryExt.poke(Frame1Mirrored, 4, -32767);
+		do MemoryExt.poke(Frame1Mirrored, 7, -32383);
+		do MemoryExt.poke(Frame1Mirrored, 10, -32191);
+		do MemoryExt.poke(Frame1Mirrored, 13, -32191);
+		do MemoryExt.poke(Frame1Mirrored, 16, -32383);
+		do MemoryExt.poke(Frame1Mirrored, 19, -32767);
+		do MemoryExt.poke(Frame1Mirrored, 22, -32767);
+		do MemoryExt.poke(Frame1Mirrored, 25, -32767);
+		do MemoryExt.poke(Frame1Mirrored, 28, -30127);
+		do MemoryExt.poke(Frame1Mirrored, 31, -31711);
+		do MemoryExt.poke(Frame1Mirrored, 34, -30127);
+		do MemoryExt.poke(Frame1Mirrored, 37, -32767);
+		do MemoryExt.poke(Frame1Mirrored, 40, -32767);
+		do MemoryExt.poke(Frame1Mirrored, 43, -32767);
+		do MemoryExt.poke(Frame1Mirrored, 46, -1);
+		do MemoryExt.poke(Frame1Mirrored, 58, 960);
+		do MemoryExt.poke(Frame1Mirrored, 61, 3120);
+		do MemoryExt.poke(Frame1Mirrored, 64, 4104);
+		do MemoryExt.poke(Frame1Mirrored, 67, 3120);
+		do MemoryExt.poke(Frame1Mirrored, 69, 12288);
+		do MemoryExt.poke(Frame1Mirrored, 70, 960);
+		do MemoryExt.poke(Frame1Mirrored, 71, 768);
+		do MemoryExt.poke(Frame1Mirrored, 72, 14336);
+		do MemoryExt.poke(Frame1Mirrored, 74, 896);
+		do MemoryExt.poke(Frame1Mirrored, 75, 13312);
+		do MemoryExt.poke(Frame1Mirrored, 77, 832);
+		do MemoryExt.poke(Frame1Mirrored, 78, 16376);
+		do MemoryExt.poke(Frame1Mirrored, 80, 1023);
+		do MemoryExt.poke(Frame1Mirrored, 81, 16376);
+		do MemoryExt.poke(Frame1Mirrored, 83, 1023);
+		do MemoryExt.poke(Frame1Mirrored, 84, 16376);
+		do MemoryExt.poke(Frame1Mirrored, 86, 1023);
+		do MemoryExt.poke(Frames, 0, Frame1);
+		do MemoryExt.poke(FramesMirrored, 0, Frame1Mirrored);
+		return;
+	}
+	function int getWidth() { return Width; }
+	function int getHeight() { return Height; }
+	function void DrawFrame(int memAddress, bool display, bool mirrored, int x, int y)
+	{
+		if (mirrored)
+		{
+			do Sprite.Draw(memAddress, FramesMirrored[currFrame], FrameSize, Width, Height, display, x, y);
+		}
+		else
+		{
+			do Sprite.Draw(memAddress, Frames[currFrame], FrameSize, Width, Height, display, x, y);
+		}
+		return;
+	}
+}

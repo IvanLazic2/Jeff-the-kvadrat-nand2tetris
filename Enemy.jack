@@ -61,6 +61,8 @@ class Enemy
 	field int lastCX;
 	field int lastCY;
 
+	field int health;
+
     constructor Enemy new(int x, int y, int type)
     {	
 		var int i;
@@ -83,6 +85,8 @@ class Enemy
 
 			let IsRoaming = true;
 			let DiesOnSquish = true;
+
+			let health = 1;
 		}
 		// EVIL JEFF MELEE
 		else { if (Type = 1)
@@ -94,6 +98,8 @@ class Enemy
 
 			let IsGravityAffected = true;
 			let IsMelee = true;
+
+			let health = 5;
 		}
 		// EVIL JEFF RANGED
 		else { if (Type = 2)
@@ -108,6 +114,8 @@ class Enemy
 			let IsRanged = true;
 
 			let DiesOnSquish = true;
+
+			let health = 5;
 		}
 		// BAT
 		else { if (Type = 3)
@@ -123,7 +131,10 @@ class Enemy
 			let IsFollowing = true;
 			let IsFlying = true;
 			let DiesOnSquish = true;
+
+			let health = 1;
 		}
+		// SHOOTER
 		else {if (Type = 4)
 		{
 			let Width = Shooter.getWidth();
@@ -131,6 +142,8 @@ class Enemy
 
 			let IsShooting = true;
 			let DiesOnSquish = true;
+
+			let health = 1;
 		}}}}}
 
 		if (IsShooting)
@@ -225,14 +238,23 @@ class Enemy
 	{
 		if (IsAlive)
 		{
-			if (DiesOnSquish & Collision.IsEntityCollidedWithEntityTop(cx, cy, cw, ch, X, Y, Width, heightInPixels))
+			
+			if (Collision.IsEntityCollidedWithEntityTop(cx, cy, cw, ch, X, Y, Width, heightInPixels))
 			{
-				do Die();
-				do Game.addKill();
-				return false;
+				if (DiesOnSquish)
+				{
+					do Die();
+					do Game.addKill();
+					return false;
+				}
+				else
+				{
+					return true;
+				}
 			}
 			else { if (Collision.IsEntityCollidedWithEntitySides(cx, cy, cw, ch, X, Y, Width, heightInPixels))
 			{
+				// FIXAT KAD TE ENEMY UBIJE BLIZU SPAWN POINTA
 				return true;
 			}}
 		}
@@ -555,7 +577,7 @@ class Enemy
 			{
 				do MoveUp();
 			}
-			if ((Y < lastCY) & (Map.getValue(X + worldOffset, (Y/16) + 1) = 0) & ((Y + 16) < characterY))
+			if ((Y < lastCY) & (Map.getValue(X + worldOffset, (Y/16) + 1) = 0) & ((Y) < characterY))
 			{
 				do MoveDown();
 			}
@@ -763,12 +785,17 @@ class Enemy
 		var int i;
 		var Bullet bullet;
 
-		let lastMemAddress = memAddress;
-		let memAddress = Constants.getMemAddress(-10, -10);
-		do Clear();
-		let X = -10;
-		let Y = -10;
-		let IsAlive = false;
+		let health = health - 1;
+
+		if (health < 1)
+		{
+			let lastMemAddress = memAddress;
+			let memAddress = Constants.getMemAddress(-10, -10);
+			do Clear();
+			let X = -10;
+			let Y = -10;
+			let IsAlive = false;
+		}
 
 		return;
 	}
@@ -870,6 +897,7 @@ class Enemy
 		let followTimer = 0;
 		let lastCX = 0;
 		let lastCY = 0;
+		let health = 0;
 		return;
 	}
 

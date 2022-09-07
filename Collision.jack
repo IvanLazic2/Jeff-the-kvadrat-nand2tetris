@@ -222,7 +222,13 @@ class Collision
 
     function bool IsEntityCollidedWithEntitySides(int cx, int cy, int cw, int ch, int ex, int ey, int ew, int eh)
     {
-        return (ex < (cx + cw)) & (cx < (ex + ew)) & ((ey - 16) < cy) & (cy < (ey + eh));
+        // TEMP FIX!!!
+        if (ch = 2)
+        {
+            let ch = 32;
+        }
+
+        return (ex < (cx + cw)) & (cx < (ex + ew)) & ((ey) > (cy - ch)) & ((ey) < (cy + 16));
     }
 
     function bool IsEntityCollidedWithEntityTop(int cx, int cy, int cw, int ch, int ex, int ey, int ew, int eh)
