@@ -95,7 +95,7 @@ class Game
         let LeftBorder = ScreenMiddle - MoveAreaWidth;
         let RightBorder = ScreenMiddle + MoveAreaWidth;
 
-        let GameDelay = 5; //20
+        let GameDelay = 0; //20
 
         let redrawAllObstaclesDelay = 7;
         let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
@@ -227,7 +227,26 @@ class Game
         var int j;
         var int temp;
         var Platform platform;
+
+        var int value;
+        var int scrollAmount;
+
+        var int x;
+        var int absX;
+        var int cWidth;
+
+        var Collectable collectable;
+
+        var Enemy enemy;
+
+        var int characterBulletsCount;
+        var int enemyBulletsCount;
+        var Array characterBullets;
+        var Array enemyBullets;
+        var Bullet bullet;
         
+
+
 
         let exit = false;
 
@@ -270,31 +289,244 @@ class Game
                 do showPauseMenu();
             }}}}}}}
 
-            do CheckRespawn();
-            do Move();
+            
+
+            
+            ///////////////////////////////////////////////////////////////////////
+
+            //do CheckRespawn();
+
+            if (Character.getShouldRedrawAll())
+            {
+                if (WorldOffset > 0)
+                {
+                    while (~(Character.getAbsoluteX() = Character.getLastSpawnPointX()))
+                    {
+                        if (WorldOffset > 0)
+                        {
+                            do ScrollRight();
+                        }
+                        else
+                        {
+                            do Character.setAbsoluteX(Character.getLastSpawnPointX());
+                            do Character.setX(Character.getAbsoluteX() - WorldOffset);
+                        }
+
+                        do Character.ForceDraw();
+                    }
+                }
+
+                do Character.setAbsoluteX(Character.getLastSpawnPointX());
+                do Character.setX(Character.getAbsoluteX() - WorldOffset);
+
+                do Character.ForceDraw();
+
+                do Character.setShouldRedrawAll(false);
+
+            }
+            //////////////////////////////////////////////////////////
+
+            //do Move();
+
+            let x = Character.getX();
+            let absX = Character.getAbsoluteX();
+            let cWidth = Character.getWidth();
+
+            do Character.CheckGravity(WorldOffset);
+            do Character.CheckCollisionWithObstacles(WorldOffset);
+
+            if (Direction = 1) 
+            {
+                do Character.setMovingLeft(true);
+
+                if (~Character.CheckCollisionWithPlatformLeft(WorldOffset))
+                {
+                    if (absX < LeftBorder)
+                    {
+                        do Character.MoveLeft();
+                    }
+                    else { if (x < LeftBorder)
+                    {
+                        do ScrollRight();
+                    }
+                    else 
+                    {
+                        do Character.MoveLeft();
+                    }}
+                }
+            }
+            else { if (Direction = 2)
+            {
+                do Character.setMovingLeft(false);
+
+                if (~Character.CheckCollisionWithPlatformRight(WorldOffset))
+                {
+                    if (absX > (mapWidth - RightBorder))
+                    {
+                        do Character.MoveRight();
+                    }
+                    else { if (x > (RightBorder - cWidth))
+                    {
+                        do ScrollLeft();
+                    }
+                    else 
+                    {
+                        do Character.MoveRight();
+                    }}
+                }
+            }}
+            /////////////////////////////////////////////////////////////////////
+
+            do Sys.wait(GameDelay);
+
             do Character.RedrawPlatforms(WorldOffset);
+
+            do Character.CheckBullets(WorldOffset);
+
+            do Character.CheckTimers();
+
+            do Character.DecrementTimers();
+
+            /////////////////////////////////////////////////////////////////////
+            //do CheckAllBulletCollisions();
+            let i = 0;
+            let j = 0;
+
+            let characterBulletsCount = Character.getBulletsCount();
+            let characterBullets = Character.getBullets();
+
+            while (i < characterBulletsCount)
+            {
+                let bullet = characterBullets[i];
+                do Character.CheckCollisionWithBullet(bullet, WorldOffset);
+
+                let j = 0;
+                while (j < EnemiesCount)
+                {
+                    let enemy = Enemies[j];
+                    do enemy.CheckCollisionWithBullet(bullet);
+                    let j = j + 1;
+                }
+
+                let i = i + 1;
+            }
+            /////////////////////////////////////////////////////////////////////
 
             do Finish.ForceDraw();
 
-            do DrawAllCollectables();
+            /////////////////////////////////////////////////////////////////////
 
-            do DoAllEnemyActions();
+            let i = 0;
+            while (i < CollectablesCount)
+            {
+                let collectable = Collectables[i];
 
-            do CheckAllBullets();
+                //CheckCollectableAndCharacterCollision();
+                do Character.CheckCollisionWithCollectable(collectable);
 
-            do CheckAllBulletCollisions();
-            do CheckEnemyAndCharacterCollision();
-            do CheckCollectableAndCharacterCollision();
+                //DrawAllCollectables();
+                do collectable.Draw();
 
-            do CheckTimers();
-            do DecrementTimers();
+                let i = i + 1;
+            }
+
+            /////////////////////////////////////////////////////////////////////
+
+            let i = 0;
+
+            while (i < EnemiesCount)
+            {
+                let enemy = Enemies[i];
+
+                //DoAllEnemyActions();
+                do Character.DoEnemyAction(enemy, WorldOffset);
+
+                //CheckAllBullets();
+                do enemy.CheckBullets(WorldOffset);
+
+                ////////////////////////////////////////////////////////////////
+
+                //CheckAllBulletCollisions();
+                let enemy = Enemies[i];
+
+                let enemyBulletsCount = enemy.getBulletsCount();
+                let enemyBullets = enemy.getBullets();
+
+                let j = 0;
+                while (j < enemyBulletsCount)
+                {
+                    let bullet = enemyBullets[j];
+                    do Character.CheckCollisionWithBullet(bullet, WorldOffset);
+                    let j = j + 1;
+                }
+
+                ////////////////////////////////////////////////////////////////
+
+                //CheckEnemyAndCharacterCollision();
+                if (Character.CheckCollisionWithEnemy(enemy, WorldOffset))
+                {
+                    do DrawAllPlatforms();
+                    //let i = EnemiesCount;
+                }
+                ////////////////////////////////////////////////////////////////
+
+                //CheckAllEnemyTimers();
+                do enemy.CheckTimers();
+
+                //DecrementAllEnemyTimers();
+                do enemy.DecrementTimers();
+
+                let i = i + 1;
+            }
+
+            ////////////////////////////////////////////////////////////////////
+
+            //CheckTimers();
+
+            if (redrawAllObstaclesTimer < 1)
+            {
+                do DrawAllObstacles();
+                let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
+            }
+
+            ///////////////////////////////////////////////////////////////////
+
+            //CheckAllSpriteTimers();
+
+            do FinishFlag.CheckTimers();
+
+            do Bat.CheckTimers();
+            do Spider.CheckTimers();
+
+            do Heart.CheckTimers();
+            do Coin.CheckTimers();
+
+            ///////////////////////////////////////////////////////////////////
+
+            //DecrementTimers();
+
+            let redrawAllObstaclesTimer = redrawAllObstaclesTimer - 1;
+
+            ///////////////////////////////////////////////////////////////////
+
+            //DecrementAllSpriteTimers();
+
+            do FinishFlag.DecrementTimers();
+
+            do Bat.DecrementTimers();
+            do Spider.DecrementTimers();
+
+            do Heart.DecrementTimers();
+            do Coin.DecrementTimers();
+
+            ///////////////////////////////////////////////////////////////////
 
             if (showMainMenu | Character.IsCollidedWithFinish(Finish) | (Character.getHealth() < 1))
             {
                 let exit = true;
             }
 
-            do Sys.wait(GameDelay);
+            
         }
 
         do Screen.clearScreen();
@@ -334,87 +566,87 @@ class Game
     }
 
     // GAME TIMERS
-    method void CheckTimers()
-    {
-        if (redrawAllObstaclesTimer < 1)
-        {
-            do DrawAllObstacles();
-            let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
-        }
+    //method void CheckTimers()
+    //{
+    //    if (redrawAllObstaclesTimer < 1)
+    //    {
+    //        do DrawAllObstacles();
+    //        let redrawAllObstaclesTimer = redrawAllObstaclesDelay;
+    //    }
 
-        do Character.CheckTimers();
-        do CheckAllEnemyTimers();
-        do CheckAllSpriteTimers();
-        
-        return;
-    }
-    
-    method void DecrementTimers()
-    {
-        let redrawAllObstaclesTimer = redrawAllObstaclesTimer - 1;
+    //    do Character.CheckTimers();
+    //    do CheckAllEnemyTimers();
+    //    do CheckAllSpriteTimers();
+    //    
+    //    return;
+    //}
+    //
+    //method void DecrementTimers()
+    //{
+    //    let redrawAllObstaclesTimer = redrawAllObstaclesTimer - 1;
 
-        do Character.DecrementTimers();
-        do DecrementAllEnemyTimers();
-        do DecrementAllSpriteTimers();
+    //    do Character.DecrementTimers();
+    //    do DecrementAllEnemyTimers();
+    //    do DecrementAllSpriteTimers();
 
-        return;
-    }
+    //    return;
+    //}
 
-    method void CheckAllEnemyTimers()
-    {
-        var Enemy enemy;
-        var int i;
-
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-            do enemy.CheckTimers();
-            let i = i + 1;
-        }
-
-        return;
-    }
-
-    method void DecrementAllEnemyTimers()
-    {
-        var Enemy enemy;
-        var int i;
-
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-            do enemy.DecrementTimers();
-            let i = i + 1;
-        }
-
-        return;
-    }
-
-    method void CheckAllSpriteTimers()
-    {
-        do FinishFlag.CheckTimers();
-
-        do Bat.CheckTimers();
-        do Spider.CheckTimers();
-
-        do Heart.CheckTimers();
-        do Coin.CheckTimers();
-
-        return;
-    }
-
-    method void DecrementAllSpriteTimers()
-    {
-        do FinishFlag.DecrementTimers();
-
-        do Bat.DecrementTimers();
-        do Spider.DecrementTimers();
-
-        do Heart.DecrementTimers();
-        do Coin.DecrementTimers();
-
-        return;
-    }
+    //method void CheckAllEnemyTimers()
+    //{
+    //    var Enemy enemy;
+    //    var int i;
+//
+    //    while (i < EnemiesCount)
+    //    {
+    //        let enemy = Enemies[i];
+    //        do enemy.CheckTimers();
+    //        let i = i + 1;
+    //    }
+//
+    //    return;
+    //}
+//
+    //method void DecrementAllEnemyTimers()
+    //{
+    //    var Enemy enemy;
+    //    var int i;
+//
+    //    while (i < EnemiesCount)
+    //    {
+    //        let enemy = Enemies[i];
+    //        do enemy.DecrementTimers();
+    //        let i = i + 1;
+    //    }
+//
+    //    return;
+    //}
+//
+    //method void CheckAllSpriteTimers()
+    //{
+    //    do FinishFlag.CheckTimers();
+//
+    //    do Bat.CheckTimers();
+    //    do Spider.CheckTimers();
+//
+    //    do Heart.CheckTimers();
+    //    do Coin.CheckTimers();
+//
+    //    return;
+    //}
+//
+    //method void DecrementAllSpriteTimers()
+    //{
+    //    do FinishFlag.DecrementTimers();
+//
+    //    do Bat.DecrementTimers();
+    //    do Spider.DecrementTimers();
+//
+    //    do Heart.DecrementTimers();
+    //    do Coin.DecrementTimers();
+//
+    //    return;
+    //}
 
     // REDRAWING
     method void RedrawAll()
@@ -426,7 +658,7 @@ class Game
         do DrawAllBullets();
 
         do Character.Draw();
-        do Finish.Draw(true);
+        do Finish.Draw();
 
         return;
     }
@@ -484,7 +716,7 @@ class Game
         while (i < CollectablesCount)
         {
             let collectable = Collectables[i];
-            do collectable.Draw(true);
+            do collectable.Draw();
             let i = i + 1;
         }
 
@@ -509,167 +741,165 @@ class Game
     }
 
     // CHECKS AND ACTIONS
-    method void CheckRespawn()
-    {
-        var int value;
-        var int scrollAmount;
+    //method void CheckRespawn()
+    //{
+    //    var int value;
+    //    var int scrollAmount;
+//
+    //    if (Character.getShouldRedrawAll())
+    //    {
+    //        if (WorldOffset > 0)
+    //        {
+    //            while (~(Character.getAbsoluteX() = Character.getLastSpawnPointX()))
+    //            {
+    //                if (WorldOffset > 0)
+    //                {
+    //                    do ScrollRight();
+    //                }
+    //                else
+    //                {
+    //                    do Character.setAbsoluteX(Character.getLastSpawnPointX());
+    //                    do Character.setX(Character.getAbsoluteX() - WorldOffset);
+    //                }
+//
+    //                do Character.ForceDraw();
+    //            }
+    //        }
+//
+    //        do Character.setAbsoluteX(Character.getLastSpawnPointX());
+    //        do Character.setX(Character.getAbsoluteX() - WorldOffset);
+//
+    //        do Character.ForceDraw();
+//
+    //        do Character.setShouldRedrawAll(false);
+    //        
+    //    }
+//
+    //    return;
+    //}
 
-        if (Character.getShouldRedrawAll())
-        {
-            if (WorldOffset > 0)
-            {
-                while (~(Character.getAbsoluteX() = Character.getLastSpawnPointX()))
-                {
-                    if (WorldOffset > 0)
-                    {
-                        do ScrollRight();
-                    }
-                    else
-                    {
-                        do Character.setAbsoluteX(Character.getLastSpawnPointX());
-                        do Character.setX(Character.getAbsoluteX() - WorldOffset);
-                    }
+    //method void DoAllEnemyActions()
+    //{
+    //    var Enemy enemy;
+    //    var int i;
+//
+    //    while (i < EnemiesCount)
+    //    {
+    //        let enemy = Enemies[i];
+    //        do Character.DoEnemyAction(enemy, WorldOffset);
+    //        let i = i + 1;
+    //    }
+//
+    //    return;
+    //}
 
-                    do Character.ForceDraw();
-                }
-            }
-
-            do Character.setAbsoluteX(Character.getLastSpawnPointX());
-            do Character.setX(Character.getAbsoluteX() - WorldOffset);
-
-            do Character.ForceDraw();
-
-            do Character.setShouldRedrawAll(false);
-            
-        }
-
-        return;
-    }
-
-    method void DoAllEnemyActions()
-    {
-        var Enemy enemy;
-        var int i;
-
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-            do Character.DoEnemyAction(enemy, WorldOffset);
-            let i = i + 1;
-        }
-
-        return;
-    }
-
-    method void CheckEnemyAndCharacterCollision()
-    {
-        var int i;
-        var Enemy enemy;
-        var bool collided_sides;
-        var bool collided_top;
-
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-
-            if (Character.CheckCollisionWithEnemy(enemy, WorldOffset))
-            {
-                do DrawAllPlatforms();
-                let i = EnemiesCount;
-            }
-
-            let i = i + 1;
-        }
-
-        return;
-    }
+    //method void CheckEnemyAndCharacterCollision()
+    //{
+    //    var int i;
+    //    var Enemy enemy;
+//
+    //    while (i < EnemiesCount)
+    //    {
+    //        let enemy = Enemies[i];
+//
+    //        if (Character.CheckCollisionWithEnemy(enemy, WorldOffset))
+    //        {
+    //            do DrawAllPlatforms();
+    //            let i = EnemiesCount;
+    //        }
+//
+    //        let i = i + 1;
+    //    }
+//
+    //    return;
+    //}
 
 
-    method void CheckAllBullets()
-    {
-        var int i;
-        var Enemy enemy;
+    //method void CheckAllBullets()
+    //{
+    //    var int i;
+    //    var Enemy enemy;
 
-        do Character.CheckBullets(WorldOffset);
+    //    do Character.CheckBullets(WorldOffset);
 
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-            do enemy.CheckBullets(WorldOffset);
-            let i = i + 1;
-        }
+    //    while (i < EnemiesCount)
+    //    {
+    //        let enemy = Enemies[i];
+    //        do enemy.CheckBullets(WorldOffset);
+    //        let i = i + 1;
+    //    }
 
-        return;
-    }
+    //    return;
+    //}
 
-    method void CheckAllBulletCollisions()
-    {
-        var int i;
-        var int j;
-        var int characterBulletsCount;
-        var int enemyBulletsCount;
-        var Array characterBullets;
-        var Array enemyBullets;
-        var Enemy enemy;
-        var Bullet bullet;
+    //method void CheckAllBulletCollisions()
+    //{
+    //    var int i;
+    //    var int j;
+    //    var int characterBulletsCount;
+    //    var int enemyBulletsCount;
+    //    var Array characterBullets;
+    //    var Array enemyBullets;
+    //    var Enemy enemy;
+    //    var Bullet bullet;
+//
+    //    let characterBulletsCount = Character.getBulletsCount();
+    //    let characterBullets = Character.getBullets();
+//
+    //    while (i < characterBulletsCount)
+    //    {
+    //        let bullet = characterBullets[i];
+    //        do Character.CheckCollisionWithBullet(bullet, WorldOffset);
+//
+    //        let j = 0;
+    //        while (j < EnemiesCount)
+    //        {
+    //            let enemy = Enemies[j];
+    //            do enemy.CheckCollisionWithBullet(bullet);
+    //            let j = j + 1;
+    //        }
+//
+    //        let i = i + 1;
+    //    }
+//
+    //    let i = 0;
+    //    while (i < EnemiesCount)
+    //    {
+    //        let enemy = Enemies[i];
+//
+    //        let enemyBulletsCount = enemy.getBulletsCount();
+    //        let enemyBullets = enemy.getBullets();
+//
+    //        let j = 0;
+    //        while (j < enemyBulletsCount)
+    //        {
+    //            let bullet = enemyBullets[j];
+    //            do Character.CheckCollisionWithBullet(bullet, WorldOffset);
+    //            let j = j + 1;
+    //        }
+//
+    //        let i = i + 1;
+    //    }     
+//
+    //    return;
+    //}
 
-        let characterBulletsCount = Character.getBulletsCount();
-        let characterBullets = Character.getBullets();
-
-        while (i < characterBulletsCount)
-        {
-            let bullet = characterBullets[i];
-            do Character.CheckCollisionWithBullet(bullet, WorldOffset);
-
-            let j = 0;
-            while (j < EnemiesCount)
-            {
-                let enemy = Enemies[j];
-                do enemy.CheckCollisionWithBullet(bullet);
-                let j = j + 1;
-            }
-
-            let i = i + 1;
-        }
-
-        let i = 0;
-        while (i < EnemiesCount)
-        {
-            let enemy = Enemies[i];
-
-            let enemyBulletsCount = enemy.getBulletsCount();
-            let enemyBullets = enemy.getBullets();
-
-            let j = 0;
-            while (j < enemyBulletsCount)
-            {
-                let bullet = enemyBullets[j];
-                do Character.CheckCollisionWithBullet(bullet, WorldOffset);
-                let j = j + 1;
-            }
-
-            let i = i + 1;
-        }     
-
-        return;
-    }
-
-    method void CheckCollectableAndCharacterCollision()
-    {
-        var int i;
-        var Collectable collectable;
-
-        while (i < CollectablesCount)
-        {
-            let collectable = Collectables[i];
-
-            do Character.CheckCollisionWithCollectable(collectable);
-
-            let i = i + 1;
-        }
-
-        return;
-    }
+    //method void CheckCollectableAndCharacterCollision()
+    //{
+    //    var int i;
+    //    var Collectable collectable;
+//
+    //    while (i < CollectablesCount)
+    //    {
+    //        let collectable = Collectables[i];
+//
+    //        do Character.CheckCollisionWithCollectable(collectable);
+//
+    //        let i = i + 1;
+    //    }
+//
+    //    return;
+    //}
 
     // MOVEMENT
     method void ScrollLeft()
@@ -819,62 +1049,62 @@ class Game
         return;
     }
 
-    method void Move()
-    {
-        var int x;
-        var int absX;
-        var int cWidth;
-        
-        let x = Character.getX();
-        let absX = Character.getAbsoluteX();
-        let cWidth = Character.getWidth();
-
-        do Character.CheckGravity(WorldOffset);
-        do Character.CheckCollisionWithObstacles(WorldOffset);
-
-        if (Direction = 1) 
-        {
-            do Character.setMovingLeft(true);
-
-            if (~Character.CheckCollisionWithPlatformLeft(WorldOffset))
-            {
-                if (absX < LeftBorder)
-                {
-                    do Character.MoveLeft();
-                }
-                else { if (x < LeftBorder)
-                {
-                    do ScrollRight();
-                }
-                else 
-                {
-                    do Character.MoveLeft();
-                }}
-            }
-        }
-        else { if (Direction = 2)
-        {
-            do Character.setMovingLeft(false);
-
-            if (~Character.CheckCollisionWithPlatformRight(WorldOffset))
-            {
-                if (absX > (mapWidth - RightBorder))
-                {
-                    do Character.MoveRight();
-                }
-                else { if (x > (RightBorder - cWidth))
-                {
-                    do ScrollLeft();
-                }
-                else 
-                {
-                    do Character.MoveRight();
-                }}
-            }
-        }}
-        
-        return;
-    }
+    //method void Move()
+    //{
+    //    var int x;
+    //    var int absX;
+    //    var int cWidth;
+    //    
+    //    let x = Character.getX();
+    //    let absX = Character.getAbsoluteX();
+    //    let cWidth = Character.getWidth();
+//
+    //    do Character.CheckGravity(WorldOffset);
+    //    do Character.CheckCollisionWithObstacles(WorldOffset);
+//
+    //    if (Direction = 1) 
+    //    {
+    //        do Character.setMovingLeft(true);
+//
+    //        if (~Character.CheckCollisionWithPlatformLeft(WorldOffset))
+    //        {
+    //            if (absX < LeftBorder)
+    //            {
+    //                do Character.MoveLeft();
+    //            }
+    //            else { if (x < LeftBorder)
+    //            {
+    //                do ScrollRight();
+    //            }
+    //            else 
+    //            {
+    //                do Character.MoveLeft();
+    //            }}
+    //        }
+    //    }
+    //    else { if (Direction = 2)
+    //    {
+    //        do Character.setMovingLeft(false);
+//
+    //        if (~Character.CheckCollisionWithPlatformRight(WorldOffset))
+    //        {
+    //            if (absX > (mapWidth - RightBorder))
+    //            {
+    //                do Character.MoveRight();
+    //            }
+    //            else { if (x > (RightBorder - cWidth))
+    //            {
+    //                do ScrollLeft();
+    //            }
+    //            else 
+    //            {
+    //                do Character.MoveRight();
+    //            }}
+    //        }
+    //    }}
+    //    
+    //    return;
+    //}
 
     // GARBAGE MANAGEMENT
     method void dispose()

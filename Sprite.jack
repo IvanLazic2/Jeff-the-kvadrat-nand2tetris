@@ -1,6 +1,6 @@
 class Sprite
 {
-	function void Draw(int memAddress, Array frame, int frameSize, int width, int height, bool display, int x, int y)
+	function void Draw(int memAddress, Array frame, int frameSize, int width, int height, int x, int y)
 	{
 		var int i;
 		var int row;
@@ -18,14 +18,7 @@ class Sprite
 
 			if (((-1 < (x + col)) & ((x + col) < 32)) & ((memAddress + col + row) > 16896))
 			{
-				if (display)
-				{
-					do Memory.poke(memAddress + col + row, frame[i]);
-				}
-				else
-				{
-					do Memory.poke(memAddress + col + row, 0);
-				}
+				do Memory.poke(memAddress + col + row, frame[i]);
 			}
 			
 			let col = col + 1;

@@ -80,9 +80,31 @@ class Obstacle
 	}
 
 
-	method void Clear(int memAddress, int X)
+	method void Clear(int memAddress, int x)
 	{
-		do Sprite.Draw(memAddress, smallSpikes, Height + 16, 1, heightInBlocks + 1, false, X, Y);
+		//do Sprite.Draw(memAddress, smallSpikes, Height + 16, 1, heightInBlocks + 1, false, X, Y);
+
+		var int i;
+		var int row;
+		var int col;
+		var int frameSize;
+
+		let frameSize = Height + 16;
+
+		let memAddress = memAddress + 512; // + 512 - 32
+
+		while (i < frameSize)
+		{
+			let row = row - 32;
+
+			if (((-1 < x) & (x < 32))) // & ((memAddress + row) > 16896)
+			{
+				do Memory.poke(memAddress + row, 0);
+			}
+
+			let i = i + 1;
+		}
+
 		return;
 	}
 
@@ -107,23 +129,23 @@ class Obstacle
 	{
 		if (Type = 0)
 		{
-			do Sprite.Draw(memAddress, smallSpikes, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, smallSpikes, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 1)
 		{
-			do Sprite.Draw(memAddress, mediumSpikes, 32, 1, 2, true, X, Y);
+			do Sprite.Draw(memAddress, mediumSpikes, 32, 1, 2, X, Y);
 		} 
 		else { if (Type = 2)
 		{
-			do Sprite.Draw(memAddress, weirdSpikes, 64, 1, 4, true, X, Y);
+			do Sprite.Draw(memAddress, weirdSpikes, 64, 1, 4, X, Y);
 		} 
 		else { if (Type = 3)
 		{
-			do Sprite.Draw(memAddress, largeSpikes, 80, 1, 5, true, X, Y);
+			do Sprite.Draw(memAddress, largeSpikes, 80, 1, 5, X, Y);
 		}
 		else { if (Type = 4)
 		{
-			do Sprite.Draw(memAddress, spikedArea, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, spikedArea, 16, 1, 1, X, Y);
 		}}}}}
 
 		return;

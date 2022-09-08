@@ -8,6 +8,8 @@ class Finish
     field int memAddress;
     field int lastMemAddress;
 
+    field int frameSize;
+
     constructor Finish new(int x, int y)
     {
         do resetObject();
@@ -16,10 +18,11 @@ class Finish
         let Y = y;
         let Width = FinishFlag.getWidth();
         let Height = FinishFlag.getHeight();
+        let frameSize = Width * Height * 16;
 
         let memAddress = Constants.getMemAddress(X, Y);
 
-        do Draw(true);
+        do Draw();
 
         let lastMemAddress = memAddress;
 
@@ -40,22 +43,22 @@ class Finish
 
     method void ScrollRight()
     {
-        do Clear();
-        let X = X + 1;
         let lastMemAddress = memAddress;
         let memAddress = memAddress + 1;
-        do Draw(true);
+        do Clear();
+        let X = X + 1;
+        do Draw();
 
         return;
     }
 
     method void ScrollLeft()
     {
-        do Clear();
-        let X = X - 1;
         let lastMemAddress = memAddress;
         let memAddress = memAddress - 1;
-        do Draw(true);
+        do Clear();
+        let X = X - 1;
+        do Draw();
 
         return;
     }
@@ -64,15 +67,44 @@ class Finish
 
     method void Clear()
     {
-        do Draw(false);
+        var int i;
+		var int row;
+		var int col;
+		var int tempMemAddress;
+		var int memAddressIterator;
+
+        if (~(memAddress = lastMemAddress))
+        {
+            let tempMemAddress = lastMemAddress + 480; // + 512 - 32
+
+			while (i < frameSize)
+			{
+				if (col > (Width - 1))
+				{
+					let col = 0;
+					let row = row - 32;
+				}
+
+				let memAddressIterator = tempMemAddress + col + row;
+
+				if (((-1 < (X + col)) & ((X + col) < 32)) & (memAddressIterator > 16896))
+				{
+					do Memory.poke(memAddressIterator, 0);
+				}
+
+				let col = col + 1;
+				let i = i + 1;
+			}
+        }
+
         return;
     }
 
-    method void Draw(bool display)
+    method void Draw()
     {
         if (~(memAddress = lastMemAddress))
         {
-            do FinishFlag.DrawFrame(memAddress, display, X, Y);
+            do FinishFlag.DrawFrame(memAddress, X, Y);
         }
 
         return;
@@ -80,7 +112,7 @@ class Finish
 
     method void ForceDraw()
     {
-        do FinishFlag.DrawFrame(memAddress, true, X, Y);
+        do FinishFlag.DrawFrame(memAddress, X, Y);
 
         return;
     }
@@ -93,6 +125,8 @@ class Finish
         let Height = 0;
         let memAddress = 0;
         let lastMemAddress = 0;
+        let frameSize = 0;
+
         return;
     }
 
@@ -101,6 +135,7 @@ class Finish
         do resetObject();
 
         do Memory.deAlloc(this);
+
         return;
     }
 }

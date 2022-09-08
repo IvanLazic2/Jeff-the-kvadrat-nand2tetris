@@ -66,6 +66,8 @@ class Enemy
     field int angryTimer;
 	field int angryDelay;
 
+	field int frameSize;
+
     constructor Enemy new(int x, int y, int type)
     {	
 		var int i;
@@ -110,7 +112,7 @@ class Enemy
 			let Width = EvilJeffRanged.getWidth();
 			let Height = EvilJeffRanged.getHeight();
 
-			let movementDelay = 3;
+			let movementDelay = 2;
 
 			let IsGravityAffected = true;
 			let IsShooting = true;
@@ -160,6 +162,8 @@ class Enemy
         	}
         	let currBullet = Bullets[currBulletIndex];
 		}
+
+		let frameSize = Width * Height * 16;
 
 		let heightInPixels = Height * 16;
 
@@ -833,9 +837,36 @@ class Enemy
 
 	method void Clear()
 	{
+		var int i;
+		var int row;
+		var int col;
+		var int tempMemAddress;
+		var int memAddressIterator;
+
 		if (~(memAddress = lastMemAddress))
 		{
-			do DrawTypes(lastMemAddress, false);
+			//do DrawTypes(lastMemAddress, false);
+
+			let tempMemAddress = lastMemAddress + 480; // + 512 - 32
+
+			while (i < frameSize)
+			{
+				if (col > (Width - 1))
+				{
+					let col = 0;
+					let row = row - 32;
+				}
+
+				let memAddressIterator = tempMemAddress + col + row;
+
+				if (((-1 < (X + col)) & ((X + col) < 32)) & (memAddressIterator > 16896))
+				{
+					do Memory.poke(memAddressIterator, 0);
+				}
+
+				let col = col + 1;
+				let i = i + 1;
+			}
 		}
 
 		return;
@@ -847,7 +878,7 @@ class Enemy
 		{
 			if (~(memAddress = lastMemAddress))
 			{
-				do DrawTypes(memAddress, true);
+				do DrawTypes(memAddress);
 			}	
 		}
 		
@@ -856,47 +887,47 @@ class Enemy
 
 	method void ForceDraw()
 	{
-		do DrawTypes(memAddress, true);
+		do DrawTypes(memAddress);
 		return;
 	}
 
-	method void DrawTypes(int memAddress, bool display)
+	method void DrawTypes(int memAddress)
     {
 		if (Type = 0)
 		{
-			do Spider.DrawFrame(memAddress, display, movingLeft, X, Y);
+			do Spider.DrawFrame(memAddress, movingLeft, X, Y);
 		}
 		else { if (Type = 1)
 		{
 			if (angryTimer > 0)
 			{
-				do EvilJeffAngry.DrawFrame(memAddress, display, movingLeft, X, Y);
+				do EvilJeffAngry.DrawFrame(memAddress, movingLeft, X, Y);
 				let angryTimer = angryTimer - 1;
 			}
 			else
 			{
-				do EvilJeffMelee.DrawFrame(memAddress, display, movingLeft, X, Y);
+				do EvilJeffMelee.DrawFrame(memAddress, movingLeft, X, Y);
 			}
 		}
 		else { if (Type = 2)
 		{
 			if (angryTimer > 0)
 			{
-				do EvilJeffAngry.DrawFrame(memAddress, display, movingLeft, X, Y);
+				do EvilJeffAngry.DrawFrame(memAddress, movingLeft, X, Y);
 				let angryTimer = angryTimer - 1;
 			}
 			else
 			{
-				do EvilJeffRanged.DrawFrame(memAddress, display, movingLeft, X, Y);
+				do EvilJeffRanged.DrawFrame(memAddress, movingLeft, X, Y);
 			}
 		}
 		else { if (Type = 3)
 		{
-			do Bat.DrawFrame(memAddress, display, movingLeft, X, Y);
+			do Bat.DrawFrame(memAddress, movingLeft, X, Y);
 		}
 		else { if (Type = 4)
 		{
-			do Shooter.DrawFrame(memAddress, display, movingLeft, X, Y);
+			do Shooter.DrawFrame(memAddress, movingLeft, X, Y);
 		}}}}}
 		
 		return;
@@ -946,7 +977,8 @@ class Enemy
 		let lastCY = 0;
 		let health = 0;
 		let angryTimer = 0;
-		let angryDelay = 10;
+		let angryDelay = 0;
+		let frameSize = 0;
 		return;
 	}
 

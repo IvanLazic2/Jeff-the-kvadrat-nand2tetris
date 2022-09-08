@@ -92,9 +92,30 @@ class Platform
 		return;
 	}
 
-	method void Clear(int memAddress, int X)
+	method void Clear(int memAddress, int x)
 	{
-		do Sprite.Draw(memAddress, simpleGround, 16, 1, 1, false, X, Y);
+		//do Sprite.Draw(memAddress, simpleGround, 16, 1, 1, false, X, Y);
+
+		if (((-1 < x) & (x < 32)))
+		{
+			do Memory.poke(memAddress, 0);
+			do Memory.poke(memAddress + 32, 0);
+			do Memory.poke(memAddress + 64, 0);
+			do Memory.poke(memAddress + 96, 0);
+			do Memory.poke(memAddress + 128, 0);
+			do Memory.poke(memAddress + 160, 0);
+			do Memory.poke(memAddress + 192, 0);
+			do Memory.poke(memAddress + 224, 0);
+			do Memory.poke(memAddress + 256, 0);
+			do Memory.poke(memAddress + 288, 0);
+			do Memory.poke(memAddress + 320, 0);
+			do Memory.poke(memAddress + 352, 0);
+			do Memory.poke(memAddress + 384, 0);
+			do Memory.poke(memAddress + 416, 0);
+			do Memory.poke(memAddress + 448, 0);
+			do Memory.poke(memAddress + 480, 0);
+		}
+		
 		return;
 	}
 
@@ -120,43 +141,43 @@ class Platform
 	{
 		if (Type = 0)
 		{
-			do Sprite.Draw(memAddress, simpleGround, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, simpleGround, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 1) 
 		{
-			do Sprite.Draw(memAddress, simple, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, simple, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 2)
 		{
-			do Sprite.Draw(memAddress, stone, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, stone, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 3)
 		{
-			do Sprite.Draw(memAddress, brick1, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, brick1, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 4)
 		{
-			do Sprite.Draw(memAddress, brick2, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, brick2, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 5)
 		{
-			do Sprite.Draw(memAddress, robotic, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, robotic, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 6)
 		{
-			do Sprite.Draw(memAddress, stoneSmall, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, stoneSmall, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 7)
 		{
-			do Sprite.Draw(memAddress, brick1Small, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, brick1Small, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 8)
 		{
-			do Sprite.Draw(memAddress, brick2Small, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, brick2Small, 16, 1, 1, X, Y);
 		}
 		else { if (Type = 9)
 		{
-			do Sprite.Draw(memAddress, roboticSmall, 16, 1, 1, true, X, Y);
+			do Sprite.Draw(memAddress, roboticSmall, 16, 1, 1, X, Y);
 		}}}}}}}}}}
 
 		return;

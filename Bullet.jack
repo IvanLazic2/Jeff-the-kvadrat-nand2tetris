@@ -142,7 +142,7 @@ class Bullet
 
     method void Reset()
     {
-        do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+        do SimpleBullet.DrawFrame(memAddress, false, X, Y);
         let X = -10;
         let Y = -10;
         let memAddress = resetMemAddress;
@@ -182,7 +182,8 @@ class Bullet
     {
 		if (canMove)
 		{
-            do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+            //do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+            do Clear();
 			
             let memAddress = memAddress - 1;
         	let X = X - 1;
@@ -201,7 +202,8 @@ class Bullet
 
 		if (canMove)
 		{
-            do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+            //do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+            do Clear();
 
             let memAddress = memAddress + 1;
         	let X = X + 1;
@@ -219,7 +221,28 @@ class Bullet
 
     method void Clear()
     {
-        do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+        //do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
+
+        if (((-1 < X) & (X < 32)))
+        {
+            do Memory.poke(memAddress, 0);
+		    do Memory.poke(memAddress + 32, 0);
+		    do Memory.poke(memAddress + 64, 0);
+		    do Memory.poke(memAddress + 96, 0);
+		    do Memory.poke(memAddress + 128, 0);
+		    do Memory.poke(memAddress + 160, 0);
+		    do Memory.poke(memAddress + 192, 0);
+		    do Memory.poke(memAddress + 224, 0);
+		    do Memory.poke(memAddress + 256, 0);
+		    do Memory.poke(memAddress + 288, 0);
+		    do Memory.poke(memAddress + 320, 0);
+		    do Memory.poke(memAddress + 352, 0);
+		    do Memory.poke(memAddress + 384, 0);
+		    do Memory.poke(memAddress + 416, 0);
+		    do Memory.poke(memAddress + 448, 0);
+		    do Memory.poke(memAddress + 480, 0);
+        }
+
         return;
     }
 
@@ -227,7 +250,7 @@ class Bullet
     {
         if (~IsAvailable())
         {
-            do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
+            do SimpleBullet.DrawFrame(memAddress, drawLeft, X, Y);
         }
 
         return;

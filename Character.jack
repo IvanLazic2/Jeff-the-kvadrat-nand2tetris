@@ -47,6 +47,8 @@ class Character
 
     static String text;
 
+    field int frameSize;
+
     constructor Character new(int x, int y, bool ia)
     {
         var int i;
@@ -58,6 +60,7 @@ class Character
         let isAnimation = ia;
         let Width = Jeff.getWidth();
         let Height = Jeff.getHeight();
+        let frameSize = Width * Height * 16;
 
         let memAddress = Constants.getMemAddress(X, Y);
         let absoluteX = x;
@@ -651,16 +654,34 @@ class Character
     //// DRAW/CLEAR
     method void Clear()
 	{
+        var int i;
+		var int row;
+		var int col;
+		var int tempMemAddress;
+		var int memAddressIterator;
+
 		if (~(memAddress = lastMemAddress))
 		{
-			if (Difficulty.getDifficulty() = 4)
-            {
-                do InsaneJeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
-            }
-            else
-            {
-                do Jeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
-            }
+			let tempMemAddress = lastMemAddress + 480; // + 512 - 32
+
+			while (i < frameSize)
+			{
+				if (col > (Width - 1))
+				{
+					let col = 0;
+					let row = row - 32;
+				}
+
+				let memAddressIterator = tempMemAddress + col + row;
+
+				if (((-1 < (X + col)) & ((X + col) < 32)) & (memAddressIterator > 16896))
+				{
+					do Memory.poke(memAddressIterator, 0);
+				}
+
+				let col = col + 1;
+				let i = i + 1;
+			}
 		}
 
 		return;
@@ -668,13 +689,31 @@ class Character
 
     method void ForceClear()
     {
-        if (Difficulty.getDifficulty() = 4)
+        var int i;
+		var int row;
+		var int col;
+		var int tempMemAddress;
+		var int memAddressIterator;
+
+        let tempMemAddress = lastMemAddress + 480; // + 512 - 32
+
+        while (i < frameSize)
         {
-            do InsaneJeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
-        }
-        else
-        {
-            do Jeff.DrawFrame(lastMemAddress, false, movingLeft, X, Y);
+            if (col > (Width - 1))
+            {
+                let col = 0;
+                let row = row - 32;
+            }
+
+            let memAddressIterator = tempMemAddress + col + row;
+
+            if (((-1 < (X + col)) & ((X + col) < 32)) & (memAddressIterator > 16896))
+            {
+                do Memory.poke(memAddressIterator, 0);
+            }
+
+            let col = col + 1;
+            let i = i + 1;
         }
 
         return;
@@ -686,17 +725,17 @@ class Character
 		{
             if (shouldRedrawAll | (damageTimer > 0))
             {
-                do JeffDead.DrawFrame(memAddress, true, movingLeft, X, Y);
+                do JeffDead.DrawFrame(memAddress, movingLeft, X, Y);
             }
             else
             {
                 if (Difficulty.getDifficulty() = 4)
                 {
-                    do InsaneJeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+                    do InsaneJeff.DrawFrame(memAddress, movingLeft, X, Y);
                 }
                 else
                 {
-                    do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+                    do Jeff.DrawFrame(memAddress, movingLeft, X, Y);
                 }
             }
             
@@ -709,17 +748,17 @@ class Character
     {
         if (shouldRedrawAll | (damageTimer > 0))
         {
-            do JeffDead.DrawFrame(memAddress, true, movingLeft, X, Y);
+            do JeffDead.DrawFrame(memAddress, movingLeft, X, Y);
         }
         else
         {
             if (Difficulty.getDifficulty() = 4)
             {
-                do InsaneJeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+                do InsaneJeff.DrawFrame(memAddress, movingLeft, X, Y);
             }
             else
             {
-                do Jeff.DrawFrame(memAddress, true, movingLeft, X, Y);
+                do Jeff.DrawFrame(memAddress, movingLeft, X, Y);
             }
         }
         
@@ -761,6 +800,7 @@ class Character
         let lastSpawnPoint = 0;
         let shouldRedrawAll = 0;
         let newWorldOffset = 0;
+        let frameSize = 0;
 
         return;
     }

@@ -40,9 +40,9 @@ class Ammo
 	}
 	function int getWidth() { return Width; }
 	function int getHeight() { return Height; }
-	function void DrawFrame(int memAddress, bool display, int x, int y)
+	function void DrawFrame(int memAddress, int x, int y)
 	{
-		do Sprite.Draw(memAddress, Frames[currFrame], FrameSize, Width, Height, display, x, y);
+		do Sprite.Draw(memAddress, Frames[currFrame], FrameSize, Width, Height, x, y);
 		return;
 	}
 }
