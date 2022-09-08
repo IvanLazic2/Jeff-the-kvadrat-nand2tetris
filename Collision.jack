@@ -81,6 +81,7 @@ class Collision
     {
         var int i;
         var bool result;
+        var int matrixValue;
 
         if (~((-1 < y) & (y < 256)))
         {
@@ -90,7 +91,14 @@ class Collision
         let i = ((y + 8)/16);
         while (i > ((y / 16) - height))
         {
-            let result = result | (Collision.IsPlatform(Map.getValue(x + width + worldOffset, i)));
+            let matrixValue = Map.getValue(x + width + worldOffset, i);
+
+            if ((5 < matrixValue) & (matrixValue < 11))
+            {
+                return false;
+            }
+
+            let result = result | Collision.IsPlatform(matrixValue);
 
             let i = i - 1;
         }
@@ -102,6 +110,7 @@ class Collision
     {
         var int i;
         var bool result;
+        var int matrixValue;
 
         if (~((-1 < y) & (y < 256)))
         {
@@ -111,7 +120,14 @@ class Collision
         let i = ((y + 8)/16);
         while (i > ((y / 16) - height))
         {
-            let result = result | (Collision.IsPlatform(Map.getValue(x - 1 + worldOffset, i)));
+            let matrixValue = Map.getValue(x - 1 + worldOffset, i);
+
+            if ((5 < matrixValue) & (matrixValue < 11))
+            {
+                return false;
+            }
+            
+            let result = result | Collision.IsPlatform(matrixValue);
             let i = i - 1;
         }
 
@@ -416,9 +432,6 @@ class Collision
 
             let i = i + 1;
         }
-
-        do Output.moveCursor(15, 0);
-        do Output.printInt(result);
 
         return result / 16;
     }

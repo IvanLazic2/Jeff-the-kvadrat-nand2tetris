@@ -1,9 +1,12 @@
 // 0 - simple ground platform
-// 1 - simple platform
+
 // 2 - stone platform
 // 3 - brick1 platform
 // 4 - brick2 platform
 // 5 - robotic platform
+
+// 1 - simple platform
+
 // 6 - small stone platform
 // 7 - small brick1 platform
 // 8 - small brick2 platform

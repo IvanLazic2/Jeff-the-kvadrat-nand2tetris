@@ -64,6 +64,7 @@ class Enemy
 	field int health;
 
     field int angryTimer;
+	field int angryDelay;
 
     constructor Enemy new(int x, int y, int type)
     {	
@@ -179,6 +180,8 @@ class Enemy
 		let hasPlatformAboveDelay = 5;
 		let hasPlatformAboveTimer = hasPlatformAboveDelay;
 
+		let angryDelay = 10;
+
 		let movingLeft = true;
 
 		do Draw();
@@ -224,6 +227,11 @@ class Enemy
             let bulletTimer = bulletDelay;
         }
 
+		if (angryTimer = angryDelay)
+		{
+			do ForceDraw();
+		}
+
 		return;
 	}
 
@@ -246,7 +254,10 @@ class Enemy
 				if (DiesOnSquish)
 				{
 					do Die();
-					do Game.addKill();
+					if (health = 0)
+					{
+						do Game.addKill();
+					}
 					return false;
 				}
 				else
@@ -271,7 +282,10 @@ class Enemy
 			if (bullet.CheckCollisionWithEntity(X, Y, Width, heightInPixels))
 			{
 				do Die();
-				do Game.addKill();
+				if (health = 0)
+				{
+					do Game.addKill();
+				}
 			}
 		}
 
@@ -520,7 +534,11 @@ class Enemy
 
 	method void Melee(int worldOffset, int cx, int cy)
 	{
-		if (Constants.IsInScreenX(X))
+		var int distance;
+
+		let distance = Math.abs(X - cx);
+
+		if (distance < 32)
 		{
 			do FollowGravity(worldOffset, cx, cy);
 		}
@@ -649,9 +667,13 @@ class Enemy
 
     method void MoveLeft(int worldOffset)
     {
+		var int matrixValue;
+
 		let movingLeft = true;
 
-		if (canMoveLeftRight & (Map.getValue(X - 1 + worldOffset, Y/16) = 0))
+		let matrixValue = Map.getValue(X - 1 + worldOffset, Y/16);
+
+		if (canMoveLeftRight & ((matrixValue = 0) | (matrixValue > 15)))
 		{
 			let lastMemAddress = memAddress;
 			let memAddress = memAddress - 1;
@@ -671,9 +693,13 @@ class Enemy
 
     method void MoveRight(int worldOffset)
     {
+		var int matrixValue;
+
 		let movingLeft = false;
 
-		if (canMoveLeftRight & (Map.getValue(X + Width + worldOffset, Y/16) = 0))
+		let matrixValue = Map.getValue(X + Width + worldOffset, Y/16);
+
+		if (canMoveLeftRight & ((matrixValue = 0) | (matrixValue > 15)))
 		{
 			let lastMemAddress = memAddress;
 			let memAddress = memAddress + 1;
@@ -800,7 +826,7 @@ class Enemy
 			let IsAlive = false;
 		}
 
-		let angryTimer = 10;
+		let angryTimer = angryDelay;
 
 		return;
 	}
@@ -920,6 +946,7 @@ class Enemy
 		let lastCY = 0;
 		let health = 0;
 		let angryTimer = 0;
+		let angryDelay = 10;
 		return;
 	}
 
