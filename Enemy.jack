@@ -845,8 +845,6 @@ class Enemy
 
 		if (~(memAddress = lastMemAddress))
 		{
-			//do DrawTypes(lastMemAddress, false);
-
 			let tempMemAddress = lastMemAddress + 480; // + 512 - 32
 
 			while (i < frameSize)

@@ -289,13 +289,9 @@ class Game
                 do showPauseMenu();
             }}}}}}}
 
-            
-
-            
             ///////////////////////////////////////////////////////////////////////
 
-            //do CheckRespawn();
-
+            //CheckRespawn();
             if (Character.getShouldRedrawAll())
             {
                 if (WorldOffset > 0)
@@ -324,10 +320,10 @@ class Game
                 do Character.setShouldRedrawAll(false);
 
             }
+
             //////////////////////////////////////////////////////////
 
             //do Move();
-
             let x = Character.getX();
             let absX = Character.getAbsoluteX();
             let cWidth = Character.getWidth();
@@ -375,6 +371,7 @@ class Game
                     }}
                 }
             }}
+
             /////////////////////////////////////////////////////////////////////
 
             do Sys.wait(GameDelay);
@@ -388,6 +385,7 @@ class Game
             do Character.DecrementTimers();
 
             /////////////////////////////////////////////////////////////////////
+
             //do CheckAllBulletCollisions();
             let i = 0;
             let j = 0;
@@ -447,8 +445,6 @@ class Game
                 ////////////////////////////////////////////////////////////////
 
                 //CheckAllBulletCollisions();
-                let enemy = Enemies[i];
-
                 let enemyBulletsCount = enemy.getBulletsCount();
                 let enemyBullets = enemy.getBullets();
 
@@ -466,7 +462,6 @@ class Game
                 if (Character.CheckCollisionWithEnemy(enemy, WorldOffset))
                 {
                     do DrawAllPlatforms();
-                    //let i = EnemiesCount;
                 }
                 ////////////////////////////////////////////////////////////////
 
@@ -482,7 +477,6 @@ class Game
             ////////////////////////////////////////////////////////////////////
 
             //CheckTimers();
-
             if (redrawAllObstaclesTimer < 1)
             {
                 do DrawAllObstacles();
@@ -492,30 +486,23 @@ class Game
             ///////////////////////////////////////////////////////////////////
 
             //CheckAllSpriteTimers();
-
             do FinishFlag.CheckTimers();
-
             do Bat.CheckTimers();
             do Spider.CheckTimers();
-
             do Heart.CheckTimers();
             do Coin.CheckTimers();
 
             ///////////////////////////////////////////////////////////////////
 
             //DecrementTimers();
-
             let redrawAllObstaclesTimer = redrawAllObstaclesTimer - 1;
 
             ///////////////////////////////////////////////////////////////////
 
             //DecrementAllSpriteTimers();
-
             do FinishFlag.DecrementTimers();
-
             do Bat.DecrementTimers();
             do Spider.DecrementTimers();
-
             do Heart.DecrementTimers();
             do Coin.DecrementTimers();
 
@@ -524,9 +511,7 @@ class Game
             if (showMainMenu | Character.IsCollidedWithFinish(Finish) | (Character.getHealth() < 1))
             {
                 let exit = true;
-            }
-
-            
+            }            
         }
 
         do Screen.clearScreen();

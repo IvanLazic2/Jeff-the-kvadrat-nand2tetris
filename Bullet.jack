@@ -115,7 +115,7 @@ class Bullet
     {
         do CheckTimers();
 
-        if (~(memAddress = resetMemAddress)) // podsjetnik svaki enemy dobije jedan bullet i svaki bullet daje damage svakome
+        if (~(memAddress = resetMemAddress))
         {
             let isCollided = Collision.IsBulletCollidedWithMap(X, Y, drawLeft, worldOffset);
             if (isCollided)
@@ -142,7 +142,7 @@ class Bullet
 
     method void Reset()
     {
-        do SimpleBullet.DrawFrame(memAddress, false, X, Y);
+        do Clear();
         let X = -10;
         let Y = -10;
         let memAddress = resetMemAddress;
@@ -157,7 +157,6 @@ class Bullet
             do Clear();
             let memAddress = memAddress + 1;
             let X = X + 1;
-            //do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
             do Draw();
         }
 
@@ -171,7 +170,6 @@ class Bullet
             do Clear();
             let memAddress = memAddress - 1;
             let X = X - 1;
-            //do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
             do Draw();
         }
 
@@ -182,15 +180,10 @@ class Bullet
     {
 		if (canMove)
 		{
-            //do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
-            do Clear();
-			
+            do Clear();	
             let memAddress = memAddress - 1;
         	let X = X - 1;
-			
-            //do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
             do Draw();
-
 			let canMove = false;
 		}
 
@@ -202,15 +195,10 @@ class Bullet
 
 		if (canMove)
 		{
-            //do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
             do Clear();
-
             let memAddress = memAddress + 1;
         	let X = X + 1;
-
-            //do SimpleBullet.DrawFrame(memAddress, true, drawLeft, X, Y);
             do Draw();
-
 			let canMove = false;
 		}
 
@@ -221,8 +209,6 @@ class Bullet
 
     method void Clear()
     {
-        //do SimpleBullet.DrawFrame(memAddress, false, false, X, Y);
-
         if (((-1 < X) & (X < 32)))
         {
             do Memory.poke(memAddress, 0);
@@ -267,6 +253,7 @@ class Bullet
         let canMove = 0;
         let drawLeft = 0;
         let isCollided = 0;
+
         return;
     }
 

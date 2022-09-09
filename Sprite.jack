@@ -5,6 +5,8 @@ class Sprite
 		var int i;
 		var int row;
 		var int col;
+		var int xPlusCol;
+		var int colPlusRow;
 
 		let memAddress = memAddress + 480; // + 512 - 32
 
