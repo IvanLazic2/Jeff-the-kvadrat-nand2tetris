@@ -67,7 +67,7 @@ class Character
         
         let heightInPixels = Height * 16;
 
-        let gravity = 6; // 6
+        let gravity = 5; // 6
         let canJump = false;
         let jumpHeight = Difficulty.getCharacterJumpHeight(); // 35
 

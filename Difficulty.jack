@@ -2,6 +2,7 @@ class Difficulty
 {
     static int difficulty;
 
+    // character properties
     static int characterJumpHeight;
     static int characterHealth;
     static int characterDamageDelay;
@@ -11,29 +12,30 @@ class Difficulty
     static int characterBulletLimit;
     static int characterHealthLimit;
 
+    // collectable properties
     static bool canPickUpAmmo;
     static bool canPickUpHealth;
     static int ammoCount;
 
+    // enemy properties
     static int spiderMovementDelay;
     static int batMovementDelay;
     static int enemyBulletDelay;
     static int enemyFollowDelay;
 
-
-
     function void init()
     {
-        
+        let characterJumpHeight = 31; //35
+
+        // EASY
         if (difficulty = 1)
         {
-            let characterJumpHeight = 35; //35
             let characterHealth = 5;
             let characterDamageDelay = 30;
             let characterBulletsCount = 5;
             let characterHasInfiniteBullets = true;
             let characterBulletDelay = 7;
-            let characterBulletLimit = 10;
+            let characterBulletLimit = 5;
             let characterHealthLimit = 5;
 
             let canPickUpHealth = true;
@@ -44,9 +46,9 @@ class Difficulty
             let enemyBulletDelay = 20;
             let enemyFollowDelay = 25;
         }
+        // MEDIUM
         else { if (difficulty = 2)
         {
-            let characterJumpHeight = 32;
             let characterHealth = 3;
             let characterDamageDelay = 20;
             let characterBulletsCount = 3;
@@ -63,9 +65,9 @@ class Difficulty
             let enemyBulletDelay = 15;
             let enemyFollowDelay = 25;
         }
+        // HARD
         else { if (difficulty = 3)
         {
-            let characterJumpHeight = 32;
             let characterHealth = 2;
             let characterDamageDelay = 20;
             let characterBulletsCount = 0;
@@ -82,9 +84,9 @@ class Difficulty
             let enemyBulletDelay = 10;
             let enemyFollowDelay = 10;
         }
+        // INSANE
         else { if (difficulty = 4)
         {
-            let characterJumpHeight = 30;
             let characterHealth = 1;
             let characterDamageDelay = 0;
             let characterBulletsCount = 0;
