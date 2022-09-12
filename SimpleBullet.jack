@@ -11,8 +11,6 @@ class SimpleBullet
 	static Array FramesMirrored;
 	static Array Frame1;
 	static Array Frame1Mirrored;
-	static Array Frame2;
-	static Array Frame2Mirrored;
 	function void init()
 	{
 ///////////////// CONFIG /////////////////
@@ -25,12 +23,12 @@ class SimpleBullet
 		let FramesMirrored = Array.new(AnimationFramesCount);
 		let Frame1 = Array.new(16);
 		let Frame1Mirrored = Array.new(16);
-		do MemoryExt.poke(Frame1, 7, 30720);
-		do MemoryExt.poke(Frame1, 8, -30720);
-		do MemoryExt.poke(Frame1, 9, 30720);
-		do MemoryExt.poke(Frame1Mirrored, 7, 30);
-		do MemoryExt.poke(Frame1Mirrored, 8, 17);
-		do MemoryExt.poke(Frame1Mirrored, 9, 30);
+		do MemoryExt.poke(Frame1, 13, 30720);
+		do MemoryExt.poke(Frame1, 14, -30720);
+		do MemoryExt.poke(Frame1, 15, 30720);
+		do MemoryExt.poke(Frame1Mirrored, 13, 30);
+		do MemoryExt.poke(Frame1Mirrored, 14, 17);
+		do MemoryExt.poke(Frame1Mirrored, 15, 30);
 		do MemoryExt.poke(Frames, 0, Frame1);
 		do MemoryExt.poke(FramesMirrored, 0, Frame1Mirrored);
 		return;

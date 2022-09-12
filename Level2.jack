@@ -33,7 +33,7 @@ class Level2
 		do MemoryExt.poke(Platforms, 4, Platform.new(61, 240, 3, 1));
 		do MemoryExt.poke(Platforms, 5, Platform.new(70, 240, 3, 1));
 		do MemoryExt.poke(Platforms, 6, Platform.new(89, 240, 3, 32));
-		do MemoryExt.poke(Platforms, 7, Platform.new(106, 48, 7, 5));
+		do MemoryExt.poke(Platforms, 7, Platform.new(104, 48, 7, 7));
 		do MemoryExt.poke(Platforms, 8, Platform.new(83, 64, 7, 5));
 		do MemoryExt.poke(Platforms, 9, Platform.new(121, 64, 7, 7));
 		do MemoryExt.poke(Platforms, 10, Platform.new(97, 96, 7, 5));
@@ -209,7 +209,9 @@ class Level2
 		do MemoryExt.poke(Map, 1631, 4);
 		do MemoryExt.poke(Map, 1647, 4);
 		do MemoryExt.poke(Map, 1663, 4);
+		do MemoryExt.poke(Map, 1667, 8);
 		do MemoryExt.poke(Map, 1679, 4);
+		do MemoryExt.poke(Map, 1683, 8);
 		do MemoryExt.poke(Map, 1695, 4);
 		do MemoryExt.poke(Map, 1699, 8);
 		do MemoryExt.poke(Map, 1711, 4);

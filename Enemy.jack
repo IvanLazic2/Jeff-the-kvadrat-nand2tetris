@@ -378,11 +378,11 @@ class Enemy
 
 		if (Type = 4)
 		{
-			let bulletY = Y - 10;
+			let bulletY = Y - 6;
 		}
 		else
 		{
-			let bulletY = Y - 20;
+			let bulletY = Y - 16;
 		}
 
         if (canShoot)

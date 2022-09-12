@@ -604,7 +604,7 @@ class Character
             {
                 let bulletX = X + Width;
             }
-            let bulletY = Y - 20;
+            let bulletY = Y - 16;
 
             if (canShoot)
             {

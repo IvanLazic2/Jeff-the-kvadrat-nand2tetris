@@ -261,11 +261,11 @@ class Collision
         {
             if (drawLeft)
             {
-                let col = x - 2 + worldOffset;
+                let col = x - 1 + worldOffset;
             }
             else 
             {
-                let col = x + 2 + worldOffset;
+                let col = x + 1 + worldOffset;
             }
 
             let result = (Map.getValue(col, y / 16) = 0) & (Map.getValue(col, (y + 15)/16) = 0);
