@@ -1,0 +1,580 @@
+function Menu.new 0
+push constant 15
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push argument 1
+pop this 1
+push argument 2
+pop this 2
+push argument 3
+pop this 3
+push argument 4
+pop this 4
+push argument 5
+pop this 14
+push constant 0
+pop this 6
+push constant 0
+pop this 7
+push this 4
+call Array.new 1
+pop this 5
+push constant 10
+pop this 11
+push this 11
+pop this 10
+push constant 2
+pop this 13
+push pointer 0
+return
+function Menu.AddItem 0
+push argument 0
+pop pointer 0
+push this 6
+push this 4
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+push this 5
+add
+push argument 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push this 6
+push constant 1
+add
+pop this 6
+label IF_FALSE0
+push constant 0
+return
+function Menu.Show 3
+push argument 0
+pop pointer 0
+push constant 0
+pop local 1
+push constant 0
+pop this 7
+push pointer 0
+call Menu.Draw 1
+pop temp 0
+label WHILE_EXP0
+push local 1
+not
+not
+if-goto WHILE_END0
+push this 14
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+call Game.CheckMainMenuAnimation 0
+pop temp 0
+label IF_FALSE0
+push this 10
+push constant 0
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+pop this 12
+push this 11
+pop this 10
+goto IF_END1
+label IF_FALSE1
+push this 10
+push constant 1
+sub
+pop this 10
+label IF_END1
+call Keyboard.keyPressed 0
+pop local 0
+push local 0
+push constant 133
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Menu.SelectDown 1
+pop temp 0
+goto IF_END2
+label IF_FALSE2
+push local 0
+push constant 131
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push pointer 0
+call Menu.SelectUp 1
+pop temp 0
+goto IF_END3
+label IF_FALSE3
+push local 0
+push constant 128
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push this 7
+pop local 2
+push pointer 0
+call Menu.Clear 1
+pop temp 0
+push constant 0
+not
+pop local 1
+label IF_FALSE4
+label IF_END3
+label IF_END2
+goto WHILE_EXP0
+label WHILE_END0
+push local 2
+return
+function Menu.SelectUp 0
+push argument 0
+pop pointer 0
+push this 12
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 7
+push constant 0
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 7
+push constant 1
+sub
+pop this 7
+push pointer 0
+call Menu.Draw 1
+pop temp 0
+label IF_FALSE1
+push constant 0
+pop this 12
+label IF_FALSE0
+push constant 0
+return
+function Menu.SelectDown 0
+push argument 0
+pop pointer 0
+push this 12
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 7
+push this 6
+push constant 1
+sub
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 7
+push constant 1
+add
+pop this 7
+push pointer 0
+call Menu.Draw 1
+pop temp 0
+label IF_FALSE1
+push constant 0
+pop this 12
+label IF_FALSE0
+push constant 0
+return
+function Menu.Clear 3
+push argument 0
+pop pointer 0
+push this 1
+push constant 1
+add
+push constant 352
+call Math.multiply 2
+push this 0
+push constant 2
+call Math.divide 2
+add
+push constant 32
+add
+pop local 2
+push local 2
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 1
+push constant 1
+add
+push this 4
+push this 13
+call Math.multiply 2
+add
+push constant 352
+call Math.multiply 2
+push this 0
+push constant 2
+call Math.divide 2
+add
+push constant 414
+add
+lt
+not
+if-goto WHILE_END0
+push constant 0
+pop local 1
+label WHILE_EXP1
+push local 1
+push this 2
+lt
+not
+if-goto WHILE_END1
+call Constants.getScreenStart 0
+push local 0
+add
+push local 1
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push constant 32
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Menu.Draw 2
+push argument 0
+pop pointer 0
+push this 0
+push constant 4
+add
+pop this 8
+push this 1
+push constant 2
+add
+pop this 9
+push pointer 0
+call Menu.Clear 1
+pop temp 0
+push pointer 0
+call Menu.DrawElems 1
+pop temp 0
+push constant 0
+return
+function Menu.DrawElems 3
+push argument 0
+pop pointer 0
+push this 0
+push constant 4
+add
+pop this 8
+push this 1
+push constant 2
+add
+pop this 9
+push this 9
+push this 8
+call Output.moveCursor 2
+pop temp 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 4
+lt
+not
+if-goto WHILE_END0
+call Constants.getScreenStart 0
+push this 9
+push constant 352
+call Math.multiply 2
+add
+push this 8
+push constant 2
+call Math.divide 2
+add
+push constant 63
+add
+pop local 1
+push local 0
+push this 5
+add
+pop pointer 1
+push that 0
+call Output.printString 1
+pop temp 0
+push this 9
+push this 13
+add
+pop this 9
+push local 0
+push this 4
+push constant 1
+sub
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 9
+push this 8
+call Output.moveCursor 2
+pop temp 0
+label IF_FALSE0
+push local 0
+push this 7
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 1
+push constant 0
+add
+push constant 26
+neg
+call Memory.poke 2
+pop temp 0
+push local 1
+push constant 32
+add
+push constant 2
+neg
+call Memory.poke 2
+pop temp 0
+push local 1
+push constant 64
+add
+push constant 2
+neg
+call Memory.poke 2
+pop temp 0
+push local 1
+push constant 96
+add
+push constant 316
+call Memory.poke 2
+pop temp 0
+push local 1
+push constant 128
+add
+push constant 254
+call Memory.poke 2
+pop temp 0
+push local 1
+push constant 160
+add
+push constant 31
+call Memory.poke 2
+pop temp 0
+push local 1
+push constant 192
+add
+push constant 15
+call Memory.poke 2
+pop temp 0
+push local 1
+push constant 224
+add
+push constant 7
+call Memory.poke 2
+pop temp 0
+label IF_FALSE1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push this 1
+push constant 1
+add
+push constant 352
+call Math.multiply 2
+push this 0
+push constant 2
+call Math.divide 2
+add
+push constant 32
+add
+pop local 1
+push local 1
+pop local 0
+label WHILE_EXP1
+push local 0
+push this 9
+push this 13
+sub
+push constant 352
+call Math.multiply 2
+push this 8
+push constant 2
+call Math.divide 2
+add
+push constant 638
+add
+lt
+not
+if-goto WHILE_END1
+call Constants.getScreenStart 0
+push local 0
+add
+push constant 15
+call Memory.poke 2
+pop temp 0
+call Constants.getScreenStart 0
+push local 0
+add
+push this 2
+add
+push constant 1
+sub
+push constant 2048
+neg
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 32
+add
+pop local 0
+goto WHILE_EXP1
+label WHILE_END1
+push constant 0
+pop local 0
+label WHILE_EXP2
+push local 0
+push this 2
+lt
+not
+if-goto WHILE_END2
+call Constants.getScreenStart 0
+push this 1
+push constant 352
+call Math.multiply 2
+add
+push this 0
+push constant 2
+call Math.divide 2
+add
+push local 0
+add
+pop local 1
+push local 1
+push constant 384
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 1
+push constant 416
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 1
+push constant 448
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 1
+push constant 480
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+call Constants.getScreenStart 0
+push this 9
+push this 13
+sub
+push constant 352
+call Math.multiply 2
+add
+push this 8
+push constant 2
+call Math.divide 2
+add
+push constant 254
+add
+push local 0
+add
+pop local 1
+push local 1
+push constant 384
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 1
+push constant 416
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 1
+push constant 448
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 1
+push constant 480
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP2
+label WHILE_END2
+push constant 0
+return
+function Menu.dispose 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 4
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 5
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call String.dispose 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push this 5
+call Array.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

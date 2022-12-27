@@ -1,0 +1,331 @@
+function Collectable.new 0
+push constant 5
+call Memory.alloc 1
+pop pointer 0
+push pointer 0
+call Collectable.resetObject 1
+pop temp 0
+push argument 0
+pop this 0
+push argument 1
+pop this 1
+push argument 0
+push argument 1
+call Constants.getMemAddress 2
+pop this 4
+push argument 2
+pop this 2
+push constant 0
+not
+pop this 3
+push pointer 0
+return
+function Collectable.getX 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Collectable.getY 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Collectable.getType 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Collectable.getIsAvailable 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Collectable.setIsAvailable 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 3
+push constant 0
+return
+function Collectable.CheckCollisionWithCharacter 0
+push argument 0
+pop pointer 0
+push this 3
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+push argument 2
+push argument 3
+push argument 4
+push this 0
+push this 1
+call Collision.IsBulletCollidedWithEntity 6
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call Collectable.Collect 1
+pop temp 0
+push this 2
+return
+label IF_FALSE1
+label IF_FALSE0
+push constant 1
+neg
+return
+function Collectable.Collect 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Collectable.Clear 1
+pop temp 0
+push constant 0
+pop this 3
+push constant 0
+return
+function Collectable.ScrollRight 0
+push argument 0
+pop pointer 0
+push this 3
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Collectable.Clear 1
+pop temp 0
+push this 4
+push constant 1
+add
+pop this 4
+push this 0
+push constant 1
+add
+pop this 0
+push pointer 0
+call Collectable.Draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Collectable.ScrollLeft 0
+push argument 0
+pop pointer 0
+push this 3
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Collectable.Clear 1
+pop temp 0
+push this 4
+push constant 1
+sub
+pop this 4
+push this 0
+push constant 1
+sub
+pop this 0
+push pointer 0
+call Collectable.Draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Collectable.Clear 0
+push argument 0
+pop pointer 0
+push constant 1
+neg
+push this 0
+lt
+push this 0
+push constant 32
+lt
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 4
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 32
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 64
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 96
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 128
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 160
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 192
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 224
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 256
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 288
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 320
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 352
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 384
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 416
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 448
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push this 4
+push constant 480
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Collectable.Draw 0
+push argument 0
+pop pointer 0
+push this 3
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 2
+push constant 0
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 4
+push this 0
+push this 1
+call Coin.DrawFrame 3
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push this 2
+push constant 1
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+call Difficulty.getCanPickUpHealth 0
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 4
+push this 0
+push this 1
+call Heart.DrawFrame 3
+pop temp 0
+label IF_FALSE3
+goto IF_END2
+label IF_FALSE2
+push this 2
+push constant 2
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+call Difficulty.getCanPickUpAmmo 0
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push this 4
+push this 0
+push this 1
+call Ammo.DrawFrame 3
+pop temp 0
+label IF_FALSE5
+label IF_FALSE4
+label IF_END2
+label IF_END1
+label IF_FALSE0
+push constant 0
+return
+function Collectable.resetObject 0
+push argument 0
+pop pointer 0
+push constant 0
+pop this 0
+push constant 0
+pop this 1
+push constant 0
+pop this 2
+push constant 0
+pop this 3
+push constant 0
+pop this 4
+push constant 0
+return
+function Collectable.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Collectable.resetObject 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

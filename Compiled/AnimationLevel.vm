@@ -1,0 +1,670 @@
+function AnimationLevel.new 1
+push constant 13
+call Memory.alloc 1
+pop pointer 0
+push constant 2
+push constant 80
+push constant 0
+not
+call Character.new 3
+pop this 0
+push constant 127
+push constant 224
+call Finish.new 2
+pop this 1
+push constant 9
+pop this 2
+push constant 0
+pop this 3
+push constant 0
+pop this 4
+push constant 0
+pop this 5
+push constant 9
+call Array.new 1
+pop this 6
+push constant 0
+push this 6
+add
+push constant 43
+push constant 16
+push constant 6
+push constant 4
+call Platform.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 1
+push this 6
+add
+push constant 35
+push constant 32
+push constant 6
+push constant 5
+call Platform.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 2
+push this 6
+add
+push constant 58
+push constant 32
+push constant 7
+push constant 4
+call Platform.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 3
+push this 6
+add
+push constant 49
+push constant 48
+push constant 7
+push constant 5
+call Platform.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 4
+push this 6
+add
+push constant 75
+push constant 16
+push constant 8
+push constant 4
+call Platform.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 5
+push this 6
+add
+push constant 67
+push constant 48
+push constant 8
+push constant 5
+call Platform.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 6
+push this 6
+add
+push constant 81
+push constant 32
+push constant 9
+push constant 3
+call Platform.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 7
+push this 6
+add
+push constant 88
+push constant 48
+push constant 9
+push constant 4
+call Platform.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 8
+push this 6
+add
+push constant 94
+push constant 48
+push constant 9
+push constant 2
+call Platform.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 128
+pop this 11
+push constant 7
+pop this 12
+push this 11
+push this 12
+call Math.multiply 2
+call Array.new 1
+pop this 10
+label WHILE_EXP0
+push local 0
+push this 11
+push this 12
+call Math.multiply 2
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 10
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 247
+push this 10
+add
+push constant 7
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 254
+push this 10
+add
+push constant 7
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 261
+push this 10
+add
+push constant 7
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 268
+push this 10
+add
+push constant 7
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 275
+push this 10
+add
+push constant 7
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 302
+push this 10
+add
+push constant 7
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 309
+push this 10
+add
+push constant 7
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 316
+push this 10
+add
+push constant 7
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 323
+push this 10
+add
+push constant 7
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 346
+push this 10
+add
+push constant 8
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 353
+push this 10
+add
+push constant 8
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 360
+push this 10
+add
+push constant 8
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 367
+push this 10
+add
+push constant 8
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 374
+push this 10
+add
+push constant 8
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 408
+push this 10
+add
+push constant 8
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 415
+push this 10
+add
+push constant 8
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 422
+push this 10
+add
+push constant 8
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 429
+push this 10
+add
+push constant 8
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 472
+push this 10
+add
+push constant 9
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 479
+push this 10
+add
+push constant 9
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 486
+push this 10
+add
+push constant 9
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 493
+push this 10
+add
+push constant 9
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 500
+push this 10
+add
+push constant 9
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 526
+push this 10
+add
+push constant 9
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 533
+push this 10
+add
+push constant 9
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 540
+push this 10
+add
+push constant 9
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 547
+push this 10
+add
+push constant 9
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 569
+push this 10
+add
+push constant 10
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 576
+push this 10
+add
+push constant 10
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 583
+push this 10
+add
+push constant 10
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 619
+push this 10
+add
+push constant 10
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 626
+push this 10
+add
+push constant 10
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 633
+push this 10
+add
+push constant 10
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 640
+push this 10
+add
+push constant 10
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 661
+push this 10
+add
+push constant 10
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 668
+push this 10
+add
+push constant 10
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push pointer 0
+return
+function AnimationLevel.getPlatformsCount 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function AnimationLevel.getObstaclesCount 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function AnimationLevel.getEnemiesCount 0
+push argument 0
+pop pointer 0
+push this 4
+return
+function AnimationLevel.getCollectablesCount 0
+push argument 0
+pop pointer 0
+push this 5
+return
+function AnimationLevel.getPlatforms 0
+push argument 0
+pop pointer 0
+push this 6
+return
+function AnimationLevel.getObstacles 0
+push argument 0
+pop pointer 0
+push this 7
+return
+function AnimationLevel.getEnemies 0
+push argument 0
+pop pointer 0
+push this 8
+return
+function AnimationLevel.getCollectables 0
+push argument 0
+pop pointer 0
+push this 9
+return
+function AnimationLevel.getCharacter 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function AnimationLevel.getFinish 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function AnimationLevel.getMap 0
+push argument 0
+pop pointer 0
+push this 10
+return
+function AnimationLevel.getMapWidth 0
+push argument 0
+pop pointer 0
+push this 11
+return
+function AnimationLevel.getMapHeight 0
+push argument 0
+pop pointer 0
+push this 12
+return
+function AnimationLevel.dispose 5
+push argument 0
+pop pointer 0
+push this 0
+call Character.dispose 1
+pop temp 0
+push this 1
+call Finish.dispose 1
+pop temp 0
+label WHILE_EXP0
+push local 0
+push this 2
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 6
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Platform.dispose 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+pop local 0
+label WHILE_EXP1
+push local 0
+push this 3
+lt
+not
+if-goto WHILE_END1
+push local 0
+push this 7
+add
+pop pointer 1
+push that 0
+pop local 2
+push local 2
+call Obstacle.dispose 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP1
+label WHILE_END1
+push constant 0
+pop local 0
+label WHILE_EXP2
+push local 0
+push this 4
+lt
+not
+if-goto WHILE_END2
+push local 0
+push this 8
+add
+pop pointer 1
+push that 0
+pop local 3
+push local 3
+call Enemy.dispose 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP2
+label WHILE_END2
+push constant 0
+pop local 0
+label WHILE_EXP3
+push local 0
+push this 5
+lt
+not
+if-goto WHILE_END3
+push local 0
+push this 9
+add
+pop pointer 1
+push that 0
+pop local 4
+push local 4
+call Collectable.dispose 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP3
+label WHILE_END3
+push this 2
+push constant 0
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+call Array.dispose 1
+pop temp 0
+label IF_FALSE0
+push this 3
+push constant 0
+eq
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 7
+call Array.dispose 1
+pop temp 0
+label IF_FALSE1
+push this 4
+push constant 0
+eq
+not
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 8
+call Array.dispose 1
+pop temp 0
+label IF_FALSE2
+push this 5
+push constant 0
+eq
+not
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 9
+call Array.dispose 1
+pop temp 0
+label IF_FALSE3
+push this 10
+call Array.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

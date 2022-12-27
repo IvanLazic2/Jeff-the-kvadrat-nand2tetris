@@ -1,0 +1,761 @@
+function Spider.init 0
+push constant 3
+pop static 5
+push constant 2
+pop static 0
+push constant 1
+pop static 1
+push constant 2
+pop static 2
+push constant 32
+pop static 7
+push static 2
+call Array.new 1
+pop static 6
+push static 2
+call Array.new 1
+pop static 8
+push constant 32
+call Array.new 1
+pop static 9
+push constant 32
+call Array.new 1
+pop static 10
+push static 9
+push constant 0
+push constant 8321
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 1
+push constant 28414
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 2
+push constant 17158
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 3
+push constant 27844
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 4
+push constant 31752
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 5
+push constant 8188
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 6
+push constant 1016
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 7
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 8
+push constant 16
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 9
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 10
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 11
+push constant 4735
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 12
+push constant 4
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 13
+push constant 6015
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 14
+push constant 2
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 15
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 16
+push constant 2
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 17
+push constant 4071
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 18
+push constant 2
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 19
+push constant 7
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 20
+push constant 4
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 21
+push constant 7
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 22
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 23
+push constant 3
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 24
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 25
+push constant 3
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 26
+push constant 16
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 27
+push constant 1
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 28
+push constant 32704
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 0
+push constant 16521
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 1
+push constant 32508
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 2
+push constant 9014
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 3
+push constant 24770
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 4
+push constant 16376
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 5
+push constant 4158
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 6
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 7
+push constant 4159
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 8
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 9
+push constant 4095
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 10
+push constant 440
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 11
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 12
+push constant 280
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 13
+push constant 16383
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 14
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 15
+push constant 32767
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 16
+push constant 6160
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 17
+push constant 32767
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 18
+push constant 8192
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 19
+push constant 32767
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 20
+push constant 8192
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 21
+push constant 16383
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 22
+push constant 16384
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 23
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 24
+push constant 16384
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 25
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 26
+push constant 32767
+not
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 27
+push constant 4095
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 29
+push constant 1022
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 0
+push static 9
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 0
+push static 10
+call MemoryExt.poke 3
+pop temp 0
+push constant 32
+call Array.new 1
+pop static 11
+push constant 32
+call Array.new 1
+pop static 12
+push static 11
+push constant 0
+push constant 30688
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 1
+push constant 8738
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 2
+push constant 17424
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 3
+push constant 11460
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 4
+push constant 31752
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 5
+push constant 8188
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 6
+push constant 1016
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 7
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 8
+push constant 16
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 9
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 10
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 11
+push constant 4735
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 12
+push constant 4
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 13
+push constant 6015
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 14
+push constant 2
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 15
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 16
+push constant 2
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 17
+push constant 4071
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 18
+push constant 2
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 19
+push constant 7
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 20
+push constant 4
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 21
+push constant 7
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 22
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 23
+push constant 3
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 24
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 25
+push constant 3
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 26
+push constant 16
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 27
+push constant 1
+call MemoryExt.poke 3
+pop temp 0
+push static 11
+push constant 28
+push constant 32704
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 0
+push constant 17476
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 1
+push constant 1041
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 2
+push constant 9012
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 3
+push constant 2082
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 4
+push constant 16376
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 5
+push constant 4158
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 6
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 7
+push constant 4159
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 8
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 9
+push constant 4095
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 10
+push constant 440
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 11
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 12
+push constant 280
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 13
+push constant 16383
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 14
+push constant 8
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 15
+push constant 32767
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 16
+push constant 6160
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 17
+push constant 32767
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 18
+push constant 8192
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 19
+push constant 32767
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 20
+push constant 8192
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 21
+push constant 16383
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 22
+push constant 16384
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 23
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 24
+push constant 16384
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 25
+push constant 8191
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 26
+push constant 32767
+not
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 27
+push constant 4095
+call MemoryExt.poke 3
+pop temp 0
+push static 12
+push constant 29
+push constant 1022
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 1
+push static 11
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 1
+push static 12
+call MemoryExt.poke 3
+pop temp 0
+push constant 0
+return
+function Spider.getWidth 0
+push static 0
+return
+function Spider.getHeight 0
+push static 1
+return
+function Spider.CheckTimers 0
+push static 4
+push constant 1
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+call Spider.ChangeFrame 0
+pop temp 0
+push static 5
+pop static 4
+label IF_FALSE0
+push constant 0
+return
+function Spider.DecrementTimers 0
+push static 4
+push constant 1
+sub
+pop static 4
+push constant 0
+return
+function Spider.ChangeFrame 0
+push static 3
+push static 2
+push constant 1
+sub
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push static 3
+push constant 1
+add
+pop static 3
+goto IF_END0
+label IF_FALSE0
+push constant 0
+pop static 3
+label IF_END0
+push constant 0
+return
+function Spider.DrawFrame 0
+push argument 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+push static 3
+push static 8
+add
+pop pointer 1
+push that 0
+push static 7
+push static 0
+push static 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push argument 0
+push static 3
+push static 6
+add
+pop pointer 1
+push that 0
+push static 7
+push static 0
+push static 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+label IF_END0
+push constant 0
+return

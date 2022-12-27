@@ -1,0 +1,1914 @@
+function Enemy.new 1
+push constant 44
+call Memory.alloc 1
+pop pointer 0
+push pointer 0
+call Enemy.resetObject 1
+pop temp 0
+push argument 0
+pop this 0
+push argument 1
+pop this 1
+push argument 2
+pop this 4
+push this 0
+push this 1
+call Constants.getMemAddress 2
+pop this 6
+push this 4
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+call Spider.getWidth 0
+pop this 2
+call Spider.getHeight 0
+pop this 3
+call Difficulty.getSpiderMovementDelay 0
+pop this 12
+push constant 0
+not
+pop this 17
+push constant 0
+not
+pop this 23
+push constant 1
+pop this 40
+goto IF_END0
+label IF_FALSE0
+push this 4
+push constant 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+call EvilJeffMelee.getWidth 0
+pop this 2
+call EvilJeffMelee.getHeight 0
+pop this 3
+push constant 2
+pop this 12
+push constant 0
+not
+pop this 19
+push constant 0
+not
+pop this 20
+push constant 5
+pop this 40
+goto IF_END1
+label IF_FALSE1
+push this 4
+push constant 2
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+call EvilJeffRanged.getWidth 0
+pop this 2
+call EvilJeffRanged.getHeight 0
+pop this 3
+push constant 2
+pop this 12
+push constant 0
+not
+pop this 19
+push constant 0
+not
+pop this 22
+push constant 0
+not
+pop this 21
+push constant 5
+pop this 40
+goto IF_END2
+label IF_FALSE2
+push this 4
+push constant 3
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+call Bat.getWidth 0
+pop this 2
+call Bat.getHeight 0
+pop this 3
+call Difficulty.getBatMovementDelay 0
+pop this 12
+push constant 0
+pop this 22
+push constant 0
+pop this 21
+push constant 0
+not
+pop this 24
+push constant 0
+not
+pop this 18
+push constant 0
+not
+pop this 23
+push constant 1
+pop this 40
+goto IF_END3
+label IF_FALSE3
+push this 4
+push constant 4
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+call Shooter.getWidth 0
+pop this 2
+call Shooter.getHeight 0
+pop this 3
+push constant 0
+not
+pop this 22
+push constant 0
+not
+pop this 23
+push constant 1
+pop this 40
+label IF_FALSE4
+label IF_END3
+label IF_END2
+label IF_END1
+label IF_END0
+push this 22
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push constant 1
+pop this 28
+push this 28
+call Array.new 1
+pop this 27
+label WHILE_EXP0
+push local 0
+push this 28
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 27
+add
+call Bullet.new 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push this 29
+push this 27
+add
+pop pointer 1
+push that 0
+pop this 30
+label IF_FALSE5
+push this 2
+push this 3
+call Math.multiply 2
+push constant 16
+call Math.multiply 2
+pop this 43
+push this 3
+push constant 16
+call Math.multiply 2
+pop this 5
+push this 12
+pop this 13
+push constant 0
+not
+pop this 14
+push constant 0
+not
+pop this 15
+push constant 0
+pop this 10
+push constant 6
+pop this 8
+push constant 30
+pop this 11
+push constant 0
+not
+pop this 26
+call Difficulty.getEnemyBulletDelay 0
+pop this 32
+push this 32
+pop this 31
+push constant 5
+pop this 36
+push this 36
+pop this 35
+push constant 10
+pop this 42
+push constant 0
+not
+pop this 16
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+push this 6
+pop this 7
+push pointer 0
+return
+function Enemy.get_x 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Enemy.get_y 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Enemy.getWidth 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Enemy.getHeight 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Enemy.get_type 0
+push argument 0
+pop pointer 0
+push this 4
+return
+function Enemy.getIsRoaming 0
+push argument 0
+pop pointer 0
+push this 17
+return
+function Enemy.getIsFlying 0
+push argument 0
+pop pointer 0
+push this 18
+return
+function Enemy.getIsGravityAffected 0
+push argument 0
+pop pointer 0
+push this 19
+return
+function Enemy.getIsMelee 0
+push argument 0
+pop pointer 0
+push this 20
+return
+function Enemy.getIsShooting 0
+push argument 0
+pop pointer 0
+push this 22
+return
+function Enemy.getIsFollowing 0
+push argument 0
+pop pointer 0
+push this 24
+return
+function Enemy.getIsStacionary 0
+push argument 0
+pop pointer 0
+push this 25
+return
+function Enemy.getIsAlive 0
+push argument 0
+pop pointer 0
+push this 26
+return
+function Enemy.getBullets 0
+push argument 0
+pop pointer 0
+push this 27
+return
+function Enemy.getBulletsCount 0
+push argument 0
+pop pointer 0
+push this 28
+return
+function Enemy.CheckTimers 0
+push argument 0
+pop pointer 0
+push this 13
+push constant 1
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+pop this 14
+push constant 0
+not
+pop this 15
+push this 12
+pop this 13
+label IF_FALSE0
+push this 31
+push constant 1
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+pop this 33
+push this 32
+pop this 31
+label IF_FALSE1
+push this 41
+push this 42
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Enemy.ForceDraw 1
+pop temp 0
+label IF_FALSE2
+push constant 0
+return
+function Enemy.DecrementTimers 0
+push argument 0
+pop pointer 0
+push this 13
+push constant 1
+sub
+pop this 13
+push this 31
+push constant 1
+sub
+pop this 31
+push constant 0
+return
+function Enemy.CheckCollisionWithCharacter 0
+push argument 0
+pop pointer 0
+push this 26
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+push argument 2
+push argument 3
+push argument 4
+push this 0
+push this 1
+push this 2
+push this 5
+call Collision.IsEntityCollidedWithEntityTop 8
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 23
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Enemy.Die 1
+pop temp 0
+push this 40
+push constant 0
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+call Game.addKill 0
+pop temp 0
+label IF_FALSE3
+push constant 0
+return
+goto IF_END2
+label IF_FALSE2
+push constant 0
+not
+return
+label IF_END2
+goto IF_END1
+label IF_FALSE1
+push argument 1
+push argument 2
+push argument 3
+push argument 4
+push this 0
+push this 1
+push this 2
+push this 5
+call Collision.IsEntityCollidedWithEntitySides 8
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push constant 0
+not
+return
+label IF_FALSE4
+label IF_END1
+label IF_FALSE0
+push constant 0
+return
+function Enemy.CheckCollisionWithBullet 0
+push argument 0
+pop pointer 0
+push this 26
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+push this 0
+push this 1
+push this 2
+push this 5
+call Bullet.CheckCollisionWithEntity 5
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call Enemy.Die 1
+pop temp 0
+push this 40
+push constant 0
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+call Game.addKill 0
+pop temp 0
+label IF_FALSE2
+label IF_FALSE1
+label IF_FALSE0
+push constant 0
+return
+function Enemy.DoActions 0
+push argument 0
+pop pointer 0
+push this 26
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 19
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+push argument 1
+call Enemy.CheckGravity 2
+pop temp 0
+push this 0
+push this 1
+push this 2
+push this 5
+push argument 1
+call Collision.RedrawPlatforms 5
+pop temp 0
+label IF_FALSE1
+push this 17
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+push argument 1
+call Enemy.Roam 2
+pop temp 0
+label IF_FALSE2
+push this 20
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push pointer 0
+push argument 1
+push argument 2
+push argument 3
+call Enemy.Melee 4
+pop temp 0
+label IF_FALSE3
+push this 21
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push pointer 0
+push argument 1
+push argument 2
+push argument 3
+call Enemy.Ranged 4
+pop temp 0
+label IF_FALSE4
+push this 25
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+label IF_FALSE5
+push this 24
+push this 18
+and
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push pointer 0
+push argument 1
+push argument 2
+push argument 3
+push constant 16
+sub
+call Enemy.FollowFlying 4
+pop temp 0
+label IF_FALSE6
+push this 22
+push this 21
+not
+and
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push pointer 0
+push argument 1
+push argument 2
+call Enemy.ShooterAction 3
+pop temp 0
+label IF_FALSE7
+label IF_FALSE0
+push constant 0
+return
+function Enemy.ShooterAction 0
+push argument 0
+pop pointer 0
+push this 0
+call Constants.IsInScreenX 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 2
+push this 0
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 16
+not
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+not
+pop this 16
+push pointer 0
+call Enemy.ForceDraw 1
+pop temp 0
+label IF_FALSE2
+goto IF_END1
+label IF_FALSE1
+push this 16
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push constant 0
+pop this 16
+push pointer 0
+call Enemy.ForceDraw 1
+pop temp 0
+label IF_FALSE3
+label IF_END1
+push pointer 0
+push argument 1
+call Enemy.Shoot 2
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Enemy.Shoot 2
+push argument 0
+pop pointer 0
+push this 16
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 0
+push constant 1
+sub
+pop local 0
+goto IF_END0
+label IF_FALSE0
+push this 0
+push this 2
+add
+pop local 0
+label IF_END0
+push this 4
+push constant 4
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 1
+push constant 6
+sub
+pop local 1
+goto IF_END1
+label IF_FALSE1
+push this 1
+push constant 16
+sub
+pop local 1
+label IF_END1
+push this 33
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 30
+call Bullet.IsAvailable 1
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 30
+push local 0
+push local 1
+push this 16
+push argument 1
+call Bullet.Shoot 5
+pop temp 0
+push this 29
+push constant 1
+add
+pop this 29
+push this 29
+push this 28
+push constant 1
+sub
+gt
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push constant 0
+pop this 29
+label IF_FALSE4
+push this 29
+push this 27
+add
+pop pointer 1
+push that 0
+pop this 30
+label IF_FALSE3
+push constant 0
+pop this 33
+label IF_FALSE2
+push constant 0
+return
+function Enemy.CheckBullets 2
+push argument 0
+pop pointer 0
+push this 22
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+label WHILE_EXP0
+push local 0
+push this 28
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 27
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+push argument 1
+call Bullet.CheckBullet 2
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+label IF_FALSE0
+push constant 0
+return
+function Enemy.DrawAllBullets 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 28
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 27
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Bullet.Draw 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Enemy.ScrollBulletsLeft 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 28
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 27
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Bullet.ScrollLeft 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Enemy.ScrollBulletsRight 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 28
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 27
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Bullet.ScrollRight 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Enemy.CheckFollowTimer 0
+push argument 0
+pop pointer 0
+push this 37
+push constant 0
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+pop this 38
+push argument 2
+pop this 39
+call Difficulty.getEnemyFollowDelay 0
+pop this 37
+goto IF_END0
+label IF_FALSE0
+push this 37
+push constant 1
+sub
+pop this 37
+label IF_END0
+push constant 0
+return
+function Enemy.FollowGravity 0
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 2
+push argument 3
+call Enemy.CheckFollowTimer 3
+pop temp 0
+push this 35
+push constant 0
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 0
+push this 1
+push this 2
+push argument 1
+push this 16
+call Collision.HasPlatformAbove 5
+pop this 34
+push this 36
+pop this 35
+goto IF_END0
+label IF_FALSE0
+push this 35
+push constant 1
+sub
+pop this 35
+label IF_END0
+push this 34
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 0
+push this 38
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+push argument 1
+call Enemy.MoveLeft 2
+pop temp 0
+goto IF_END2
+label IF_FALSE2
+push pointer 0
+push argument 1
+call Enemy.MoveRight 2
+pop temp 0
+label IF_END2
+push pointer 0
+call Enemy.Jump 1
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push this 0
+push this 1
+push this 2
+push argument 1
+push constant 0
+not
+call Collision.GetPlatformBelowY 5
+push this 0
+push this 1
+push this 2
+push argument 1
+push constant 0
+not
+call Collision.GetObstacleBelowY 5
+push constant 1
+add
+lt
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 0
+push this 38
+gt
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push pointer 0
+push argument 1
+call Enemy.MoveLeft 2
+pop temp 0
+label IF_FALSE4
+label IF_FALSE3
+push this 0
+push this 1
+push this 2
+push argument 1
+push constant 0
+call Collision.GetPlatformBelowY 5
+push this 0
+push this 1
+push this 2
+push argument 1
+push constant 0
+call Collision.GetObstacleBelowY 5
+push constant 1
+add
+lt
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push this 0
+push this 38
+lt
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push pointer 0
+push argument 1
+call Enemy.MoveRight 2
+pop temp 0
+label IF_FALSE6
+label IF_FALSE5
+label IF_END1
+push constant 0
+return
+function Enemy.Melee 1
+push argument 0
+pop pointer 0
+push this 0
+push argument 2
+sub
+call Math.abs 1
+pop local 0
+push local 0
+push constant 32
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+push argument 1
+push argument 2
+push argument 3
+call Enemy.FollowGravity 4
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Enemy.Ranged 1
+push argument 0
+pop pointer 0
+push this 0
+push argument 2
+sub
+call Math.abs 1
+pop local 0
+push constant 12
+push local 0
+lt
+push local 0
+push constant 32
+lt
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+push argument 1
+push argument 2
+push argument 3
+call Enemy.FollowGravity 4
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push this 22
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 0
+push argument 2
+lt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+pop this 16
+push pointer 0
+call Enemy.ForceDraw 1
+pop temp 0
+goto IF_END2
+label IF_FALSE2
+push constant 0
+not
+pop this 16
+push pointer 0
+call Enemy.ForceDraw 1
+pop temp 0
+label IF_END2
+push pointer 0
+push argument 1
+call Enemy.Shoot 2
+pop temp 0
+label IF_FALSE1
+label IF_END0
+push constant 0
+return
+function Enemy.FollowFlying 0
+push argument 0
+pop pointer 0
+push this 0
+call Constants.IsInScreenX 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+push argument 2
+push argument 3
+call Enemy.CheckFollowTimer 3
+pop temp 0
+push this 0
+push this 38
+gt
+push this 0
+push constant 1
+sub
+push argument 1
+add
+push this 1
+push constant 16
+call Math.divide 2
+call Map.getValue 2
+push constant 0
+eq
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+push argument 1
+call Enemy.MoveLeft 2
+pop temp 0
+label IF_FALSE1
+push this 0
+push this 38
+lt
+push this 0
+push this 2
+add
+push argument 1
+add
+push this 1
+push constant 16
+call Math.divide 2
+call Map.getValue 2
+push constant 0
+eq
+and
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+push argument 1
+call Enemy.MoveRight 2
+pop temp 0
+label IF_FALSE2
+push this 1
+push this 39
+gt
+push this 0
+push argument 1
+add
+push this 1
+push constant 16
+call Math.divide 2
+push this 3
+sub
+call Map.getValue 2
+push constant 0
+eq
+and
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push pointer 0
+call Enemy.MoveUp 1
+pop temp 0
+label IF_FALSE3
+push this 1
+push this 39
+lt
+push this 0
+push argument 1
+add
+push this 1
+push constant 16
+call Math.divide 2
+push constant 1
+add
+call Map.getValue 2
+push constant 0
+eq
+and
+push this 1
+push argument 3
+lt
+and
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push pointer 0
+call Enemy.MoveDown 1
+pop temp 0
+label IF_FALSE4
+label IF_FALSE0
+push pointer 0
+call Enemy.ForceDraw 1
+pop temp 0
+push constant 0
+return
+function Enemy.Roam 0
+push argument 0
+pop pointer 0
+push this 16
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+push argument 1
+call Enemy.MoveLeft 2
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push pointer 0
+push argument 1
+call Enemy.MoveRight 2
+pop temp 0
+label IF_END0
+push this 0
+push this 1
+push this 2
+push this 3
+push argument 1
+call Collision.CheckAnyPlatformCollisionLeft 5
+push this 0
+push this 1
+push this 2
+push this 3
+push argument 1
+call Collision.IsAtPlatformBoundaryLeft 5
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+pop this 16
+goto IF_END1
+label IF_FALSE1
+push this 0
+push this 1
+push this 2
+push this 3
+push argument 1
+call Collision.CheckAnyPlatformCollisionRight 5
+push this 0
+push this 1
+push this 2
+push this 3
+push argument 1
+call Collision.IsAtPlatformBoundaryRight 5
+or
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+not
+pop this 16
+label IF_FALSE2
+label IF_END1
+push pointer 0
+call Enemy.ForceDraw 1
+pop temp 0
+push constant 0
+return
+function Enemy.ScrollRight 0
+push argument 0
+pop pointer 0
+push this 26
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+pop this 7
+push this 6
+push constant 1
+add
+pop this 6
+push pointer 0
+call Enemy.Clear 1
+pop temp 0
+push this 0
+push constant 1
+add
+pop this 0
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Enemy.ScrollLeft 0
+push argument 0
+pop pointer 0
+push this 26
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+pop this 7
+push this 6
+push constant 1
+sub
+pop this 6
+push pointer 0
+call Enemy.Clear 1
+pop temp 0
+push this 0
+push constant 1
+sub
+pop this 0
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Enemy.MoveLeft 1
+push argument 0
+pop pointer 0
+push constant 0
+not
+pop this 16
+push this 0
+push constant 1
+sub
+push argument 1
+add
+push this 1
+push constant 16
+call Math.divide 2
+call Map.getValue 2
+pop local 0
+push this 14
+push local 0
+push constant 0
+eq
+push local 0
+push constant 15
+gt
+or
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+pop this 7
+push this 6
+push constant 1
+sub
+pop this 6
+push pointer 0
+call Enemy.Clear 1
+pop temp 0
+push this 0
+push constant 1
+sub
+pop this 0
+push this 4
+push constant 0
+eq
+push this 4
+push constant 3
+eq
+or
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+label IF_FALSE1
+push constant 0
+pop this 14
+label IF_FALSE0
+push constant 0
+return
+function Enemy.MoveRight 1
+push argument 0
+pop pointer 0
+push constant 0
+pop this 16
+push this 0
+push this 2
+add
+push argument 1
+add
+push this 1
+push constant 16
+call Math.divide 2
+call Map.getValue 2
+pop local 0
+push this 14
+push local 0
+push constant 0
+eq
+push local 0
+push constant 15
+gt
+or
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+pop this 7
+push this 6
+push constant 1
+add
+pop this 6
+push pointer 0
+call Enemy.Clear 1
+pop temp 0
+push this 0
+push constant 1
+add
+pop this 0
+push this 4
+push constant 0
+eq
+push this 4
+push constant 3
+eq
+or
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+label IF_FALSE1
+push constant 0
+pop this 14
+label IF_FALSE0
+push constant 0
+return
+function Enemy.MoveUp 0
+push argument 0
+pop pointer 0
+push this 15
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+pop this 7
+push this 6
+push constant 512
+sub
+pop this 6
+push pointer 0
+call Enemy.Clear 1
+pop temp 0
+push this 1
+push constant 16
+sub
+pop this 1
+push this 4
+push constant 0
+eq
+push this 4
+push constant 3
+eq
+or
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+label IF_FALSE1
+push constant 0
+pop this 15
+label IF_FALSE0
+push constant 0
+return
+function Enemy.MoveDown 0
+push argument 0
+pop pointer 0
+push this 15
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+pop this 7
+push this 6
+push constant 512
+add
+pop this 6
+push pointer 0
+call Enemy.Clear 1
+pop temp 0
+push this 1
+push constant 16
+add
+pop this 1
+push this 4
+push constant 0
+eq
+push this 4
+push constant 3
+eq
+or
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+label IF_FALSE1
+push constant 0
+pop this 15
+label IF_FALSE0
+push constant 0
+return
+function Enemy.Jump 0
+push argument 0
+pop pointer 0
+push this 9
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 10
+push this 11
+sub
+pop this 10
+label IF_FALSE0
+push constant 0
+return
+function Enemy.CheckGravity 4
+push argument 0
+pop pointer 0
+push this 0
+push this 1
+push this 2
+push this 3
+push this 10
+push argument 1
+call Collision.IsOnAnyPlatform 6
+pop this 9
+push this 9
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+call Collision.getPlatformY 0
+push constant 16
+sub
+pop this 1
+push constant 0
+pop this 10
+push this 6
+pop this 7
+push this 0
+push this 1
+call Constants.getMemAddress 2
+pop this 6
+push pointer 0
+call Enemy.Clear 1
+pop temp 0
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push this 1
+push constant 224
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 1
+pop this 40
+push pointer 0
+call Enemy.Die 1
+pop temp 0
+label IF_FALSE1
+push this 10
+push this 8
+add
+pop this 10
+label IF_END0
+push this 1
+push this 10
+add
+pop this 1
+push this 6
+pop this 7
+push this 0
+push this 1
+call Constants.getMemAddress 2
+pop this 6
+push pointer 0
+call Enemy.Clear 1
+pop temp 0
+push pointer 0
+call Enemy.Draw 1
+pop temp 0
+push constant 0
+return
+function Enemy.Die 2
+push argument 0
+pop pointer 0
+push this 40
+push constant 1
+sub
+pop this 40
+push this 40
+push constant 1
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+pop this 7
+push constant 10
+neg
+push constant 10
+neg
+call Constants.getMemAddress 2
+pop this 6
+push pointer 0
+call Enemy.Clear 1
+pop temp 0
+push constant 10
+neg
+pop this 0
+push constant 10
+neg
+pop this 1
+push constant 0
+pop this 26
+label IF_FALSE0
+push this 42
+pop this 41
+push constant 0
+return
+function Enemy.Clear 5
+push argument 0
+pop pointer 0
+push this 6
+push this 7
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 7
+push constant 480
+add
+pop local 3
+label WHILE_EXP0
+push local 0
+push this 43
+lt
+not
+if-goto WHILE_END0
+push local 2
+push this 2
+push constant 1
+sub
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+pop local 2
+push local 1
+push constant 32
+sub
+pop local 1
+label IF_FALSE1
+push local 3
+push local 2
+add
+push local 1
+add
+pop local 4
+push constant 1
+neg
+push this 0
+push local 2
+add
+lt
+push this 0
+push local 2
+add
+push constant 32
+lt
+and
+push local 4
+push constant 16896
+gt
+and
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 4
+push constant 0
+call Memory.poke 2
+pop temp 0
+label IF_FALSE2
+push local 2
+push constant 1
+add
+pop local 2
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+label IF_FALSE0
+push constant 0
+return
+function Enemy.Draw 0
+push argument 0
+pop pointer 0
+push this 26
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+push this 7
+eq
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+push this 6
+call Enemy.DrawTypes 2
+pop temp 0
+label IF_FALSE1
+label IF_FALSE0
+push constant 0
+return
+function Enemy.ForceDraw 0
+push argument 0
+pop pointer 0
+push pointer 0
+push this 6
+call Enemy.DrawTypes 2
+pop temp 0
+push constant 0
+return
+function Enemy.DrawTypes 0
+push argument 0
+pop pointer 0
+push this 4
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+push this 16
+push this 0
+push this 1
+call Spider.DrawFrame 4
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push this 4
+push constant 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 41
+push constant 0
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push argument 1
+push this 16
+push this 0
+push this 1
+call EvilJeffAngry.DrawFrame 4
+pop temp 0
+push this 41
+push constant 1
+sub
+pop this 41
+goto IF_END2
+label IF_FALSE2
+push argument 1
+push this 16
+push this 0
+push this 1
+call EvilJeffMelee.DrawFrame 4
+pop temp 0
+label IF_END2
+goto IF_END1
+label IF_FALSE1
+push this 4
+push constant 2
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 41
+push constant 0
+gt
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push argument 1
+push this 16
+push this 0
+push this 1
+call EvilJeffAngry.DrawFrame 4
+pop temp 0
+push this 41
+push constant 1
+sub
+pop this 41
+goto IF_END4
+label IF_FALSE4
+push argument 1
+push this 16
+push this 0
+push this 1
+call EvilJeffRanged.DrawFrame 4
+pop temp 0
+label IF_END4
+goto IF_END3
+label IF_FALSE3
+push this 4
+push constant 3
+eq
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push argument 1
+push this 16
+push this 0
+push this 1
+call Bat.DrawFrame 4
+pop temp 0
+goto IF_END5
+label IF_FALSE5
+push this 4
+push constant 4
+eq
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push argument 1
+push this 16
+push this 0
+push this 1
+call Shooter.DrawFrame 4
+pop temp 0
+label IF_FALSE6
+label IF_END5
+label IF_END3
+label IF_END1
+label IF_END0
+push constant 0
+return
+function Enemy.resetObject 0
+push argument 0
+pop pointer 0
+push constant 0
+pop this 0
+push constant 0
+pop this 1
+push constant 0
+pop this 2
+push constant 0
+pop this 3
+push constant 0
+pop this 4
+push constant 0
+pop this 5
+push constant 0
+pop this 6
+push constant 0
+pop this 7
+push constant 0
+pop this 8
+push constant 0
+pop this 9
+push constant 0
+pop this 10
+push constant 0
+pop this 11
+push constant 0
+pop this 12
+push constant 0
+pop this 13
+push constant 0
+pop this 14
+push constant 0
+pop this 15
+push constant 0
+pop this 16
+push constant 0
+pop this 17
+push constant 0
+pop this 18
+push constant 0
+pop this 19
+push constant 0
+pop this 20
+push constant 0
+pop this 21
+push constant 0
+pop this 22
+push constant 0
+pop this 23
+push constant 0
+pop this 24
+push constant 0
+pop this 25
+push constant 0
+pop this 26
+push constant 0
+pop this 27
+push constant 0
+pop this 28
+push constant 0
+pop this 29
+push constant 0
+pop this 30
+push constant 0
+pop this 31
+push constant 0
+pop this 32
+push constant 0
+pop this 33
+push constant 0
+pop this 34
+push constant 0
+pop this 35
+push constant 0
+pop this 36
+push constant 0
+pop this 37
+push constant 0
+pop this 38
+push constant 0
+pop this 39
+push constant 0
+pop this 40
+push constant 0
+pop this 41
+push constant 0
+pop this 42
+push constant 0
+pop this 43
+push constant 0
+return
+function Enemy.dispose 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 28
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 27
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Bullet.dispose 1
+pop temp 0
+push constant 0
+pop local 1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push this 28
+push constant 0
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 27
+call Array.dispose 1
+pop temp 0
+label IF_FALSE0
+push pointer 0
+call Enemy.resetObject 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

@@ -1,0 +1,1226 @@
+function Platform.new 0
+push constant 5
+call Memory.alloc 1
+pop pointer 0
+push pointer 0
+call Platform.resetObject 1
+pop temp 0
+push argument 0
+pop this 0
+push argument 1
+pop this 1
+push argument 2
+pop this 3
+push argument 3
+pop this 2
+push this 0
+push this 1
+call Constants.getMemAddress 2
+pop this 4
+push pointer 0
+return
+function Platform.getX 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Platform.getY 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Platform.getSize 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Platform.getType 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Platform.set_moving 0
+push argument 0
+pop pointer 0
+push constant 0
+return
+function Platform.ClearScrollLeft 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 1
+sub
+pop this 0
+push this 4
+push constant 1
+sub
+pop this 4
+push pointer 0
+push this 4
+push this 2
+add
+push this 0
+push this 2
+add
+call Platform.Clear 3
+pop temp 0
+push constant 0
+return
+function Platform.DrawScrollLeft 0
+push argument 0
+pop pointer 0
+push this 3
+push this 4
+push this 0
+push this 1
+call Platform.DrawBlock 4
+pop temp 0
+push constant 0
+return
+function Platform.ClearScrollRight 0
+push argument 0
+pop pointer 0
+push pointer 0
+push this 4
+push this 0
+call Platform.Clear 3
+pop temp 0
+push constant 0
+return
+function Platform.DrawScrollRight 0
+push argument 0
+pop pointer 0
+push this 3
+push this 4
+push this 2
+add
+push this 0
+push this 2
+add
+push this 1
+call Platform.DrawBlock 4
+pop temp 0
+push this 0
+push constant 1
+add
+pop this 0
+push this 4
+push constant 1
+add
+pop this 4
+push constant 0
+return
+function Platform.Clear 0
+push argument 0
+pop pointer 0
+push constant 1
+neg
+push argument 2
+lt
+push argument 2
+push constant 32
+lt
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 32
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 64
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 96
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 128
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 160
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 192
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 224
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 256
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 288
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 320
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 352
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 384
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 416
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 448
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push argument 1
+push constant 480
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Platform.Draw 2
+push argument 0
+pop pointer 0
+push this 4
+pop local 1
+label WHILE_EXP0
+push local 0
+push this 2
+lt
+not
+if-goto WHILE_END0
+push this 3
+push local 1
+push this 0
+push local 0
+add
+push this 1
+call Platform.DrawBlock 4
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Platform.DrawBlock 0
+push argument 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+push static 0
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push argument 0
+push constant 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 1
+push static 5
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push argument 0
+push constant 2
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push argument 1
+push static 1
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END2
+label IF_FALSE2
+push argument 0
+push constant 3
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push argument 1
+push static 2
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END3
+label IF_FALSE3
+push argument 0
+push constant 4
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push argument 1
+push static 3
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END4
+label IF_FALSE4
+push argument 0
+push constant 5
+eq
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push argument 1
+push static 4
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END5
+label IF_FALSE5
+push argument 0
+push constant 6
+eq
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push argument 1
+push static 6
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END6
+label IF_FALSE6
+push argument 0
+push constant 7
+eq
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push argument 1
+push static 7
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END7
+label IF_FALSE7
+push argument 0
+push constant 8
+eq
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push argument 1
+push static 8
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END8
+label IF_FALSE8
+push argument 0
+push constant 9
+eq
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
+push argument 1
+push static 9
+push constant 16
+push constant 1
+push constant 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+label IF_FALSE9
+label IF_END8
+label IF_END7
+label IF_END6
+label IF_END5
+label IF_END4
+label IF_END3
+label IF_END2
+label IF_END1
+label IF_END0
+push constant 0
+return
+function Platform.init 0
+push constant 16
+call Array.new 1
+pop static 0
+push constant 16
+call Array.new 1
+pop static 1
+push constant 16
+call Array.new 1
+pop static 2
+push constant 16
+call Array.new 1
+pop static 3
+push constant 16
+call Array.new 1
+pop static 4
+push constant 16
+call Array.new 1
+pop static 5
+push constant 16
+call Array.new 1
+pop static 6
+push constant 16
+call Array.new 1
+pop static 7
+push constant 16
+call Array.new 1
+pop static 8
+push constant 16
+call Array.new 1
+pop static 9
+push static 0
+push constant 0
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 1
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 2
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 3
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 4
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 5
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 6
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 7
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 8
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 9
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 10
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 11
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 12
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 13
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 14
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 0
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 14
+push constant 16189
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 13
+push constant 3227
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 12
+push constant 25043
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 11
+push constant 31703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 10
+push constant 1063
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 9
+push constant 28411
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 8
+push constant 30523
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 7
+push constant 30917
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 6
+push constant 30655
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 5
+push constant 28511
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 4
+push constant 4327
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 3
+push constant 28633
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 2
+push constant 29631
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 1
+push constant 32191
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 1
+push constant 0
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 14
+push constant 32751
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 13
+push constant 32751
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 12
+push constant 32751
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 11
+push constant 32751
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 10
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 9
+push constant 30719
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 8
+push constant 30719
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 7
+push constant 30719
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 6
+push constant 30719
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 5
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 4
+push constant 32703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 3
+push constant 32703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 2
+push constant 32703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 1
+push constant 32703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 2
+push constant 0
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 14
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 13
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 12
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 11
+push constant 28687
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 10
+push constant 30703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 9
+push constant 30703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 8
+push constant 30703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 7
+push constant 30703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 6
+push constant 30703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 5
+push constant 30703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 4
+push constant 28687
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 3
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 2
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 1
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 3
+push constant 0
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 14
+push constant 16375
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 13
+push constant 24559
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 12
+push constant 26845
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 11
+push constant 30651
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 10
+push constant 27703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 9
+push constant 27215
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 8
+push constant 27039
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 7
+push constant 31127
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 6
+push constant 29271
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 5
+push constant 27703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 4
+push constant 24047
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 3
+push constant 15127
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 2
+push constant 30715
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 1
+push constant 28669
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 4
+push constant 0
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 5
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 5
+push constant 14
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 5
+push constant 13
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 5
+push constant 12
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 5
+push constant 11
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 5
+push constant 10
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 14
+push constant 28655
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 13
+push constant 28655
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 12
+push constant 30611
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 11
+push constant 26937
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 10
+push constant 5855
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 9
+push constant 31711
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 8
+push constant 30703
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 7
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 7
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 7
+push constant 14
+push constant 32751
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 7
+push constant 13
+push constant 32751
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 7
+push constant 12
+push constant 32751
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 7
+push constant 11
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 7
+push constant 10
+push constant 32255
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 7
+push constant 9
+push constant 32255
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 7
+push constant 8
+push constant 32255
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 7
+push constant 7
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 14
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 13
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 12
+push constant 16387
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 11
+push constant 24571
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 10
+push constant 16387
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 9
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 8
+push constant 32767
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 7
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 15
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 14
+push constant 4081
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 13
+push constant 29071
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 12
+push constant 3697
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 11
+push constant 32191
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 10
+push constant 3697
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 9
+push constant 29071
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 8
+push constant 4081
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 7
+push constant 1
+neg
+call MemoryExt.poke 3
+pop temp 0
+push constant 0
+return
+function Platform.resetObject 0
+push argument 0
+pop pointer 0
+push constant 0
+pop this 0
+push constant 0
+pop this 1
+push constant 0
+pop this 2
+push constant 0
+pop this 3
+push constant 0
+pop this 4
+push constant 0
+return
+function Platform.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Platform.resetObject 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

@@ -1,0 +1,106 @@
+function SimpleBullet.init 0
+push constant 1
+pop static 0
+push constant 1
+pop static 1
+push constant 1
+pop static 2
+push constant 16
+pop static 7
+push static 2
+call Array.new 1
+pop static 6
+push static 2
+call Array.new 1
+pop static 8
+push constant 16
+call Array.new 1
+pop static 9
+push constant 16
+call Array.new 1
+pop static 10
+push static 9
+push constant 13
+push constant 30720
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 14
+push constant 30720
+neg
+call MemoryExt.poke 3
+pop temp 0
+push static 9
+push constant 15
+push constant 30720
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 13
+push constant 30
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 14
+push constant 17
+call MemoryExt.poke 3
+pop temp 0
+push static 10
+push constant 15
+push constant 30
+call MemoryExt.poke 3
+pop temp 0
+push static 6
+push constant 0
+push static 9
+call MemoryExt.poke 3
+pop temp 0
+push static 8
+push constant 0
+push static 10
+call MemoryExt.poke 3
+pop temp 0
+push constant 0
+return
+function SimpleBullet.getWidth 0
+push static 0
+return
+function SimpleBullet.getHeight 0
+push static 1
+return
+function SimpleBullet.DrawFrame 0
+push argument 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+push static 3
+push static 8
+add
+pop pointer 1
+push that 0
+push static 7
+push static 0
+push static 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push argument 0
+push static 3
+push static 6
+add
+pop pointer 1
+push that 0
+push static 7
+push static 0
+push static 1
+push argument 2
+push argument 3
+call Sprite.Draw 7
+pop temp 0
+label IF_END0
+push constant 0
+return

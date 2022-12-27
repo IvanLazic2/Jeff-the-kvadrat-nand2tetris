@@ -1,0 +1,1004 @@
+function Collision.getLastY 0
+push static 0
+return
+function Collision.getPlatformY 0
+push static 1
+return
+function Collision.getNearestPlatformY 2
+call Map.getHeight 0
+push constant 16
+call Math.multiply 2
+pop local 1
+push argument 1
+push constant 16
+call Math.divide 2
+push constant 1
+add
+pop local 0
+label WHILE_EXP0
+push local 0
+call Map.getHeight 0
+lt
+not
+if-goto WHILE_END0
+push constant 1
+neg
+push argument 1
+push constant 16
+add
+lt
+push argument 1
+push constant 16
+add
+push constant 256
+lt
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+push local 0
+call Map.getValue 2
+call Collision.IsPlatform 1
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 0
+push constant 16
+call Math.multiply 2
+pop local 1
+call Map.getHeight 0
+pop local 0
+label IF_FALSE1
+label IF_FALSE0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push local 1
+return
+function Collision.IsOnAnyPlatform 9
+call Map.getHeight 0
+push constant 16
+call Math.multiply 2
+pop local 7
+label WHILE_EXP0
+push local 6
+push argument 2
+lt
+not
+if-goto WHILE_END0
+push argument 0
+push local 6
+add
+push argument 5
+add
+push argument 1
+push argument 3
+call Collision.getNearestPlatformY 3
+pop local 8
+push local 8
+push constant 0
+gt
+push local 8
+push local 7
+lt
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 8
+pop local 7
+label IF_FALSE0
+push local 6
+push constant 1
+add
+pop local 6
+goto WHILE_EXP0
+label WHILE_END0
+push local 7
+pop static 1
+push local 7
+push argument 1
+sub
+call Constants.getBlockHeight 0
+sub
+pop local 3
+push constant 1
+neg
+push local 3
+lt
+push local 3
+push argument 4
+push constant 1
+add
+lt
+and
+pop local 1
+push argument 1
+call Constants.getBlockHeight 0
+add
+push argument 4
+add
+push local 7
+sub
+call Math.abs 1
+push constant 7
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+pop local 1
+label IF_FALSE1
+push local 7
+call Map.getHeight 0
+push constant 16
+call Math.multiply 2
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+pop local 1
+label IF_FALSE2
+push local 1
+return
+function Collision.CheckAnyPlatformCollisionRight 3
+push constant 1
+neg
+push argument 1
+lt
+push argument 1
+push constant 256
+lt
+and
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push argument 1
+push constant 8
+add
+push constant 16
+call Math.divide 2
+pop local 0
+label WHILE_EXP0
+push local 0
+push argument 1
+push constant 16
+call Math.divide 2
+push argument 3
+sub
+gt
+not
+if-goto WHILE_END0
+push argument 0
+push argument 2
+add
+push argument 4
+add
+push local 0
+call Map.getValue 2
+pop local 2
+push constant 5
+push local 2
+lt
+push local 2
+push constant 11
+lt
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push local 1
+push local 2
+call Collision.IsPlatform 1
+or
+pop local 1
+push local 0
+push constant 1
+sub
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push local 1
+return
+function Collision.CheckAnyPlatformCollisionLeft 3
+push constant 1
+neg
+push argument 1
+lt
+push argument 1
+push constant 256
+lt
+and
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push argument 1
+push constant 8
+add
+push constant 16
+call Math.divide 2
+pop local 0
+label WHILE_EXP0
+push local 0
+push argument 1
+push constant 16
+call Math.divide 2
+push argument 3
+sub
+gt
+not
+if-goto WHILE_END0
+push argument 0
+push constant 1
+sub
+push argument 4
+add
+push local 0
+call Map.getValue 2
+pop local 2
+push constant 5
+push local 2
+lt
+push local 2
+push constant 11
+lt
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push local 1
+push local 2
+call Collision.IsPlatform 1
+or
+pop local 1
+push local 0
+push constant 1
+sub
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push local 1
+return
+function Collision.IsPlatform 0
+push constant 0
+push argument 0
+lt
+push argument 0
+push constant 11
+lt
+and
+return
+function Collision.IsObstacle 0
+push constant 10
+push argument 0
+lt
+push argument 0
+push constant 16
+lt
+and
+return
+function Collision.IsCollectable 0
+push constant 15
+push argument 0
+lt
+push argument 0
+push constant 19
+lt
+and
+return
+function Collision.GetPlatformType 0
+push argument 0
+push constant 1
+sub
+return
+function Collision.IsAtPlatformBoundaryLeft 0
+push argument 0
+push constant 1
+sub
+push argument 4
+add
+push argument 1
+push constant 16
+call Math.divide 2
+push constant 1
+add
+call Map.getValue 2
+call Collision.IsPlatform 1
+not
+return
+function Collision.IsAtPlatformBoundaryRight 0
+push argument 0
+push argument 2
+add
+push argument 4
+add
+push argument 1
+push constant 16
+call Math.divide 2
+push constant 1
+add
+call Map.getValue 2
+call Collision.IsPlatform 1
+not
+return
+function Collision.IsCollidedAnyObstacle 4
+push constant 1
+neg
+push argument 1
+push argument 3
+push constant 16
+call Math.multiply 2
+sub
+lt
+push argument 1
+push argument 3
+push constant 16
+call Math.multiply 2
+sub
+push constant 256
+lt
+and
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+label WHILE_EXP0
+push local 1
+push argument 2
+lt
+not
+if-goto WHILE_END0
+push argument 1
+push constant 16
+call Math.divide 2
+push argument 3
+push constant 1
+sub
+sub
+pop local 2
+label WHILE_EXP1
+push local 2
+push argument 1
+push constant 16
+call Math.divide 2
+push constant 1
+add
+lt
+not
+if-goto WHILE_END1
+push local 0
+push argument 0
+push local 1
+add
+push local 2
+call Map.getValue 2
+call Collision.IsObstacle 1
+or
+pop local 0
+push local 2
+push constant 1
+add
+pop local 2
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 2
+pop local 1
+label IF_FALSE1
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push local 0
+return
+function Collision.RedrawPlatforms 5
+push constant 1
+neg
+push argument 0
+push constant 1
+sub
+lt
+push argument 0
+push constant 1
+sub
+push constant 32
+lt
+and
+push constant 1
+neg
+push argument 0
+push argument 2
+add
+push constant 1
+add
+lt
+push argument 0
+push argument 2
+add
+push constant 1
+add
+push constant 32
+lt
+and
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+push constant 1
+sub
+pop local 0
+label WHILE_EXP0
+push local 0
+push argument 0
+push argument 2
+add
+push constant 1
+add
+lt
+not
+if-goto WHILE_END0
+push argument 1
+push argument 3
+sub
+push constant 16
+call Math.divide 2
+push constant 2
+sub
+pop local 1
+label WHILE_EXP1
+push local 1
+push argument 1
+call Constants.getBlockHeight 0
+add
+push constant 16
+call Math.divide 2
+push constant 2
+add
+lt
+not
+if-goto WHILE_END1
+push local 0
+push argument 4
+add
+call Map.getWidth 0
+lt
+push local 1
+call Map.getHeight 0
+lt
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 0
+push argument 4
+add
+push local 1
+call Map.getValue 2
+call Collision.IsPlatform 1
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 0
+push local 1
+push constant 16
+call Math.multiply 2
+call Constants.getMemAddress 2
+pop local 4
+push local 0
+push argument 4
+add
+push local 1
+call Map.getValue 2
+push constant 1
+sub
+push local 4
+push local 0
+push local 1
+call Platform.DrawBlock 4
+pop temp 0
+label IF_FALSE2
+label IF_FALSE1
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+label IF_FALSE0
+push constant 0
+return
+function Collision.IsEntityCollidedWithEntitySides 0
+push argument 3
+push constant 2
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 32
+pop argument 3
+label IF_FALSE0
+push argument 4
+push argument 0
+push argument 2
+add
+lt
+push argument 0
+push argument 4
+push argument 6
+add
+lt
+and
+push argument 5
+push argument 1
+push argument 3
+sub
+gt
+and
+push argument 5
+push argument 1
+push constant 16
+add
+lt
+and
+return
+function Collision.IsEntityCollidedWithEntityTop 0
+push argument 4
+push argument 0
+push argument 2
+add
+lt
+push argument 0
+push argument 4
+push argument 6
+add
+lt
+and
+push argument 5
+push argument 7
+sub
+push constant 24
+sub
+push argument 1
+lt
+and
+push argument 1
+push argument 5
+push argument 7
+sub
+lt
+and
+return
+function Collision.IsBulletCollidedWithMap 2
+push constant 1
+neg
+push argument 0
+lt
+push argument 0
+push constant 32
+lt
+and
+push constant 1
+neg
+push argument 1
+lt
+push argument 1
+push constant 256
+lt
+and
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 2
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 0
+push constant 1
+sub
+push argument 3
+add
+pop local 1
+goto IF_END1
+label IF_FALSE1
+push argument 0
+push constant 1
+add
+push argument 3
+add
+pop local 1
+label IF_END1
+push local 1
+push argument 1
+push constant 16
+call Math.divide 2
+call Map.getValue 2
+push constant 0
+eq
+push local 1
+push argument 1
+push constant 15
+add
+push constant 16
+call Math.divide 2
+call Map.getValue 2
+push constant 0
+eq
+and
+pop local 0
+label IF_FALSE0
+push local 0
+not
+return
+function Collision.IsBulletCollidedWithEntity 2
+push argument 4
+push argument 0
+push argument 2
+add
+lt
+push argument 4
+push constant 1
+add
+push argument 0
+gt
+and
+pop local 0
+push argument 5
+push constant 15
+add
+push argument 1
+push argument 3
+sub
+push constant 15
+add
+gt
+push argument 5
+push argument 1
+push constant 15
+add
+lt
+and
+pop local 1
+push local 0
+push local 1
+and
+return
+function Collision.HasPlatformAbove 4
+push argument 4
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+push constant 3
+sub
+pop local 0
+push argument 0
+pop local 2
+goto IF_END0
+label IF_FALSE0
+push argument 0
+push argument 2
+add
+push constant 1
+sub
+pop local 0
+push argument 0
+push argument 2
+add
+push constant 3
+add
+pop local 2
+label IF_END0
+label WHILE_EXP0
+push local 0
+push local 2
+lt
+not
+if-goto WHILE_END0
+push constant 0
+pop local 1
+label WHILE_EXP1
+push local 1
+push constant 3
+lt
+not
+if-goto WHILE_END1
+push argument 1
+push constant 16
+call Math.divide 2
+push local 1
+sub
+push constant 1
+neg
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 3
+push local 0
+push argument 3
+add
+push argument 1
+push constant 16
+call Math.divide 2
+push local 1
+sub
+call Map.getValue 2
+call Collision.IsPlatform 1
+or
+pop local 3
+label IF_FALSE1
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push local 3
+return
+function Collision.HasObstacleBelow 4
+push argument 4
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+pop local 0
+push argument 0
+push constant 1
+add
+pop local 2
+goto IF_END0
+label IF_FALSE0
+push argument 0
+push argument 2
+add
+push constant 1
+sub
+pop local 0
+push argument 0
+push argument 2
+add
+pop local 2
+label IF_END0
+label WHILE_EXP0
+push local 0
+push local 2
+lt
+not
+if-goto WHILE_END0
+push argument 1
+push constant 16
+call Math.divide 2
+pop local 1
+label WHILE_EXP1
+push local 1
+push constant 16
+lt
+not
+if-goto WHILE_END1
+push local 3
+push local 0
+push argument 3
+add
+push local 1
+call Map.getValue 2
+call Collision.IsObstacle 1
+or
+pop local 3
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push local 3
+return
+function Collision.GetObstacleBelowY 4
+push argument 4
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+pop local 0
+push argument 0
+push constant 1
+add
+pop local 2
+goto IF_END0
+label IF_FALSE0
+push argument 0
+push argument 2
+add
+push constant 1
+sub
+pop local 0
+push argument 0
+push argument 2
+add
+pop local 2
+label IF_END0
+push constant 256
+pop local 3
+label WHILE_EXP0
+push local 0
+push local 2
+lt
+not
+if-goto WHILE_END0
+push argument 1
+pop local 1
+label WHILE_EXP1
+push local 1
+call Map.getHeight 0
+push constant 16
+call Math.multiply 2
+lt
+not
+if-goto WHILE_END1
+push local 0
+push argument 3
+add
+push local 1
+push constant 16
+call Math.divide 2
+call Map.getValue 2
+call Collision.IsObstacle 1
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 1
+push local 3
+lt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 1
+pop local 3
+label IF_FALSE2
+label IF_FALSE1
+push local 1
+push constant 16
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push local 3
+push constant 16
+call Math.divide 2
+return
+function Collision.GetPlatformBelowY 4
+push argument 4
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+push constant 3
+sub
+pop local 0
+push argument 0
+push constant 1
+add
+pop local 2
+goto IF_END0
+label IF_FALSE0
+push argument 0
+push argument 2
+add
+push constant 1
+sub
+pop local 0
+push argument 0
+push argument 2
+add
+push constant 3
+add
+pop local 2
+label IF_END0
+push constant 256
+pop local 3
+label WHILE_EXP0
+push local 0
+push local 2
+lt
+not
+if-goto WHILE_END0
+push argument 1
+pop local 1
+label WHILE_EXP1
+push local 1
+call Map.getHeight 0
+push constant 16
+call Math.multiply 2
+lt
+not
+if-goto WHILE_END1
+push local 0
+push argument 3
+add
+push local 1
+push constant 16
+call Math.divide 2
+call Map.getValue 2
+call Collision.IsPlatform 1
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 1
+push local 3
+lt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 1
+pop local 3
+label IF_FALSE2
+label IF_FALSE1
+push local 1
+push constant 16
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push local 3
+push constant 16
+call Math.divide 2
+return

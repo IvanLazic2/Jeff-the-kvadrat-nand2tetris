@@ -1,0 +1,200 @@
+function Difficulty.init 0
+push constant 31
+pop static 1
+push static 0
+push constant 1
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 5
+pop static 2
+push constant 30
+pop static 3
+push constant 5
+pop static 4
+push constant 0
+not
+pop static 5
+push constant 7
+pop static 6
+push constant 5
+pop static 7
+push constant 5
+pop static 8
+push constant 0
+not
+pop static 10
+push constant 0
+pop static 9
+push constant 4
+pop static 12
+push constant 10
+pop static 13
+push constant 20
+pop static 14
+push constant 25
+pop static 15
+goto IF_END0
+label IF_FALSE0
+push static 0
+push constant 2
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 3
+pop static 2
+push constant 20
+pop static 3
+push constant 3
+pop static 4
+push constant 10
+pop static 6
+push constant 7
+pop static 7
+push constant 4
+pop static 8
+push constant 0
+not
+pop static 9
+push constant 0
+not
+pop static 10
+push constant 3
+pop static 11
+push constant 3
+pop static 12
+push constant 10
+pop static 13
+push constant 15
+pop static 14
+push constant 25
+pop static 15
+goto IF_END1
+label IF_FALSE1
+push static 0
+push constant 3
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 2
+pop static 2
+push constant 20
+pop static 3
+push constant 0
+pop static 4
+push constant 20
+pop static 6
+push constant 5
+pop static 7
+push constant 3
+pop static 8
+push constant 0
+not
+pop static 9
+push constant 0
+not
+pop static 10
+push constant 1
+pop static 11
+push constant 2
+pop static 12
+push constant 5
+pop static 13
+push constant 10
+pop static 14
+push constant 10
+pop static 15
+goto IF_END2
+label IF_FALSE2
+push static 0
+push constant 4
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push constant 1
+pop static 2
+push constant 0
+pop static 3
+push constant 0
+pop static 4
+push constant 1
+pop static 8
+push constant 0
+pop static 9
+push constant 0
+pop static 10
+push constant 0
+pop static 11
+push constant 1
+pop static 12
+push constant 3
+pop static 13
+push constant 7
+pop static 14
+push constant 7
+pop static 15
+label IF_FALSE3
+label IF_END2
+label IF_END1
+label IF_END0
+push constant 0
+return
+function Difficulty.setDifficulty 0
+push argument 0
+pop static 0
+call Difficulty.init 0
+pop temp 0
+push constant 0
+return
+function Difficulty.getDifficulty 0
+push static 0
+return
+function Difficulty.getCharacterJumpHeight 0
+push static 1
+return
+function Difficulty.getCharacterHealth 0
+push static 2
+return
+function Difficulty.getCharacterDamageDelay 0
+push static 3
+return
+function Difficulty.getCharacterBulletsCount 0
+push static 4
+return
+function Difficulty.getCharacterHasInfiniteBullets 0
+push static 5
+return
+function Difficulty.getCharacterBulletDelay 0
+push static 6
+return
+function Difficulty.getCharacterBulletLimit 0
+push static 7
+return
+function Difficulty.getCharacterHealthLimit 0
+push static 8
+return
+function Difficulty.getCanPickUpAmmo 0
+push static 9
+return
+function Difficulty.getCanPickUpHealth 0
+push static 10
+return
+function Difficulty.getAmmoCount 0
+push static 11
+return
+function Difficulty.getSpiderMovementDelay 0
+push static 12
+return
+function Difficulty.getBatMovementDelay 0
+push static 13
+return
+function Difficulty.getEnemyBulletDelay 0
+push static 14
+return
+function Difficulty.getEnemyFollowDelay 0
+push static 15
+return

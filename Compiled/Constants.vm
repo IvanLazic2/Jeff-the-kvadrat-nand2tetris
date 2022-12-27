@@ -1,0 +1,79 @@
+function Constants.init 1
+push constant 16384
+pop static 0
+push constant 16
+pop static 1
+push constant 0
+return
+function Constants.getScreenStart 0
+push static 0
+return
+function Constants.getBlockHeight 0
+push static 1
+return
+function Constants.getLeftBlock 0
+push argument 0
+push constant 1
+sub
+return
+function Constants.getRightBlock 0
+push argument 0
+push constant 1
+add
+return
+function Constants.getUpBlock 0
+push argument 0
+push constant 512
+sub
+return
+function Constants.getDownBlock 0
+push argument 0
+push constant 512
+add
+return
+function Constants.getLocation 0
+push argument 1
+push constant 32
+call Math.multiply 2
+push argument 0
+add
+return
+function Constants.getLocationMemAddress 0
+push static 0
+push argument 0
+add
+return
+function Constants.getMemAddress 0
+push static 0
+push argument 0
+push argument 1
+call Constants.getLocation 2
+add
+return
+function Constants.IsInScreenX 0
+push constant 1
+neg
+push argument 0
+lt
+push argument 0
+push constant 32
+lt
+and
+return
+function Constants.IsInScreenY 0
+push constant 1
+neg
+push argument 0
+lt
+push argument 0
+push constant 256
+lt
+and
+return
+function Constants.IsInScreen 0
+push argument 0
+call Constants.IsInScreenX 1
+push argument 1
+call Constants.IsInScreenY 1
+and
+return

@@ -1,0 +1,9 @@
+function MemoryExt.poke 0
+push argument 0
+push argument 1
+add
+push argument 2
+call Memory.poke 2
+pop temp 0
+push constant 0
+return

@@ -1,0 +1,32 @@
+function Map.getWidth 0
+push static 0
+return
+function Map.getHeight 0
+push static 1
+return
+function Map.getMap 0
+push static 2
+return
+function Map.setWidth 0
+push argument 0
+pop static 0
+push constant 0
+return
+function Map.setHeight 0
+push argument 0
+pop static 1
+push constant 0
+return
+function Map.setMap 0
+push argument 0
+pop static 2
+push constant 0
+return
+function Map.getValue 0
+push argument 0
+push argument 1
+push static 2
+push static 0
+push static 1
+call Matrix.getValue 5
+return

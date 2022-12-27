@@ -1,0 +1,1599 @@
+function Character.new 1
+push constant 33
+call Memory.alloc 1
+pop pointer 0
+push pointer 0
+call Character.resetObject 1
+pop temp 0
+push argument 0
+pop this 0
+push argument 1
+pop this 1
+push argument 2
+pop this 26
+call Jeff.getWidth 0
+pop this 2
+call Jeff.getHeight 0
+pop this 3
+push this 2
+push this 3
+call Math.multiply 2
+push constant 16
+call Math.multiply 2
+pop this 32
+push this 0
+push this 1
+call Constants.getMemAddress 2
+pop this 6
+push argument 0
+pop this 4
+push this 3
+push constant 16
+call Math.multiply 2
+pop this 5
+push constant 5
+pop this 9
+push constant 0
+pop this 11
+call Difficulty.getCharacterJumpHeight 0
+pop this 10
+call Difficulty.getCharacterHealth 0
+pop this 12
+call Difficulty.getCharacterDamageDelay 0
+pop this 16
+call Difficulty.getCharacterBulletsCount 0
+pop this 19
+push this 19
+pop this 20
+push pointer 0
+call Character.RefreshBullets 1
+pop temp 0
+call Difficulty.getCharacterBulletDelay 0
+pop this 24
+push this 24
+pop this 23
+push constant 0
+not
+pop this 25
+push this 6
+pop this 7
+push pointer 0
+call Character.Draw 1
+pop temp 0
+push pointer 0
+return
+function Character.getX 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Character.getY 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Character.getWidth 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Character.getHeight 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Character.getAbsoluteX 0
+push argument 0
+pop pointer 0
+push this 4
+return
+function Character.getShouldRedrawObstacles 0
+push argument 0
+pop pointer 0
+push this 14
+return
+function Character.getBullets 0
+push argument 0
+pop pointer 0
+push this 18
+return
+function Character.getBulletsCount 0
+push argument 0
+pop pointer 0
+push this 20
+return
+function Character.getAvailableBulletsCount 0
+push argument 0
+pop pointer 0
+push this 20
+return
+function Character.getHealth 0
+push argument 0
+pop pointer 0
+push this 12
+return
+function Character.getCoins 0
+push argument 0
+pop pointer 0
+push this 13
+return
+function Character.getShouldRedrawAll 0
+push argument 0
+pop pointer 0
+push this 30
+return
+function Character.getLastSpawnPointX 0
+push argument 0
+pop pointer 0
+push this 29
+call SpawnPoint.getX 1
+return
+function Character.setX 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 0
+push constant 0
+return
+function Character.setAbsoluteX 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 4
+push constant 0
+return
+function Character.setMemAddress 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 6
+push constant 0
+return
+function Character.setLastMemAddress 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 7
+push constant 0
+return
+function Character.setShouldRedrawObstacles 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 14
+push constant 0
+return
+function Character.setMovingLeft 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 17
+push constant 0
+return
+function Character.setJumpHeight 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 10
+push constant 0
+return
+function Character.setShouldRedrawAll 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 30
+push constant 0
+return
+function Character.setSpawnPointsCount 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 28
+push constant 0
+return
+function Character.setSpawnPoints 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 27
+push constant 0
+push this 27
+add
+pop pointer 1
+push that 0
+pop this 29
+push constant 0
+return
+function Character.incrementAbsoluteX 0
+push argument 0
+pop pointer 0
+push this 4
+push argument 1
+add
+pop this 4
+push constant 0
+return
+function Character.setCoins 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 13
+push constant 0
+return
+function Character.addCoin 0
+push argument 0
+pop pointer 0
+push this 13
+push constant 1
+add
+pop this 13
+push pointer 0
+call Character.printCoins 1
+pop temp 0
+push constant 0
+return
+function Character.addLife 0
+push argument 0
+pop pointer 0
+push this 12
+call Difficulty.getCharacterHealthLimit 0
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 12
+push constant 1
+add
+pop this 12
+push pointer 0
+call Character.printHealth 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Character.CheckTimers 0
+push argument 0
+pop pointer 0
+push this 23
+push constant 1
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+pop this 25
+push this 24
+pop this 23
+label IF_FALSE0
+push this 15
+push constant 1
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call Character.ForceDraw 1
+pop temp 0
+label IF_FALSE1
+push constant 0
+return
+function Character.DecrementTimers 0
+push argument 0
+pop pointer 0
+push this 23
+push constant 1
+sub
+pop this 23
+push constant 0
+return
+function Character.printHealth 0
+push argument 0
+pop pointer 0
+push this 26
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+push constant 18
+call Output.moveCursor 2
+pop temp 0
+push constant 2
+call String.new 1
+push constant 58
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+pop static 0
+push static 0
+call Output.printString 1
+pop temp 0
+push this 12
+call Output.printInt 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Character.printCoins 0
+push argument 0
+pop pointer 0
+push this 26
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+push constant 26
+call Output.moveCursor 2
+pop temp 0
+push constant 2
+call String.new 1
+push constant 58
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+pop static 0
+push static 0
+call Output.printString 1
+pop temp 0
+push this 13
+call Output.printInt 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Character.printAmmo 1
+push argument 0
+pop pointer 0
+push this 26
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+push constant 34
+call Output.moveCursor 2
+pop temp 0
+push constant 2
+call String.new 1
+push constant 58
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+pop static 0
+push static 0
+call Output.printString 1
+pop temp 0
+call Difficulty.getDifficulty 0
+push constant 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 50
+push constant 0
+call Constants.getMemAddress 2
+pop local 0
+push local 0
+push constant 0
+push constant 6200
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 32
+push constant 15484
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 64
+push constant 32382
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 96
+push constant 6329
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 128
+push constant 15485
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 160
+push constant 15933
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 192
+push constant 7449
+neg
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 224
+push constant 32382
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 256
+push constant 15420
+call MemoryExt.poke 3
+pop temp 0
+push local 0
+push constant 288
+push constant 6168
+call MemoryExt.poke 3
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push this 20
+call Output.printInt 1
+pop temp 0
+label IF_END1
+label IF_FALSE0
+push constant 0
+return
+function Character.IsCollidedWithFinish 0
+push argument 0
+pop pointer 0
+push argument 1
+push this 0
+push this 1
+push this 2
+push this 3
+call Finish.IsCollidedWithCharacter 5
+return
+function Character.DoEnemyAction 0
+push argument 0
+pop pointer 0
+push argument 1
+push argument 2
+push this 0
+push this 1
+call Enemy.DoActions 4
+pop temp 0
+push constant 0
+return
+function Character.CheckCollisionWithEnemy 1
+push argument 0
+pop pointer 0
+push argument 1
+push this 0
+push this 1
+push this 2
+push this 5
+call Enemy.CheckCollisionWithCharacter 5
+pop local 0
+push local 0
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+push argument 2
+call Character.Respawn 2
+pop temp 0
+push pointer 0
+call Character.TakeDamage 1
+pop temp 0
+label IF_FALSE0
+push local 0
+return
+function Character.CheckCollisionWithBullet 0
+push argument 0
+pop pointer 0
+push argument 1
+push this 0
+push this 1
+push this 2
+push this 5
+call Bullet.CheckCollisionWithEntity 5
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+push argument 2
+call Character.Respawn 2
+pop temp 0
+push pointer 0
+call Character.TakeDamage 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Character.CheckCollisionWithCollectable 4
+push argument 0
+pop pointer 0
+push argument 1
+push this 0
+push this 1
+push this 2
+push this 5
+push constant 16
+sub
+call Collectable.CheckCollisionWithCharacter 5
+pop local 0
+push local 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Character.addCoin 1
+pop temp 0
+push pointer 0
+call Character.ForceDraw 1
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push local 0
+push constant 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+call Difficulty.getCanPickUpHealth 0
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Character.addLife 1
+pop temp 0
+push pointer 0
+call Character.ForceDraw 1
+pop temp 0
+label IF_FALSE2
+goto IF_END1
+label IF_FALSE1
+push local 0
+push constant 2
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+call Difficulty.getCanPickUpAmmo 0
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push this 19
+pop local 1
+push pointer 0
+call Character.ClearAllBullets 1
+pop temp 0
+push this 20
+call Difficulty.getAmmoCount 0
+add
+call Difficulty.getCharacterBulletLimit 0
+gt
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+call Difficulty.getCharacterBulletLimit 0
+pop this 20
+goto IF_END5
+label IF_FALSE5
+push this 20
+call Difficulty.getAmmoCount 0
+add
+pop this 20
+label IF_END5
+push this 20
+pop this 19
+push local 1
+push constant 0
+gt
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push constant 0
+pop local 3
+label WHILE_EXP0
+push local 3
+push local 1
+lt
+not
+if-goto WHILE_END0
+push local 3
+push this 18
+add
+pop pointer 1
+push that 0
+pop local 2
+push local 2
+call Bullet.dispose 1
+pop temp 0
+push local 3
+push constant 1
+add
+pop local 3
+goto WHILE_EXP0
+label WHILE_END0
+push this 18
+call Array.dispose 1
+pop temp 0
+label IF_FALSE6
+push pointer 0
+call Character.RefreshBullets 1
+pop temp 0
+push pointer 0
+call Character.ForceDraw 1
+pop temp 0
+label IF_FALSE4
+label IF_FALSE3
+label IF_END1
+label IF_END0
+push constant 0
+return
+function Character.ClearAllBullets 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 19
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 18
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Bullet.Clear 1
+pop temp 0
+push local 1
+call Bullet.Reset 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Character.RefreshBullets 2
+push argument 0
+pop pointer 0
+push this 19
+push constant 0
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 19
+call Array.new 1
+pop this 18
+label WHILE_EXP0
+push local 0
+push this 19
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 18
+add
+call Bullet.new 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+pop this 21
+push this 21
+push this 18
+add
+pop pointer 1
+push that 0
+pop this 22
+push pointer 0
+call Character.printAmmo 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Character.DrawAllBullets 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 19
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 18
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Bullet.Draw 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Character.ScrollBulletsLeft 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 19
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 18
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Bullet.ScrollLeft 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Character.ScrollBulletsRight 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 19
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 18
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Bullet.ScrollRight 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Character.RedrawPlatforms 0
+push argument 0
+pop pointer 0
+push this 0
+push this 1
+push this 2
+push this 5
+push argument 1
+call Collision.RedrawPlatforms 5
+pop temp 0
+push constant 0
+return
+function Character.CheckCollisionWithPlatformRight 0
+push argument 0
+pop pointer 0
+push this 0
+push this 1
+push this 2
+push this 3
+push argument 1
+call Collision.CheckAnyPlatformCollisionRight 5
+return
+function Character.CheckCollisionWithPlatformLeft 0
+push argument 0
+pop pointer 0
+push this 0
+push this 1
+push this 2
+push this 3
+push argument 1
+call Collision.CheckAnyPlatformCollisionLeft 5
+return
+function Character.CheckCollisionWithObstacles 2
+push argument 0
+pop pointer 0
+push this 4
+push this 1
+push this 2
+push this 3
+call Collision.IsCollidedAnyObstacle 4
+pop local 1
+push local 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+pop this 14
+push pointer 0
+call Character.TakeDamage 1
+pop temp 0
+push pointer 0
+push argument 1
+call Character.Respawn 2
+pop temp 0
+label IF_FALSE0
+push this 15
+push constant 0
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 15
+push constant 1
+sub
+pop this 15
+label IF_FALSE1
+push constant 0
+return
+function Character.MoveLeft 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 1
+sub
+call Constants.IsInScreenX 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+pop this 7
+push this 6
+push constant 1
+sub
+pop this 6
+push pointer 0
+call Character.Clear 1
+pop temp 0
+push this 0
+push constant 1
+sub
+pop this 0
+push this 4
+push constant 1
+sub
+pop this 4
+push pointer 0
+call Character.Draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Character.MoveRight 0
+push argument 0
+pop pointer 0
+push this 0
+push this 2
+add
+call Constants.IsInScreenX 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+pop this 7
+push this 6
+push constant 1
+add
+pop this 6
+push pointer 0
+call Character.Clear 1
+pop temp 0
+push this 0
+push constant 1
+add
+pop this 0
+push this 4
+push constant 1
+add
+pop this 4
+push pointer 0
+call Character.Draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Character.Jump 0
+push argument 0
+pop pointer 0
+push this 11
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 8
+push this 10
+sub
+pop this 8
+label IF_FALSE0
+push constant 0
+return
+function Character.CheckGravity 4
+push argument 0
+pop pointer 0
+push this 0
+push this 1
+push this 2
+push this 3
+push this 8
+push argument 1
+call Collision.IsOnAnyPlatform 6
+pop this 11
+push this 11
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+call Collision.getPlatformY 0
+push constant 16
+sub
+pop this 1
+push this 1
+push constant 224
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+push argument 1
+call Character.Respawn 2
+pop temp 0
+push pointer 0
+call Character.TakeDamage 1
+pop temp 0
+label IF_FALSE1
+push constant 0
+pop this 8
+push this 6
+pop this 7
+push this 0
+push this 1
+call Constants.getMemAddress 2
+pop this 6
+push pointer 0
+call Character.Clear 1
+pop temp 0
+push pointer 0
+call Character.Draw 1
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push this 1
+push constant 224
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+push argument 1
+call Character.Respawn 2
+pop temp 0
+push pointer 0
+call Character.TakeDamage 1
+pop temp 0
+label IF_FALSE2
+push this 8
+push this 9
+add
+pop this 8
+label IF_END0
+push this 1
+push this 8
+add
+pop this 1
+push this 6
+pop this 7
+push this 0
+push this 1
+call Constants.getMemAddress 2
+pop this 6
+push pointer 0
+call Character.Clear 1
+pop temp 0
+push pointer 0
+call Character.Draw 1
+pop temp 0
+push constant 0
+return
+function Character.CheckPassedSpawnPoints 3
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 28
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 27
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call SpawnPoint.getX 1
+push this 4
+lt
+push local 1
+call SpawnPoint.getX 1
+push local 2
+gt
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 1
+pop this 29
+push this 29
+call SpawnPoint.getX 1
+pop local 2
+label IF_FALSE0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Character.Respawn 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Character.CheckPassedSpawnPoints 1
+pop temp 0
+push this 29
+call SpawnPoint.getY 1
+pop this 1
+push constant 0
+not
+pop this 30
+push constant 0
+return
+function Character.TakeDamage 0
+push argument 0
+pop pointer 0
+push this 15
+push constant 1
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 12
+push constant 1
+sub
+pop this 12
+push this 16
+pop this 15
+push pointer 0
+call Character.printHealth 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Character.Shoot 2
+push argument 0
+pop pointer 0
+push this 20
+push constant 0
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 17
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 0
+push constant 1
+sub
+pop local 0
+goto IF_END1
+label IF_FALSE1
+push this 0
+push this 2
+add
+pop local 0
+label IF_END1
+push this 1
+push constant 16
+sub
+pop local 1
+push this 25
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 22
+call Bullet.IsAvailable 1
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 22
+push local 0
+push local 1
+push this 17
+push argument 1
+call Bullet.Shoot 5
+pop temp 0
+push this 21
+push constant 1
+add
+pop this 21
+push this 21
+push this 19
+push constant 1
+sub
+gt
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push constant 0
+pop this 21
+label IF_FALSE4
+push this 21
+push this 18
+add
+pop pointer 1
+push that 0
+pop this 22
+call Difficulty.getCharacterHasInfiniteBullets 0
+not
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push this 20
+push constant 1
+sub
+pop this 20
+label IF_FALSE5
+label IF_FALSE3
+push constant 0
+pop this 25
+label IF_FALSE2
+push pointer 0
+call Character.printAmmo 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Character.CheckBullets 2
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 19
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 18
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+push argument 1
+call Bullet.CheckBullet 2
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Character.Clear 5
+push argument 0
+pop pointer 0
+push this 6
+push this 7
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 7
+push constant 480
+add
+pop local 3
+label WHILE_EXP0
+push local 0
+push this 32
+lt
+not
+if-goto WHILE_END0
+push local 2
+push this 2
+push constant 1
+sub
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+pop local 2
+push local 1
+push constant 32
+sub
+pop local 1
+label IF_FALSE1
+push local 3
+push local 2
+add
+push local 1
+add
+pop local 4
+push constant 1
+neg
+push this 0
+push local 2
+add
+lt
+push this 0
+push local 2
+add
+push constant 32
+lt
+and
+push local 4
+push constant 16896
+gt
+and
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 4
+push constant 0
+call Memory.poke 2
+pop temp 0
+label IF_FALSE2
+push local 2
+push constant 1
+add
+pop local 2
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+label IF_FALSE0
+push constant 0
+return
+function Character.ForceClear 5
+push argument 0
+pop pointer 0
+push this 7
+push constant 480
+add
+pop local 3
+label WHILE_EXP0
+push local 0
+push this 32
+lt
+not
+if-goto WHILE_END0
+push local 2
+push this 2
+push constant 1
+sub
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+pop local 2
+push local 1
+push constant 32
+sub
+pop local 1
+label IF_FALSE0
+push local 3
+push local 2
+add
+push local 1
+add
+pop local 4
+push constant 1
+neg
+push this 0
+push local 2
+add
+lt
+push this 0
+push local 2
+add
+push constant 32
+lt
+and
+push local 4
+push constant 16896
+gt
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 4
+push constant 0
+call Memory.poke 2
+pop temp 0
+label IF_FALSE1
+push local 2
+push constant 1
+add
+pop local 2
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Character.Draw 0
+push argument 0
+pop pointer 0
+push this 6
+push this 7
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 30
+push this 15
+push constant 0
+gt
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 6
+push this 17
+push this 0
+push this 1
+call JeffDead.DrawFrame 4
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+call Difficulty.getDifficulty 0
+push constant 4
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 6
+push this 17
+push this 0
+push this 1
+call InsaneJeff.DrawFrame 4
+pop temp 0
+goto IF_END2
+label IF_FALSE2
+push this 6
+push this 17
+push this 0
+push this 1
+call Jeff.DrawFrame 4
+pop temp 0
+label IF_END2
+label IF_END1
+label IF_FALSE0
+push constant 0
+return
+function Character.ForceDraw 0
+push argument 0
+pop pointer 0
+push this 30
+push this 15
+push constant 0
+gt
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
+push this 17
+push this 0
+push this 1
+call JeffDead.DrawFrame 4
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+call Difficulty.getDifficulty 0
+push constant 4
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 6
+push this 17
+push this 0
+push this 1
+call InsaneJeff.DrawFrame 4
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push this 6
+push this 17
+push this 0
+push this 1
+call Jeff.DrawFrame 4
+pop temp 0
+label IF_END1
+label IF_END0
+push constant 0
+return
+function Character.resetObject 0
+push argument 0
+pop pointer 0
+push constant 0
+pop this 0
+push constant 0
+pop this 1
+push constant 0
+pop this 2
+push constant 0
+pop this 3
+push constant 0
+pop this 4
+push constant 0
+pop this 5
+push constant 0
+pop this 6
+push constant 0
+pop this 7
+push constant 0
+pop this 8
+push constant 0
+pop this 9
+push constant 0
+pop this 10
+push constant 0
+pop this 11
+push constant 0
+pop this 12
+push constant 0
+pop this 13
+push constant 0
+pop this 14
+push constant 0
+pop this 15
+push constant 0
+pop this 16
+push constant 0
+pop this 17
+push constant 0
+pop this 18
+push constant 0
+pop this 19
+push constant 0
+pop this 20
+push constant 0
+pop this 21
+push constant 0
+pop this 22
+push constant 0
+pop this 23
+push constant 0
+pop this 24
+push constant 0
+pop this 25
+push constant 0
+pop this 26
+push constant 0
+pop this 27
+push constant 0
+pop this 28
+push constant 0
+pop this 29
+push constant 0
+pop this 30
+push constant 0
+pop this 31
+push constant 0
+pop this 32
+push constant 0
+return
+function Character.dispose 3
+push argument 0
+pop pointer 0
+label WHILE_EXP0
+push local 0
+push this 28
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 27
+add
+pop pointer 1
+push that 0
+pop local 2
+push local 2
+call SpawnPoint.dispose 1
+pop temp 0
+push constant 0
+pop local 2
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+pop local 0
+label WHILE_EXP1
+push local 0
+push this 19
+lt
+not
+if-goto WHILE_END1
+push local 0
+push this 18
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Bullet.dispose 1
+pop temp 0
+push constant 0
+pop local 1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP1
+label WHILE_END1
+push this 28
+push constant 0
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 27
+call Array.dispose 1
+pop temp 0
+label IF_FALSE0
+push this 19
+push constant 0
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 18
+call Array.dispose 1
+pop temp 0
+label IF_FALSE1
+push pointer 0
+call Character.resetObject 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
