@@ -1,6 +1,10 @@
 # Jeff the kvadrat side-scrolling game - nand2tetris
 A side-scrolling game that accompanies our hero Jeff on his mission in fighting bad guys.
 
+## Gameplay video
+
+https://youtu.be/OMSfRg3UusM
+
 ## Title screen
 
 <div>
